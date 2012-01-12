@@ -6,12 +6,13 @@
 	xmlns:str="http://exslt.org/strings"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dc="http://purl.org/dc/elements/1.1/"
-	xmlns:vcard="http://ntic.org/vcard"
+	xmlns:vcardconv="http://ntic.org/vcard"
+	xmlns:vcard="urn:ietf:params:xml:ns:vcard-4.0"
 	xmlns:mlr2="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/"
 	xmlns:mlr4="http://standards.iso.org/iso-iec/19788/-4/ed-1/en/"
 	xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
-	extension-element-prefixes="regexp str vcard"
+	extension-element-prefixes="regexp str vcardconv"
 	>
 	<xsl:output method="xml" encoding="UTF-8"/>
 
@@ -80,7 +81,7 @@
 
 	<xsl:template match="lom:contribute[lom:role[lom:source/text()='LOMv1.0' and lom:value/text()='author']]" mode="lifeCycle">
 		<mlr2:DES0200> <!-- creator -->
-			<xsl:value-of select="vcard:convert(lom:entity/text())/fn/text()" />
+			<xsl:value-of select="vcardconv:convert(lom:entity/text())/vcard:fn/vcard:text/text()" />
 		</mlr2:DES0200>
 		<xsl:choose>
 			<xsl:when test="lom:date/lom:dateTime">
@@ -125,14 +126,14 @@
 
 	<xsl:template match="lom:contribute[lom:role[lom:source/text()='LOMv1.0' and lom:value/text()='publisher']]" mode="lifeCycle">
 		<mlr2:DES0500> <!-- publisher -->
-			<xsl:value-of select="vcard:vcard(lom:entity/text(), 'FN')" />
+			<xsl:value-of select="vcardconv:convert(lom:entity/text())/vcard:fn/vcard:text/text()" />
 		</mlr2:DES0500>
 	</xsl:template>
 
 
 	<xsl:template match="lom:contribute" mode="lifeCycle">
 		<mlr2:DES0600> <!-- contributor -->
-			<xsl:value-of select="vcard:vcard(lom:entity/text(), 'FN')" />
+			<xsl:value-of select="vcardconv:convert(lom:entity/text())/vcard:fn/vcard:text/text()" />
 		</mlr2:DES0600>
 	</xsl:template>
 
