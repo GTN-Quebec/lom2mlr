@@ -1,0 +1,3 @@
+vobject==0.8.1c
+lxml>=2.3
+python-dateutil<2.0
