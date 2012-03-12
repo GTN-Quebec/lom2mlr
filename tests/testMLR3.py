@@ -15,7 +15,7 @@ class testMlr3(unittest.TestCase):
 	@classmethod
 	def setupClass(self):
 		self.converter = Converter()
-		self.graph = self.converter.file2rdf('tests/data/Valid.xml')
+		self.graph = self.converter.lomfile2graph('tests/data/Valid.xml')
 	def triple_from_n3(self, n3):
 		g = rdflib.ConjunctiveGraph().parse(data=n3, format="n3")
 		return g.triples((None,None,None)).next()
