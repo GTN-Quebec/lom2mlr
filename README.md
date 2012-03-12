@@ -10,7 +10,7 @@ This is work in progress. We have a proof of concept that we can extract the [ML
 
 ## Installation ##
 
-This project is based on python and python libraries, as specified in `requirements.txt`. On a posix platform with [pip](http://www.pip-installer.org/en/latest/installing.html#using-the-installer), it is possible to satisfy the prerequisites with `pip install -r requirements.txt`. However, some requirements may be demanding. On a linux platform, you may need to install development tools and `xmllib2-devel`, `xmllint2-devel` beforehand. On a MacOS platform, you would need `gcc` either through [XCode](http://developer.apple.com/technologies/tools/) or [standalone](https://github.com/kennethreitz/osx-gcc-installer). Currently, we also use the [Redland librdf](http://librdf.org/) library, but we will attempt to waive that requirement, mostly for the benefit of windows.
+This project is based on python and python libraries, as specified in `requirements.txt`. On a posix platform with [pip](http://www.pip-installer.org/en/latest/installing.html#using-the-installer), it is possible to satisfy the prerequisites with `pip install -r requirements.txt`. However, some requirements may be demanding. On a linux platform, you might need to install development tools and `xmllib2-devel`, `xmllint2-devel` beforehand. On a MacOS platform, you would need `gcc` either through [XCode](http://developer.apple.com/technologies/tools/) or [standalone](https://github.com/kennethreitz/osx-gcc-installer).
 
 ## Tests ##
 
