@@ -5,19 +5,41 @@ from lxml import etree
 
 from vcard2xcard import convert
 
-VCARDCNS='http://ntic.org/vcard'
+from rdflib import ConjunctiveGraph
+
+VCARDC_NS = 'http://ntic.org/vcard'
+XSLT_NS = 'http://www.w3.org/1999/XSL/Transform'
+STYLESHEET = 'lom2mlr.xsl'
+
+class Converter(object):
+	def __init__(self, stylesheet=STYLESHEET):
+		stylesheet_xml = etree.parse(stylesheet)
+		self.output = stylesheet_xml.xpath('xsl:output/@method', 
+			namespaces={'xsl':XSLT_NS})
+		self.stylesheet = etree.XSLT(stylesheet_xml,
+			extensions={(VCARDC_NS, 'convert'):convert})
+	def convert_xml(self, xml):
+		return self.stylesheet(xml)
+	def convert_file(self, fname):
+		xml = etree.parse(fname)
+		return self.convert_xml(xml)
+	def file2rdf(self, fname):
+		xml = self.convert_file(fname)
+		graph = ConjunctiveGraph().parse(data=etree.tounicode(xml), format="xml")
+		return graph
+
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Apply a XSLT stylesheet to a LOM file')
 	parser.add_argument('-s', default='lom2mlr.xsl', help='Name of the stylesheet')
 	parser.add_argument('infile')
 	args = parser.parse_args()
-	xsl = etree.parse(args.s)
-	output = xsl.xpath('xsl:output/@method', namespaces={'xsl':'http://www.w3.org/1999/XSL/Transform'})
-	xsl = etree.XSLT(xsl,
-		extensions={(VCARDCNS, 'convert'):convert})
-	xml = etree.parse(args.infile)
+	converter = Converter(args.s)
+	xml = converter.convert_file(args.infile)
+	output = converter.output
 	if output and output[0] == 'text':
-		print unicode(xsl(xml)).encode('utf-8')
+		print unicode(xml.encode('utf-8'))
 	else:
-		print etree.tounicode(xsl(xml), pretty_print=True).encode('utf-8')
+		print etree.tounicode(xml, pretty_print=True).encode('utf-8')
+	graph = converter.file2rdf(args.s)
+	print(list(graph.triples((None, None, None))))

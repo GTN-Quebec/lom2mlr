@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lom xmlns="http://ltsc.ieee.org/xsd/LOM">
+    <general>
+    <identifier>
+      <catalog>TEST</catalog>
+      <entry>oai:test.licef.ca:123123</entry>
+    </identifier>
+        <title>
+            <string language="fr-CA">Conditions favorables à l'intégration des TIC...</string>
+        </title>
+        <language>fr-CA</language>
+        <description>
+            <string language="fr-CA">L'enseignante identifie les contraintes provenant de l'organisation scolaire devant être modifiées pour permettre la mise en place de contextes d'apprentissages signifiants pour les élèves. </string>
+        </description>
+            <keyword>
+      <string language="fr">optique</string>
+      <string language="fr">sciences de la nature</string>
+      <string language="fr">physique</string>
+    </keyword>
+        <structure>
+            <source>LOMv1.0</source>
+            <value>atomic</value>
+        </structure>
+        <aggregationLevel>
+            <source>LOMv1.0</source>
+            <value>1</value>
+        </aggregationLevel>
+    </general>
+    <lifeCycle>
+        <version>
+            <string language="fr-CA">1</string>
+        </version>
+        <status>
+            <source>LOMv1.0</source>
+            <value>final</value>
+        </status>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+VERSION:3.0
+FN:AQUOPS
+N:Parent;Marc-Antoine;;;
+EMAIL;TYPE=INTERNET:accueil@aquops.qc.ca
+TEL;TYPE=WORK,VOICE:+1-514-948-1234
+TEL;TYPE=WORK,FAX:+1-514-948-1231
+ADR;TYPE=WORK,POST:;;7400,boul. Saint-Laurent,Bureau 530;Montr√©al;Qu√©bec;H2R 2Y1;Canada
+END:VCARD
+</entity>
+            <date>
+                <description><string language="fr">non disponible</string></description>
+            </date>
+        </contribute>
+    </lifeCycle>
+    <metaMetadata>
+        <identifier>
+            <catalog>URI</catalog>
+            <entry>oai:aquops.qc.ca:videos:8</entry>
+        </identifier>
+        <metadataSchema>LOMv1.0</metadataSchema>
+        <language>fr-CA</language>
+    </metaMetadata>
+    <technical>
+        <size>123123</size>
+        <format>video/quicktime</format>
+        <location>http://xserve.scedu.umontreal.ca/~cyberscol/videos/v00008-640-s.mov</location>
+        <location>http://xserve.scedu.umontreal.ca/~cyberscol/videos/v00008-480-s.mov</location>
+        <location>http://xserve.scedu.umontreal.ca/~cyberscol/videos/v00008-320-s.mov</location>
+        <location>http://xserve.scedu.umontreal.ca/~cyberscol/videos/v00008-240-s.mov</location>
+        <installationRemarks><string language="fr">Ouais</string></installationRemarks>
+        <otherPlatformRequirements><string language="fr">Test</string></otherPlatformRequirements>
+        <duration>
+            <duration>PT02M25S</duration>
+        </duration>
+    </technical>
+    <educational>
+        <interactivityType>
+            <source>LOMv1.0</source>
+            <value>mixed</value>
+        </interactivityType>
+        <learningResourceType>
+            <source>LOMv1.0</source>
+            <value>simulation</value>
+        </learningResourceType>
+        <context>
+            <source>LOMv1.0</source>
+            <value>training</value>
+        </context>
+        <typicalAgeRange>
+            <string language="fr-CA">adultes</string>
+        </typicalAgeRange>
+        <language>fr-CA</language>
+        <intendedEndUserRole>
+            <source>LOMv1.0</source>
+            <value>teacher</value>
+        </intendedEndUserRole>
+        <typicalLearningTime>
+            <duration>P1M</duration>
+        </typicalLearningTime>
+
+    </educational>
+    <rights>
+        <cost>
+            <source>LOMv1.0</source>
+            <value>no</value>
+        </cost>
+        <copyrightAndOtherRestrictions>
+            <source>LOMv1.0</source>
+            <value>yes</value>
+        </copyrightAndOtherRestrictions>
+        <description>
+            <string language="fr-CA">L'utilisation de ces vidéos se fait  uniquement par lintermédiaire de ce site et à des fins éducatives et non lucratives pour fin de consultation ou de présentation à des intervenants du milieu de léducation. Ces vidéos ne peuvent en aucun cas être copiées ou transférées sur support informatique.</string>
+        </description>
+    </rights>
+    <relation>
+    <kind>
+      <source>LOMv1.0</source>
+      <value>ispartof</value>
+    </kind>
+    <resource>
+      <identifier>
+        <catalog>TEST</catalog>
+        <entry>oai:test.licef.ca:999999</entry>
+      </identifier>
+    </resource>
+    </relation>
+   <classification>
+    <purpose>
+<source>LOMv1.0</source>
+<value>accessibility restrictions</value>
+</purpose>
+<taxonPath><source>        <string language="fr-CA">http://eureka.ntic.org/vdex/eureka_main_themes_voc.xml</string>
+      </source>
+      <taxon>
+        <id>EUREKA_ROOT</id>
+        <entry>
+          <string language="fr">Eurêka</string>
+          <string language="en">Eureka</string>
+        </entry>
+      </taxon>
+      <taxon>
+        <id>41bd6a4da724c</id>
+        <entry>
+          <string language="fr-CA">Développement et tests</string>
+        </entry>
+      </taxon>
+    </taxonPath>
+</classification>
+</lom>
+

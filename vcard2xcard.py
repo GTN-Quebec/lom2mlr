@@ -5,9 +5,9 @@ import re
 from vobject.base import readOne
 from vobject import vcard
 
-VCARDNS='urn:ietf:params:xml:ns:vcard-4.0'
-VCARDNSB='{%s}' % (VCARDNS, )
-NSMAP={None:VCARDNS}
+VCARD_NS='urn:ietf:params:xml:ns:vcard-4.0'
+VCARD_NSB='{%s}' % (VCARD_NS, )
+NSMAP={None:VCARD_NS}
 
 
 def regexp_checker(pattern):
@@ -102,14 +102,14 @@ def vobj_to_str(vobj, root, attributes):
 		if val:
 			# vobject disagrees with rfc6531
 			if n == 'family': n = 'surname'
-			el = root.makeelement(VCARDNSB+n.lower(), nsmap=NSMAP)
+			el = root.makeelement(VCARD_NSB+n.lower(), nsmap=NSMAP)
 			root.append(el)
 			if is_sequence(val):
 				val = u' '.join(val)
 			el.text = val
 
 def append_typed_el(root, typename, val):
-	el = root.makeelement(VCARDNSB+typename, nsmap=NSMAP)
+	el = root.makeelement(VCARD_NSB+typename, nsmap=NSMAP)
 	root.append(el)
 	el.text = val
 
@@ -158,18 +158,18 @@ def convert(context, card):
 		else:
 			return []
 	card = readOne(card)
-	root = context.context_node.makeelement(VCARDNSB+'vcard', nsmap=NSMAP)
+	root = context.context_node.makeelement(VCARD_NSB+'vcard', nsmap=NSMAP)
 	for e in card.getChildren():
 		tag = e.name.lower()
 		if tag in exclude_tags:
 			continue
-		el = root.makeelement(VCARDNSB+tag, nsmap=NSMAP)
+		el = root.makeelement(VCARD_NSB+tag, nsmap=NSMAP)
 		root.append(el)
 		if e.params:
-			params = el.makeelement(VCARDNSB+'parameters', nsmap=NSMAP)
+			params = el.makeelement(VCARD_NSB+'parameters', nsmap=NSMAP)
 			el.append(params)
 			for k, v in e.params.items():
-				param = params.makeelement(VCARDNSB+k.lower(), nsmap=NSMAP)
+				param = params.makeelement(VCARD_NSB+k.lower(), nsmap=NSMAP)
 				params.append(param)
 				vobj_to_typed_param(v, param)
 		v = e.transformToNative().value
