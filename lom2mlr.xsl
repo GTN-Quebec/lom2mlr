@@ -70,7 +70,7 @@
 		<xsl:apply-templates mode="educational"/>
 	</xsl:template>
 	<xsl:template match="lom:classification" mode="top">
-		<xsl:apply-templates mode="classification"/>
+		<xsl:apply-templates mode="classification" select="." />
 	</xsl:template>
 
 	<xsl:template match="lom:title" mode="general">
