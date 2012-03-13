@@ -12,12 +12,15 @@
         <description>
             <string language="fr-CA">L'enseignante identifie les contraintes provenant de l'organisation scolaire devant être modifiées pour permettre la mise en place de contextes d'apprentissages signifiants pour les élèves. </string>
         </description>
-            <keyword>
+        <keyword>
       <string language="fr">optique</string>
       <string language="fr">sciences de la nature</string>
       <string language="fr">physique</string>
     </keyword>
-        <structure>
+    <coverage>
+        <string language="fr-CA">Québec</string>
+    </coverage>
+    <structure>
             <source>LOMv1.0</source>
             <value>atomic</value>
         </structure>
@@ -37,16 +40,51 @@
         <contribute>
             <role>
                 <source>LOMv1.0</source>
+                <value>technical validator</value>
+            </role>
+            <entity>BEGIN:VCARD
+VERSION:3.0
+FN:Marc-Antoine Parent
+N:Parent;Marc-Antoine;;;
+EMAIL;TYPE=INTERNET:map@ntic.org
+TEL;TYPE=WORK,VOICE:+1-514-948-1234
+TEL;TYPE=WORK,FAX:+1-514-948-1231
+ADR;TYPE=WORK,POST:;;7400,boul. Saint-Laurent,Bureau 530;Montréal;Québec;H2R 2Y1;Canada
+END:VCARD
+</entity>
+            <date>
+                <description><string language="fr">non disponible</string></description>
+            </date>
+        </contribute>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
                 <value>author</value>
             </role>
             <entity>BEGIN:VCARD
 VERSION:3.0
-FN:AQUOPS
-N:Parent;Marc-Antoine;;;
-EMAIL;TYPE=INTERNET:accueil@aquops.qc.ca
+FN:Frédéric Bergeron
+N:Bergeron;Frédéric;;;
+EMAIL;TYPE=INTERNET:frederic.bergeron@licef.org
 TEL;TYPE=WORK,VOICE:+1-514-948-1234
 TEL;TYPE=WORK,FAX:+1-514-948-1231
-ADR;TYPE=WORK,POST:;;7400,boul. Saint-Laurent,Bureau 530;Montr√©al;Qu√©bec;H2R 2Y1;Canada
+ADR;TYPE=WORK,POST:;;7400,boul. Saint-Laurent,Bureau 530;Montréal;Québec;H2R 2Y1;Canada
+END:VCARD
+</entity>
+            <date>
+                <description><string language="fr">non disponible</string></description>
+            </date>
+        </contribute>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>publisher</value>
+            </role>
+            <entity>BEGIN:VCARD
+VERSION:3.0
+FN:GTN-Québec
+ORG:GTN-Québec
+EMAIL;TYPE=INTERNET:info@gtn-quebec.org
 END:VCARD
 </entity>
             <date>
@@ -98,9 +136,7 @@ END:VCARD
         </intendedEndUserRole>
         <typicalLearningTime>
             <duration>P1M</duration>
-        </typicalLearningTime>
-
-    </educational>
+        </typicalLearningTime>    </educational>
     <rights>
         <cost>
             <source>LOMv1.0</source>
@@ -126,6 +162,18 @@ END:VCARD
       </identifier>
     </resource>
     </relation>
+    <relation>
+    <kind>
+      <source>LOMv1.0</source>
+      <value>isbasedon</value>
+    </kind>
+    <resource>
+      <identifier>
+        <catalog>TEST</catalog>
+        <entry>oai:test.licef.ca:999998</entry>
+      </identifier>
+    </resource>
+    </relation>
    <classification>
     <purpose>
 <source>LOMv1.0</source>
@@ -148,5 +196,22 @@ END:VCARD
       </taxon>
     </taxonPath>
 </classification>
+<classification>
+    <purpose>
+        <source>LOMv1.0</source>
+        <value>discipline</value>
+    </purpose>
+    <taxonPath>
+        <source>
+            <string language="fr">CDD 22e éd.</string>
+            <string language="en">DDC 22nd ed.</string>
+        </source>
+        <taxon>
+            <id>909</id>
+            <entry>
+                <string language="fr">Histoire du monde. Civilisation</string>
+            </entry>
+        </taxon>
+    </taxonPath>
+</classification>
 </lom>
-
