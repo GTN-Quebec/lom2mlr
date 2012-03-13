@@ -12,6 +12,10 @@ XSLT_NS = 'http://www.w3.org/1999/XSL/Transform'
 STYLESHEET = 'lom2mlr.xsl'
 
 class Converter(object):
+	"""A converter between LOM and MLR formats. 
+
+	Can take a file or lxml object; can return rdf-xml or rdflib graphs."""
+
 	def __init__(self, stylesheet=STYLESHEET):
 		stylesheet_xml = etree.parse(stylesheet)
 		self.output = stylesheet_xml.xpath('xsl:output/@method', 
@@ -19,14 +23,21 @@ class Converter(object):
 		self.stylesheet = etree.XSLT(stylesheet_xml,
 			extensions={(VCARDC_NS, 'convert'):convert})
 	def lomxml2rdfxml(self, xml):
+		"Transform a lom xml object to a rdf-xml object"
 		return self.stylesheet(xml)
+
 	def lomfile2rdfxml(self, fname):
+		"Takes a path to a lom file, returns a rdf-xml object"
 		xml = etree.parse(fname)
 		return self.lomxml2rdfxml(xml)
+
 	def lomfile2graph(self, fname):
+		"Takes a path to a lom file, returns a rdf graph"
 		xml = self.lomfile2rdfxml(fname)
 		return ConjunctiveGraph().parse(data=etree.tounicode(xml), format="xml")
+
 	def lomxml2graph(self, xml):
+		"Takes a LOM xml object, returns a rdf graph"
 		xml = self.lomxml2graph(self, xml)
 		return ConjunctiveGraph().parse(data=etree.tounicode(xml), format="xml")
 
