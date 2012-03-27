@@ -72,6 +72,7 @@ ADR;TYPE=WORK,POST:;;7400,boul. Saint-Laurent,Bureau 530;Montréal;Québec;H2R 2
 END:VCARD
 </entity>
             <date>
+                <dateTime>1999-12-01</dateTime>
                 <description><string language="fr">non disponible</string></description>
             </date>
         </contribute>
@@ -120,7 +121,7 @@ END:VCARD
         </interactivityType>
         <learningResourceType>
             <source>LOMv1.0</source>
-            <value>simulation</value>
+            <value>slide</value>
         </learningResourceType>
         <context>
             <source>LOMv1.0</source>
