@@ -108,6 +108,32 @@ END:VCARD
         <location>http://xserve.scedu.umontreal.ca/~cyberscol/videos/v00008-480-s.mov</location>
         <location>http://xserve.scedu.umontreal.ca/~cyberscol/videos/v00008-320-s.mov</location>
         <location>http://xserve.scedu.umontreal.ca/~cyberscol/videos/v00008-240-s.mov</location>
+        <requirement>
+          <orComposite>
+            <type>
+              <source>LOMv1.0</source>
+              <value>browser</value>
+            </type>
+            <name>
+              <source>LOMv1.0</source>
+              <value>netscape communicator</value>
+            </name>
+            <minimumVersion>4.2</minimumVersion>
+            <maximumVersion/>
+          </orComposite>
+          <orComposite>
+            <type>
+              <source>LOMv1.0</source>
+                <value>browser</value>
+            </type>
+            <name>
+              <source>LOMv1.0</source>
+              <value>ms-internet explorer</value>
+            </name>
+            <minimumVersion>5.5</minimumVersion>
+            <maximumVersion/>
+          </orComposite>
+        </requirement>
         <installationRemarks><string language="fr">Ouais</string></installationRemarks>
         <otherPlatformRequirements><string language="fr">Test</string></otherPlatformRequirements>
         <duration>

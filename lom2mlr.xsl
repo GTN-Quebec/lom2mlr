@@ -177,6 +177,12 @@
 		</xsl:choose>
 	</xsl:template>
 
+	<xsl:template match="lom:size" mode="technical">
+		<mlr4:DES0200>
+			<xsl:value-of select="text()"/>
+		</mlr4:DES0200>
+	</xsl:template>
+
 	<xsl:template match="lom:format" mode="technical">
 		<xsl:choose>
 			<xsl:when test="text()='non-digital'">
@@ -195,6 +201,145 @@
 				</mlr2:DES0900>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="lom:location" mode="technical">
+		<mlr4:DES0100>
+			<xsl:value-of select="text()"/>
+		</mlr4:DES0100>
+	</xsl:template>
+
+	<xsl:template name="as_00num">
+		<xsl:param name="v"/>
+		<xsl:choose>
+			<xsl:when test="number($v)&gt;9">
+				<xsl:value-of select="number($v)"/>
+			</xsl:when>
+			<xsl:when test="number($v)&gt;0">
+				<xsl:text>0</xsl:text>
+				<xsl:value-of select="number($v)"/>
+			</xsl:when>
+			<xsl:otherwise>00</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="lom:duration" mode="technical">
+		<xsl:if test="lom:duration and regexp:test(lom:duration/text(),'^PT([0-9]+H)?([0-9]+M)?([0-9]+S)?$')">
+			<mlr4:DES0300>
+				<xsl:call-template name="as_00num">
+					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+H'),'H')"/>
+				</xsl:call-template>
+				<xsl:text>:</xsl:text>
+				<xsl:call-template name="as_00num">
+					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+M'),'M')"/>
+				</xsl:call-template>
+				<xsl:text>:</xsl:text>
+				<xsl:call-template name="as_00num">
+					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+S'),'S')"/>
+				</xsl:call-template>
+			</mlr4:DES0300>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template match="lom:requirement" mode="technical">
+		<mlr4:DES0400 xml:lang="fr-CA">
+			<xsl:variable name="multiple" select="count(lom:orComposite)&gt;1"/>
+			<xsl:if test="$multiple">
+				<xsl:text>Une des options suivantes:&#160;</xsl:text>
+			</xsl:if>
+			<xsl:apply-templates mode="tech-requirement" select="lom:orComposite">
+				<xsl:with-param name="multiple" select="$multiple"/>
+			</xsl:apply-templates>
+		</mlr4:DES0400>
+	</xsl:template>
+
+	<xsl:template match="text()" mode="tech-requirement"/>
+
+	<xsl:template match="lom:orComposite" mode="tech-requirement">
+		<xsl:param name="multiple"/>
+		<xsl:if test="$multiple">
+			<xsl:value-of select="position()"/>
+			<xsl:text>.&#160;</xsl:text>
+		</xsl:if>
+		<xsl:apply-templates mode="tech-requirement"/>
+		<xsl:text>. </xsl:text>
+	</xsl:template>
+
+	<xsl:template match="lom:type" mode="tech-requirement">
+		<xsl:choose>
+			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='browser'">
+				<xsl:text>Le fureteur</xsl:text>
+			</xsl:when>
+			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='operating system'">
+				<xsl:text>Le système d'exploitation</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="lom:value/text()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="lom:name" mode="tech-requirement">
+		<xsl:choose>
+			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='ms-internet-explorer'">
+				<xsl:text> doit être Microsoft Internet Explorer</xsl:text>
+			</xsl:when>
+			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='any'">
+				<xsl:text> peut être n'importe lequel</xsl:text>
+			</xsl:when>
+			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='none'">
+				<xsl:text> n'est pas pertinent</xsl:text>
+			</xsl:when>
+			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='multi-os'">
+				<xsl:text> peut être n'importe lequel</xsl:text>
+			</xsl:when>
+			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='pc-dos'">
+				<xsl:text> doit être DOS</xsl:text>
+			</xsl:when>
+			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='ms-windows'">
+				<xsl:text> doit être Microsoft Windows</xsl:text>
+			</xsl:when>
+			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='macos'">
+				<xsl:text> doit être Mac OS</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text> doit être </xsl:text>
+				<xsl:value-of select="lom:value/text()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="lom:minimumVersion" mode="tech-requirement">
+		<xsl:if test="text()">
+			<xsl:text>, version au moins </xsl:text>
+			<xsl:value-of select="text()"/>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template match="lom:maximumVersion" mode="tech-requirement">
+		<xsl:if test="text()">
+			<xsl:choose>
+				<xsl:when test="../lom:minimumVersion">
+					<xsl:text> et au plus </xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>, version au plus </xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
+			<xsl:value-of select="text()"/>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template match="lom:installationRemarks" mode="technical">
+		<xsl:apply-templates select="lom:string" mode="langstring">
+			<xsl:with-param name="nodename" select="'mlr4:DES0400'"/>
+		</xsl:apply-templates>
+	</xsl:template>
+
+	<xsl:template match="lom:otherPlatformRequirements" mode="technical">
+		<xsl:apply-templates select="lom:string" mode="langstring">
+			<xsl:with-param name="nodename" select="'mlr4:DES0400'"/>
+		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="lom:identifier" mode="general">
