@@ -1,0 +1,80 @@
+T010
+lead
+be in charge or command of, organize and direct 
+animer
+être responsable ou en commandement, organiser et diriger
+T020
+collaborate
+work jointly on an activity, esp. produce or create something
+collaborer
+travailler conjointement à une activité afin de produire ou créer quelque chose
+T030
+communicate
+share or exchange information, news, or ideas
+communiquer
+partager ou échanger de l’information, des nouvelles ou des idées
+T040
+cooperate
+act jointly ; work toward the same end
+coopérer
+travailler conjointement à une œuvre commune
+T050
+create
+bring (something) to existence
+créer
+réaliser quelque chose qui n’existe pas encore
+T060
+exchange
+interaction between two or more individuals including information transmission
+échanger
+interaction entre deux ou plusieurs individus impliquant la transmission d’information
+T070
+read
+look at and comprehend the meaning of (written or printed matter) by mentally interpreting the characters or symbols of which it is composed
+lire
+voir et comprendre le sens d’un écrit ou d’un imprimé par l’interprétation mentale des caractères ou symboles qui le composent
+T080
+observe
+take note of or detect (something) in the course of a scientific study
+observer
+constater ou détecter (quelque chose) dans la procédure d’une étude scientifique 
+T090
+organize
+arrange in a structured whole ; order
+organiser
+organiser dans un tout structuré ; ordonner
+T100
+produce
+make or manufacture from components or raw materials
+produire
+assembler ou fabriquer à partir de matériaux de base
+T110
+publish
+print (something) in a book or journal so as make it generally known
+publier 
+publier (quelque chose) dans un livre ou un périodique afin de le faire connaître
+T120
+search
+try to find something by looking or otherwise seeking carefully and thoroughly
+rechercher
+essayer de trouver quelque chose en cherchant ou en investiguant soigneusement et minutieusement
+T130
+self-assess
+doing a systematic review of one's own performance
+s’autoévaluer
+procéder à un examen systématique de sa propre performance
+T140
+practice
+perform (an activity) or exercise (a skill) repeatedly or regularly in order to improve or maintain one’s proficiency
+s’exercer
+exercer une activité ou une habileté de façon répétée ou régulière afin de maintenir ou de développer une compétence
+T150
+train
+learn a particular skill or type of behavior through practice and instruction over a period of time
+se former
+apprendre une habileté particulière ou un comportement par l’exercice et l’apprentissage pendant une période de temps donnée
+T160
+simulate
+model, replicate, duplicate the behavior, appearance or properties of a process or mechanism
+simuler
+imiter, reproduire ou dupliquer le comportement, l’apparence ou les propriétés d’un processus ou d’un mécanisme

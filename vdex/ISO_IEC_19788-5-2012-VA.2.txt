@@ -1,0 +1,30 @@
+T010
+learner
+one who learns or receives instruction
+apprenant
+apprenant ou personne recevant de l’enseignement
+T020
+mediator
+person, other than teacher, who participates in the production, management and delivery of educational activities
+médiateur
+personne, autre qu’un enseignant, qui participe à la production, la gestion et la prestation d’activités éducatives 
+T030
+mentor
+experienced person who provides guidance
+mentor
+expert agissant comme guide 
+T040
+teacher
+entity who or that which teaches or instructs ; an instructor
+enseignant
+entité enseignante, un instructeur 
+T050
+teaching assistant
+entity who assists a teacher
+assistant
+entité qui assiste un enseignant d’enseignement
+T060
+tutor
+entity who assists a learner
+tuteur
+entité qui assiste un apprenant

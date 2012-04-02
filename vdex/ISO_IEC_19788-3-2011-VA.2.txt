@@ -1,0 +1,91 @@
+T001
+collection
+A collection is an aggregation of items.
+collection
+Agrégation de documents formant un tout.
+подборка
+Тематическое объединение информационных компонентов
+T002
+dataset
+A dataset is information encoded in a defined structure. For example - lists, tables, and databases, intended to be useful for direct machine processing.
+ensemble de données
+Structure appropriée au traitement par ordinateur, par exemple: des listes, des tableaux ou bases de données.
+набор данных
+Данные,, закодированные в определенной структуре и предназначенные для непосредственной машинной обрабоки.Например: перечни, таблицы и базы данных.
+T003
+event
+A non- persistent, time-based occurrence.
+événement
+Une manifestation à caractère ponctuel.
+Событие
+Метаданные для События предоставляют информацию о цели, месте, продолжительности и ответственных лицах. Примеры: выставка, сетевое вещание, конференция, семинар, день открытых дверей, представление, битва, судебное разбирательство, свадьба, чаепитие, пожар.
+T004
+image
+A visual representation other than text.
+image
+Une représentation visuelle autre que du texte.
+Изображение
+Примеры: изображения и фотографии физических объектов, живопись, оттиски, рисунки, графика, анимация и движущиеся изображения, фильмы, диаграммы, карты, музыкальная нотация. Обратите внимание, что Изображение может иметь как электронное, так и физическое представление.
+T005
+interactive resource
+An interactive resource is a resource which requires interaction from the user to be understood, executed, or experienced. For example - forms on web pages, applets, multimedia learning objects, chat services, virtual reality.
+ressource interactive
+Objet requérant une interaction de l'utilisateur, par exemple: un formulaire sur une page Web, un applet, un service de clavardage, etc.
+интерактивны й ресурс
+Ресурс, требующий взаимодейст вия с пользователем для понимания, выполнения или получения опыта. Например: формы вэб- страниц, апплеты, мультимедийные обучающие объекты, сервисы чата, виртуальная реальность.
+T013
+manga
+Resource whose content is a sequence of graphic, usually accompanied with texts, convey a story.
+manga
+Ressource dont le contenu est une séquence d’illustrations, habituellement accompagnée de texte, qui raconte une histoire.
+
+
+T006
+moving image
+A series of visual representations that, when shown in succession, impart an impression of motion.
+image animée
+Une série de représentations visuelles qui, lorsque montrées en succession, donnent l'impression d'un mouvement.
+движущееся и зображение
+Набор визуальных представлений, дающих при последовательном показе ощущение движения.
+T007
+physical object
+An inanimate, three- dimensional object or substance.
+objet physique
+Tout objet physique à trois dimensions.
+физический о бъект
+Статический трехмерный объект или материальный объект.
+T008
+service
+A service is a system that provides one or more functions of value to the end-user. Examples include: a photocopying service, an authentication service, interlibrary loans, a Z39.50 or web server.
+service
+Système qui rend des services à l'utilisateur, comme un service de photocopie ou un serveur Web.
+сервис
+Система, предоставляющая одну или более функций, востребуемых конечным пользователем. Например: сервис фотокопирования, сервис удостоверения подлинности, межбиблиотечное обслуживание, Web сервер
+T009
+software
+Software is a computer program in source or compiled form which may be available for installation non-transiently on another machine.
+logiciel
+Application logicielle compilée ou en format source.
+программное обеспечение
+Компьютерная программ а в исходном коде или в оттранслированном виде, которая может быть доступна для инсталляции нетранзитивно на другой машине.
+T010
+sound
+A sound is a resource whose content is primarily intended to be rendered as audio. For example - a music playback file format, an audio compact disc, and recorded speech or sounds.
+son
+Ressource principalement disponible en format audio. Par exemple: un fichier permettant d'entendre une pièce musicale, un disque compact audio ou l'enregistrement de la parole.
+звук
+Ресурс, в первую очередь предназначенн ый для прослушивания. Например: формат музыкально воспроизводимого файла, аудио компакт диск, записанные речь или звуковое сопровождение
+T011
+still image
+A static visual representation.
+image fixe
+Représentation visuelle statique.
+статическое изображение
+Статическое визуальное представление.
+T012
+text
+A text is a resource whose content is primarily words for reading. For example - books, letters, dissertations, poems, newspapers, articles, archives of mailing lists.
+texte
+Ressource dont le contenu consiste en mots: livres, magazines, journaux, poèmes, messages d'une liste de diffusion, etc.
+текст
+Ресурс, в первую очередь предназначенн ый для чтения. Например: книги, письма, диссертации, стихи, газеты, статьи, архивы адресных списков. Заметьте, что факсимиле или фотокопии техтов относятся к жанровым текстам.

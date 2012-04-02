@@ -1,0 +1,105 @@
+T010
+self-assessment
+assessment or evaluation of one’s actions and attitudes*
+auto évaluation 
+évaluation personnelle de ses actions et attitudes
+T020
+lecture
+an informative talk given as before an audience or class and usually prepared beforehand or the text of such a talk*
+cours/présentation
+une présentation de vive voix devant un auditoire ou une classe, habituellement préparée à l’avance ou le texte d’une telle présentation
+T030
+demonstration
+a practical exhibition and explanation of how something works or is performed*
+démonstration
+présentation pratique accompagnée d’explications sur le fonctionnement de quelque chose ou l’accomplissement d’une tâche
+T040
+case study
+description of an actual situation, commonly involving a decision, a challenge, an opportunity, a problem or an issue
+étude de cas
+description d’une situation réelle impliquant souvent une décision, un défi, une occasion, un problème
+T050
+problem statement
+a clear concise description of the issues that need to be addressed by a problem solving team
+énoncé de problème
+une description claire et concise d’un sujet soumis à une équipe de résolution de problème
+T060
+evaluation
+determination of the knowledge, skills or performance levels of students in relationship to stated objectives
+évaluation
+établissement de la connaissance, des habiletés ou du niveau de performance d’un étudiant en fonction d’un objectif établi
+T070
+examination
+a formal test of a person’s knowledge or proficiency in a particular subject or skill*
+examen
+évaluation formelle des connaissances d’un individu ou de sa maîtrise d’un sujet ou d’une habileté particulière
+T080
+exercise
+a task or activity done to practice or test a skill*
+exercice
+une tâche ayant pour but de pratiquer et d’évaluer une habileté
+T090
+experiment
+a scientific procedure undertaken to make a discovery, test a hypothesis, or demonstrate a known fact ; laboratory experiments*
+expérience
+procédure scientifique entreprise dans un but de découverte, de vérification d’une hypothèse ou de démonstration d’un fait connu ; expérience de laboratoire
+T100
+glossary
+an alphabetical list of terms relating to a specific subject, text, or dialect, with explanations; a brief dictionary*
+glossaire
+liste alphabétique de termes se rapportant à un sujet, accompagnée d’explications ; un lexique
+T110
+guide
+a set of rules describing the use of a resource or a tool*
+guide
+ensemble de règles précisant l’utilisation d’une ressource pédagogique, d’un instrument
+T120
+data set
+set of data (structured or not)
+jeu de données
+ensemble de données (structurées ou non)
+T130
+reference list
+a list of books, articles, movies, etc.
+liste de références
+liste de livres, d’articles, de films, etc.
+T140
+reference material
+material to be consulted for information like standards, laws, etc.*
+matériel de référence
+documents d’information sur les standards, les lois, etc.
+T150
+methodology
+a logical step by step procedure
+méthode
+une procédure suivant un ordre logique
+T160
+tool
+a thing used in an occupation or pursuit*
+outil
+un outil de production ou de diffusion
+T170
+tutorial
+a system of instruction containing exercises, information, etc.
+tutoriel
+un ensemble d’instructions contenant des exercices, de l’information, etc.
+T180
+questionnaire
+a set of questions with a choice of answers, devised for the purposes of a survey or statistical study*
+questionnaire
+une série de questions accompagnées d’un choix de réponses pour réaliser un enquête ou une étude statistique
+T190
+pedagogical scenario
+an instructional design model for a given subject and a given kind of situation with a description of objectives, roles, resources and tools
+scénario pédagogique
+un modèle d’instructions sur un sujet ou une situation donnée comportant une description des rôles, accompagné d’un ensemble de d’objectifs, de rôles, de ressources et d’outils
+T200
+simulation
+the reproducing of certain characteristics or conditions, as of a system by the use of a model or a representation*
+simulation
+la reproduction de caractéristiques ou conditions tel qu’un système par l’utilisation d’un modèle ou d’une représentation
+T210
+other
+
+autre
+

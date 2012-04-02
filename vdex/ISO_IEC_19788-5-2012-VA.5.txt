@@ -1,0 +1,24 @@
+T010
+global
+globale
+T020
+content quality
+qualité du contenu
+T030
+suggestion for use
+suggestion d’utilisation
+T040
+reliability
+fiabilité
+T050
+usability
+convivialité
+T060
+handiness
+maniabilité
+T070
+reusability
+réutilisabilité
+T080
+efficiency
+efficience

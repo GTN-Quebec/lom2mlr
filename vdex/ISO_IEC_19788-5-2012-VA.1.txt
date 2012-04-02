@@ -1,0 +1,10 @@
+T010
+author
+an individual or an institution responsible for making the content of the resource. An author can be a person, institution, group, or other entity
+auteur
+individu ou institution responsable de produire le contenu de la ressource. Un auteur peut être une personne, une institution, un groupe, etc.
+T020
+validator
+individual, organization or public administration responsible for confirming the overall integrity of the resource
+attestateur
+individu, organisation ou administration responsable de confirmer l’intégrité de la ressource
