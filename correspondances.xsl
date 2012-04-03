@@ -3,6 +3,7 @@
 	xmlns:xslin="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform/Out"
 	xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:mlr3="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/"
 	xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
@@ -32,10 +33,20 @@
 			<xsl:choose>
 				<xslin:if test="@dest='mlr3:DES0700'">
 					<xsl:when test="/lom:lom/lom:general/lom:aggregationLevel[lom:source/text()='LOMv1.0' and lom:value/text()='collection']">
-						<mlr3:DES0700><xslin:value-of select="@voc"/>:T001</mlr3:DES0700> <!-- collection -->
+						<mlr3:DES0700>
+							<xslin:attribute name="rdf:resource">
+								<xslin:value-of select="@voc"/>
+								<xslin:text>:T001</xslin:text> <!-- collection -->
+							</xslin:attribute>
+						</mlr3:DES0700>
 					</xsl:when>
 					<xsl:when test="../lom:interactivityLevel[lom:source/text()='LOMv1.0' and (lom:value/text()='high' or lom:value/text()='very high')] or ../lom:interactivityType[lom:source/text()='LOMv1.0' and lom:value/text()='active']">
-						<mlr3:DES0700><xslin:value-of select="@voc"/>:T005</mlr3:DES0700> <!-- interactive ressource -->
+						<mlr3:DES0700>
+							<xslin:attribute name="rdf:resource">
+								<xslin:value-of select="@voc"/>
+								<xslin:text>:T005</xslin:text> <!-- interactive ressource -->
+							</xslin:attribute>
+						</mlr3:DES0700>
 					</xsl:when>
 				</xslin:if>
 				<xslin:apply-templates/>
@@ -60,7 +71,9 @@
 				<xslin:text>'</xslin:text>
 			</xslin:attribute>
 			<xslin:element name="{../@dest}">
-				<xslin:value-of select="concat(../@voc,':',@dest)"/>
+				<xslin:attribute name="rdf:resource">
+					<xslin:value-of select="concat(../@voc,':',@dest)"/>
+				</xslin:attribute>
 			</xslin:element>
 		</xsl:when>
 	</xslin:template>
