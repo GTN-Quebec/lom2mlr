@@ -69,13 +69,24 @@ MLR5_Element_names = {
 #	MLR5_NS+'DES2900': 'Prerequisite',
 }
 
-MLR5_Sub_Element_names = {
+MLR_codomain = {
+	MLR5_NS+'DES1300': MLR5_NS+'RC0001', # Annotation
+	MLR5_NS+'DES1500': MLR5_NS+'RC0002', # Audience
+	MLR5_NS+'DES1700': MLR5_NS+'RC0003', # Contribution
+	MLR5_NS+'DES1700': MLR5_NS+'RC0003', # Contribution
+	MLR5_NS+'DES1900': MLR5_NS+'RC0004', # Curriculum
+	MLR5_NS+'DES2000': MLR5_NS+'RC0005', # Learning activity
+	MLR5_NS+'DES1400': MLR1_NS+'RC0003', # Person
+	MLR5_NS+'DES1800': MLR1_NS+'RC0003', # Person
+}
+
+MLR_Subclass_attributes = {
 	MLR1_NS+'RC0003': { # Person
 
 	},
 	MLR5_NS+'RC0001': { # Annotation
 		# MLR5_NS+'DES0100': 'Annotation date',
-		# MLR5_NS+'DES0200': 'Annotation text',
+		MLR5_NS+'DES0200': 'Annotation text',
 		# MLR5_NS+'DES0300': 'Annotation type',
 		# MLR5_NS+'DES1400': 'Has annotator',
 	},
@@ -103,7 +114,7 @@ MLR5_Sub_Element_names = {
 		# MLR5_NS+'DES2200': 'Learning activity occurrence',
 		# MLR5_NS+'DES2300': 'Learning method',
 		# MLR5_NS+'DES2700': 'Pedagogical relation',
-		MLR5_NS+'DES2800': 'Pedagogical type',
+		# MLR5_NS+'DES2800': 'Pedagogical type',
 		MLR5_NS+'DES3000': 'Typical learning time',
 	}
 }
@@ -178,6 +189,29 @@ class testMlr2(unittest.TestCase):
 		predicates = set(str(p) for (s,p,o) in triples)
 		for p in predicates:
 			assert p in Element_names, "Unknown predicate: "+p
+
+	def test_codomain(self):
+		for predicate in MLR_codomain.keys():
+			for s, p, o in self.graph.triples((None, rdflib.term.URIRef(predicate), None)):
+				for s2, p2, o2 in self.graph.triples((o, rdflib.RDF.type, None)):
+					assert str(o2) == MLR_codomain[predicate]
+
+	def test_subobjects_has_only_mlr_values(self):
+		for s, p, o in self.graph.triples((None, rdflib.RDF.type, None)):
+			assert str(o) in MLR_Subclass_attributes
+			attributes = MLR_Subclass_attributes[str(o)]
+			for s2, p2, o2 in self.graph.triples((s, None, None)):
+				if rdflib.RDF.type == p2:
+					continue
+				assert str(p2) in attributes, "unknown predicate: "+p2+" for a "+o
+
+	def test_subobjects_has_all_mlr_values(self):
+		for s, p, o in self.graph.triples((None, rdflib.RDF.type, None)):
+			assert str(o) in MLR_Subclass_attributes
+			attributes = MLR_Subclass_attributes[str(o)]
+			predicates = set((str(p2) for s2, p2, o2 in self.graph.triples((s, None, None))))
+			for p3, name in attributes.items():
+				assert p3 in predicates,  "Missing predicate: "+p3+", "+name
 
 	def test_value_types(self):
 		triples = list(self.graph.triples((None, None, None)))
