@@ -5,6 +5,8 @@ import re
 from vobject.base import readOne
 from vobject import vcard
 
+from util import is_sequence, unwrap_seq
+
 VCARD_NS='urn:ietf:params:xml:ns:vcard-4.0'
 VCARD_NSB='{%s}' % (VCARD_NS, )
 NSMAP={None:VCARD_NS}
@@ -91,10 +93,6 @@ xcard_prop_types = {
 
 exclude_tags = ['version']
 
-def is_sequence(arg):
-    return (not hasattr(arg, "strip") and
-            hasattr(arg, "__getitem__") or
-            hasattr(arg, "__iter__"))
 
 def vobj_to_str(vobj, root, attributes):
 	for n in attributes:
@@ -148,15 +146,8 @@ def vobj_to_typed_properties(val, root):
 
 
 # TODO: Utiliser http://tools.ietf.org/html/rfc6351
+@unwrap_seq
 def convert(context, card):
-	if is_sequence(card):
-		if len(card):
-			if len(card) > 1:
-				return [convert(context, c) for c in card]
-			else:
-				card = card[0]
-		else:
-			return []
 	card = readOne(card)
 	root = context.context_node.makeelement(VCARD_NSB+'vcard', nsmap=NSMAP)
 	for e in card.getChildren():
