@@ -52,6 +52,10 @@
 	<xsl:template match="text()" mode="rights"/>
 	<xsl:template match="text()" mode="relation"/>
 	<xsl:template match="text()" mode="classification"/>
+	<xsl:template match="text()" mode="educational_learning_activity"/>
+	<xsl:template match="text()" mode="classification_curriculum"/>
+	<xsl:template match="text()" mode="educational_audience"/>
+	<xsl:template match="text()" mode="educational_annotation"/>
 
 	<xsl:template match="*">
 		<xsl:apply-templates/>
@@ -71,10 +75,39 @@
 		<xsl:apply-templates mode="technical"/>
 	</xsl:template>
 	<xsl:template match="lom:educational" mode="top">
+		<xsl:variable name="learning_activity">
+			<mlr5:RC0005>
+				<xsl:apply-templates mode="educational_learning_activity"/>
+			</mlr5:RC0005>
+		</xsl:variable>
+		<xsl:variable name="audience">
+			<mlr5:RC0002>
+				<xsl:apply-templates mode="educational_audience"/>
+			</mlr5:RC0002>
+		</xsl:variable>
+		<xsl:variable name="annotation">
+			<mlr5:RC0001>
+				<xsl:apply-templates mode="educational_annotation"/>
+			</mlr5:RC0001>
+		</xsl:variable>
 		<xsl:apply-templates mode="educational"/>
+		<xsl:if test="string-length($learning_activity)&gt;0">
+			<xsl:copy-of select="$learning_activity"/>
+		</xsl:if>
+		<xsl:if test="string-length($audience)&gt;0">
+			<xsl:copy-of select="$audience"/>
+		</xsl:if>
 	</xsl:template>
 	<xsl:template match="lom:classification" mode="top">
+		<xsl:variable name="curriculum">
+			<mlr5:RC0004>
+				<xsl:apply-templates mode="classification_curriculum" select="."/>
+			</mlr5:RC0004>
+		</xsl:variable>
 		<xsl:apply-templates mode="classification" select="." />
+		<xsl:if test="string-length($curriculum)&gt;0">
+			<xsl:copy-of select="$curriculum"/>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="lom:title" mode="general">
@@ -132,7 +165,7 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template match="lom:classification[lom:purpose[lom:source/text()='LOMv1.0' and lom:value/text()='educational level']]" mode="classification">
+	<xsl:template match="lom:classification[lom:purpose[lom:source/text()='LOMv1.0' and lom:value/text()='educational level']]" mode="classification_curriculum">
 		<xsl:choose>
 			<xsl:when test="lom:description">
 				<xsl:apply-templates select="lom:description/lom:string" mode="langstring">
@@ -183,13 +216,13 @@
 		<xsl:call-template name="mlr5_DES0600"/>
 	</xsl:template>
 
-	<xsl:template match="lom:typicalLearningTime[lom:duration]" mode="educational">
+	<xsl:template match="lom:typicalLearningTime[lom:duration]" mode="educational_learning_activity">
 		<mlr5:DES3000 rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">
 			<xsl:value-of select="lom:duration/text()"/>
 		</mlr5:DES3000>
 	</xsl:template>
 
-	<xsl:template match="lom:typicalAgeRange" mode="educational">
+	<xsl:template match="lom:typicalAgeRange" mode="educational_audience">
 		<xsl:choose>
 			<xsl:when test="regexp:test(lom:string/text(),'^[0-9]+-[0-9]+')">
 				<mlr5:DES2600 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
@@ -215,7 +248,7 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template match="lom:context" mode="educational">
+	<xsl:template match="lom:context" mode="educational_audience">
 		<mlr5:DES0500>
 			<xsl:value-of select="lom:value/text()"/>
 		</mlr5:DES0500>
@@ -231,11 +264,18 @@
 		</mlr5:DES1300>
 	</xsl:template>
 
-	<xsl:template match="lom:language" mode="educational">
+	<xsl:template match="lom:language" mode="educational_audience">
 		<mlr5:DES0400>
 			<xsl:value-of select="text()"/>
 		</mlr5:DES0400>
 	</xsl:template>
+
+	<xsl:template match="lom:type" mode="educational_learning_activity">
+		<mlr5:DES2800>
+			<xsl:call-template name="mlr5_DES2800"/>
+		</mlr5:DES2800>
+	</xsl:template>
+
 
 	<xsl:template match="lom:size" mode="technical">
 		<mlr4:DES0200 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
