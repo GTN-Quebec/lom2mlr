@@ -156,7 +156,6 @@ END:VCARD
         <typicalAgeRange>
             <string language="none">10-12</string>
         </typicalAgeRange>
-        <language>fra-CA</language>
         <intendedEndUserRole>
             <source>LOMv1.0</source>
             <value>teacher</value>
