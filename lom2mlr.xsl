@@ -76,19 +76,25 @@
 	</xsl:template>
 	<xsl:template match="lom:educational" mode="top">
 		<xsl:variable name="learning_activity">
-			<mlr5:RC0005>
-				<xsl:apply-templates mode="educational_learning_activity"/>
-			</mlr5:RC0005>
+			<mlr5:DES2000>
+				<mlr5:RC0005>
+					<xsl:apply-templates mode="educational_learning_activity"/>
+				</mlr5:RC0005>
+			</mlr5:DES2000>
 		</xsl:variable>
 		<xsl:variable name="audience">
-			<mlr5:RC0002>
-				<xsl:apply-templates mode="educational_audience"/>
-			</mlr5:RC0002>
+			<mlr5:DES1500>
+				<mlr5:RC0002>
+					<xsl:apply-templates mode="educational_audience"/>
+				</mlr5:RC0002>
+			</mlr5:DES1500>
 		</xsl:variable>
 		<xsl:variable name="annotation">
-			<mlr5:RC0001>
-				<xsl:apply-templates mode="educational_annotation"/>
-			</mlr5:RC0001>
+			<mlr5:DES1300>
+				<mlr5:RC0001>
+					<xsl:apply-templates mode="educational_annotation"/>
+				</mlr5:RC0001>
+			</mlr5:DES1300>
 		</xsl:variable>
 		<xsl:apply-templates mode="educational"/>
 		<xsl:if test="string-length($learning_activity)&gt;0">
@@ -100,9 +106,11 @@
 	</xsl:template>
 	<xsl:template match="lom:classification" mode="top">
 		<xsl:variable name="curriculum">
-			<mlr5:RC0004>
-				<xsl:apply-templates mode="classification_curriculum" select="."/>
-			</mlr5:RC0004>
+			<mlr5:DES1900>
+				<mlr5:RC0004>
+					<xsl:apply-templates mode="classification_curriculum" select="."/>
+				</mlr5:RC0004>
+			</mlr5:DES1900>
 		</xsl:variable>
 		<xsl:apply-templates mode="classification" select="." />
 		<xsl:if test="string-length($curriculum)&gt;0">
@@ -207,12 +215,9 @@
 
 	<xsl:template match="lom:learningResourceType" mode="educational">
 		<xsl:call-template name="mlr3_DES0700"/>
-		<mlr5:DES2800>
-			<xsl:value-of select="lom:value/text()" />
-		</mlr5:DES2800>
 	</xsl:template>
 
-	<xsl:template match="lom:intendedEndUserRole" mode="educational">
+	<xsl:template match="lom:intendedEndUserRole" mode="educational_audience">
 		<xsl:call-template name="mlr5_DES0600"/>
 	</xsl:template>
 
