@@ -9,13 +9,15 @@ from isodate import parse_date, parse_datetime
 MLR2_NS = 'http://standards.iso.org/iso-iec/19788/-2/ed-1/en/'
 MLR3_NS = 'http://standards.iso.org/iso-iec/19788/-3/ed-1/en/'
 MLR4_NS = 'http://standards.iso.org/iso-iec/19788/-4/ed-1/en/'
+MLR5_NS = 'http://standards.iso.org/iso-iec/19788/-5/ed-1/en/'
 
 prologue = '''
 @prefix mlr2: <%s> .
 @prefix mlr3: <%s> .
 @prefix mlr4: <%s> .
+@prefix mlr5: <%s> .
 
-''' % (MLR2_NS, MLR3_NS, MLR4_NS)
+''' % (MLR2_NS, MLR3_NS, MLR4_NS, MLR5_NS)
 
 MLR2_Element_names = {
 	MLR2_NS+'DES0100': 'Title',
@@ -55,10 +57,44 @@ MLR4_Element_names = {
 	MLR4_NS+'DES0700': 'Technical delivery context'
 }
 
+MLR5_Element_names = {
+#	MLR5_NS+'DES0100': 'Annotation date',
+#	MLR5_NS+'DES0200': 'Annotation text',
+#	MLR5_NS+'DES0300': 'Annotation type',
+	MLR5_NS+'DES0400': 'Audience language',
+	MLR5_NS+'DES0500': 'Audience level',
+	MLR5_NS+'DES0600': 'Audience role',
+#	MLR5_NS+'DES0700': 'Contribution date',
+#	MLR5_NS+'DES0800': 'Contributor role',
+#	MLR5_NS+'DES0900': 'Curriculum assessment',
+	MLR5_NS+'DES1000': 'Curriculum level',
+#	MLR5_NS+'DES1100': 'Curriculum specification',
+#	MLR5_NS+'DES1200': 'Curriculum topic',
+	MLR5_NS+'DES1300': 'Has annotation',
+#	MLR5_NS+'DES1400': 'Has annotator',
+#	MLR5_NS+'DES1500': 'Has audience',
+#	MLR5_NS+'DES1600': 'Has audience',
+#	MLR5_NS+'DES1700': 'Has contribution',
+#	MLR5_NS+'DES1800': 'Has contributor',
+#	MLR5_NS+'DES2900': 'Has curriculum',
+#	MLR5_NS+'DES2000': 'Has learning activity',
+#	MLR5_NS+'DES2100': 'Induced activity',
+#	MLR5_NS+'DES2200': 'Learning activity occurrence',
+#	MLR5_NS+'DES2300': 'Learning method',
+#	MLR5_NS+'DES2400': 'Learning method',
+	MLR5_NS+'DES2500': 'Maximum age',
+	MLR5_NS+'DES2600': 'Minimum age',
+#	MLR5_NS+'DES2700': 'Pedagogical relation',
+	MLR5_NS+'DES2800': 'Pedagogical type',
+#	MLR5_NS+'DES2900': 'Prerequisite',
+	MLR5_NS+'DES3000': 'Typical learning time',
+}
+
 Element_names = {}
 Element_names.update(MLR2_Element_names)
 Element_names.update(MLR3_Element_names)
 Element_names.update(MLR4_Element_names)
+Element_names.update(MLR5_Element_names)
 
 Known_Missing = set([
 	MLR2_NS+'DES0700', # replaced by MLR3:DES0100
@@ -107,7 +143,7 @@ class testMlr2(unittest.TestCase):
 		assert(len(self.graph)>0)
 
 	def test_has_lang(self):
-		expected = '%s <%s> mlr3:DES0500 "fr-CA".' % (prologue, TEST_ID)
+		expected = '%s <%s> mlr3:DES0500 "fra-CA".' % (prologue, TEST_ID)
 		assert(len(list(self.graph.triples(self.triple_from_n3(expected)))))
 
 	def test_has_all_mlr_values(self):

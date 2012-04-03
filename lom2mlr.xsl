@@ -8,14 +8,17 @@
 	xmlns:dc="http://purl.org/dc/elements/1.1/"
 	xmlns:vcardconv="http://ntic.org/vcard"
 	xmlns:vcard="urn:ietf:params:xml:ns:vcard-4.0"
+	xmlns:mlrext='http://standards.iso.org/iso-iec/19788/ext/'
 	xmlns:mlr2="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/"
 	xmlns:mlr3="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/"
 	xmlns:mlr4="http://standards.iso.org/iso-iec/19788/-4/ed-1/en/"
 	xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
-	extension-element-prefixes="regexp str vcardconv"
+	extension-element-prefixes="regexp str vcardconv mlrext"
 	>
 	<xsl:output method="xml" encoding="UTF-8"/>
+
+	<xsl:include href="correspondances_xsl.xsl"/>
 
 	<xsl:template match="/">
 		<rdf:RDF>
@@ -129,6 +132,26 @@
 		</xsl:choose>
 	</xsl:template>
 
+	<xsl:template match="lom:classification[lom:purpose[lom:source/text()='LOMv1.0' and lom:value/text()='educational level']]" mode="classification">
+		<xsl:choose>
+			<xsl:when test="lom:description">
+				<xsl:apply-templates select="lom:description/lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="'mlr5:DES1000'"/>
+				</xsl:apply-templates>
+			</xsl:when>
+			<xsl:when test="lom:keyword">
+				<xsl:apply-templates select="lom:keyword/lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="'mlr5:DES1000'"/>
+				</xsl:apply-templates>
+			</xsl:when>
+			<xsl:when test="lom:taxonPath">
+				<xsl:apply-templates select="lom:taxonPath/lom:taxon[last()]/lom:entry/lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="'mlr5:DES1000'"/>
+				</xsl:apply-templates>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
 	<xsl:template match="lom:description" mode="general">
 		<xsl:apply-templates select="lom:string" mode="langstring">
 			<xsl:with-param name="nodename" select="'mlr3:DES0200'"/>
@@ -150,35 +173,72 @@
 	</xsl:template>
 
 	<xsl:template match="lom:learningResourceType" mode="educational">
+		<xsl:call-template name="mlr3_DES0700"/>
+		<mlr5:DES2800>
+			<xsl:value-of select="lom:value/text()" />
+		</mlr5:DES2800>
+	</xsl:template>
+
+	<xsl:template match="lom:intendedEndUserRole" mode="educational">
+		<xsl:call-template name="mlr5_DES0600"/>
+	</xsl:template>
+
+	<xsl:template match="lom:typicalLearningTime[lom:duration]" mode="educational">
+		<mlr5:DES3000 rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">
+			<xsl:value-of select="lom:duration/text()"/>
+		</mlr5:DES3000>
+	</xsl:template>
+
+	<xsl:template match="lom:typicalAgeRange" mode="educational">
 		<xsl:choose>
-			<xsl:when test="/lom:lom/lom:general/lom:aggregationLevel[lom:source/text()='LOMv1.0' and lom:value/text()='collection']">
-				<mlr3:DES0700>T001</mlr3:DES0700> <!-- collection -->
+			<xsl:when test="regexp:test(lom:string/text(),'^[0-9]+-[0-9]+')">
+				<mlr5:DES2600 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+					<xsl:value-of select="substring-before(lom:string/text(),'-')"/>
+				</mlr5:DES2600>
+				<mlr5:DES2500 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+					<xsl:value-of select="regexp:match(substring-after(lom:string/text(),'-'),'^[0-9]+')"/>
+				</mlr5:DES2500>
 			</xsl:when>
-			<xsl:when test="../lom:interactivityLevel[lom:source/text()='LOMv1.0' and (lom:value/text()='high' or lom:value/text()='very high')] or ../lom:interactivityType[lom:source/text()='LOMv1.0' and lom:value/text()='active']">
-				<mlr3:DES0700>T005</mlr3:DES0700> <!-- interactive ressource -->
+			<xsl:when test="regexp:test(lom:string/text(),'^[0-9]+-')">
+				<mlr5:DES2600 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+					<xsl:value-of select="substring-before(lom:string/text(),'-')"/>
+				</mlr5:DES2600>
 			</xsl:when>
-			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='narrative text'">
-				<mlr3:DES0700>T012</mlr3:DES0700> <!-- text -->
+			<xsl:when test="regexp:test(lom:string/text(),'^[0-9]+')">
+				<mlr5:DES2600 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+					<xsl:value-of select="regexp:match(lom:string/text(),'^[0-9]+')"/>
+				</mlr5:DES2600>
+				<mlr5:DES2500 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+					<xsl:value-of select="regexp:match(lom:string/text(),'^[0-9]+')"/>
+				</mlr5:DES2500>
 			</xsl:when>
-			<xsl:when test="lom:source/text()='LOMv1.0' and (lom:value/text()='slide' or lom:value/text()='diagram' or lom:value/text()='figure' or lom:value/text()='graph')">
-				<mlr3:DES0700>T011</mlr3:DES0700> <!-- still image -->
-			</xsl:when>
-			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='table'">
-				<mlr3:DES0700>T002</mlr3:DES0700> <!-- dataset -->
-			</xsl:when>
-			<xsl:when test="lom:source/text()='http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml' and lom:value/text()='outils'">
-				<mlr3:DES0700>T009</mlr3:DES0700> <!-- software -->
-			</xsl:when>
-			<xsl:otherwise>
-				<mlr2:DES0800>
-					<xsl:value-of select="lom:value/text()"/>
-				</mlr2:DES0800>
-			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 
+	<xsl:template match="lom:context" mode="educational">
+		<mlr5:DES0500>
+			<xsl:value-of select="lom:value/text()"/>
+		</mlr5:DES0500>
+	</xsl:template>
+
+	<xsl:template match="lom:description" mode="educational">
+		<mlr5:DES1300>
+			<mlr5:RC0001>
+				<xsl:apply-templates select="lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="'mlr5:DES0200'"/>
+				</xsl:apply-templates>
+			</mlr5:RC0001>
+		</mlr5:DES1300>
+	</xsl:template>
+
+	<xsl:template match="lom:language" mode="educational">
+		<mlr5:DES0400>
+			<xsl:value-of select="text()"/>
+		</mlr5:DES0400>
+	</xsl:template>
+
 	<xsl:template match="lom:size" mode="technical">
-		<mlr4:DES0200>
+		<mlr4:DES0200 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
 			<xsl:value-of select="text()"/>
 		</mlr4:DES0200>
 	</xsl:template>
@@ -205,6 +265,7 @@
 
 	<xsl:template match="lom:location" mode="technical">
 		<mlr4:DES0100>
+			<!-- question: Make this a resource? -->
 			<xsl:value-of select="text()"/>
 		</mlr4:DES0100>
 	</xsl:template>
@@ -225,7 +286,7 @@
 
 	<xsl:template match="lom:duration" mode="technical">
 		<xsl:if test="lom:duration and regexp:test(lom:duration/text(),'^PT([0-9]+H)?([0-9]+M)?([0-9]+S)?$')">
-			<mlr4:DES0300>
+			<mlr4:DES0300 rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">
 				<xsl:call-template name="as_00num">
 					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+H'),'H')"/>
 				</xsl:call-template>
@@ -344,13 +405,17 @@
 
 	<xsl:template match="lom:identifier" mode="general">
 		<mlr3:DES0400>
-			<xsl:value-of select="lom:entry/text()"/>
+			<xsl:attribute name="rdf:resource">
+				<xsl:value-of select="lom:entry/text()"/>
+			</xsl:attribute>
 		</mlr3:DES0400>
 	</xsl:template>
 
 	<xsl:template match="lom:relation[lom:kind[lom:source/text()='LOMv1.0' and lom:value/text()='isbasedon']]" mode="top">
 		<mlr3:DES0600>
-			<xsl:value-of select="lom:resource/lom:identifier/lom:entry/text()"/>
+			<xsl:attribute name="rdf:resource">
+				<xsl:value-of select="lom:resource/lom:identifier/lom:entry/text()"/>
+			</xsl:attribute>
 		</mlr3:DES0600>
 	</xsl:template>
 
@@ -371,7 +436,9 @@
 
 	<xsl:template match="lom:relation" mode="top">
 		<mlr2:DES1300>
-			<xsl:value-of select="lom:resource/lom:identifier/lom:entry/text()"/>
+			<xsl:attribute name="rdf:resource">
+				<xsl:value-of select="lom:resource/lom:identifier/lom:entry/text()"/>
+			</xsl:attribute>
 		</mlr2:DES1300>
 	</xsl:template>
 

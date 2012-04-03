@@ -6,11 +6,11 @@
       <entry>oai:test.licef.ca:123123</entry>
     </identifier>
         <title>
-            <string language="fr-CA">Conditions favorables à l'intégration des TIC...</string>
+            <string language="fra-CA">Conditions favorables à l'intégration des TIC...</string>
         </title>
-        <language>fr-CA</language>
+        <language>fra-CA</language>
         <description>
-            <string language="fr-CA">L'enseignante identifie les contraintes provenant de l'organisation scolaire devant être modifiées pour permettre la mise en place de contextes d'apprentissages signifiants pour les élèves. </string>
+            <string language="fra-CA">L'enseignante identifie les contraintes provenant de l'organisation scolaire devant être modifiées pour permettre la mise en place de contextes d'apprentissages signifiants pour les élèves. </string>
         </description>
         <keyword>
       <string language="fr">optique</string>
@@ -18,7 +18,7 @@
       <string language="fr">physique</string>
     </keyword>
     <coverage>
-        <string language="fr-CA">Québec</string>
+        <string language="fra-CA">Québec</string>
     </coverage>
     <structure>
             <source>LOMv1.0</source>
@@ -31,7 +31,7 @@
     </general>
     <lifeCycle>
         <version>
-            <string language="fr-CA">1</string>
+            <string language="fra-CA">1</string>
         </version>
         <status>
             <source>LOMv1.0</source>
@@ -99,7 +99,7 @@ END:VCARD
             <entry>oai:aquops.qc.ca:videos:8</entry>
         </identifier>
         <metadataSchema>LOMv1.0</metadataSchema>
-        <language>fr-CA</language>
+        <language>fra-CA</language>
     </metaMetadata>
     <technical>
         <size>123123</size>
@@ -154,16 +154,24 @@ END:VCARD
             <value>training</value>
         </context>
         <typicalAgeRange>
-            <string language="fr-CA">adultes</string>
+            <string language="none">10-12</string>
         </typicalAgeRange>
-        <language>fr-CA</language>
+        <language>fra-CA</language>
         <intendedEndUserRole>
             <source>LOMv1.0</source>
             <value>teacher</value>
         </intendedEndUserRole>
         <typicalLearningTime>
             <duration>P1M</duration>
-        </typicalLearningTime>    </educational>
+        </typicalLearningTime>
+        <description>
+            <string language="fra-CA">Cette ressource peut être très efficace lorsqu’elle est
+utilisée comme déclencheur de discussion dans les classes de deuxième année.
+Cependant, elle peut aussi être utilisée pour les devoirs d’écriture individuels pour
+les élèves de quatrième ou de cinquième année qui éprouvent des difficultés.</string>
+        </description>
+        <language>fra-CA</language>
+    </educational>
     <rights>
         <cost>
             <source>LOMv1.0</source>
@@ -174,7 +182,7 @@ END:VCARD
             <value>yes</value>
         </copyrightAndOtherRestrictions>
         <description>
-            <string language="fr-CA">L'utilisation de ces vidéos se fait  uniquement par lintermédiaire de ce site et à des fins éducatives et non lucratives pour fin de consultation ou de présentation à des intervenants du milieu de léducation. Ces vidéos ne peuvent en aucun cas être copiées ou transférées sur support informatique.</string>
+            <string language="fra-CA">L'utilisation de ces vidéos se fait  uniquement par lintermédiaire de ce site et à des fins éducatives et non lucratives pour fin de consultation ou de présentation à des intervenants du milieu de léducation. Ces vidéos ne peuvent en aucun cas être copiées ou transférées sur support informatique.</string>
         </description>
     </rights>
     <relation>
@@ -206,7 +214,7 @@ END:VCARD
 <source>LOMv1.0</source>
 <value>accessibility restrictions</value>
 </purpose>
-<taxonPath><source>        <string language="fr-CA">http://eureka.ntic.org/vdex/eureka_main_themes_voc.xml</string>
+<taxonPath><source>        <string language="fra-CA">http://eureka.ntic.org/vdex/eureka_main_themes_voc.xml</string>
       </source>
       <taxon>
         <id>EUREKA_ROOT</id>
@@ -218,7 +226,7 @@ END:VCARD
       <taxon>
         <id>41bd6a4da724c</id>
         <entry>
-          <string language="fr-CA">Développement et tests</string>
+          <string language="fra-CA">Développement et tests</string>
         </entry>
       </taxon>
     </taxonPath>
@@ -240,5 +248,14 @@ END:VCARD
             </entry>
         </taxon>
     </taxonPath>
+</classification>
+<classification>
+    <purpose>
+        <source>LOMv1.0</source>
+        <value>educational level</value>
+    </purpose>
+    <description>
+        <string language="fra-CA">secondaire</string>
+    </description>
 </classification>
 </lom>
