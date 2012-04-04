@@ -9,11 +9,13 @@
 	xmlns:vcardconv="http://ntic.org/vcard"
 	xmlns:vcard="urn:ietf:params:xml:ns:vcard-4.0"
 	xmlns:mlrext='http://standards.iso.org/iso-iec/19788/ext/'
+	xmlns:mlr1="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/"
 	xmlns:mlr2="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/"
 	xmlns:mlr3="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/"
 	xmlns:mlr4="http://standards.iso.org/iso-iec/19788/-4/ed-1/en/"
 	xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
+	xmlns:mlr9="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/"
 	extension-element-prefixes="regexp str vcardconv mlrext"
 	>
 	<xsl:output method="xml" encoding="UTF-8"/>
@@ -27,7 +29,7 @@
 	</xsl:template>
 
 	<xsl:template match="lom:lom">
-		<rdf:Description>
+		<mlr1:RC0002>
 			<xsl:attribute name="rdf:about">
 				<xsl:choose>
 					<xsl:when test="lom:general/lom:identifier/lom:entry">
@@ -39,13 +41,14 @@
 				</xsl:choose>
 			</xsl:attribute>
 			<xsl:apply-templates mode="top"/>
-		</rdf:Description>
+		</mlr1:RC0002>
 	</xsl:template>
 
 	<xsl:template match="text()" />
 	<xsl:template match="text()" mode="top"/>
 	<xsl:template match="text()" mode="general"/>
 	<xsl:template match="text()" mode="lifeCycle"/>
+	<xsl:template match="text()" mode="lifeCycle_ed"/>
 	<xsl:template match="text()" mode="metaMetadata"/>
 	<xsl:template match="text()" mode="technical"/>
 	<xsl:template match="text()" mode="educational"/>
@@ -56,6 +59,10 @@
 	<xsl:template match="text()" mode="classification_curriculum"/>
 	<xsl:template match="text()" mode="educational_audience"/>
 	<xsl:template match="text()" mode="educational_annotation"/>
+	<xsl:template match="text()" mode="vcard_org"/>
+	<xsl:template match="text()" mode="vcard_np"/>
+	<xsl:template match="text()" mode="vcard_person"/>
+	<xsl:template match="text()" mode="address"/>
 
 	<xsl:template match="*">
 		<xsl:apply-templates/>
@@ -67,6 +74,7 @@
 	</xsl:template>
 	<xsl:template match="lom:lifeCycle" mode="top">
 		<xsl:apply-templates mode="lifeCycle"/>
+		<xsl:apply-templates mode="lifeCycle_ed"/>
 	</xsl:template>
 	<xsl:template match="lom:metaMetadata" mode="top">
 		<xsl:apply-templates mode="metaMetadata"/>
@@ -153,6 +161,244 @@
 		</xsl:choose>
 	</xsl:template>
 
+	<xsl:template match="lom:contribute[lom:role[lom:source/text()='LOMv1.0' and lom:value/text()='publisher']]" mode="lifeCycle">
+		<mlr2:DES0500> <!-- publisher -->
+			<xsl:value-of select="vcardconv:convert(lom:entity/text())/vcard:fn/vcard:text/text()" />
+		</mlr2:DES0500>
+	</xsl:template>
+
+
+	<xsl:template match="lom:contribute" mode="lifeCycle">
+		<mlr2:DES0600> <!-- contributor -->
+			<xsl:value-of select="vcardconv:convert(lom:entity/text())/vcard:fn/vcard:text/text()" />
+		</mlr2:DES0600>
+	</xsl:template>
+
+	<xsl:template match="lom:contribute" mode="lifeCycle_ed">
+		<mlr5:DES1700>
+			<mlr5:RC0003>
+				<xsl:apply-templates mode="lifeCycle_ed"/>
+			</mlr5:RC0003>
+		</mlr5:DES1700>
+	</xsl:template>
+
+	<xsl:template match="lom:role" mode="lifeCycle_ed">
+		<xsl:call-template name="mlr5_DES0800"/>
+	</xsl:template>
+
+	<xsl:template match="lom:date" mode="lifeCycle_ed">
+		<xsl:choose>
+			<!-- first cases: valid 8601 date or datetime -->
+			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6]))))$')">
+				<mlr5:DES0700 rdf:datatype="http://www.w3.org/2001/XMLSchema#date">
+					<xsl:value-of select="lom:dateTime/text()" />
+				</mlr5:DES0700>
+			</xsl:when>
+			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$')">
+				<mlr5:DES0700 rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">
+					<xsl:value-of select="lom:dateTime/text()" />
+				</mlr5:DES0700>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="lom:entity" mode="lifeCycle_ed">
+		<mlr5:DES1800>
+			<!-- <xsl:copy-of select="vcardconv:convert(text())" /> -->
+			<xsl:apply-templates mode="lifeCycle_ed" select="vcardconv:convert(text())" />
+		</mlr5:DES1800>
+	</xsl:template>
+
+	<xsl:template match="vcard:vcard" mode="lifeCycle_ed">
+		<xsl:choose>
+			<xsl:when test="vcard:n">
+				<mlr9:RC0001>
+					<xsl:call-template name="person_identity"/>
+					<xsl:apply-templates mode="vcard_np" />
+					<xsl:if test="vcard:org or vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+						<mlr9:DES1100>
+							<mlr9:RC0002>
+								<xsl:choose>
+									<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+										<!-- This is a risky heuristics. We might pick up on a personal work url. -->
+										<mlr9:DES0100>
+											<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:uri/text()"/>
+										</mlr9:DES0100>
+									</xsl:when>
+									<xsl:when test="vcard:org">
+										<mlr9:DES0100>
+											<xsl:value-of select="vcard:org[1]/vcard:text/text()"/>
+										</mlr9:DES0100>
+									</xsl:when>
+								</xsl:choose>
+								<xsl:apply-templates mode="vcard_org" />
+								<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+									<mlr9:DES1300>
+										<mlr9:RC0003>
+											<xsl:apply-templates mode="address" select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']"/>
+											<!-- skip geo which might be home address -->
+										</mlr9:RC0003>
+									</mlr9:DES1300>
+								</xsl:if>
+							</mlr9:RC0002>
+						</mlr9:DES1100>
+					</xsl:if>
+				</mlr9:RC0001>
+			</xsl:when>
+			<xsl:when test="vcard:org">
+				<mlr9:RC0002>
+					<xsl:call-template name="person_identity"/>
+					<xsl:apply-templates mode="vcard_org" />
+					<xsl:if test="vcard:geo or vcard:adr">
+						<mlr9:DES1300>
+							<mlr9:RC0003>
+								<xsl:apply-templates mode="address" select="vcard:adr"/>
+								<xsl:if test="vcard:geo">
+									<mlr9:DES1500 rdf:datatype="http://www.w3.org/2001/XMLSchema#float">
+										<xsl:value-of select="substring-before(vcard:geo[1]/vcard:uri/text(),';')"/>
+									</mlr9:DES1500>
+									<mlr9:DES1400 rdf:datatype="http://www.w3.org/2001/XMLSchema#float">
+										<xsl:value-of select="substring-after(vcard:geo[1]/vcard:uri/text(),';')"/>
+									</mlr9:DES1400>
+								</xsl:if>
+							</mlr9:RC0003>
+						</mlr9:DES1300>
+					</xsl:if>
+				</mlr9:RC0002>
+			</xsl:when>
+			<xsl:otherwise>
+				<mlr1:RC0003>
+					<xsl:call-template name="person_identity"/>
+					<xsl:apply-templates mode="vcard_person" />
+				</mlr1:RC0003>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="person_identity">
+		<mlr9:DES0100>
+			<xsl:choose>
+				<xsl:when test="vcard:url">
+					<xsl:value-of select="vcard:url[1]/vcard:uri/text()"/>
+				</xsl:when>
+				<xsl:when test="vcard:org and not(vcard:n)">
+					<xsl:value-of select="vcard:org[1]/vcard:text/text()"/>
+				</xsl:when>
+				<xsl:when test="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']">
+					<xsl:text>mailto:</xsl:text>
+					<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET'][1]/vcard:text/text()"/>
+				</xsl:when>
+				<xsl:when test="vcard:org">
+					<xsl:value-of select="vcard:org[1]/vcard:text/text()"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="vcard:fn/vcard:text/text()"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</mlr9:DES0100>
+	</xsl:template>
+
+	<xsl:template match="vcard:fn" mode="vcard_person">
+		<mlr9:DES0200>
+			<xsl:value-of select="vcard:text/text()"/>
+		</mlr9:DES0200>
+	</xsl:template>
+
+	<xsl:template match="vcard:fn" mode="vcard_np">
+		<mlr9:DES0800>
+			<xsl:value-of select="vcard:text/text()"/>
+		</mlr9:DES0800>
+	</xsl:template>
+
+	<xsl:template match="vcard:x-skype" mode="vcard_np">
+		<mlr9:DES0600>
+			<xsl:value-of select="vcard:unknown/text()"/>
+		</mlr9:DES0600>
+	</xsl:template>
+
+	<xsl:template match="vcard:x-skype-username" mode="vcard_np">
+		<mlr9:DES0600>
+			<xsl:value-of select="vcard:unknown/text()"/>
+		</mlr9:DES0600>
+	</xsl:template>
+
+	<xsl:template match="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']" mode="vcard_np">
+		<mlr9:DES0900>
+			<xsl:value-of select="vcard:text/text()"/>
+		</mlr9:DES0900>
+	</xsl:template>
+
+	<xsl:template mode="address" match="vcard:adr">
+		<mlr9:DES1700>
+			<xsl:value-of select="vcard:street/text()"/>
+			<xsl:text>
+</xsl:text>
+			<xsl:value-of select="vcard:city/text()"/>
+			<xsl:text>, </xsl:text>
+			<xsl:value-of select="vcard:region/text()"/>
+			<xsl:text>, </xsl:text>
+			<xsl:value-of select="vcard:code/text()"/>
+			<xsl:text>
+</xsl:text>
+			<xsl:value-of select="vcard:country/text()"/>
+		</mlr9:DES1700>
+	</xsl:template>
+
+	<xsl:template match="vcard:org" mode="vcard_org">
+		<mlr9:DES1200>
+			<xsl:value-of select="vcard:text/text()"/>
+		</mlr9:DES1200>
+	</xsl:template>
+
+	<xsl:template match="vcard:n" mode="vcard_np">
+		<mlr9:DES0500>
+			<xsl:variable name="name">
+				<xsl:if test="vcard:prefix">
+					<xsl:value-of select="vcard:prefix/text()"/>
+					<xsl:text> </xsl:text>
+				</xsl:if>
+				<xsl:if test="vcard:given">
+					<xsl:value-of select="vcard:given/text()"/>
+					<xsl:text> </xsl:text>
+				</xsl:if>
+				<xsl:if test="vcard:additional">
+					<xsl:value-of select="vcard:additional/text()"/>
+					<xsl:text> </xsl:text>
+				</xsl:if>
+				<xsl:if test="vcard:surname">
+					<xsl:value-of select="vcard:surname/text()"/>
+					<xsl:text> </xsl:text>
+				</xsl:if>
+				<xsl:if test="vcard:suffix">
+					<xsl:value-of select="vcard:suffix/text()"/>
+				</xsl:if>
+			</xsl:variable>
+			<xsl:value-of select="normalize-space($name)"/>
+		</mlr9:DES0500>
+		<mlr9:DES0700>
+			<xsl:value-of select="vcard:surname/text()"/>
+			<xsl:text>;</xsl:text>
+			<xsl:value-of select="vcard:given/text()"/>
+			<xsl:text>;</xsl:text>
+			<xsl:value-of select="vcard:additional/text()"/>
+			<xsl:text>;</xsl:text>
+			<xsl:value-of select="vcard:prefix/text()"/>
+			<xsl:text>;</xsl:text>
+			<xsl:value-of select="vcard:suffix/text()"/>
+		</mlr9:DES0700>
+		<mlr9:DES0300>
+			<xsl:value-of select="vcard:surname/text()"/>
+		</mlr9:DES0300>
+		<mlr9:DES0400>
+			<xsl:value-of select="vcard:given/text()"/>
+		</mlr9:DES0400>
+	</xsl:template>
+	<xsl:template match="vcard:tel[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'VOICE']" mode="vcard_np">
+		<mlr9:DES1000>
+			<xsl:value-of select="vcard:text/text()"/>
+		</mlr9:DES1000>
+	</xsl:template>
+
 	<xsl:template match="lom:classification[lom:purpose[lom:source/text()='LOMv1.0' and lom:value/text()='discipline']]" mode="classification">
 		<xsl:choose>
 			<xsl:when test="lom:description">
@@ -197,20 +443,6 @@
 		<xsl:apply-templates select="lom:string" mode="langstring">
 			<xsl:with-param name="nodename" select="'mlr3:DES0200'"/>
 		</xsl:apply-templates>
-	</xsl:template>
-
-
-	<xsl:template match="lom:contribute[lom:role[lom:source/text()='LOMv1.0' and lom:value/text()='publisher']]" mode="lifeCycle">
-		<mlr2:DES0500> <!-- publisher -->
-			<xsl:value-of select="vcardconv:convert(lom:entity/text())/vcard:fn/vcard:text/text()" />
-		</mlr2:DES0500>
-	</xsl:template>
-
-
-	<xsl:template match="lom:contribute" mode="lifeCycle">
-		<mlr2:DES0600> <!-- contributor -->
-			<xsl:value-of select="vcardconv:convert(lom:entity/text())/vcard:fn/vcard:text/text()" />
-		</mlr2:DES0600>
 	</xsl:template>
 
 	<xsl:template match="lom:learningResourceType" mode="educational">

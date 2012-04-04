@@ -46,7 +46,10 @@
 VERSION:3.0
 FN:Marc-Antoine Parent
 N:Parent;Marc-Antoine;;;
+ORG:GTN-Québec
 EMAIL;TYPE=INTERNET:map@ntic.org
+X-SKYPE:maparent
+URL:http://maparent.ca
 TEL;TYPE=WORK,VOICE:+1-514-948-1234
 TEL;TYPE=WORK,FAX:+1-514-948-1231
 ADR;TYPE=WORK,POST:;;7400,boul. Saint-Laurent,Bureau 530;Montréal;Québec;H2R 2Y1;Canada
@@ -69,6 +72,7 @@ EMAIL;TYPE=INTERNET:frederic.bergeron@licef.org
 TEL;TYPE=WORK,VOICE:+1-514-948-1234
 TEL;TYPE=WORK,FAX:+1-514-948-1231
 ADR;TYPE=WORK,POST:;;7400,boul. Saint-Laurent,Bureau 530;Montréal;Québec;H2R 2Y1;Canada
+ORG:LICEF
 END:VCARD
 </entity>
             <date>
@@ -86,6 +90,8 @@ VERSION:3.0
 FN:GTN-Québec
 ORG:GTN-Québec
 EMAIL;TYPE=INTERNET:info@gtn-quebec.org
+ADR;TYPE=WORK,POST:;;7400,boul. Saint-Laurent,Bureau 530;Montréal;Québec;H2R 2Y1;Canada
+GEO:37.386013;-122.082932
 END:VCARD
 </entity>
             <date>
