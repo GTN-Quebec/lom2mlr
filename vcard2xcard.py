@@ -170,5 +170,4 @@ def convert(context, card):
 			vobj_to_str(v, el, vcard.NAME_ORDER)
 		else:
 			vobj_to_typed_properties(v, el)
-	context.context_node.append(root)
 	return root
