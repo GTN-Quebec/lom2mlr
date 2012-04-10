@@ -59,6 +59,7 @@
 				<xslin:value-of select="concat(../@ns,'_',@lang,':',translate(text(),$trfrom,'___'))"/>
 			</xslin:attribute>
 			<xslin:element name="{concat(../@ns,':',../@id)}">
+				<xsl:apply-templates select="@*"/>
 				<xsl:apply-templates/>
 			</xslin:element>
 		</xsl:template>
