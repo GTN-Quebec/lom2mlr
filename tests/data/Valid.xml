@@ -50,6 +50,7 @@ ORG:GTN-Québec
 EMAIL;TYPE=INTERNET:map@ntic.org
 X-SKYPE:maparent
 URL:http://maparent.ca
+URL;TYPE=WORK:http://www.gtn-quebec.org/
 TEL;TYPE=WORK,VOICE:+1-514-948-1234
 TEL;TYPE=WORK,FAX:+1-514-948-1231
 ADR;TYPE=WORK,POST:;;7400,boul. Saint-Laurent,Bureau 530;Montréal;Québec;H2R 2Y1;Canada
@@ -89,6 +90,7 @@ END:VCARD
 VERSION:3.0
 FN:GTN-Québec
 ORG:GTN-Québec
+URL:http://www.gtn-quebec.org/
 EMAIL;TYPE=INTERNET:info@gtn-quebec.org
 ADR;TYPE=WORK,POST:;;7400,boul. Saint-Laurent,Bureau 530;Montréal;Québec;H2R 2Y1;Canada
 GEO:37.386013;-122.082932

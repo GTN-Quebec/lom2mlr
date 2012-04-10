@@ -8,7 +8,7 @@
 	xmlns:dc="http://purl.org/dc/elements/1.1/"
 	xmlns:vcardconv="http://ntic.org/vcard"
 	xmlns:vcard="urn:ietf:params:xml:ns:vcard-4.0"
-	xmlns:mlrext='http://standards.iso.org/iso-iec/19788/ext/'
+	xmlns:mlrext="http://standards.iso.org/iso-iec/19788/ext/"
 	xmlns:mlr1="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/"
 	xmlns:mlr2="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/"
 	xmlns:mlr3="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/"
@@ -213,11 +213,27 @@
 		<xsl:choose>
 			<xsl:when test="vcard:n">
 				<mlr9:RC0001>
+					<xsl:variable name="identity_url">
+						<xsl:call-template name="person_identity_url"/>
+					</xsl:variable>
+					<xsl:if test="$identity_url != ''">
+						<xsl:attribute name="rdf:about">
+							<xsl:value-of select="$identity_url"/>
+						</xsl:attribute>
+					</xsl:if>
 					<xsl:call-template name="person_identity"/>
 					<xsl:apply-templates mode="vcard_np" />
 					<xsl:if test="vcard:org or vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
 						<mlr9:DES1100>
 							<mlr9:RC0002>
+								<xsl:variable name="org_identity_url">
+									<xsl:call-template name="org_identity_url"/>
+								</xsl:variable>
+								<xsl:if test="$org_identity_url != ''">
+									<xsl:attribute name="rdf:about">
+										<xsl:value-of select="$org_identity_url"/>
+									</xsl:attribute>
+								</xsl:if>
 								<xsl:choose>
 									<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
 										<!-- This is a risky heuristics. We might pick up on a personal work url. -->
@@ -247,6 +263,14 @@
 			</xsl:when>
 			<xsl:when test="vcard:org">
 				<mlr9:RC0002>
+					<xsl:variable name="org_identity_url">
+						<xsl:call-template name="org_identity_url"/>
+					</xsl:variable>
+					<xsl:if test="$org_identity_url != ''">
+						<xsl:attribute name="rdf:about">
+							<xsl:value-of select="$org_identity_url"/>
+						</xsl:attribute>
+					</xsl:if>
 					<xsl:call-template name="person_identity"/>
 					<xsl:apply-templates mode="vcard_org" />
 					<xsl:if test="vcard:geo or vcard:adr">
@@ -296,6 +320,31 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</mlr9:DES0100>
+	</xsl:template>
+
+	<xsl:template name="person_identity_url">
+		<xsl:choose>
+			<xsl:when test="vcard:url">
+				<xsl:value-of select="vcard:url[1]/vcard:uri/text()"/>
+			</xsl:when>
+			<xsl:when test="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']">
+				<xsl:value-of select="mlrext:uuid_email(vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET'][1]/vcard:text/text())"/>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="org_identity_url">
+		<xsl:choose>
+			<xsl:when test="vcard:url and not(vcard:n)">
+				<xsl:value-of select="vcard:url[1]/vcard:uri/text()"/>
+			</xsl:when>
+			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:uri/text()"/>
+			</xsl:when>
+			<xsl:when test="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET'] and not(vcard:n)">
+				<xsl:value-of select="mlrext:uuid_email(vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET'][1]/vcard:text/text())"/>
+			</xsl:when>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="vcard:fn" mode="vcard_person">
