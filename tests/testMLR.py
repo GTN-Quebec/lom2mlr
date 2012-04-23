@@ -1,7 +1,7 @@
 import sys
 import unittest
 
-from rdflib import RDF, ConjunctiveGraph, term, Namespace
+from rdflib import RDF, Graph, term, Namespace
 
 from lom2mlr import Converter
 from isodate import parse_date, parse_datetime
@@ -205,7 +205,7 @@ class testMlr2(unittest.TestCase):
 		self.graph = self.converter.lomfile2graph('tests/data/Valid.xml')
 
 	def triple_from_n3(self, n3):
-		g = ConjunctiveGraph().parse(data=n3, format="n3")
+		g = Graph().parse(data=n3, format="n3")
 		return g.triples((None,None,None)).next()
 
 	def test_not_empty(self):

@@ -5,7 +5,7 @@ import os.path
 
 from uuid import uuid5, NAMESPACE_URL
 from lxml import etree
-from rdflib import ConjunctiveGraph
+from rdflib import Graph
 
 from util import unwrap_seq
 from vcard2xcard import convert
@@ -69,12 +69,12 @@ class Converter(object):
 	def lomfile2graph(self, fname, lang=None):
 		"Takes a path to a lom file, returns a rdf graph"
 		xml = self.lomfile2rdfxml(fname, lang)
-		return ConjunctiveGraph().parse(data=etree.tounicode(xml), format="xml")
+		return Graph().parse(data=etree.tounicode(xml), format="xml")
 
 	def lomxml2graph(self, xml, lang=None):
 		"Takes a LOM xml object, returns a rdf graph"
-		xml = self.lomxml2graph(self, xml, lang)
-		return ConjunctiveGraph().parse(data=etree.tounicode(xml), format="xml")
+		xml = self.lomxml2rdfxml(xml, lang)
+		return Graph().parse(data=etree.tounicode(xml), format="xml")
 
 
 if __name__ == '__main__':
