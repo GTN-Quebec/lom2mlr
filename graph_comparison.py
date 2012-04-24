@@ -150,12 +150,26 @@ class GraphTester(object):
                     errors.append((self.UNEXPECTED, tuple([self.normalizeTerm(nsm, x) for x in triple])))
         return errors
 
+    def convert_lom(self, lom):
+        return self.converter.lomxml2graph(etree.fromstring(LOM_TEMPLATE % (lom,)))
+
+    def convert_n3(self, n3):
+        return Graph().parse(data=N3_PREFIXES+n3, format="n3")
+
+    def convert(self, format, code):
+        if format.lower() == 'xml':
+            return self.convert_lom(code)
+        elif format.lower() == 'n3':
+            return self.convert_n3(code)
+        else:
+            raise Exception("invalid code format parameter: "+format)
+
     def test_lom(self, lom, expected_n3, forbidden_n3=None):
         "Transform a LOM string into a graph; returns discrepancies with (N3) expected and forbidden."
-        obtained_graph = self.converter.lomxml2graph(etree.fromstring(LOM_TEMPLATE % (lom,)))
-        expected_graph = Graph().parse(data=N3_PREFIXES+expected_n3, format="n3")
+        obtained_graph = self.convert_lom(lom)
+        expected_graph = self.convert_n3(expected_n3)
         forbidden_graph = None
         if forbidden_n3:
-            forbidden_graph = Graph().parse(data=N3_PREFIXES+forbidden_n3, format="n3")
+            forbidden_graph = self.convert_n3(forbidden_n3)
         errors = self.test_graphs(obtained_graph, expected_graph, forbidden_graph)
         return obtained_graph, errors

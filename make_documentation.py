@@ -3,6 +3,7 @@
 
 from cgi import escape
 import re
+import traceback
 
 #Hack pour importer sw sans le mettre dans pygments
 import sw
@@ -30,13 +31,9 @@ class TestTreeprocessor(Treeprocessor):
         lines = [l for l in lines if l and l[0] != '@']
         return "\n".join(lines)
 
-    def make_response(self, code):
-        assert len(code) in range(2, 4)
-        if len(code) == 2:
-            code.append(('N3',''))
-        assert [t.lower() for t, c in code] == ['xml','n3','n3']
-        code = [c for t, c in code]
-        obtained_graph, errors = self.graph_tester.test_lom(*code)
+    def make_response(self, graphs):
+        assert len(graphs) in range(2, 4)
+        errors = self.graph_tester.test_graphs(*graphs)
         if errors:
             div = etree.Element('div',{"class":"error"})
             p = etree.Element('p')
@@ -44,10 +41,10 @@ class TestTreeprocessor(Treeprocessor):
             div.append(p)
             pre = etree.Element('pre')
             div.append(pre)
-            code = etree.Element('code')
-            pre.append(code)
-            result = obtained_graph.serialize(format='n3', encoding='utf-8')
-            code.text = ':::N3\n' + self.remove_namespace(result).decode('utf-8')
+            graph_e = etree.Element('code')
+            pre.append(graph_e)
+            result = graphs[0].serialize(format='n3', encoding='utf-8')
+            graph_e.text = ':::N3\n' + self.remove_namespace(result).decode('utf-8')
             for err_type, error in errors:
                 p = etree.Element('p')
                 errors = [escape(x) for x in error]
@@ -61,22 +58,35 @@ class TestTreeprocessor(Treeprocessor):
     def run(self, root):
         elements = list(root) # should be an iterator, but 2.6 getiterator vs 2.7 iter.
         target = root
-        code = []
+        graphs = []
         offset = 0
+        error = False
         for pos, element in enumerate(elements):
             if HEADER_R.match(element.tag):
-                if code:
-                    response = self.make_response(code)
+                if graphs and not error:
+                    response = self.make_response(graphs)
                     if response:
                         target.insert(pos+offset, response)
                         offset += 1
-                    code = []
+                    graphs = []
+                error = False
             if element.tag == 'pre':
                 sub = list(element)
                 assert len(sub) == 1 and sub[0].tag == 'code'
-                code.append(splitcode(sub[0].text))
-        if code:
-            response = self.make_response(code)
+                format, code = splitcode(sub[0].text)
+                try:
+                    graph = self.graph_tester.convert(format, code)
+                    graphs.append(graph)
+                except Exception as e:
+                    p2 = etree.Element('pre')
+                    tr = etree.Element('code')
+                    p2.append(tr)
+                    tr.text = ":::Python Traceback\n"+traceback.format_exc()
+                    offset += 1
+                    target.insert(pos+offset, p2)
+                    error = True
+        if graphs:
+            response = self.make_response(graphs)
             if response:
                 target.append(response)
         return root
@@ -121,7 +131,7 @@ class EmbedExtension(markdown.Extension):
 
 if __name__ == '__main__':
     markdown.markdownFromFile(
-        input='conversion.md',
-        output='conversion.html',
+        input='documentation.md',
+        output='documentation.html',
         encoding='utf-8',
         extensions=[TestExtension(), CodeHiliteExtension({}), EmbedExtension()])
