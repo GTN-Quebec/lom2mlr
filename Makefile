@@ -1,5 +1,5 @@
 
-TARGETS = correspondances_xsl.xsl documentation.html
+TARGETS = correspondances_xsl.xsl documentation_fr.html
 
 DIRS = translations vdex
 
@@ -27,4 +27,7 @@ correspondances_xsl.xsl: correspondances_type.xml correspondances.xsl
 
 documentation.html: documentation.md
 	./make_documentation.py
+
+documentation_fr.html: documentation.md
+	./make_documentation.py -l fr
 

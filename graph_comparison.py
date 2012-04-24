@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from collections import defaultdict
+from itertools import chain
 
 from lxml import etree
 from rdflib import Graph, BNode, URIRef
@@ -20,6 +21,14 @@ N3_PREFIXES = u'''
 @prefix mlr5: <http://standards.iso.org/iso-iec/19788/-5/ed-1/en/> .
 @prefix mlr9: <http://standards.iso.org/iso-iec/19788/-9/ed-1/en/> .
 '''
+
+SECTIONS = (1,2,3,4,5,9)
+LANGUAGES = ('en','fr','ru')
+PATTERN1 = "@prefix mlr%d: <http://standards.iso.org/iso-iec/19788/-%d/ed-1/en/> ."
+PATTERN2 = "@prefix mlr%d_%s: <http://standards.iso.org/iso-iec/19788/-%d/ed-1/en/%s/> ."
+N3_PREFIXES = "\n".join([PATTERN1 % (s, s) for s in SECTIONS])+"\n"+\
+              "\n".join(chain(*[[PATTERN2 % (s, l, s, l) for s in SECTIONS] for l in LANGUAGES]))
+
 
 def translate_triple(triple, map):
     s, p, o = triple

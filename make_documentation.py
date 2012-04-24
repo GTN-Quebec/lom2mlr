@@ -4,6 +4,7 @@
 from cgi import escape
 import re
 import traceback
+import argparse
 
 #Hack pour importer sw sans le mettre dans pygments
 import sw
@@ -101,6 +102,40 @@ class TestExtension(markdown.Extension):
         md.treeprocessors.add("tester", tester, "<inline")
         md.registerExtension(self)
 
+class TranslateMlrTreeprocessor(Treeprocessor):
+    "Translate mlr strings"
+    def __init__(self, md, lang):
+        self.lang = lang
+        name_trans = re.compile(u"[ '\u2019]")
+        tree = etree.parse('translations/translation.xml')
+        translations = {}
+        for idtag in tree.getiterator('id'):
+            for termtag in idtag.getiterator('term'):
+                if termtag.get('lang') == lang:
+                    translations["%s:%s" % (idtag.get('ns'),idtag.get('id'))] = \
+                        "%s_%s:%s" % (idtag.get('ns'),lang, name_trans.sub("_", termtag.text))
+                    break
+        self.translations = translations
+
+    def run(self, root):
+        mlr_r = re.compile(r'\b(mlr[0-9]:(?:DES|RC)[0-9]+)')
+        def trans(match):
+            c = match.group(0)
+            return self.translations.get(c, c)
+        for code in root.iter("code"):
+            code.text = mlr_r.sub(trans, code.text)
+        return root
+
+class TranslateMlrExtension(markdown.Extension):
+    def __init__(self, lang):
+        self.lang = lang
+
+    def extendMarkdown(self, md, md_globals):
+        """ Add Embed to Markdown instance. """
+        translateMlr = TranslateMlrTreeprocessor(md, self.lang)
+        md.treeprocessors.add("translateMlr", translateMlr, "<inline")
+        md.registerExtension(self)
+
 class EmbedTreeprocessor(Treeprocessor):
     "Embed the root in html/body tags."
     def run(self, root):
@@ -130,8 +165,16 @@ class EmbedExtension(markdown.Extension):
         md.registerExtension(self)
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Create the documentation file')
+    parser.add_argument('-l', help='Express using language')
+    args = parser.parse_args()
+    extensions = [TestExtension(), CodeHiliteExtension({}), EmbedExtension()]
+    target_name = 'documentation.html'
+    if (args.l):
+        extensions.insert(1, TranslateMlrExtension(args.l))
+        target_name = 'documentation_%s.html' % (args.l,)
     markdown.markdownFromFile(
         input='documentation.md',
-        output='documentation.html',
+        output=target_name,
         encoding='utf-8',
-        extensions=[TestExtension(), CodeHiliteExtension({}), EmbedExtension()])
+        extensions=extensions)
