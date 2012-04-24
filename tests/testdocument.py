@@ -23,8 +23,8 @@ def t_function(code, title):
 def test_document():
     m = markdown.Markdown()
     data = open('documentation.md').read().decode('utf-8')
-    root = m.parser.parseDocument(data).getroot()
-    elements = list(root) # should be an iterator, but 2.6 getiterator vs 2.7 iter. 
+    root = m.parser.parseDocument(data.split('\n')).getroot()
+    elements = list(root) # should be an iterator, but 2.6 getiterator vs 2.7 iter.
     code = []
     offset = 0
     for element in elements:
