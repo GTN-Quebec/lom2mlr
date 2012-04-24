@@ -16,7 +16,7 @@ class testGraphComparison(unittest.TestCase):
         return Graph().parse(data=N3_PREFIXES+source, format="n3")
 
     def test_find_missing(self):
-        errors = self.graphtester.compare_graphs(self.parse('''
+        errors = self.graphtester.test_graphs(self.parse('''
             <http://example.com> a mlr1:RC0002.
             '''),self.parse('''
             <http://example.com> a mlr1:RC0002 ;
@@ -26,7 +26,7 @@ class testGraphComparison(unittest.TestCase):
         assert len(errors)==2
 
     def test_find_missing_on_blank(self):
-        errors = self.graphtester.compare_graphs(self.parse('''
+        errors = self.graphtester.test_graphs(self.parse('''
             <http://example.com> a mlr1:RC0002 ;
             mlr5:DES1300 [
                 a mlr5:RC0001 ] .
@@ -42,7 +42,7 @@ class testGraphComparison(unittest.TestCase):
         assert error[1][2] == u"Commentaire"
 
     def test_find_unexpected(self):
-        errors = self.graphtester.compare_graphs(self.parse('''
+        errors = self.graphtester.test_graphs(self.parse('''
             <http://example.com> a mlr1:RC0002 ;
             mlr2:DES0100 "Titre" .
             '''),self.parse('''
