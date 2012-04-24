@@ -20,6 +20,13 @@
 	>
 	<xsl:output method="xml" encoding="UTF-8"/>
 
+    <xsl:param name="randomid" select="false()"/>
+    <!--
+    About the randomid value and its default:
+    Gilles Gauthier proposes not to use blank nodes, and instead assigning random IDs, because the blank node's
+    proliferation may pollute the namespace. I prefer to leave blank nodes, as they can be used as a basis for
+    identifying similar nodes by content. -->
+
 	<xsl:include href="correspondances_xsl.xsl"/>
 
 	<xsl:template match="/">
@@ -86,21 +93,36 @@
 		<xsl:variable name="learning_activity">
 			<mlr5:DES2000>
 				<mlr5:RC0005>
-					<xsl:apply-templates mode="educational_learning_activity"/>
+                    <xsl:if test="$randomid">
+                        <xsl:attribute name="rdf:about">
+                            <xsl:value-of select="mlrext:uuid_random()"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:apply-templates mode="educational_learning_activity"/>
 				</mlr5:RC0005>
 			</mlr5:DES2000>
 		</xsl:variable>
 		<xsl:variable name="audience">
 			<mlr5:DES1500>
 				<mlr5:RC0002>
-					<xsl:apply-templates mode="educational_audience"/>
+                    <xsl:if test="$randomid">
+                        <xsl:attribute name="rdf:about">
+                            <xsl:value-of select="mlrext:uuid_random()"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:apply-templates mode="educational_audience"/>
 				</mlr5:RC0002>
 			</mlr5:DES1500>
 		</xsl:variable>
 		<xsl:variable name="annotation">
 			<mlr5:DES1300>
 				<mlr5:RC0001>
-					<xsl:apply-templates mode="educational_annotation"/>
+                    <xsl:if test="$randomid">
+                        <xsl:attribute name="rdf:about">
+                            <xsl:value-of select="mlrext:uuid_random()"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:apply-templates mode="educational_annotation"/>
 				</mlr5:RC0001>
 			</mlr5:DES1300>
 		</xsl:variable>
@@ -116,7 +138,12 @@
 		<xsl:variable name="curriculum">
 			<mlr5:DES1900>
 				<mlr5:RC0004>
-					<xsl:apply-templates mode="classification_curriculum" select="."/>
+                    <xsl:if test="$randomid">
+                        <xsl:attribute name="rdf:about">
+                            <xsl:value-of select="mlrext:uuid_random()"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:apply-templates mode="classification_curriculum" select="."/>
 				</mlr5:RC0004>
 			</mlr5:DES1900>
 		</xsl:variable>
@@ -177,7 +204,12 @@
 	<xsl:template match="lom:contribute" mode="lifeCycle_ed">
 		<mlr5:DES1700>
 			<mlr5:RC0003>
-				<xsl:apply-templates mode="lifeCycle_ed"/>
+                <xsl:if test="$randomid">
+                    <xsl:attribute name="rdf:about">
+                        <xsl:value-of select="mlrext:uuid_random()"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:apply-templates mode="lifeCycle_ed"/>
 			</mlr5:RC0003>
 		</mlr5:DES1700>
 	</xsl:template>
@@ -216,12 +248,19 @@
 					<xsl:variable name="identity_url">
 						<xsl:call-template name="person_identity_url"/>
 					</xsl:variable>
-					<xsl:if test="$identity_url != ''">
-						<xsl:attribute name="rdf:about">
-							<xsl:value-of select="$identity_url"/>
-						</xsl:attribute>
-					</xsl:if>
-					<xsl:call-template name="person_identity"/>
+                    <xsl:choose>
+                        <xsl:when test="$identity_url != ''">
+                            <xsl:attribute name="rdf:about">
+                                <xsl:value-of select="$identity_url"/>
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:when test="$randomid">
+                            <xsl:attribute name="rdf:about">
+                                <xsl:value-of select="mlrext:uuid_random()"/>
+                            </xsl:attribute>
+                        </xsl:when>
+                    </xsl:choose>
+                    <xsl:call-template name="person_identity"/>
 					<xsl:apply-templates mode="vcard_np" />
 					<xsl:if test="vcard:org or vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
 						<mlr9:DES1100>
@@ -229,11 +268,18 @@
 								<xsl:variable name="org_identity_url">
 									<xsl:call-template name="org_identity_url"/>
 								</xsl:variable>
-								<xsl:if test="$org_identity_url != ''">
-									<xsl:attribute name="rdf:about">
-										<xsl:value-of select="$org_identity_url"/>
-									</xsl:attribute>
-								</xsl:if>
+                                <xsl:choose>
+                                    <xsl:when test="$org_identity_url != ''">
+                                        <xsl:attribute name="rdf:about">
+                                            <xsl:value-of select="$org_identity_url"/>
+                                        </xsl:attribute>
+                                    </xsl:when>
+                                    <xsl:when test="$randomid">
+                                        <xsl:attribute name="rdf:about">
+                                            <xsl:value-of select="mlrext:uuid_random()"/>
+                                        </xsl:attribute>
+                                    </xsl:when>
+                                </xsl:choose>
 								<xsl:choose>
 									<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
 										<!-- This is a risky heuristics. We might pick up on a personal work url. -->
@@ -251,7 +297,12 @@
 								<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
 									<mlr9:DES1300>
 										<mlr9:RC0003>
-											<xsl:apply-templates mode="address" select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']"/>
+                                            <xsl:if test="$randomid">
+                                                <xsl:attribute name="rdf:about">
+                                                    <xsl:value-of select="mlrext:uuid_random()"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:apply-templates mode="address" select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']"/>
 											<!-- skip geo which might be home address -->
 										</mlr9:RC0003>
 									</mlr9:DES1300>
@@ -266,17 +317,29 @@
 					<xsl:variable name="org_identity_url">
 						<xsl:call-template name="org_identity_url"/>
 					</xsl:variable>
-					<xsl:if test="$org_identity_url != ''">
-						<xsl:attribute name="rdf:about">
-							<xsl:value-of select="$org_identity_url"/>
-						</xsl:attribute>
-					</xsl:if>
-					<xsl:call-template name="person_identity"/>
+                    <xsl:choose>
+                        <xsl:when test="$org_identity_url != ''">
+                            <xsl:attribute name="rdf:about">
+                                <xsl:value-of select="$org_identity_url"/>
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:when test="$randomid">
+                            <xsl:attribute name="rdf:about">
+                                <xsl:value-of select="mlrext:uuid_random()"/>
+                            </xsl:attribute>
+                        </xsl:when>
+                    </xsl:choose>
+                    <xsl:call-template name="person_identity"/>
 					<xsl:apply-templates mode="vcard_org" />
 					<xsl:if test="vcard:geo or vcard:adr">
 						<mlr9:DES1300>
 							<mlr9:RC0003>
-								<xsl:apply-templates mode="address" select="vcard:adr"/>
+                                <xsl:if test="$randomid">
+                                    <xsl:attribute name="rdf:about">
+                                        <xsl:value-of select="mlrext:uuid_random()"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                                <xsl:apply-templates mode="address" select="vcard:adr"/>
 								<xsl:if test="vcard:geo">
 									<mlr9:DES1500 rdf:datatype="http://www.w3.org/2001/XMLSchema#float">
 										<xsl:value-of select="substring-before(vcard:geo[1]/vcard:uri/text(),';')"/>
@@ -543,7 +606,12 @@
 	<xsl:template match="lom:description" mode="educational">
 		<mlr5:DES1300>
 			<mlr5:RC0001>
-				<xsl:apply-templates select="lom:string" mode="langstring">
+                <xsl:if test="$randomid">
+                    <xsl:attribute name="rdf:about">
+                        <xsl:value-of select="mlrext:uuid_random()"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:apply-templates select="lom:string" mode="langstring">
 					<xsl:with-param name="nodename" select="'mlr5:DES0200'"/>
 				</xsl:apply-templates>
 			</mlr5:RC0001>
