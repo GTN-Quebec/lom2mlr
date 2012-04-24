@@ -27,8 +27,10 @@
     proliferation may pollute the namespace. I prefer to leave blank nodes, as they can be used as a basis for
     identifying similar nodes by content. -->
 
+    <!-- vocabularies -->
 	<xsl:include href="correspondances_xsl.xsl"/>
 
+	<!-- top-level templates -->
 	<xsl:template match="/">
 		<rdf:RDF>
 			<xsl:apply-templates/>
@@ -58,14 +60,15 @@
 	<xsl:template match="text()" mode="lifeCycle_ed"/>
 	<xsl:template match="text()" mode="metaMetadata"/>
 	<xsl:template match="text()" mode="technical"/>
+	<xsl:template match="text()" mode="tech-requirement"/>
 	<xsl:template match="text()" mode="educational"/>
+	<xsl:template match="text()" mode="educational_learning_activity"/>
+	<xsl:template match="text()" mode="educational_audience"/>
+	<xsl:template match="text()" mode="educational_annotation"/>
 	<xsl:template match="text()" mode="rights"/>
 	<xsl:template match="text()" mode="relation"/>
 	<xsl:template match="text()" mode="classification"/>
-	<xsl:template match="text()" mode="educational_learning_activity"/>
 	<xsl:template match="text()" mode="classification_curriculum"/>
-	<xsl:template match="text()" mode="educational_audience"/>
-	<xsl:template match="text()" mode="educational_annotation"/>
 	<xsl:template match="text()" mode="vcard_org"/>
 	<xsl:template match="text()" mode="vcard_np"/>
 	<xsl:template match="text()" mode="vcard_person"/>
@@ -75,82 +78,35 @@
 		<xsl:apply-templates/>
 	</xsl:template>
 
+
+	<!-- top-level templates -->
+
 	<!-- use mode as a context indicator -->
 	<xsl:template match="lom:general" mode="top">
 		<xsl:apply-templates mode="general"/>
 	</xsl:template>
+
 	<xsl:template match="lom:lifeCycle" mode="top">
 		<xsl:apply-templates mode="lifeCycle"/>
 		<xsl:apply-templates mode="lifeCycle_ed"/>
 	</xsl:template>
+
 	<xsl:template match="lom:metaMetadata" mode="top">
 		<xsl:apply-templates mode="metaMetadata"/>
 	</xsl:template>
+
 	<xsl:template match="lom:technical" mode="top">
 		<xsl:apply-templates mode="technical"/>
 	</xsl:template>
-	<xsl:template match="lom:educational" mode="top">
-		<xsl:variable name="learning_activity">
-			<mlr5:DES2000>
-				<mlr5:RC0005>
-                    <xsl:if test="$randomid">
-                        <xsl:attribute name="rdf:about">
-                            <xsl:value-of select="mlrext:uuid_random()"/>
-                        </xsl:attribute>
-                    </xsl:if>
-                    <xsl:apply-templates mode="educational_learning_activity"/>
-				</mlr5:RC0005>
-			</mlr5:DES2000>
-		</xsl:variable>
-		<xsl:variable name="audience">
-			<mlr5:DES1500>
-				<mlr5:RC0002>
-                    <xsl:if test="$randomid">
-                        <xsl:attribute name="rdf:about">
-                            <xsl:value-of select="mlrext:uuid_random()"/>
-                        </xsl:attribute>
-                    </xsl:if>
-                    <xsl:apply-templates mode="educational_audience"/>
-				</mlr5:RC0002>
-			</mlr5:DES1500>
-		</xsl:variable>
-		<xsl:variable name="annotation">
-			<mlr5:DES1300>
-				<mlr5:RC0001>
-                    <xsl:if test="$randomid">
-                        <xsl:attribute name="rdf:about">
-                            <xsl:value-of select="mlrext:uuid_random()"/>
-                        </xsl:attribute>
-                    </xsl:if>
-                    <xsl:apply-templates mode="educational_annotation"/>
-				</mlr5:RC0001>
-			</mlr5:DES1300>
-		</xsl:variable>
-		<xsl:apply-templates mode="educational"/>
-		<xsl:if test="string-length($learning_activity)&gt;0">
-			<xsl:copy-of select="$learning_activity"/>
-		</xsl:if>
-		<xsl:if test="string-length($audience)&gt;0">
-			<xsl:copy-of select="$audience"/>
-		</xsl:if>
-	</xsl:template>
-	<xsl:template match="lom:classification" mode="top">
-		<xsl:variable name="curriculum">
-			<mlr5:DES1900>
-				<mlr5:RC0004>
-                    <xsl:if test="$randomid">
-                        <xsl:attribute name="rdf:about">
-                            <xsl:value-of select="mlrext:uuid_random()"/>
-                        </xsl:attribute>
-                    </xsl:if>
-                    <xsl:apply-templates mode="classification_curriculum" select="."/>
-				</mlr5:RC0004>
-			</mlr5:DES1900>
-		</xsl:variable>
-		<xsl:apply-templates mode="classification" select="." />
-		<xsl:if test="string-length($curriculum)&gt;0">
-			<xsl:copy-of select="$curriculum"/>
-		</xsl:if>
+
+	<!-- General templates -->
+
+	<xsl:template match="lom:identifier" mode="general">
+		<mlr3:DES0400>
+			<xsl:attribute name="rdf:resource">
+				<xsl:value-of select="lom:entry/text()"/>
+			</xsl:attribute>
+		</mlr3:DES0400>
 	</xsl:template>
 
 	<xsl:template match="lom:title" mode="general">
@@ -158,6 +114,41 @@
 			<xsl:with-param name="nodename" select="'mlr2:DES0100'"/>
 		</xsl:apply-templates>
 	</xsl:template>
+
+	<xsl:template match="lom:language" mode="general">
+		<xsl:choose>
+			<xsl:when test="regexp:test(text(),'^[a-z][a-z][a-z]?(\-[A-Z][A-Z])?$')">
+				<mlr3:DES0500>
+					<xsl:value-of select="text()"/>
+				</mlr3:DES0500>
+			</xsl:when>
+			<xsl:otherwise>
+				<mlr2:DES1200>
+					<xsl:value-of select="text()"/>
+				</mlr2:DES1200>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="lom:description" mode="general">
+		<xsl:apply-templates select="lom:string" mode="langstring">
+			<xsl:with-param name="nodename" select="'mlr3:DES0200'"/>
+		</xsl:apply-templates>
+	</xsl:template>
+
+	<xsl:template match="lom:keyword" mode="general">
+		<xsl:apply-templates select="lom:keyword/lom:string" mode="langstring">
+			<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
+		</xsl:apply-templates>
+	</xsl:template>
+
+	<xsl:template match="lom:coverage" mode="general">
+		<xsl:apply-templates select="lom:string" mode="langstring">
+			<xsl:with-param name="nodename" select="'mlr2:DES1400'"/>
+		</xsl:apply-templates>
+	</xsl:template>
+
+	<!-- lifeCycle -->
 
 	<xsl:template match="lom:contribute[lom:role[lom:source/text()='LOMv1.0' and lom:value/text()='author']]" mode="lifeCycle">
 		<mlr2:DES0200> <!-- creator -->
@@ -240,6 +231,8 @@
 			<xsl:apply-templates mode="lifeCycle_ed" select="vcardconv:convert(text())" />
 		</mlr5:DES1800>
 	</xsl:template>
+
+	<!-- vcard handling -->
 
 	<xsl:template match="vcard:vcard" mode="lifeCycle_ed">
 		<xsl:choose>
@@ -505,137 +498,14 @@
 			<xsl:value-of select="vcard:given/text()"/>
 		</mlr9:DES0400>
 	</xsl:template>
+
 	<xsl:template match="vcard:tel[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'VOICE']" mode="vcard_np">
 		<mlr9:DES1000>
 			<xsl:value-of select="vcard:text/text()"/>
 		</mlr9:DES1000>
 	</xsl:template>
 
-	<xsl:template match="lom:classification[lom:purpose[lom:source/text()='LOMv1.0' and lom:value/text()='discipline']]" mode="classification">
-		<xsl:choose>
-			<xsl:when test="lom:description">
-				<xsl:apply-templates select="lom:description/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
-				</xsl:apply-templates>
-			</xsl:when>
-			<xsl:when test="lom:keyword">
-				<xsl:apply-templates select="lom:keyword/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
-				</xsl:apply-templates>
-			</xsl:when>
-			<xsl:when test="lom:taxonPath">
-				<xsl:apply-templates select="lom:taxonPath/lom:taxon[last()]/lom:entry/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
-				</xsl:apply-templates>
-			</xsl:when>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template match="lom:classification[lom:purpose[lom:source/text()='LOMv1.0' and lom:value/text()='educational level']]" mode="classification_curriculum">
-		<xsl:choose>
-			<xsl:when test="lom:description">
-				<xsl:apply-templates select="lom:description/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr5:DES1000'"/>
-				</xsl:apply-templates>
-			</xsl:when>
-			<xsl:when test="lom:keyword">
-				<xsl:apply-templates select="lom:keyword/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr5:DES1000'"/>
-				</xsl:apply-templates>
-			</xsl:when>
-			<xsl:when test="lom:taxonPath">
-				<xsl:apply-templates select="lom:taxonPath/lom:taxon[last()]/lom:entry/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr5:DES1000'"/>
-				</xsl:apply-templates>
-			</xsl:when>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template match="lom:description" mode="general">
-		<xsl:apply-templates select="lom:string" mode="langstring">
-			<xsl:with-param name="nodename" select="'mlr3:DES0200'"/>
-		</xsl:apply-templates>
-	</xsl:template>
-
-	<xsl:template match="lom:learningResourceType" mode="educational">
-		<xsl:call-template name="mlr3_DES0700"/>
-	</xsl:template>
-
-	<xsl:template match="lom:intendedEndUserRole" mode="educational_audience">
-		<xsl:call-template name="mlr5_DES0600"/>
-	</xsl:template>
-
-	<xsl:template match="lom:typicalLearningTime[lom:duration]" mode="educational_learning_activity">
-		<mlr5:DES3000 rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">
-			<xsl:value-of select="lom:duration/text()"/>
-		</mlr5:DES3000>
-	</xsl:template>
-
-	<xsl:template match="lom:typicalAgeRange" mode="educational_audience">
-		<xsl:choose>
-			<xsl:when test="regexp:test(lom:string/text(),'^[0-9]+-[0-9]+')">
-				<mlr5:DES2600 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
-					<xsl:value-of select="substring-before(lom:string/text(),'-')"/>
-				</mlr5:DES2600>
-				<mlr5:DES2500 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
-					<xsl:value-of select="regexp:match(substring-after(lom:string/text(),'-'),'^[0-9]+')"/>
-				</mlr5:DES2500>
-			</xsl:when>
-			<xsl:when test="regexp:test(lom:string/text(),'^[0-9]+-')">
-				<mlr5:DES2600 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
-					<xsl:value-of select="substring-before(lom:string/text(),'-')"/>
-				</mlr5:DES2600>
-			</xsl:when>
-			<xsl:when test="regexp:test(lom:string/text(),'^[0-9]+')">
-				<mlr5:DES2600 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
-					<xsl:value-of select="regexp:match(lom:string/text(),'^[0-9]+')"/>
-				</mlr5:DES2600>
-				<mlr5:DES2500 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
-					<xsl:value-of select="regexp:match(lom:string/text(),'^[0-9]+')"/>
-				</mlr5:DES2500>
-			</xsl:when>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template match="lom:context" mode="educational_audience">
-		<mlr5:DES0500>
-			<xsl:value-of select="lom:value/text()"/>
-		</mlr5:DES0500>
-	</xsl:template>
-
-	<xsl:template match="lom:description" mode="educational">
-		<mlr5:DES1300>
-			<mlr5:RC0001>
-                <xsl:if test="$randomid">
-                    <xsl:attribute name="rdf:about">
-                        <xsl:value-of select="mlrext:uuid_random()"/>
-                    </xsl:attribute>
-                </xsl:if>
-                <xsl:apply-templates select="lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr5:DES0200'"/>
-				</xsl:apply-templates>
-			</mlr5:RC0001>
-		</mlr5:DES1300>
-	</xsl:template>
-
-	<xsl:template match="lom:language" mode="educational_audience">
-		<mlr5:DES0400>
-			<xsl:value-of select="text()"/>
-		</mlr5:DES0400>
-	</xsl:template>
-
-	<xsl:template match="lom:type" mode="educational_learning_activity">
-		<mlr5:DES2800>
-			<xsl:call-template name="mlr5_DES2800"/>
-		</mlr5:DES2800>
-	</xsl:template>
-
-
-	<xsl:template match="lom:size" mode="technical">
-		<mlr4:DES0200 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
-			<xsl:value-of select="text()"/>
-		</mlr4:DES0200>
-	</xsl:template>
+	<!-- technical -->
 
 	<xsl:template match="lom:format" mode="technical">
 		<xsl:choose>
@@ -657,43 +527,17 @@
 		</xsl:choose>
 	</xsl:template>
 
+	<xsl:template match="lom:size" mode="technical">
+		<mlr4:DES0200 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+			<xsl:value-of select="text()"/>
+		</mlr4:DES0200>
+	</xsl:template>
+
 	<xsl:template match="lom:location" mode="technical">
 		<mlr4:DES0100>
 			<!-- question: Make this a resource? -->
 			<xsl:value-of select="text()"/>
 		</mlr4:DES0100>
-	</xsl:template>
-
-	<xsl:template name="as_00num">
-		<xsl:param name="v"/>
-		<xsl:choose>
-			<xsl:when test="number($v)&gt;9">
-				<xsl:value-of select="number($v)"/>
-			</xsl:when>
-			<xsl:when test="number($v)&gt;0">
-				<xsl:text>0</xsl:text>
-				<xsl:value-of select="number($v)"/>
-			</xsl:when>
-			<xsl:otherwise>00</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template match="lom:duration" mode="technical">
-		<xsl:if test="lom:duration and regexp:test(lom:duration/text(),'^PT([0-9]+H)?([0-9]+M)?([0-9]+S)?$')">
-			<mlr4:DES0300 rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">
-				<xsl:call-template name="as_00num">
-					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+H'),'H')"/>
-				</xsl:call-template>
-				<xsl:text>:</xsl:text>
-				<xsl:call-template name="as_00num">
-					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+M'),'M')"/>
-				</xsl:call-template>
-				<xsl:text>:</xsl:text>
-				<xsl:call-template name="as_00num">
-					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+S'),'S')"/>
-				</xsl:call-template>
-			</mlr4:DES0300>
-		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="lom:requirement" mode="technical">
@@ -708,7 +552,6 @@
 		</mlr4:DES0400>
 	</xsl:template>
 
-	<xsl:template match="text()" mode="tech-requirement"/>
 
 	<xsl:template match="lom:orComposite" mode="tech-requirement">
 		<xsl:param name="multiple"/>
@@ -797,50 +640,158 @@
 		</xsl:apply-templates>
 	</xsl:template>
 
-	<xsl:template match="lom:identifier" mode="general">
-		<mlr3:DES0400>
-			<xsl:attribute name="rdf:resource">
-				<xsl:value-of select="lom:entry/text()"/>
-			</xsl:attribute>
-		</mlr3:DES0400>
-	</xsl:template>
-
-	<xsl:template match="lom:relation[lom:kind[lom:source/text()='LOMv1.0' and lom:value/text()='isbasedon']]" mode="top">
-		<mlr3:DES0600>
-			<xsl:attribute name="rdf:resource">
-				<xsl:value-of select="lom:resource/lom:identifier/lom:entry/text()"/>
-			</xsl:attribute>
-		</mlr3:DES0600>
-	</xsl:template>
-
-	<xsl:template match="lom:language" mode="general">
+	<xsl:template name="as_00num">
+		<xsl:param name="v"/>
 		<xsl:choose>
-			<xsl:when test="regexp:test(text(),'^[a-z][a-z][a-z]?(\-[A-Z][A-Z])?$')">
-				<mlr3:DES0500>
-					<xsl:value-of select="text()"/>
-				</mlr3:DES0500>
+			<xsl:when test="number($v)&gt;9">
+				<xsl:value-of select="number($v)"/>
 			</xsl:when>
-			<xsl:otherwise>
-				<mlr2:DES1200>
-					<xsl:value-of select="text()"/>
-				</mlr2:DES1200>
-			</xsl:otherwise>
+			<xsl:when test="number($v)&gt;0">
+				<xsl:text>0</xsl:text>
+				<xsl:value-of select="number($v)"/>
+			</xsl:when>
+			<xsl:otherwise>00</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template match="lom:relation" mode="top">
-		<mlr2:DES1300>
-			<xsl:attribute name="rdf:resource">
-				<xsl:value-of select="lom:resource/lom:identifier/lom:entry/text()"/>
-			</xsl:attribute>
-		</mlr2:DES1300>
+	<xsl:template match="lom:duration" mode="technical">
+		<xsl:if test="lom:duration and regexp:test(lom:duration/text(),'^PT([0-9]+H)?([0-9]+M)?([0-9]+S)?$')">
+			<mlr4:DES0300 rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">
+				<xsl:call-template name="as_00num">
+					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+H'),'H')"/>
+				</xsl:call-template>
+				<xsl:text>:</xsl:text>
+				<xsl:call-template name="as_00num">
+					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+M'),'M')"/>
+				</xsl:call-template>
+				<xsl:text>:</xsl:text>
+				<xsl:call-template name="as_00num">
+					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+S'),'S')"/>
+				</xsl:call-template>
+			</mlr4:DES0300>
+		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="lom:coverage" mode="general">
-		<xsl:apply-templates select="lom:string" mode="langstring">
-			<xsl:with-param name="nodename" select="'mlr2:DES1400'"/>
-		</xsl:apply-templates>
+	<!-- educational -->
+
+	<xsl:template match="lom:educational" mode="top">
+		<xsl:variable name="learning_activity">
+			<mlr5:DES2000>
+				<mlr5:RC0005>
+                    <xsl:if test="$randomid">
+                        <xsl:attribute name="rdf:about">
+                            <xsl:value-of select="mlrext:uuid_random()"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:apply-templates mode="educational_learning_activity"/>
+				</mlr5:RC0005>
+			</mlr5:DES2000>
+		</xsl:variable>
+		<xsl:variable name="audience">
+			<mlr5:DES1500>
+				<mlr5:RC0002>
+                    <xsl:if test="$randomid">
+                        <xsl:attribute name="rdf:about">
+                            <xsl:value-of select="mlrext:uuid_random()"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:apply-templates mode="educational_audience"/>
+				</mlr5:RC0002>
+			</mlr5:DES1500>
+		</xsl:variable>
+		<xsl:variable name="annotation">
+			<mlr5:DES1300>
+				<mlr5:RC0001>
+                    <xsl:if test="$randomid">
+                        <xsl:attribute name="rdf:about">
+                            <xsl:value-of select="mlrext:uuid_random()"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:apply-templates mode="educational_annotation"/>
+				</mlr5:RC0001>
+			</mlr5:DES1300>
+		</xsl:variable>
+		<xsl:apply-templates mode="educational"/>
+		<xsl:if test="string-length($learning_activity)&gt;0">
+			<xsl:copy-of select="$learning_activity"/>
+		</xsl:if>
+		<xsl:if test="string-length($audience)&gt;0">
+			<xsl:copy-of select="$audience"/>
+		</xsl:if>
 	</xsl:template>
+
+	<xsl:template match="lom:learningResourceType" mode="educational">
+		<xsl:call-template name="mlr3_DES0700"/>
+	</xsl:template>
+
+	<xsl:template match="lom:learningResourceType" mode="educational_learning_activity">
+		<xsl:call-template name="mlr5_DES2800"/>
+	</xsl:template>
+
+	<xsl:template match="lom:intendedEndUserRole" mode="educational_audience">
+		<xsl:call-template name="mlr5_DES0600"/>
+	</xsl:template>
+
+	<xsl:template match="lom:context" mode="educational_audience">
+		<mlr5:DES0500>
+			<xsl:value-of select="lom:value/text()"/>
+		</mlr5:DES0500>
+	</xsl:template>
+
+	<xsl:template match="lom:typicalAgeRange" mode="educational_audience">
+		<xsl:choose>
+			<xsl:when test="regexp:test(lom:string/text(),'^[0-9]+-[0-9]+')">
+				<mlr5:DES2600 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+					<xsl:value-of select="substring-before(lom:string/text(),'-')"/>
+				</mlr5:DES2600>
+				<mlr5:DES2500 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+					<xsl:value-of select="regexp:match(substring-after(lom:string/text(),'-'),'^[0-9]+')"/>
+				</mlr5:DES2500>
+			</xsl:when>
+			<xsl:when test="regexp:test(lom:string/text(),'^[0-9]+-')">
+				<mlr5:DES2600 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+					<xsl:value-of select="substring-before(lom:string/text(),'-')"/>
+				</mlr5:DES2600>
+			</xsl:when>
+			<xsl:when test="regexp:test(lom:string/text(),'^[0-9]+')">
+				<mlr5:DES2600 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+					<xsl:value-of select="regexp:match(lom:string/text(),'^[0-9]+')"/>
+				</mlr5:DES2600>
+				<mlr5:DES2500 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+					<xsl:value-of select="regexp:match(lom:string/text(),'^[0-9]+')"/>
+				</mlr5:DES2500>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="lom:typicalLearningTime[lom:duration]" mode="educational_learning_activity">
+		<mlr5:DES3000 rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">
+			<xsl:value-of select="lom:duration/text()"/>
+		</mlr5:DES3000>
+	</xsl:template>
+
+	<xsl:template match="lom:description" mode="educational">
+		<mlr5:DES1300>
+			<mlr5:RC0001>
+                <xsl:if test="$randomid">
+                    <xsl:attribute name="rdf:about">
+                        <xsl:value-of select="mlrext:uuid_random()"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:apply-templates select="lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="'mlr5:DES0200'"/>
+				</xsl:apply-templates>
+			</mlr5:RC0001>
+		</mlr5:DES1300>
+	</xsl:template>
+
+	<xsl:template match="lom:language" mode="educational_audience">
+		<mlr5:DES0400>
+			<xsl:value-of select="text()"/>
+		</mlr5:DES0400>
+	</xsl:template>
+
+	<!-- rights -->
 
 	<xsl:template match="lom:rights" mode="top">
 		<xsl:choose>
@@ -857,6 +808,85 @@
 			</xsl:when>
 			<xsl:when test="lom:cost[lom:source/text()='LOMv1.0' and lom:value/text()='no'] and lom:copyrightAndOtherRestrictions[lom:source/text()='LOMv1.0' and lom:value/text()='no']">
 				<mlr2:DES1500 xml:lang="fr">Pas de copyright</mlr2:DES1500>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
+	<!-- relations -->
+
+	<xsl:template match="lom:relation[lom:kind[lom:source/text()='LOMv1.0' and lom:value/text()='isbasedon']]" mode="top">
+		<mlr3:DES0600>
+			<xsl:attribute name="rdf:resource">
+				<xsl:value-of select="lom:resource/lom:identifier/lom:entry/text()"/>
+			</xsl:attribute>
+		</mlr3:DES0600>
+	</xsl:template>
+
+	<xsl:template match="lom:relation" mode="top">
+		<mlr2:DES1300>
+			<xsl:attribute name="rdf:resource">
+				<xsl:value-of select="lom:resource/lom:identifier/lom:entry/text()"/>
+			</xsl:attribute>
+		</mlr2:DES1300>
+	</xsl:template>
+
+	<!-- classification -->
+
+	<xsl:template match="lom:classification" mode="top">
+		<xsl:variable name="curriculum">
+			<mlr5:DES1900>
+				<mlr5:RC0004>
+                    <xsl:if test="$randomid">
+                        <xsl:attribute name="rdf:about">
+                            <xsl:value-of select="mlrext:uuid_random()"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:apply-templates mode="classification_curriculum" select="."/>
+				</mlr5:RC0004>
+			</mlr5:DES1900>
+		</xsl:variable>
+		<xsl:apply-templates mode="classification" select="." />
+		<xsl:if test="string-length($curriculum)&gt;0">
+			<xsl:copy-of select="$curriculum"/>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template match="lom:classification[lom:purpose[lom:source/text()='LOMv1.0' and lom:value/text()='discipline']]" mode="classification">
+		<xsl:choose>
+			<xsl:when test="lom:description">
+				<xsl:apply-templates select="lom:description/lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
+				</xsl:apply-templates>
+			</xsl:when>
+			<xsl:when test="lom:keyword">
+				<xsl:apply-templates select="lom:keyword/lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
+				</xsl:apply-templates>
+			</xsl:when>
+			<xsl:when test="lom:taxonPath">
+				<xsl:apply-templates select="lom:taxonPath/lom:taxon[last()]/lom:entry/lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
+				</xsl:apply-templates>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="lom:classification[lom:purpose[lom:source/text()='LOMv1.0' and lom:value/text()='educational level']]" mode="classification_curriculum">
+		<xsl:choose>
+			<xsl:when test="lom:description">
+				<xsl:apply-templates select="lom:description/lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="'mlr5:DES1000'"/>
+				</xsl:apply-templates>
+			</xsl:when>
+			<xsl:when test="lom:keyword">
+				<xsl:apply-templates select="lom:keyword/lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="'mlr5:DES1000'"/>
+				</xsl:apply-templates>
+			</xsl:when>
+			<xsl:when test="lom:taxonPath">
+				<xsl:apply-templates select="lom:taxonPath/lom:taxon[last()]/lom:entry/lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="'mlr5:DES1000'"/>
+				</xsl:apply-templates>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
