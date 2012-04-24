@@ -16,3 +16,12 @@ def unwrap_seq(func):
 		else:
 			return func(context, l)
 	return wrapped
+
+def splitcode(code):
+    if code[0:3] == ':::':
+        lines = code.split("\n")
+        code_type = lines[0][3:]
+        code = "\n".join(lines[1:])
+    else:
+        code_type = None
+    return code_type, code
