@@ -21,7 +21,7 @@ from graph_comparison import GraphTester
 from util import splitcode
 
 
-HEADER_R = re.compile(r'^h[0-9]$', re.I)
+HEADER_R = re.compile(r'^h[1-9]$', re.I)
 
 class TestTreeprocessor(Treeprocessor):
     def __init__(self, md):
@@ -33,7 +33,7 @@ class TestTreeprocessor(Treeprocessor):
         return "\n".join(lines)
 
     def make_response(self, graphs):
-        assert len(graphs) in range(2, 4)
+        assert len(graphs) in range(2, 4), "%d sections of code" % (len(graphs),)
         errors = self.graph_tester.test_graphs(*graphs)
         if errors:
             div = etree.Element('div',{"class":"error"})
@@ -69,7 +69,7 @@ class TestTreeprocessor(Treeprocessor):
                     if response:
                         target.insert(pos+offset, response)
                         offset += 1
-                    graphs = []
+                graphs = []
                 error = False
             if element.tag == 'pre':
                 sub = list(element)
@@ -86,7 +86,7 @@ class TestTreeprocessor(Treeprocessor):
                     offset += 1
                     target.insert(pos+offset, p2)
                     error = True
-        if graphs:
+        if graphs and not error:
             response = self.make_response(graphs)
             if response:
                 target.append(response)
@@ -113,7 +113,7 @@ class TranslateMlrTreeprocessor(Treeprocessor):
             for termtag in idtag.getiterator('term'):
                 if termtag.get('lang') == lang:
                     translations["%s:%s" % (idtag.get('ns'),idtag.get('id'))] = \
-                        "%s_%s:%s" % (idtag.get('ns'),lang, name_trans.sub("_", termtag.text))
+                        u"%s_%s:%s" % (idtag.get('ns'),lang, name_trans.sub("_", termtag.text))
                     break
         self.translations = translations
 
@@ -123,7 +123,10 @@ class TranslateMlrTreeprocessor(Treeprocessor):
             c = match.group(0)
             return self.translations.get(c, c)
         for code in root.iter("code"):
-            code.text = mlr_r.sub(trans, code.text)
+            t = code.text
+            if isinstance(t, str):
+                t = t.decode('utf-8')
+            code.text = mlr_r.sub(trans, t)
         return root
 
 class TranslateMlrExtension(markdown.Extension):
