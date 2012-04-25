@@ -39,16 +39,23 @@
 
 	<xsl:template match="lom:lom">
 		<mlr1:RC0002>
-			<xsl:attribute name="rdf:about">
-				<xsl:choose>
-					<xsl:when test="lom:general/lom:identifier/lom:entry">
+			<xsl:choose>
+				<xsl:when test="lom:general/lom:identifier/lom:entry">
+					<xsl:attribute name="rdf:about">
 						<xsl:value-of select="lom:general/lom:identifier[1]/lom:entry/text()" />
-					</xsl:when>
-					<xsl:when test="lom:technical/lom:location">
+					</xsl:attribute>
+				</xsl:when>
+				<xsl:when test="lom:technical/lom:location">
+					<xsl:attribute name="rdf:about">
 						<xsl:value-of select="lom:technical/lom:location[1]/text()" />
-					</xsl:when>
+					</xsl:attribute>
+				</xsl:when>
+				<xsl:when test="$randomid">
+					<xsl:attribute name="rdf:about">
+                        <xsl:value-of select="mlrext:uuid_random()"/>
+					</xsl:attribute>
+				</xsl:when>
 				</xsl:choose>
-			</xsl:attribute>
 			<xsl:apply-templates mode="top"/>
 		</mlr1:RC0002>
 	</xsl:template>
@@ -137,7 +144,7 @@
 	</xsl:template>
 
 	<xsl:template match="lom:keyword" mode="general">
-		<xsl:apply-templates select="lom:keyword/lom:string" mode="langstring">
+		<xsl:apply-templates select="lom:string" mode="langstring">
 			<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
 		</xsl:apply-templates>
 	</xsl:template>
