@@ -79,7 +79,7 @@ class TestTreeprocessor(Treeprocessor):
                     graph = self.graph_tester.convert(format, code)
                     graphs.append(graph)
                 except Exception as e:
-                    p2 = etree.Element('pre')
+                    p2 = etree.Element('pre',{"class":"error"})
                     tr = etree.Element('code')
                     p2.append(tr)
                     tr.text = ":::Python Traceback\n"+traceback.format_exc()
