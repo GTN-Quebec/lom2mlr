@@ -53,6 +53,7 @@ class TestTreeprocessor(Treeprocessor):
                     p.text = u"Il manque < %s %s %s >." % error
                 elif  err_type == GraphTester.UNEXPECTED:
                     p.text = u"< %s %s %s > est présent et ne devrait pas l'être." % error
+                print '*', p.text
                 div.append(p)
             return div
 
@@ -69,6 +70,7 @@ class TestTreeprocessor(Treeprocessor):
                     if response:
                         target.insert(pos+offset, response)
                         offset += 1
+                print " " * int(element.tag[1]) + element.text
                 graphs = []
                 error = False
             if element.tag == 'pre':
@@ -85,6 +87,7 @@ class TestTreeprocessor(Treeprocessor):
                     tr.text = ":::Python Traceback\n"+traceback.format_exc()
                     offset += 1
                     target.insert(pos+offset, p2)
+                    print '*', e
                     error = True
         if graphs and not error:
             response = self.make_response(graphs)
