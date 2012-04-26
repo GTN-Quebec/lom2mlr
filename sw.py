@@ -28,6 +28,7 @@ class Notation3Lexer(RegexLexer):
     aliases = ['n3', 'turtle']
     filenames = ['*.n3', '*.ttl', '*.NT']
     mimetypes = ['text/rdf+n3','application/x-turtle','application/n3']
+    flags = re.MULTILINE + re.UNICODE
 
     tokens = {
         'comments': [
@@ -37,7 +38,7 @@ class Notation3Lexer(RegexLexer):
             include('comments'),
             (r'(\s*@(?:prefix|base|keywords)\s*)(\w*:\s+)?(<[^> ]*>\s*\.\s*)',bygroups(Keyword,Name.Variable,Name.Namespace)),
             (r'\s*(<[^>]*\>)', Name.Class, ('triple','predObj')),
-            (r'(\s*[a-zA-Z_:][a-zA-Z0-9\-_:]*\s)', Name.Class, ('triple','predObj')),
+            (r'(\s*[\w:][\w0-9\-:]*\s)', Name.Class, ('triple','predObj')),
             (r'\s*\[\]\s*', Name.Class, ('triple','predObj')),
         ],
         'triple' : [
@@ -45,7 +46,7 @@ class Notation3Lexer(RegexLexer):
         ],
         'predObj': [
             include('comments'),
-            (r'(\s*[a-zA-Z_:][a-zA-Z0-9\-_:]*\b\s*)', Operator, 'object'),
+            (r'(\s*[\w:][\w0-9\-:]*\b\s*)', Operator, 'object'),
             (r'\s*(<[^>]*\>)', Operator, 'object'),
             (r'\s*\]\s*', Text, '#pop'),
             (r'(?=\s*\.\s*)', Keyword, '#pop'), 
@@ -59,9 +60,9 @@ class Notation3Lexer(RegexLexer):
             include('comments'),
             (r'\s*\[', Text, 'predObj'),
             (r'\s*<[^> ]*>', Name.Attribute),
-            (r'\s*("""(?:.|\n)*?""")(\@[a-z]{2-4}|\^\^<?[a-zA-Z0-9\-\:_#/\.]*>?)?\s*', bygroups(Literal.String,Text)),
-            (r'\s*".*?[^\\]"(?:\@[a-z]{2-4}|\^\^<?[a-zA-Z0-9\-\:_#/\.]*>?)?\s*', Literal.String),
-            (r'\s*[a-zA-Z0-9\-_\:]\s*', Name.Attribute),
+            (r'\s*("""(?:.|\n)*?""")(\@[a-z]{2-4}|\^\^<?[\w0-9\-\:#/\.]*>?)?\s*', bygroups(Literal.String,Text)),
+            (r'\s*".*?[^\\]"(?:\@[a-z]{2-4}|\^\^<?[\w0-9\-\:#/\.]*>?)?\s*', Literal.String),
+            (r'\s*[\w0-9\-\:]\s*', Name.Attribute),
             (r'\s*\(', Text, 'objList'),
             (r'\s*;\s*\n?', Text, '#pop'),
             (r'(?=\s*\])', Text, '#pop'),            
