@@ -75,7 +75,7 @@ class GraphCorrespondence(object):
         for s, p, o in subject_sig:
             if isinstance(o, BNode):
                 if o in self.blank_map:
-                    o = blank_map[o]
+                    o = self.blank_map[o]
                 else:
                     unknown += 1
                     continue
