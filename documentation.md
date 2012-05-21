@@ -1,14 +1,16 @@
-# Conversion LOM vers MLR
+# Converting LOM to MLR
 
-## Généralités  ##
+## General ##
 
-### Identifiant
+### Identifier
 
-#### Identifiant explicite
+What should the RDF identifier (`rdf:about`) of the resource be?
 
-La balise `general/identifier` de LOM est employé de préférence pour l'identité. Elle est également employée pour l'élément mlr3:DES0400. 
+#### Explicit identifier
 
-Question ouvertes: Que faire du `catalog`? Que faire si l'entry n'est pas un URI?
+The `general/identifier` LOM tag is preferred as a RDF identification. It is also used for the mlr3:DES0400 element, the equivalent to `dc:identifier`.
+
+Open questions: How to incorporate the `catalog` information? What if the identifier `entry` is not a URI?
 
     :::xml
     <general>
@@ -18,35 +20,35 @@ Question ouvertes: Que faire du `catalog`? Que faire si l'entry n'est pas un URI
         </identifier>
     </general>
 
-Devient
+Becomes
 
     :::N3
     <oai:test.licef.ca:123123> a mlr1:RC0002;
       mlr3:DES0400 <oai:test.licef.ca:123123> .
 
-#### Emploi de technique/localisation comme identifiant
+#### Use of technical/location as identifier
 
-Si `general/identifier` est absent, on prendra le premier URL disponible dans `technical/location`.
+If `general/identifier` we would use the first available URL in `technical/location`. This is a heuristics, as there is no automated way to distinguish multiple URLs.
 
     :::xml
     <technical>
         <location>http://xserve.scedu.umontreal.ca/~cyberscol/videos/v00008-640-s.mov</location>
     </technical>
 
-Devient
+Becomes
 
     :::N3
     <http://xserve.scedu.umontreal.ca/~cyberscol/videos/v00008-640-s.mov> a mlr1:RC0002.
 
-Mais nous ne l'employons pas pour la balise d'identification de MLR3, donc nous n'aurons pas:
+However, we would not use this for the MLR3 identifier tag, so we would *not* get:
 
     :::N3
     <http://xserve.scedu.umontreal.ca/~cyberscol/videos/v00008-640-s.mov> a mlr1:RC0002;
       mlr3:DES0400 <http://xserve.scedu.umontreal.ca/~cyberscol/videos/v00008-640-s.mov> .
 
-### Éléments DublinCore
+### DublinCore elements
 
-Beaucoup d'éléments ont une traduction directe en DublinCore, et donc en MLR-2.
+Many elements have a direct translation in DublinCore, and hence in MLR-2.
 
 #### general/title
 
@@ -57,21 +59,21 @@ Beaucoup d'éléments ont une traduction directe en DublinCore, et donc en MLR-2
         </title>
     </general>
 
-Devient
+Becomes
 
     :::N3
     [] mlr2:DES0100 "Conditions favorables à l'intégration des TIC..."@fra-CA .
 
 #### general/language suivant ISO 639-3
 
-Idéalement, la langue devrait suivre ISO 639-3. Dans ce cas, nous pouvons employer `MLR-3:DES0500`.
+Ideally, language should follow ISO 639-3. This can be detected by a regular expression, and we can then translate as `MLR-3:DES0500`.
 
     :::xml
     <general>
         <language>fra-CA</language>
     </general>
 
-Devient
+Becomes
 
     :::N3
     [] mlr3:DES0500 "fra-CA" .
@@ -79,21 +81,21 @@ Devient
 
 #### general/language
 
-Mais dans le cas plus général, nous pouvons employer la version MLR-2. (Nous pourrions envisager de traduire les codes ISO 639-2 en ISO 639-3.)
+But more generally, we can use the MLR-2 version of that property. (We may translate ISO 639-2 codes to ISO 639-3.)
 
     :::xml
     <general>
         <language>français</language>
     </general>
 
-Devient
+Becomes
 
     :::N3
     [] mlr2:DES1200 "français" .
 
 #### general/description
 
-La description pourrait se traduire par `mlr2:DES0400`, mais en pratique il n'y a jamais de raison de ne pas plutôt employer `mlr3:DES0200`.
+Description could be interpreted as `mlr2:DES0400`, but in practice there is never any reason not to use `mlr3:DES0200` instead.
 
     :::xml
     <general>
@@ -102,19 +104,19 @@ La description pourrait se traduire par `mlr2:DES0400`, mais en pratique il n'y 
         </description>
     </general>
 
-Devient
+Becomes
 
     :::N3
     [] mlr3:DES0200 "L'enseignant identifie les contraintes..."@fra-CA .
 
-Et non pas
+And not
 
     :::N3
     [] mlr2:DES0400 "L'enseignant identifie les contraintes..."@fra-CA .
 
 #### general/keyword ####
 
-Les mots clés peuvent être traités comme des sujets.
+Keywords can be interpreted an equivalent to `dc:subject`, hence `mlr2:DES0300`.
 
     :::xml
     <general>
@@ -124,7 +126,7 @@ Les mots clés peuvent être traités comme des sujets.
         </keyword>
     </general>
 
-Devient
+Becomes
 
     :::N3
     [] mlr2:DES0300 "optique"@fra; 
@@ -139,22 +141,22 @@ Devient
         </coverage>
     </general>
 
-Devient
+Becomes
 
     :::N3
     [] mlr2:DES1400 "Québec"@fra-CA.
 
-### Aspects non traités
+### Elements that are not covered
 
-`general/structure` et `general/aggregationLevel` n'ont pas d'équivalent MLR (sauf les composites, traités dans `mlr3:DES0700`)
+`general/structure` and `general/aggregationLevel` have no MLR equivalent (except composites, treated in `mlr3:DES0700`).
 
-## Cycle de vie
+## Life cycle
 
-### Rôles
+### Roles
 
-#### Auteurs 
+#### Authors
 
-Une contribution dont le rôle est `LOMv1.0:author` est traitée comme un *Creator* au sens DublinCore (`mlr2:DES0200`). On emploiera alors le `FN` de la `VCARD`.
+A contribution whose role is `LOMv1.0:author` is interpreted as a `dc:creator` (`mlr2:DES0200`). We would then use the `FN` of the `VCARD`.
 
     :::xml
     <lifeCycle>
@@ -181,14 +183,14 @@ Une contribution dont le rôle est `LOMv1.0:author` est traitée comme un *Creat
         </contribute>
     </lifeCycle>
 
-Devient
+Becomes
 
     :::N3
     [] mlr2:DES0200 "Frédéric Bergeron".
 
 #### Éditeurs
 
-De façon similaire, une contribution dont le rôle est `LOMv1.0:publisher` est traitée comme un *Publisher* au sens DublinCore (`mlr2:DES0500`).
+Similarly, a contribution whose role is `LOMv1.0:publisher` is interpreted as a `dc:publisher` (`mlr2:DES0500`).
 
     :::xml
     <lifeCycle>
@@ -205,14 +207,14 @@ De façon similaire, une contribution dont le rôle est `LOMv1.0:publisher` est 
         </contribute>
     </lifeCycle>
 
-Devient
+Becomes
 
     :::N3
     [] mlr2:DES0500 "Frédéric Bergeron".
 
 #### Collaborateurs
 
-Enfin, tout autre rôle est traité comme un *Contributor* au sens DublinCore (`mlr2:DES0600`).
+Finally, all other roles are interpreted as `dc:contributor` (`mlr2:DES0600`).
 
     :::xml
     <lifeCycle>
@@ -229,14 +231,14 @@ Enfin, tout autre rôle est traité comme un *Contributor* au sens DublinCore (`
         </contribute>
     </lifeCycle>
 
-Devient
+Becomes
 
     :::N3
     [] mlr2:DES0600 "Frédéric Bergeron".
 
 #### `ISO_IEC_19788-5:2012::VA.1:`
 
-La plupart des rôles de LOM ont un équivalent dans le vocabulaire *Agent Role* de MLR-5, employé pour les contributions.
+Most LOM roles have an equivalent in the MLR-5 *Agent Role* vocabulary, used for contributions.
 
     :::xml
     <lifeCycle>
@@ -248,20 +250,20 @@ La plupart des rôles de LOM ont un équivalent dans le vocabulaire *Agent Role*
         </contribute>
     </lifeCycle>
 
-Devient
+Becomes
 
     :::N3
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES0800 <ISO_IEC_19788-5:2012::VA.1:T020> ] .
 
-### Types de personnes
+### Person subtypes
 
-Les différents contributeurs sont également exprimés par une entité de type Personne (`mlr1:RC0003`), Personne naturelle (`mlr9:RC0001`) ou Organisation (`mlr9:RC0002`).
+Various contributors may be interpreted as entities of the Person type (`mlr1:RC0003`), or the subtypes Natural person (`mlr9:RC0001`) or Organisation (`mlr9:RC0002`).
 
-#### Identifier les personnes naturelles
+#### Identifying natural persons
 
-On distingue les personnes naturelles des organisations par la présence de l'élément `N` dans la `VCARD`.
+Natural persons are distinguished from organizations through the presence of the `N` element in the `VCARD`.
 
     :::xml
     <lifeCycle>
@@ -279,16 +281,16 @@ On distingue les personnes naturelles des organisations par la présence de l'é
         </contribute>
     </lifeCycle>
 
-Donnera
+Becomes
 
     :::N3
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 [ a mlr9:RC0001 ] ] .
 
-#### Identifier les organisations
+#### Identifying organizations
 
-On identifie les organisations par la présence d'un élément `ORG` et l'absence d'un élément `N`.
+Conversely, organizations are distinguished by the presence of a `ORG` element and the absence of a `N` element.
 
     :::xml
     <lifeCycle>
@@ -306,7 +308,7 @@ On identifie les organisations par la présence d'un élément `ORG` et l'absenc
         </contribute>
     </lifeCycle>
 
-Devient
+Becomes
 
     :::N3
     []  a mlr1:RC0002; 
@@ -314,9 +316,9 @@ Devient
             mlr5:DES1800 [ a mlr9:RC0002 ] ] .
 
 
-#### Absence de `N` ou `ORG` dans une `VCARD`
+#### Absence of `N` or `ORG` in a `VCARD`
 
-En l'absence de l'un ou l'autre, on se rabat sur la personne générique.
+Absent either those attributes, we fall back on the generic person entity.
 
     :::xml
     <lifeCycle>
@@ -333,7 +335,7 @@ En l'absence de l'un ou l'autre, on se rabat sur la personne générique.
         </contribute>
     </lifeCycle>
 
-Devient
+Becomes
 
     :::N3
     []  a mlr1:RC0002; 
