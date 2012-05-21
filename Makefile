@@ -1,5 +1,5 @@
 
-TARGETS = correspondances_xsl.xsl documentation_fr.html
+TARGETS = correspondances_xsl.xsl documentation_en.rtf
 
 DIRS = translations vdex
 
@@ -31,3 +31,12 @@ documentation.html: documentation.md
 documentation_fr.html: documentation.md
 	./make_documentation.py -l fr
 
+documentation_en.html: documentation.md
+	./make_documentation.py -l en
+
+documentation_ru.html: documentation.md
+	./make_documentation.py -l ru
+
+%.rtf: %.html
+	textutil -inputencoding utf-8 -convert rtf $<
+# pandoc -f html -t rtf -o $@ $<
