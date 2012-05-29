@@ -201,8 +201,10 @@ class EmbedExtension(markdown.Extension):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Create the documentation file')
     parser.add_argument('-l', help='Express using language')
+    parser.add_argument('-b', help='Add buttons for each example', default=False, action='store_true')
+    parser.add_argument('-s', help='Show examples by default', default=False, action='store_true')
     args = parser.parse_args()
-    extensions = [TestExtension(), CodeHiliteExtension({}), EmbedExtension()]
+    extensions = [TestExtension(args.b, not args.s), CodeHiliteExtension({}), EmbedExtension()]
     target_name = 'documentation.html'
     if (args.l):
         extensions.insert(1, TranslateMlrExtension(args.l))
