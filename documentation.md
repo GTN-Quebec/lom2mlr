@@ -28,7 +28,7 @@ Becomes
 
 #### Use of technical/location as identifier
 
-If `general/identifier` we would use the first available URL in `technical/location`. This is a heuristics, as there is no automated way to distinguish multiple URLs.
+If `general/identifier` is undefined, we would use the first available URL in `technical/location`. This is a heuristics, as there is no automated way to distinguish multiple URLs. However, we would not use this for the MLR3 identifier tag.
 
     :::xml
     <technical>
@@ -40,7 +40,7 @@ Becomes
     :::N3
     <http://xserve.scedu.umontreal.ca/~cyberscol/videos/v00008-640-s.mov> a mlr1:RC0002.
 
-However, we would not use this for the MLR3 identifier tag, so we would *not* get:
+but not:
 
     :::N3
     <http://xserve.scedu.umontreal.ca/~cyberscol/videos/v00008-640-s.mov> a mlr1:RC0002;
@@ -51,6 +51,8 @@ However, we would not use this for the MLR3 identifier tag, so we would *not* ge
 Many elements have a direct translation in DublinCore, and hence in MLR-2.
 
 #### general/title
+
+The title is translated directly as `mlr2:DES0100`.
 
     :::xml
     <general>
@@ -66,7 +68,7 @@ Becomes
 
 #### general/language suivant ISO 639-3
 
-Ideally, language should follow ISO 639-3. This can be detected by a regular expression, and we can then translate as `MLR-3:DES0500`.
+Ideally, language should follow ISO 639-3. This can be detected by a regular expression, and we can then translate as `MLR-3:DES0500`. Note that some letter triplets might not be valid ISO 639-3, which would not be detected by a simple regular expression.
 
     :::xml
     <general>
@@ -81,7 +83,7 @@ Becomes
 
 #### general/language
 
-But more generally, we can use the MLR-2 version of that property. (We may translate ISO 639-2 codes to ISO 639-3.)
+If the language description does not follow the pattern, we can use the MLR-2 version of that property. (We may translate ISO 639-2 codes to ISO 639-3.)
 
     :::xml
     <general>
@@ -134,6 +136,8 @@ Becomes
 
 #### general/coverage ####
 
+Coverage is an equivalent concept between LOM and DC.
+
     :::xml
     <general>
         <coverage>
@@ -151,6 +155,10 @@ Becomes
 `general/structure` and `general/aggregationLevel` have no MLR equivalent (except composites, treated in `mlr3:DES0700`).
 
 ## Life cycle
+
+### Version and State
+
+Contribution version and state have no equivalent in MLR.
 
 ### Roles
 
@@ -238,7 +246,9 @@ Becomes
 
 #### `ISO_IEC_19788-5:2012::VA.1:`
 
-Most LOM roles have an equivalent in the MLR-5 *Agent Role* vocabulary, used for contributions.
+Besides those DC elements, each LOM lifecycle element can be expressed as a contribution in MLR5 terms.
+The mlr5 *Agent Role* vocabulary is simplistic, containing only author and validator. 
+Most [LOM v.10 lifeCycle roles](http://www.lom-fr.fr/vdex/lomfrv1-0/lom/vdex_lc_roles.xml) can be mapped authors, except validators which are named as such in LOM. 
 
     :::xml
     <lifeCycle>
@@ -256,6 +266,27 @@ Becomes
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES0800 <ISO_IEC_19788-5:2012::VA.1:T020> ] .
+
+##### Exceptions
+
+The difficult cases are `publisher` and `unknown`, which are not translated as vocabulary entities, but as literals.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>unknown</value>
+            </role>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES0800 "unknown" ] .
 
 ### Person subtypes
 
@@ -341,3 +372,196 @@ Becomes
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 [ a mlr1:RC0003 ] ] .
+
+
+#### Person's URL as an identifier
+
+If a person's vCard has a URL, it will be used as identifier.
+Note that this is not a safe assumption in general; we should get the FOAF URI of the person, but that is not specified by the vCard protocol, or any extension we could find. This should be proposed.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    URL:http://maparent.ca/
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <http://maparent.ca/> ] .
+    <http://maparent.ca/> a mlr9:RC0001 .
+
+#### Person's email as basis for identifier
+
+If a person's vCard has an email, we could use the `mailto:` URL directly as an identifier, but it is almost certain to conflict wit that person's real URI. We prefer in this case to create a UUID based on the email, in a custom namespace, as follows:
+
+1. Start with a URL for MLR: <http://standards.iso.org/iso-iec/19788/>
+2. Create a UUID-5 URN based on this URL, in the URL namespace: we obtain `urn:uuid:27d3ab52-3979-57d6-b974-03a2e74312d5`.
+3. Use this URN as the basis for a new UUID-5 based on the `mailto:` URL of the person's address.
+
+The resulting URN is used as the person's URI.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    EMAIL;TYPE=INTERNET:map@ntic.org
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:ed065995-91e8-5b03-a317-1be0aca4e277> ] .
+    <urn:uuid:ed065995-91e8-5b03-a317-1be0aca4e277> a mlr9:RC0001 .
+
+### Date
+
+
+#### Authorship date
+
+The author's contribution date gets translated as `mlr2:DES0700`.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <date>
+                <description>
+                    <string language="fra-CA">mi-XVIème siècle</string>
+                </description>
+            </date>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002;
+        mlr2:DES0700 "mi-XVIème siècle"@fra-CA.
+
+#### Parsable date
+
+If the author's contribution can be interpreted as a ISO 8601 datetime, we can be more precise and use `mlr3:DES0100`.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <date>
+                <dateTime>2012-01-01</dateTime>
+            </date>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002;
+        mlr3:DES0100 "2012-01-01"^^<http://www.w3.org/2001/XMLSchema#date>.
+
+##### #####
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <date>
+                <dateTime>2012-01-01T00:00</dateTime>
+            </date>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002;
+        mlr3:DES0100 "2012-01-01T00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime>.
+
+#### Contribution dates
+
+Otherwise, date is part of the contribution, as long as it can be parsed.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>publisher</value>
+            </role>
+            <date>
+                <dateTime>2012-01-01T00:00</dateTime>
+            </date>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002;
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES0700 "2012-01-01T00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ] .
+
+##### #####
+
+Unparsable dates are simply ignored.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>publisher</value>
+            </role>
+            <description>
+                <string language="fra-CA">mi-XVIème siècle</string>
+            </description>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002;
+        mlr5:DES1700 [ a mlr5:RC0003 ].
+
+without
+
+    :::N3
+    []  a mlr1:RC0002;
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES0700 "mi-XVIème siècle"@fra-CA ] .
+
