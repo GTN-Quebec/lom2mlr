@@ -1,3 +1,4 @@
+.example {background-color:#ddd; border:1px dashed black; padding-left: 1em;}
 .error {background-color:#fdd;}
 .error p {color:#c00;}
 .codehilite .hll { background-color: #ffffcc }

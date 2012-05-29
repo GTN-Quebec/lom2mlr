@@ -24,8 +24,10 @@ from util import splitcode
 HEADER_R = re.compile(r'^h[1-9]$', re.I)
 
 class TestTreeprocessor(Treeprocessor):
-    def __init__(self, md):
+    def __init__(self, md, buttons, hide_eg):
         self.graph_tester = GraphTester()
+        self.buttons = buttons
+        self.hide_eg = hide_eg
 
     def remove_namespace(self, n3):
         lines = n3.split("\n")
@@ -59,21 +61,34 @@ class TestTreeprocessor(Treeprocessor):
 
     def run(self, root):
         elements = list(root) # should be an iterator, but 2.6 getiterator vs 2.7 iter.
+        root.clear()
         target = root
         graphs = []
-        offset = 0
         error = False
-        for pos, element in enumerate(elements):
+        example_num = 0
+        for element in elements:
             if HEADER_R.match(element.tag):
                 if graphs and not error:
                     response = self.make_response(graphs)
                     if response:
-                        target.insert(pos+offset, response)
-                        offset += 1
-                print " " * int(element.tag[1]) + element.text
+                        target.append(response)
+                target = root
                 graphs = []
                 error = False
-            if element.tag == 'pre':
+                print " " * int(element.tag[1]) + element.text
+            elif element.tag == 'pre':
+                if target is root:
+                    example_num += 1
+                    if self.buttons:
+                        button = etree.Element('button',{'onclick':"$('#eg%d').toggle();"%(example_num,)})
+                        button.text='Example'
+                        root.append(button)
+                    divattr = {"class":"example",'id':'eg%d'%(example_num,)}
+                    if self.hide_eg:
+                        divattr['style']='display:none'
+                    div = etree.Element('div', divattr)
+                    root.append(div)
+                    target = div
                 sub = list(element)
                 assert len(sub) == 1 and sub[0].tag == 'code'
                 format, code = splitcode(sub[0].text)
@@ -85,10 +100,10 @@ class TestTreeprocessor(Treeprocessor):
                     tr = etree.Element('code')
                     p2.append(tr)
                     tr.text = ":::Python Traceback\n"+traceback.format_exc()
-                    offset += 1
-                    target.insert(pos+offset, p2)
+                    target.append(p2)
                     print '*', e
                     error = True
+            target.append(element)
         if graphs and not error:
             response = self.make_response(graphs)
             if response:
@@ -96,12 +111,13 @@ class TestTreeprocessor(Treeprocessor):
         return root
 
 class TestExtension(markdown.Extension):
-    def __init__(self):
-        pass
+    def __init__(self, buttons=False, hide_eg=True):
+        self.buttons = buttons
+        self.hide_eg = hide_eg
 
     def extendMarkdown(self, md, md_globals):
         """ Add TestTreeprocessor to Markdown instance. """
-        tester = TestTreeprocessor(md)
+        tester = TestTreeprocessor(md, self.buttons, self.hide_eg)
         md.treeprocessors.add("tester", tester, "<inline")
         md.registerExtension(self)
 
@@ -149,9 +165,21 @@ class EmbedTreeprocessor(Treeprocessor):
         body = etree.Element('body')
         head = etree.Element('head')
         link = etree.Element('link',{'href':"default.css", 'rel':"stylesheet", 'type':"text/css"})
+        jquery = etree.Element('script',{'src':'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'})
         head.append(link)
+        head.append(jquery)
         html.append(head)
         html.append(body)
+        buttons = etree.Element('p')
+        button = etree.Element('button',{'onclick':"$('.example').show();"})
+        button.text='Show'
+        buttons.append(button)
+        button.tail = ' or '
+        button = etree.Element('button',{'onclick':"$('.example').hide();"})
+        button.text='Hide'
+        button.tail = ' all examples'
+        buttons.append(button)
+        body.append(buttons)
         elements = list(root) # should be an iterator, but 2.6 getiterator vs 2.7 iter.
         for n in elements:
             root.remove(n)
