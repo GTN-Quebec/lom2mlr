@@ -66,7 +66,7 @@ class GraphCorrespondence(object):
             else:
                 for s2, p2, o2 in self.dest.triples((s, p, None)):
                     objects[o2] += 1
-        return len(object_sig)-unknown, objects
+        return len(object_sig) - unknown, objects
 
     def identify_one_by_subjects(self, s_node):
         subject_sig = list(self.source.triples((s_node, None, None)))
@@ -82,8 +82,7 @@ class GraphCorrespondence(object):
             else:
                 for s2, p2, o2 in self.dest.triples((None, p, o)):
                     subjects[s2] += 1
-        return len(subject_sig)-unknown, subjects
-
+        return len(subject_sig) - unknown, subjects
 
     def identify(self):
         subjects_s = set(self.source.subjects())
@@ -111,17 +110,18 @@ class GraphCorrespondence(object):
                 if len(combined_candidates) == 1:
                     self.blank_map[n] = combined_candidates.pop()
                     break
-                combined = [(objects[n] / (1.0+num_ob_stmt) + subjects[n] / (1.0+num_sub_stmt), n)
+                combined = [(objects[n] / (1.0 + num_ob_stmt) + subjects[n] / (1.0 + num_sub_stmt), n)
                             for n in combined_candidates]
                 combined.sort()
                 best = combined[-1][1]
                 score = combined[-1][0] - combined[-2][0]
                 quality.append(score, n, best)
-            else: # no breaks
+            else:  # no breaks
                 quality.sort()
                 #TODO: What if best quality is too low?
                 score, orig_node, dest_node = quality[-1]
                 self.blank_map[orig_node] = dest_node
+
 
 class GraphTester(object):
 
@@ -150,8 +150,8 @@ class GraphTester(object):
         if forbidden_graph:
             comparator_fo = GraphCorrespondence(forbidden_graph, obtained_graph)
             comparator_fo.identify()
-            map_oe = {o: e for e, o in comparator_eo.blank_map.items()}
-            map_fe = {f: map_oe[o] for f, o in comparator_fo.blank_map.items()}
+            map_oe = {o: e for (e, o) in comparator_eo.blank_map.items()}
+            map_fe = {f: map_oe.get(o, None) for f, o in comparator_fo.blank_map.items()}
             triples = forbidden_graph.triples((None, None, None))
             for triple in triples:
                 if list(obtained_graph.triples(comparator_fo.translate_triple(triple))) \
@@ -163,7 +163,7 @@ class GraphTester(object):
         return self.converter.lomxml2graph(etree.fromstring(LOM_TEMPLATE % (lom,)))
 
     def convert_n3(self, n3):
-        return Graph().parse(data=N3_PREFIXES+n3, format="n3")
+        return Graph().parse(data=N3_PREFIXES + n3, format="n3")
 
     def convert(self, format, code):
         if format.lower() == 'xml':
@@ -171,7 +171,7 @@ class GraphTester(object):
         elif format.lower() == 'n3':
             return self.convert_n3(code)
         else:
-            raise Exception("invalid code format parameter: "+format)
+            raise Exception("invalid code format parameter: " + format)
 
     def test_lom(self, lom, expected_n3, forbidden_n3=None):
         "Transform a LOM string into a graph; returns discrepancies with (N3) expected and forbidden."
