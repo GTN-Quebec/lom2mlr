@@ -35,7 +35,9 @@ def test_document():
         if element.tag == 'pre':
             sub = list(element)
             assert len(sub) == 1 and sub[0].tag == 'code'
-            code.append(splitcode(sub[0].text))
+            tag, text = splitcode(sub[0].text)
+            if tag:
+                code.append((tag, text))
     if code:
         yield t_function, code, title
 
