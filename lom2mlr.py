@@ -3,7 +3,7 @@ import argparse
 import sys
 import os.path
 
-from uuid import uuid4, uuid5, NAMESPACE_URL
+from uuid import UUID, uuid3, uuid4, uuid5, NAMESPACE_URL
 from lxml import etree
 from rdflib import Graph
 
@@ -19,17 +19,33 @@ URL_GTN = 'http://gtn-quebec.org/ns/'
 URL_MLR_EXT = URL_MLR + 'ext/'
 NAMESPACE_MLR = uuid5(NAMESPACE_URL, URL_MLR)
 
-@unwrap_seq
-def uuid_url(context, url):
-    return 'urn:uuid:'+str(uuid5(NAMESPACE_MLR, url))
 
 @unwrap_seq
-def uuid_email(context, email):
-    return uuid_url(context, 'mailto:'+email)
+def uuid_url(context, url, namespace=None):
+    'Return a UUID based on a URL'
+    if namespace is None:
+        namespace = NAMESPACE_URL
+    elif not isinstance(namespace, UUID):
+        namespace = UUID(namespace)
+    return str(uuid5(namespace, url))
+
 
 @unwrap_seq
 def uuid_random(context):
-    return 'urn:uuid:'+str(uuid4())
+    'Return a random UUID'
+    return str(uuid4())
+
+
+@unwrap_seq
+def uuid_string(context, s, namespace=None):
+    'Return a UUID based on a string'
+    if namespace is None:
+        namespace = NAMESPACE_MLR
+    elif not isinstance(namespace, UUID):
+        namespace = UUID(namespace)
+    s = s.encode('ascii','backslashreplace')
+    return str(uuid3(namespace, s))
+
 
 class Converter(object):
     """A converter between LOM and MLR formats.
@@ -43,10 +59,10 @@ class Converter(object):
         #	namespaces={'xsl':XSLT_NS})
         self.stylesheet = etree.XSLT(stylesheet_xml,
             extensions={
-                (VCARDC_NS, 'convert'):convert,
-                (URL_MLR_EXT, 'uuid_email'):uuid_email,
-                (URL_MLR_EXT, 'uuid_url'):uuid_url,
-                (URL_MLR_EXT, 'uuid_random'):uuid_random,
+                (VCARDC_NS, 'convert'): convert,
+                (URL_MLR_EXT, 'uuid_string'): uuid_string,
+                (URL_MLR_EXT, 'uuid_random'): uuid_random,
+                (URL_MLR_EXT, 'uuid_url'): uuid_url,
                 })
 
     def get_lang_sheet(self, lang, random=False):
@@ -63,8 +79,12 @@ class Converter(object):
         "Transform a lom xml object to a rdf-xml object"
         arguments = {}
         if random:
-            arguments['randomid'] = 'true()'
-        rdfxml = self.stylesheet(xml, **arguments)
+            arguments['use_random_uuid'] = 'true()'
+        try:
+            rdfxml = self.stylesheet(xml, **arguments)
+        except:
+            print self.stylesheet.error_log
+            raise
         langsheet = self.get_lang_sheet(lang)
         if langsheet:
             rdfxml = langsheet(rdfxml)
@@ -78,12 +98,14 @@ class Converter(object):
     def lomfile2graph(self, fname, lang=None, random=False):
         "Takes a path to a lom file, returns a rdf graph"
         xml = self.lomfile2rdfxml(fname, lang, random)
-        return Graph().parse(data=etree.tounicode(xml), format="xml")
+        if xml:
+            return Graph().parse(data=etree.tounicode(xml), format="xml")
 
     def lomxml2graph(self, xml, lang=None, random=False):
         "Takes a LOM xml object, returns a rdf graph"
         xml = self.lomxml2rdfxml(xml, lang, random)
-        return Graph().parse(data=etree.tounicode(xml), format="xml")
+        if xml:
+            return Graph().parse(data=etree.tounicode(xml), format="xml")
 
 
 if __name__ == '__main__':
@@ -98,8 +120,10 @@ if __name__ == '__main__':
     converter = Converter(args.s)
     if (args.f == 'rawxml'):
         xml = converter.lomfile2rdfxml(args.infile, args.l, args.r)
-        print etree.tounicode(xml, pretty_print=True).encode('utf-8')
+        if xml:
+            print etree.tounicode(xml, pretty_print=True).encode('utf-8')
     else:
         rdf = converter.lomfile2graph(args.infile, args.l, args.r)
-        print rdf.serialize(format=args.f, encoding='utf-8')
+        if rdf:
+            print rdf.serialize(format=args.f, encoding='utf-8')
 
