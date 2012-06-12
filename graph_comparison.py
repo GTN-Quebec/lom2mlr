@@ -115,7 +115,7 @@ class GraphCorrespondence(object):
                 combined.sort()
                 best = combined[-1][1]
                 score = combined[-1][0] - combined[-2][0]
-                quality.append(score, n, best)
+                quality.append((score, n, best))
             else:  # no breaks
                 quality.sort()
                 #TODO: What if best quality is too low?
