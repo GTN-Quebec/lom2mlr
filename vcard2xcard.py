@@ -156,6 +156,8 @@ def convert(context, card):
 			continue
 		el = root.makeelement(VCARD_NSB+tag, nsmap=NSMAP)
 		root.append(el)
+		if e.group:
+			el.attrib['group'] = e.group
 		if e.params:
 			params = el.makeelement(VCARD_NSB+'parameters', nsmap=NSMAP)
 			el.append(params)
