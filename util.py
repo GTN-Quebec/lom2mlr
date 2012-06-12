@@ -3,19 +3,32 @@ def is_sequence(arg):
             hasattr(arg, "__getitem__") or
             hasattr(arg, "__iter__"))
 
+def unlist(arg):
+    if is_sequence(arg) and len(arg) == 1:
+        return arg[0]
+    return arg
+
+def seqlen(arg):
+    if is_sequence(arg):
+        return len(arg)
+    return 1
+
 def unwrap_seq(func):
-    def wrapped(context, *l):
-        if len(l) == 1 and is_sequence(l[0]):
-            l = l[0]
-            if len(l):
-                if len(l) > 1:
-                    return [func(context, c) for c in l]
-                else:
-                    return func(context, l[0])
-            else:
-                return []
+    def wrapped(context, *args):
+        lengths = [seqlen(a) for a in args]
+        args = [unlist(a) for a in args]
+        if max(lengths) == 0 and len(lengths) > 0:
+            return []
+        if max(lengths) > 1:
+            pos1 = [p for (p, l) in enumerate(lengths) if l > 1][0]
+            result = []
+            for v in args[pos1]:
+                subargs = args[:]
+                subargs[pos1] = v
+                result.append(func(context, *subargs))
+            return result
         else:
-            return func(context, *l)
+            return func(context, *args)
     return wrapped
 
 def splitcode(code):
