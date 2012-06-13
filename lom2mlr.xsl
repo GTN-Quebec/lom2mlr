@@ -430,7 +430,7 @@
 			</xsl:when>
 			<xsl:when test="$use_fn_uuid">
 				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_string(vcard:fn/vcard:text/text(), vcardfn_namespace_uuid)"/>
+				<xsl:value-of select="mlrext:uuid_string(vcard:fn/vcard:text/text(), $vcardfn_namespace_uuid)"/>
 			</xsl:when>
 			<xsl:when test="$use_random_uuid">
 				<xsl:text>urn:uuid:</xsl:text>
