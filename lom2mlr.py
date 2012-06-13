@@ -52,9 +52,18 @@ class Converter(object):
 
     Can take a file or lxml object; can return rdf-xml or rdflib graphs."""
 
-    def __init__(self, stylesheet=STYLESHEET):
+    default_options = {
+        "use_mail_and_fn_uuid": "true()",
+        "use_mail_uuid": "false()",
+        "use_org_uuid": "true()",
+        "use_fn_uuid": "false()",
+        "use_random_uuid": "false()",
+    }
+
+    def __init__(self, stylesheet=STYLESHEET, options = None):
         stylesheet_xml = etree.parse(stylesheet)
         self.langsheets = {}
+        self.set_options(options)
         #self.output = stylesheet_xml.xpath('xsl:output/@method',
         #	namespaces={'xsl':XSLT_NS})
         self.stylesheet = etree.XSLT(stylesheet_xml,
@@ -65,7 +74,14 @@ class Converter(object):
                 (URL_MLR_EXT, 'uuid_url'): uuid_url,
                 })
 
-    def get_lang_sheet(self, lang, random=False):
+    def set_options(self, options = None):
+        if options is None:
+            self.options = self.default_options
+        else:
+            self.options = { k: 'true()' if k in options else 'false()' 
+                    for k in self.default_options.keys()}
+
+    def get_lang_sheet(self, lang):
         if lang in self.langsheets:
             return self.langsheets[lang]
         langsheet = None
@@ -75,13 +91,10 @@ class Converter(object):
         self.langsheets[lang] = langsheet
         return langsheet
 
-    def lomxml2rdfxml(self, xml, lang=None, random=False):
+    def lomxml2rdfxml(self, xml, lang=None):
         "Transform a lom xml object to a rdf-xml object"
-        arguments = {}
-        if random:
-            arguments['use_random_uuid'] = 'true()'
         try:
-            rdfxml = self.stylesheet(xml, **arguments)
+            rdfxml = self.stylesheet(xml, **self.options)
         except:
             print self.stylesheet.error_log
             raise
@@ -90,40 +103,48 @@ class Converter(object):
             rdfxml = langsheet(rdfxml)
         return rdfxml
 
-    def lomfile2rdfxml(self, fname, lang=None, random=False):
+    def lomfile2rdfxml(self, fname, lang=None):
         "Takes a path to a lom file, returns a rdf-xml object"
         xml = etree.parse(fname)
-        return self.lomxml2rdfxml(xml, lang, random)
+        return self.lomxml2rdfxml(xml, lang)
 
-    def lomfile2graph(self, fname, lang=None, random=False):
+    def lomfile2graph(self, fname, lang=None):
         "Takes a path to a lom file, returns a rdf graph"
-        xml = self.lomfile2rdfxml(fname, lang, random)
+        xml = self.lomfile2rdfxml(fname, lang)
         if xml:
             return Graph().parse(data=etree.tounicode(xml), format="xml")
 
-    def lomxml2graph(self, xml, lang=None, random=False):
+    def lomxml2graph(self, xml, lang=None):
         "Takes a LOM xml object, returns a rdf graph"
-        xml = self.lomxml2rdfxml(xml, lang, random)
+        xml = self.lomxml2rdfxml(xml, lang)
         if xml:
             return Graph().parse(data=etree.tounicode(xml), format="xml")
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Apply a XSLT stylesheet to a LOM file')
-    parser.add_argument('-s', default=STYLESHEET, help='Name of the stylesheet')
-    parser.add_argument('-l', help='Express using language')
-    parser.add_argument('-f', default='rawxml',
+    parser.add_argument('-s', '--stylesheet', default=STYLESHEET, help='Name of the stylesheet')
+    parser.add_argument('-l', '--language', help='Express using language')
+    parser.add_argument('-f', '--format', default='rawxml',
             help="output format: one of 'rawxml', 'xml', 'n3', 'turtle', 'nt', 'pretty-xml', trix'")
-    parser.add_argument('-r', help="Add random identifiers to blank nodes", action='store_true')
+    parser.add_argument('-o', '--output', help="Output file", type=argparse.FileType('w'), default=sys.stdout)
+    parser.add_argument('-x', '--option', action='append',
+        help="""Stylesheet options: any combination of:
+        *use_mail_and_fn_uuid, use_mail_uuid, *use_org_uuid, use_fn_uuid, use_random_uuid.
+        See stylesheet for definition. Starred items are on if no option is specified.""")
     parser.add_argument('infile')
     args = parser.parse_args()
-    converter = Converter(args.s)
-    if (args.f == 'rawxml'):
-        xml = converter.lomfile2rdfxml(args.infile, args.l, args.r)
-        if xml:
-            print etree.tounicode(xml, pretty_print=True).encode('utf-8')
-    else:
-        rdf = converter.lomfile2graph(args.infile, args.l, args.r)
-        if rdf:
-            print rdf.serialize(format=args.f, encoding='utf-8')
+    converter = Converter(args.stylesheet, args.option)
+    
+    try:
+        if (args.format == 'rawxml'):
+            xml = converter.lomfile2rdfxml(args.infile, args.language)
+            if xml:
+                args.output.write(etree.tounicode(xml, pretty_print=True).encode('utf-8'))
+        else:
+            rdf = converter.lomfile2graph(args.infile, args.language)
+            if rdf:
+                args.output.write(rdf.serialize(format=args.format, encoding='utf-8'))
+    finally:
+        args.output.close()
 
