@@ -1465,8 +1465,7 @@ The VCard contains much useful information besides the name and identity. Howeve
 
 #### Organization
 
-If a person has an ORG field in their VCard, it can be expressed as an organization.
-
+If a person has an `ORG` field in their VCard, it can be expressed as an organization.
 
     :::xml
     <lifeCycle>
@@ -1524,6 +1523,17 @@ Becomes
                 mlr9:DES1100 <http://www.gtn-quebec.org/> ] ] .
     <http://www.gtn-quebec.org/> a mlr9:RC0002.
 
+#### `N` and `FN`
+
+#### Skype
+
+#### Email
+
+#### `TEL`
+
+### Address elements
+
+#### `GEO`
 
 ### Contribution Date
 
