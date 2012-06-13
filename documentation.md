@@ -399,7 +399,7 @@ Becomes
 
 #### Natural person with work information
 
-If a natural person has an `ORG` in their vCard, or information of subtype work (whether `URL`, `ADR`, `EMAIL` or `TEL`), there must be an underlying organization. In the case of `ORG`, `URL` and `ADR` (presumed to be of subtype `POST`), it gives us further information to attach to the organization, and we then create a corresponding entity. `EMAIL` and `TEL` elements, on the other hand, are often individual, and are not assigned to the organizational entity. We did consider, and reject, a heuristic that would have assigend the email and telephone to the organization if the person had had both `WORK` and `HOME` emails.
+If a natural person has an `ORG` in their vCard, or information of subtype work (whether `URL`, `ADR`, `EMAIL` or `TEL`), there must be an underlying organization. In the case of `ORG`, `URL` and `ADR` (presumed to be of subtype `POST`), it gives us further information to attach to the organization, and we then create a corresponding entity. (Whether it has a URL is a separate issue.) `EMAIL` and `TEL` elements, on the other hand, are often individual, and are not assigned to the organizational entity. We did consider, and reject, a heuristic that would have assigend the email and telephone to the organization if the person had had both `WORK` and `HOME` emails.
 
 This raises many issues. In some cases, the `URL` or postal `ADR` may refer to that person individual's office or home page rather than the organization's. It is however very difficult to detect this based on a single vCard, which is the scope of our study. In further study, more approaches may be considered:
 
@@ -411,11 +411,9 @@ Conversely, we could consider that if a work information (esp. phone or email) i
 
 The current heuristic is far from satisfying, but may be the best we can do given the imprecision of available information. Let us not forget, moreover, that the `WORK` subtypes are often left blank, or worse, filled arbitrarily by mail agents' user interfaces, and not systematically corrected by users. 
 
-All this considered, we have settled on the following heuristics:
+So to review, here is the information that triggers an organization entity:
 
-##### Some work information triggers an organization entity
-
-###### `ORG`
+##### `ORG`
 
 The `ORG` is carried over in the entity's data as `mlr9:DES1200`. It is also used as identifier (`mlr9:DES0100`) unless a work URL is present. 
 
@@ -498,7 +496,7 @@ Becomes
 
 ##### Work URL
 
-Work URL also becomes the organization's identifying URL. This identifying URL is both the RDF subject and the `mlr9:0010` identifier. Note that we did not discern any case when `mlr9:0010` is distinct from the RDF subject identifier.
+Work URL also becomes the organization's identifying URL. This identifying URL is both the RDF subject and the `mlr9:0010` identifier. (Gilles:  La définition de mlr9:0010 donne litéral, mais il s'agit d'un URL. Devrais-je employer un litéral ou une ressource en ce cas?)
 
     :::xml
     <lifeCycle>
@@ -528,7 +526,7 @@ Becomes
         mlr9:DES0100 <http://www.gtn-quebec.org/>.
 
 
-#### Actor's URL
+### Identifying URLs
 
 There is a controversy within the GTN-Québec. When we do not have a proper identity URL for an identity, there are four options:
 
@@ -538,7 +536,7 @@ There is a controversy within the GTN-Québec. When we do not have a proper iden
 4. Use a randomized UUID.
 
 
-In cases where no URL is available, Gilles Gauthier remarked that successive analysis of the same vCard could pollute the database with as many blank nodes, which gives a valid general reason to prefer deterministic UUIDs (2) to blank nodes (3). Gilles Gauthier also favours random UUIDs (4) over blank nodes, but the rationale given does not justify this preference, since blank nodes would also be regenerated. (Gilles, je te laisse développer ta position, que je croyais comprendre mais comme tu nous a dit refuser mon dernier contre-argument sans l'avoir justifié, je n'ai aucune façon de savoir si j'ai bien saisi tes raisons.) 
+In cases where no URL is available, Gilles Gauthier remarked that successive analysis of the same vCard could pollute the database with as many blank nodes, which gives a valid general reason to prefer deterministic UUIDs (2) to blank nodes (3). Gilles Gauthier also favours random UUIDs (4) over blank nodes, but the rationale given does not justify this preference, since blank nodes would also be regenerated. (Gilles, j'aimerais que tu développes ta position, que je croyais comprendre mais comme tu nous a dit refuser mon dernier contre-argument sans l'avoir justifié, je n'ai aucune façon de savoir si j'ai bien saisi tes raisons.) 
 
 On the other hand, Marc-Antoine Parent believes that blank nodes accurately convey absence of information, which can be preferred in some cases. If a harvester receives MLR information from many converters, and each converter implements a different deterministic UUID, we will have many different identities for the same entity. 
 
@@ -546,38 +544,84 @@ At first sight, this is identical to multiple blank nodes created in the same fa
 
 Note that, if the deterministic UUIDs were agreed upon in a norm, that argument would fall. We could decide that, absent URL and Email, we will generate a UUID based on (e.g.) a person's home phone number or address as a strings in some appropriate namespace. If the strategy were common to all converters, collisions would happen to positive effect. A downside is that different vCards for the same person, with different subsets of identifying information, would again yield different identifiers, and the problem of finding correspondances between named (vs blank) entities reappears. As long as the strategies are shared, this problem is minimal, as we would know how to search for corresponding entities in that case; but until the algorithm for UUID generation is made part of the norm, such strategies may add to the problem instead of solving it.
 
-We nonetheless propose applying a deterministic strategy Emails, as the generated UUID is "natural" enough that we feel it should be easy to agree upon even without a common policy.
+We nonetheless propose applying a deterministic strategy to emails, as the generated UUID is "natural" enough that we feel it should be easy to agree upon even without a common policy. We also propose using it for `ORG`, less natural, but where it has the most payoff.
 
-Finally, Marc-Antoine Parent believes that some objects only have a source and content; if the source URL is not known, there is no information that may act as a "natural" identifier other than the content itself. Comments fall in this category. Using (a hash of) the content to generate a URL subverts the meaning of URLs, which designate the entity rather than embody it.
+As an additional point, Marc-Antoine Parent believes that some objects only have a source and content; if the source URL is not known, there is no information that may act as a "natural" identifier other than the content itself. Comments fall in this category. Using (a hash of) the content to generate a URL subverts the meaning of URLs, which designate the entity rather than embody it.
 
-Concretely, what do we recommend? In the case of natural persons (and persons), we can use the following information. Some options are disabed by settings, as discussed above.
+Concretely, what do we recommend? 
 
-1. FOAF URL
-2. Preferred URL
-3. Any URL (non-work)
-4. A UUID calculated from non-work email and FN
-5. A UUID calculated from non-work email (disabled)
-6. A UUID calculated from FN (disabled)
-7. A random UUID (disabled)
+#### Natural persons
+
+In the case of natural persons (and persons), we can use the following information. Some options are disabed by settings, as discussed above.
+
+##### FOAF URL
+
+Though it is not in much use, a strategy exists to identify FOAF URLs in a vCard, as noted in [this study](http://www.w3.org/2002/12/cal/vcard-notes.html). 
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    item1.URL:http://maparent.ca/
+    item2.URL:http://maparent.ca/foaf.rdf
+    item2.X-ABLabel:FOAF
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <http://maparent.ca/foaf.rdf> ] .
+    <http://maparent.ca/foaf.rdf> a mlr9:RC0001 .
+
+In preference to 
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <http://maparent.ca/foaf.rdf> ] .
+    <http://maparent.ca/> a mlr9:RC0001 .
+
+##### Preferred URL
+##### Any URL (non-work)
+##### A UUID calculated from non-work email and FN
+##### A UUID calculated from non-work email (disabled)
+##### A UUID calculated from FN (disabled)
+##### A random UUID (disabled)
+
+#### Organization within a person's vCard
 
 If the natural person also has organization information, we can also use the following information:
 
-1. Work URL
-2. A UUID calculated from work email and ORG
-3. A UUID calculated from work email (disabled)
-4. A random UUID (disabled)
+##### Work URL
+##### A UUID calculated from work email and ORG
+##### A UUID calculated from work email (disabled)
+##### A random UUID (disabled)
+
+##### Organization vCard
 
 Finally, an organization uses the following identifiers:
 
-1. FOAF URL
-2. Preferred URL
-3. Any URL
-4. A UUID calculated from an email and ORG
-4. A UUID calculated from an email and FN
-5. A UUID calculated from an email (disabled)
-6. A UUID calculated from ORG
-6. A UUID calculated from FN (disabled)
-7. A random UUID (disabled)
+##### FOAF URL
+##### Preferred URL
+##### Any URL
+##### A UUID calculated from an email and ORG
+##### A UUID calculated from an email and FN
+##### A UUID calculated from an email (disabled)
+##### A UUID calculated from ORG
+##### A UUID calculated from FN (disabled)
+##### A random UUID (disabled)
 
 ##### Person's URL as an identifier
 

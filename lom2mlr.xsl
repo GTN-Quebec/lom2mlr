@@ -409,9 +409,9 @@
 	<xsl:template name="natural_person_identity_url">
 		<xsl:param name="has_suborg"/>
 		<xsl:choose>
-			<xsl:when test="vcard:X-ABLabel[vcard:text/text()='FOAF' and @group]">
+			<xsl:when test="vcard:x-ablabel[vcard:unknown/text()='FOAF' and @group]">
 				<!-- From http://www.w3.org/2002/12/cal/vcard-notes.html -->
-				<xsl:variable name='group' select="vcard:X-ABLabel[vcard:text/text()='FOAF' and @group]/@group"/>
+				<xsl:variable name='group' select="vcard:x-ablabel[vcard:unknown/text()='FOAF' and @group]/@group"/>
 				<xsl:value-of select="vcard:url[@group=$group]/vcard:uri/text()"/>
 			</xsl:when>
 			<xsl:when test="vcard:url[not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK') and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
@@ -441,10 +441,11 @@
 
 	<xsl:template name="has_suborg">
 		<!-- Used on a natural person vcard to determine whether we will define a organization for that person -->
-		<xsl:value-of select="vcard:org or vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or ($use_mail_uuid and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'])"/>
+		<xsl:value-of select="vcard:org or vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']"/>
 	</xsl:template>
 
 	<xsl:template name="suborg_identity">
+		<!-- TODO: no mlr9:DES0100 if none are true... mostly for ADR-only org. -->
 		<mlr9:DES0100>
 			<xsl:choose>
 				<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
