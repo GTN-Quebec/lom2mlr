@@ -55,6 +55,7 @@ class Converter(object):
     default_options = {
         "use_mail_and_fn_uuid": "true()",
         "use_mail_uuid": "false()",
+        "use_mail_url": "false()",
         "use_org_uuid": "true()",
         "use_fn_uuid": "false()",
         "use_random_uuid": "false()",
@@ -130,7 +131,7 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--output', help="Output file", type=argparse.FileType('w'), default=sys.stdout)
     parser.add_argument('-x', '--option', action='append',
         help="""Stylesheet options: any combination of:
-        *use_mail_and_fn_uuid, use_mail_uuid, *use_org_uuid, use_fn_uuid, use_random_uuid.
+        *use_mail_and_fn_uuid, use_mail_uuid, use_mail_url, *use_org_uuid, use_fn_uuid, use_random_uuid.
         See stylesheet for definition. Starred items are on if no option is specified.""")
     parser.add_argument('infile')
     args = parser.parse_args()
