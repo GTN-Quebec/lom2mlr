@@ -1,4 +1,47 @@
-.example {background-color:#ddd; border:1px dashed black; padding-left: 1em;}
+/* Taken from http://daarchitect.wordpress.com/2008/04/09/numbered-headings-in-css/ */
+
+h1 {
+    counter-reset: mynum-h2;
+}
+
+h2 {
+    counter-reset: mynum-h3;
+}
+
+h2:before {
+    content: counter(mynum-h2) " ";
+    counter-increment: mynum-h2;
+}
+
+h3 {
+    counter-reset: mynum-h4;
+}
+
+h3:before {
+    content: counter(mynum-h2) "." counter(mynum-h3) " ";
+    counter-increment: mynum-h3;
+}
+
+h4 {
+    counter-reset: mynum-h5;
+}
+
+h4:before {
+    content: counter(mynum-h2) "." counter(mynum-h3) "." counter(mynum-h4) " ";
+    counter-increment: mynum-h4;
+}
+
+h5 {
+    /* counter-reset: mynum-h6; */
+}
+
+h5:before {
+    content: counter(mynum-h2) "." counter(mynum-h3) "." counter(mynum-h4) "." counter(mynum-h5) " ";
+    counter-increment: mynum-h5;
+}
+
+.example {border:2px solid black; padding: 1ex;}
+.codehilite {background-color:#ddd; border:1px dashed black; padding-left: 1em;}
 .error {background-color:#fdd;}
 .error p {color:#c00;}
 .codehilite .hll { background-color: #ffffcc }
