@@ -25,19 +25,19 @@ correspondances_xsl.xsl: correspondances_type.xml correspondances.xsl
 	xsltproc -o $@ correspondances.xsl $< 
 
 
-documentation.html: documentation.md
+documentation.html: documentation.md lom2mlr.xsl
 	./make_documentation.py
 
-documentation_x.html: documentation.md
+documentation_x.html: documentation.md lom2mlr.xsl
 	./make_documentation.py --output $@ --delete
 
-documentation_fr.html: documentation.md
+documentation_fr.html: documentation.md lom2mlr.xsl
 	./make_documentation.py -l fr
 
-documentation_en.html: documentation.md
+documentation_en.html: documentation.md lom2mlr.xsl
 	./make_documentation.py -l en
 
-documentation_ru.html: documentation.md
+documentation_ru.html: documentation.md lom2mlr.xsl
 	./make_documentation.py -l ru
 
 %.rtf: %.html
