@@ -200,7 +200,7 @@ A contribution whose role is `LOMv1.0:author` is interpreted as a `dc:creator` (
     EMAIL;TYPE=INTERNET:frederic.bergeron@licef.org
     TEL;TYPE=WORK,VOICE:+1-514-948-1234
     TEL;TYPE=WORK,FAX:+1-514-948-1231
-    ADR;TYPE=WORK,POST:;;7400,boul. Saint-Laurent,Bureau 530;Montréal;Québec;H2R 2Y1;Canada
+    ADR;TYPE=POST,WORK:;;455\, rue du Parvis;Québec;Québec;G1K 9H6;Canada
     ORG:LICEF
     END:VCARD
     </entity>
@@ -368,6 +368,32 @@ Becomes
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 [ a mlr9:RC0002 ] ] .
 
+#### `WORK` and `HOME` subtypes
+
+Some vCard elements, namely `ADR`, `EMAIL`, `URL` and `TEL` have a `TYPE` indicator, which may take the standard values `WORK` and `HOME`. Absent either a `N` or `ORG` element, the presence of `WORK` elements and the absence of `HOME` elements may together be indicative of an organization.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    ADR;TYPE=POST,WORK:;;455\, rue du Parvis;Québec;Québec;G1K 9H6;Canada
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0002 ] ] .
 
 #### Absence of `N` or `ORG` in a `VCARD`
 
@@ -476,7 +502,7 @@ We format the address according to the following schema:
     VERSION:3.0
     FN:Marc-Antoine Parent
     N:Parent;Marc-Antoine;;;
-    ADR;TYPE=WORK,POST:;;7400,boul. Saint-Laurent,Bureau 530;Montréal;Québec;H2R 2Y1;Canada
+    ADR;TYPE=POST,WORK:;;455\, rue du Parvis;Québec;Québec;G1K 9H6;Canada
     END:VCARD
     </entity>
         </contribute>
@@ -490,8 +516,8 @@ Becomes
             mlr5:DES1800 [ a mlr9:RC0001 ;
                 mlr9:DES1100 [ a mlr9:RC0002;
                     mlr9:DES1300 [ a mlr9:RC0003;
-                        mlr9:DES1700 """7400 boul. Saint-Laurent Bureau 530
-    Montréal, Québec, H2R 2Y1
+                        mlr9:DES1700 """455, rue du Parvis
+    Québec, Québec, G1K 9H6
     Canada""" ] ] ] ].
 
 ##### Work URL
@@ -542,9 +568,9 @@ On the other hand, Marc-Antoine Parent believes that blank nodes accurately conv
 
 At first sight, this is identical to multiple blank nodes created in the same fashion, and less of an issue than the more frequent blank nodes created by multiple reads. However, either problem needs solving, and a heuristic for declaring entities as identical is necessary. Now, such algorithms are computationally expensive, and it would be convenient to restrict their application to nodes which are known not to have a proper identity, namely blank nodes. Creating many arbitrary identities requires applying identification heuristics to a much greater number of entities.
 
-Note that, if the deterministic UUIDs were agreed upon in a norm, that argument would fall. We could decide that, absent URL and Email, we will generate a UUID based on (e.g.) a person's home phone number or address as a strings in some appropriate namespace. If the strategy were common to all converters, collisions would happen to positive effect. A downside is that different vCards for the same person, with different subsets of identifying information, would again yield different identifiers, and the problem of finding correspondances between named (vs blank) entities reappears. As long as the strategies are shared, this problem is minimal, as we would know how to search for corresponding entities in that case; but until the algorithm for UUID generation is made part of the norm, such strategies may add to the problem instead of solving it.
+Note that, in the case of deterministic UUIDs, this problem disappears if they are agreed upon in a norm. Otherwise, if we have divergent strategies for deterministic UUIDs, the problem of knowing what to match remains. For example, we could decide that, absent URL and Email, we will generate a UUID based on (e.g.) a person's home phone number or address as a strings in some appropriate namespace. If the strategy were common to all converters, collisions would happen to positive effect. A downside is that different vCards for the same person, with different subsets of identifying information, would again yield different identifiers, and the problem of finding correspondances between named (vs blank) entities reappears. As long as the strategies are shared, this problem is minimal, as we would know how to search for corresponding entities in that case; but until the algorithm for UUID generation is made part of the norm, such strategies may add to the problem instead of solving it.
 
-We nonetheless propose applying a deterministic strategy to emails, as the generated UUID is "natural" enough that we feel it should be easy to agree upon even without a common policy. We also propose using it for `ORG`, less natural, but where it has the most payoff.
+We nonetheless propose applying a deterministic strategy to a combination of name and email, as the generated UUID is "natural" enough that we feel it should be easy to agree upon even without a common policy. We also propose using it for `ORG`, less natural, but where it has the most payoff.
 
 As an additional point, Marc-Antoine Parent believes that some objects only have a source and content; if the source URL is not known, there is no information that may act as a "natural" identifier other than the content itself. Comments fall in this category. Using (a hash of) the content to generate a URL subverts the meaning of URLs, which designate the entity rather than embody it.
 
@@ -583,50 +609,20 @@ Becomes
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 <http://maparent.ca/foaf.rdf> ] .
-    <http://maparent.ca/foaf.rdf> a mlr9:RC0001 .
+    <http://maparent.ca/foaf.rdf> a mlr9:RC0001;
+        mlr9:DES0100 <http://maparent.ca/foaf.rdf>.
 
 In preference to 
 
     :::N3
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://maparent.ca/foaf.rdf> ] .
+            mlr5:DES1800 <http://maparent.ca/> ] .
     <http://maparent.ca/> a mlr9:RC0001 .
 
 ##### Preferred URL
-##### Any URL (non-work)
-##### A UUID calculated from non-work email and FN
-##### A UUID calculated from non-work email (disabled)
-##### A UUID calculated from FN (disabled)
-##### A random UUID (disabled)
 
-#### Organization within a person's vCard
-
-If the natural person also has organization information, we can also use the following information:
-
-##### Work URL
-##### A UUID calculated from work email and ORG
-##### A UUID calculated from work email (disabled)
-##### A random UUID (disabled)
-
-##### Organization vCard
-
-Finally, an organization uses the following identifiers:
-
-##### FOAF URL
-##### Preferred URL
-##### Any URL
-##### A UUID calculated from an email and ORG
-##### A UUID calculated from an email and FN
-##### A UUID calculated from an email (disabled)
-##### A UUID calculated from ORG
-##### A UUID calculated from FN (disabled)
-##### A random UUID (disabled)
-
-##### Person's URL as an identifier
-
-If a person's vCard has a URL, it will be used as identifier.
-Note that this is not a safe assumption in general; we should get the FOAF URI of the person, but that is not specified by the vCard protocol, or any extension we could find. It would be relevant to propose such an extension.
+Also, some URLs can be marked to be preferred in the vCard.
 
     :::xml
     <lifeCycle>
@@ -640,6 +636,46 @@ Note that this is not a safe assumption in general; we should get the FOAF URI o
     FN:Marc-Antoine Parent
     N:Parent;Marc-Antoine;;;
     URL:http://maparent.ca/
+    URL;TYPE=pref:http://maparent.ca/resume.fr.html
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <http://maparent.ca/resume.fr.html> ] .
+    <http://maparent.ca/resume.fr.html> a mlr9:RC0001;
+        mlr9:DES0100 <http://maparent.ca/resume.fr.html>.
+
+In preference to 
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <http://maparent.ca/> ] .
+    <http://maparent.ca/> a mlr9:RC0001 .
+
+##### Any URL (non-work)
+
+Otherwise, the first non-work URL will be used.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    URL:http://maparent.ca/
+    URL:http://maparent.ca/resume.fr.html
     END:VCARD
     </entity>
         </contribute>
@@ -651,16 +687,27 @@ Becomes
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 <http://maparent.ca/> ] .
-    <http://maparent.ca/> a mlr9:RC0001 .
+    <http://maparent.ca/> a mlr9:RC0001 ;
+        mlr9:DES0100 <http://maparent.ca/> .
 
-##### Person's email as basis for identifier
 
-If a person's vCard has an email, we could use the `mailto:` URL directly as an identifier, but it is almost certain to conflict with that person's real URI. We prefer in this case to create a UUID based on the email, in a custom namespace, as follows:
+In preference to 
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <http://maparent.ca/resume.fr.html> ] .
+    <http://maparent.ca/resume.fr.html> a mlr9:RC0001 .
+
+##### A UUID calculated from non-work email and FN
+
+If a non-work email is available, both the email and name are likely to identify a person. We can then create a UUID as follows:
 
 1. Make the email into an `mailto:` URL (e.g.: `mailto:map@ntic.org`)
-2. Create a UUID-5 URN based on this URL, in the URL namespace. (in our example, we obtain `urn:uuid:a06d8251-3b16-3f19-9dce-31d0e9a1f6b8`.)
+2. Create a UUID-5 based on this URL, in the URL namespace. (in our example, we obtain the UUID `75642fb6-e2d3-549b-9bf5-b62743af640d`.)
+3. Create a UUID-3 based on the `FN`, using the step 2) UUID as a namespace. In our example, we obtain the UUID `a06d8251-3b16-3f19-9dce-31d0e9a1f6b8`.
 
-The resulting URN is used as the person's URI.
+As for the identifier, we follow the LDIF practiced as described on [this page](http://www.w3.org/2002/12/cal/vcard-notes.html), using the email and `FN` in the following format: `cn=<FN>,mail=<email>`.
 
     :::xml
     <lifeCycle>
@@ -685,12 +732,732 @@ Becomes
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 <urn:uuid:a06d8251-3b16-3f19-9dce-31d0e9a1f6b8> ] .
-    <urn:uuid:a06d8251-3b16-3f19-9dce-31d0e9a1f6b8> a mlr9:RC0001 .
+    <urn:uuid:a06d8251-3b16-3f19-9dce-31d0e9a1f6b8> a mlr9:RC0001 ;
+        mlr9:DES0100 "cn=Marc-Antoine Parent,mail=map@ntic.org" .
 
-##### Use blank nodes
 
-Otherwise, we use blank nodes to designate the person's identity.
+##### A UUID calculated from non-work email (disabled)
 
+It would also be possible to use the email-based UUID (step 2 above) directly; but, since the FN is always available, it does not seem appropriate. 
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    EMAIL;TYPE=INTERNET:map@ntic.org
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:a06d8251-3b16-3f19-9dce-31d0e9a1f6b8> ] .
+    <urn:uuid:a06d8251-3b16-3f19-9dce-31d0e9a1f6b8> a mlr9:RC0001 ;
+        mlr9:DES0100 "cn=Marc-Antoine Parent,mail=map@ntic.org" .
+
+But not
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:75642fb6-e2d3-549b-9bf5-b62743af640d> ] .
+    <urn:uuid:75642fb6-e2d3-549b-9bf5-b62743af640d> a mlr9:RC0001 ;
+        mlr9:DES0100 "map@ntic.org" .
+
+##### A URL of non-work email (disabled)
+
+For the same reason, we do not reccomend using the email itself.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    EMAIL;TYPE=INTERNET:map@ntic.org
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:a06d8251-3b16-3f19-9dce-31d0e9a1f6b8> ] .
+    <urn:uuid:a06d8251-3b16-3f19-9dce-31d0e9a1f6b8> a mlr9:RC0001 ;
+        mlr9:DES0100 "cn=Marc-Antoine Parent,mail=map@ntic.org" .
+
+But not
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <mailto:map@ntic.org> ] .
+    <mailto:map@ntic.org> a mlr9:RC0001 ;
+        mlr9:DES0100 "map@ntic.org" .
+
+##### A UUID calculated from FN (disabled)
+
+We also considered using the `FN` alone; for example as a UUID-3 based on an ad-hoc namespace. In that scheme, we would start with the UUID for <http://gtn-quebec.org/ns/vcarduuid/fn/>, which is `7b5f0e28-5d98-5559-9a2f-c70843822a64`, and combine it with the `FN` to obtain `d37cac8d-50b5-3b1f-aa3c-343ea4fd87bb`. But the danger of `FN` collision is non-negligible, so we advise against it. However, we may still use it as identifier in `mlr9:DES0100`.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Uses a blank node, thus:
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [a mlr9:RC0001 ;
+                mlr9:DES0100 "Marc-Antoine Parent" ] ] .
+
+and does not become
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:d37cac8d-50b5-3b1f-aa3c-343ea4fd87bb> ] .
+    <urn:uuid:d37cac8d-50b5-3b1f-aa3c-343ea4fd87bb> a mlr9:RC0001 ;
+        mlr9:DES0100 "Marc-Antoine Parent" .
+
+##### A random UUID (disabled)
+
+The worst last-resort strategy would be to use a non-deterministic random UUID.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Uses a blank node
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [a mlr9:RC0001 ;
+                mlr9:DES0100 "Marc-Antoine Parent" ] ] .
+
+and does not become
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:d4836d01-8411-4eda-bb93-6f28de7bda1f> ] .
+    <urn:uuid:d4836d01-8411-4eda-bb93-6f28de7bda1f> a mlr9:RC0001.
+
+#### Organization within a person's vCard
+
+If the natural person also has organization information, we can create a corresponding `mlr9:RC0002`. The identities we can use are as follows:
+
+##### Work URL
+
+We can use the work URL. (Note: Should we look for a preferred work URL first?)
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    URL;TYPE=WORK:http://gtn-quebec.org/
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [a mlr9:RC0001 ;
+                mlr9:DES0100 "Marc-Antoine Parent";
+                mlr9:DES1100 <http://gtn-quebec.org/> ] ] .
+    <http://gtn-quebec.org/> a mlr9:RC0002;
+        mlr9:DES0100 <http://gtn-quebec.org/> .
+
+##### A UUID calculated from work email and ORG
+
+If a work email is given, we do not have enough information, but if a work email and an ORG are given, we can calculate a joint UUID just as we did for a person. As stated before, this makes the rash assumption that the work email is the company's email.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    ORG:GTN-Québec
+    EMAIL;TYPE=INTERNET,WORK:map@ntic.org
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [a mlr9:RC0001 ;
+                mlr9:DES0100 "Marc-Antoine Parent";
+                mlr9:DES1100 <urn:uuid:0a449567-b242-3586-a14e-4c24afd49adf> ] ] .
+    <urn:uuid:0a449567-b242-3586-a14e-4c24afd49adf> a mlr9:RC0002;
+        mlr9:DES0100 "cn=GTN-Québec,mail=map@ntic.org" .
+
+
+##### A UUID calculated from work email (disabled)
+
+It would be even more rash to simply use the work email as a basis for UUID.
+
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    EMAIL;TYPE=INTERNET,WORK:map@ntic.org
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [a mlr9:RC0001 ;
+                mlr9:DES0100 "Marc-Antoine Parent" ] ] .
+
+And not
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [a mlr9:RC0001 ;
+                mlr9:DES0100 "Marc-Antoine Parent";
+                mlr9:DES1100 <urn:uuid:75642fb6-e2d3-549b-9bf5-b62743af640d> ] ] .
+    <urn:uuid:75642fb6-e2d3-549b-9bf5-b62743af640d> a mlr9:RC0002;
+        mlr9:DES0100 "map@ntic.org" .
+
+##### A URL of work email (disabled)
+
+For the same reason, we do not use the work email itself.
+
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    EMAIL;TYPE=INTERNET,WORK:map@ntic.org
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [a mlr9:RC0001 ;
+                mlr9:DES0100 "Marc-Antoine Parent" ] ] .
+
+And not
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [a mlr9:RC0001 ;
+                mlr9:DES0100 "Marc-Antoine Parent";
+                mlr9:DES1100 <mailto:map@ntic.org> ] ] .
+    <mailto:map@ntic.org> a mlr9:RC0002;
+        mlr9:DES0100 "map@ntic.org" .
+
+
+##### A random UUID (disabled)
+
+The worst last-resort strategy would be, again, to use a non-deterministic random UUID.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    ADR;TYPE=POST,WORK:;;455\, rue du Parvis;Québec;Québec;G1K 9H6;Canada
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Uses a blank node to become
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [a mlr9:RC0001 ;
+                mlr9:DES0100 "Marc-Antoine Parent";
+                    mlr9:DES1100 [ a mlr9:RC0002;
+                            mlr9:DES1300 [ a mlr9:RC0003;
+                                    mlr9:DES1700 """455, rue du Parvis
+    Québec, Québec, G1K 9H6
+    Canada""" ] ] ] ].
+
+And not
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [a mlr9:RC0001 ;
+                mlr9:DES0100 "Marc-Antoine Parent";
+                mlr9:DES1100 <urn:uuid:1102ba9f-49c9-4864-88e3-81baf69d2f25> ] ] .
+    <urn:uuid:1102ba9f-49c9-4864-88e3-81baf69d2f25> a mlr9:RC0002;
+        mlr9:DES1300 [ a mlr9:RC0003;
+            mlr9:DES1700 """455, rue du Parvis
+    Québec, Québec, G1K 9H6
+    Canada""" ].
+
+#### Organization vCard
+
+Finally, an organization uses the following identifiers:
+
+##### FOAF URL
+
+Just as persons, organizations can have a FOAF URL. (Note: Should we look for SIOC as well?)
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    ORG:GTN-Québec
+    item1.URL:http://gtn-quebec.org/
+    item2.URL:http://gtn-quebec.org/foaf.rdf
+    item2.X-ABLabel:FOAF
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <http://gtn-quebec.org/foaf.rdf> ] .
+    <http://gtn-quebec.org/foaf.rdf> a mlr9:RC0002;
+        mlr9:DES0100 <http://gtn-quebec.org/foaf.rdf>.
+
+In preference to 
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <http://gtn-quebec.org/> ] .
+    <http://gtn-quebec.org/> a mlr9:RC0002 .
+
+
+##### Preferred URL
+
+And a preferred URL will be preferred to others.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    ORG:GTN-Québec
+    URL:http://gtn-quebec.org/
+    URL;TYPE=pref:http://gtn-quebec.org/contact
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <http://gtn-quebec.org/contact> ] .
+    <http://gtn-quebec.org/contact> a mlr9:RC0002;
+        mlr9:DES0100 <http://gtn-quebec.org/contact>.
+
+In preference to 
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <http://gtn-quebec.org/> ] .
+    <http://gtn-quebec.org/> a mlr9:RC0002 .
+
+##### Any URL
+
+Otherwise, the first URL will be used.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    ORG:GTN-Québec
+    URL:http://gtn-quebec.org/contact
+    URL:http://gtn-quebec.org/
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <http://gtn-quebec.org/contact> ] .
+    <http://gtn-quebec.org/contact> a mlr9:RC0002;
+        mlr9:DES0100 <http://gtn-quebec.org/contact>.
+
+In preference to 
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <http://gtn-quebec.org/> ] .
+    <http://gtn-quebec.org/> a mlr9:RC0002 .
+
+##### A UUID calculated from an email and ORG
+
+As with persons, we do reccommend using name and email as an organization identity key. However, it is possible that `ORG` and `FN` do not match; in that case, and if both are available, using `ORG` is preferable as it is more likely to match UUIDs generated with the same heuristics within person's vCards.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    ORG:Groupe de travail québécois sur les normes et standards TI pour l’apprentissage\, l’éducation et la formation
+    EMAIL;TYPE=INTERNET:info@gtn-quebec.org
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+The URI will be `UUID3(UUID5(NAMESPACE_URL, 'mailto:info@gtn-quebec.org'), 'Groupe de travail québécois sur les normes et standards TI pour l’apprentissage, l’éducation et la formation')`
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:b4b3bff1-8c2d-3f32-99ac-715dbac5e8ed> ] .
+    <urn:uuid:b4b3bff1-8c2d-3f32-99ac-715dbac5e8ed> a mlr9:RC0002;
+        mlr9:DES0100 "cn=Groupe de travail québécois sur les normes et standards TI pour l’apprentissage, l’éducation et la formation,mail=info@gtn-quebec.org".
+
+In preference to `UUID3(UUID5(NAMESPACE_URL, 'mailto:info@gtn-quebec.org'), 'GTN-Québec')`
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:4e45353d-cf87-3306-8dd7-7ed052064228> ] .
+    <urn:uuid:4e45353d-cf87-3306-8dd7-7ed052064228> a mlr9:RC0002;
+        mlr9:DES0100 "cn=GTN-Québec,mail=info@gtn-quebec.org".
+
+
+##### A UUID calculated from an email and FN
+
+However, if `ORG` is not present, `FN` will be used.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    EMAIL;TYPE=WORK,INTERNET:info@gtn-quebec.org
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:4e45353d-cf87-3306-8dd7-7ed052064228> ] .
+    <urn:uuid:4e45353d-cf87-3306-8dd7-7ed052064228> a mlr9:RC0002;
+        mlr9:DES0100 "cn=GTN-Québec,mail=info@gtn-quebec.org".
+
+##### A UUID calculated from an email (disabled)
+
+Calculting a UUID from an organization's email alone is not advised, as mentioned before.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    EMAIL;TYPE=WORK,INTERNET:info@gtn-quebec.org
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:4e45353d-cf87-3306-8dd7-7ed052064228> ] .
+    <urn:uuid:4e45353d-cf87-3306-8dd7-7ed052064228> a mlr9:RC0002;
+        mlr9:DES0100 "cn=GTN-Québec,mail=info@gtn-quebec.org".
+
+and not
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:e2c7f47e-85a9-54c1-bf69-18913bbe985c> ] .
+    <urn:uuid:e2c7f47e-85a9-54c1-bf69-18913bbe985c> a mlr9:RC0002;
+        mlr9:DES0100 "info@gtn-quebec.org".
+
+##### A URL of an email (disabled)
+
+The same comment applies to using the email as an URL.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    EMAIL;TYPE=WORK,INTERNET:info@gtn-quebec.org
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:4e45353d-cf87-3306-8dd7-7ed052064228> ] .
+    <urn:uuid:4e45353d-cf87-3306-8dd7-7ed052064228> a mlr9:RC0002;
+        mlr9:DES0100 "cn=GTN-Québec,mail=info@gtn-quebec.org".
+
+and not
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <mailto:info@gtn-quebec.org> ] .
+    <mailto:info@gtn-quebec.org> a mlr9:RC0002;
+        mlr9:DES0100 "info@gtn-quebec.org".
+
+##### A UUID calculated from ORG
+
+However, the `ORG` is considered distinctive enough that we are considering that the ad-hoc namespace strategy may be sound in this one case. Namely, we start with the UUID for <http://gtn-quebec.org/ns/vcarduuid/org/>, which is `5286b081-5077-5b10-9741-70b66eda3f61`, and combine it with the `ORG` value to obtain a UUID (for example `3f2de431-0221-3e25-b714-eda47cb4df39`). The danger of `ORG` collision is probably lower than that of `FN` collision.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    ORG:GTN-Québec
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:3f2de431-0221-3e25-b714-eda47cb4df39> ] .
+    <urn:uuid:3f2de431-0221-3e25-b714-eda47cb4df39> a mlr9:RC0002;
+        mlr9:DES0100 "GTN-Québec".
+
+##### A UUID calculated from FN (disabled)
+
+We could use the same logic with `FN`, but we feel that it would be inconsistent with the decision for natural persons. Still, we could use the same <http://gtn-quebec.org/ns/vcarduuid/fn/> namespace, which is `7b5f0e28-5d98-5559-9a2f-c70843822a64`, and combine it with the `FN` value to obtain a UUID (for example `3f2de431-0221-3e25-b714-eda47cb4df39`).
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    ADR;TYPE=POST,WORK:;;455\, rue du Parvis;Québec;Québec;G1K 9H6;Canada
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0002;
+                mlr9:DES0100 "GTN-Québec" ] ] .
+
+But not 
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:3f2e62c0-b275-3ebb-8516-196fe3807f4b> ] .
+    <urn:uuid:3f2e62c0-b275-3ebb-8516-196fe3807f4b> a mlr9:RC0002;
+        mlr9:DES0100 "GTN-Québec".
+
+##### A random UUID (disabled)
+
+The worst last-resort strategy would be, again, to use a non-deterministic random UUID.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    ADR;TYPE=POST,WORK:;;455\, rue du Parvis;Québec;Québec;G1K 9H6;Canada
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Uses a blank node to become
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0002;
+                mlr9:DES0100 "GTN-Québec" ] ] .
+
+But not, for example,
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 <urn:uuid:1800e33b-08c4-41f7-8a41-3a59943178b3> ] .
+    <urn:uuid:1800e33b-08c4-41f7-8a41-3a59943178b3> a mlr9:RC0002;
+        mlr9:DES0100 "GTN-Québec".
 
 ### Vcard elements
 
@@ -883,3 +1650,28 @@ without
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES0700 "mi-XVIème siècle"@fra-CA ] .
 
+## Technical
+### Format
+### Size
+### Location
+### Requirement
+### Installation remarks
+### Other platform requirements
+## Educational
+### Learning_activity
+#### Learning resource type
+#### Typical learning time
+### Audience
+#### Intended end user role
+#### Typical age range
+#### Context
+### Annotation
+### Learning resource type
+### Description
+### Language
+## Rights
+## Relations
+## Classification
+### Discipline
+### Curriculum
+#### Educational level
