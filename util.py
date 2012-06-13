@@ -17,9 +17,9 @@ def unwrap_seq(func):
     def wrapped(context, *args):
         lengths = [seqlen(a) for a in args]
         args = [unlist(a) for a in args]
-        if max(lengths) == 0 and len(lengths) > 0:
+        if len(lengths) > 0 and max(lengths) == 0:
             return []
-        if max(lengths) > 1:
+        if len(lengths) > 0 and max(lengths) > 1:
             pos1 = [p for (p, l) in enumerate(lengths) if l > 1][0]
             result = []
             for v in args[pos1]:
