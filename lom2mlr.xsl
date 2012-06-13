@@ -42,10 +42,8 @@
     <xsl:variable name="mlr_namespace" select="'http://standards.iso.org/iso-iec/19788/'"/>
     <xsl:variable name="gtn_namespace" select="'http://gtn-quebec.org/ns/'"/>
     <xsl:variable name="vcardorg_namespace" select="concat($gtn_namespace,'vcarduuid/org/')"/>
-    <xsl:variable name="vcardmail_namespace" select="concat($gtn_namespace,'vcarduuid/email/')"/>
     <xsl:variable name="vcardfn_namespace" select="concat($gtn_namespace,'vcarduuid/fn/')"/>
     <xsl:variable name="vcardorg_namespace_uuid" select="mlrext:uuid_url($vcardorg_namespace)"/>
-    <xsl:variable name="vcardmail_namespace_uuid" select="mlrext:uuid_url($vcardmail_namespace)"/>
     <xsl:variable name="vcardfn_namespace_uuid" select="mlrext:uuid_url($vcardfn_namespace)"/>
 
     <!-- vocabularies -->
@@ -391,7 +389,7 @@
 					</xsl:attribute>
 				</xsl:when>
 				<xsl:when test="$use_mail_and_fn_uuid and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
-					<xsl:text>dn=</xsl:text>
+					<xsl:text>cn=</xsl:text>
 					<xsl:value-of select="vcard:fn/vcard:text/text()"/>
 					<xsl:text>,mail=</xsl:text>
 					<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:text/text()"/>
@@ -454,7 +452,7 @@
 					</xsl:attribute>
 				</xsl:when>
 				<xsl:when test="$use_mail_and_fn_uuid and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
-					<xsl:text>dn=</xsl:text>
+					<xsl:text>cn=</xsl:text>
 					<xsl:value-of select="vcard:org/vcard:text/text()"/>
 					<xsl:text>,mail=</xsl:text>
 					<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
@@ -514,13 +512,13 @@
 					</xsl:attribute>
 				</xsl:when>
 				<xsl:when test="$use_mail_and_fn_uuid and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']">
-					<xsl:text>dn=</xsl:text>
+					<xsl:text>cn=</xsl:text>
 					<xsl:value-of select="vcard:org/vcard:text/text()"/>
 					<xsl:text>,mail=</xsl:text>
 					<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET'][1]/vcard:text/text()"/>
 				</xsl:when>
 				<xsl:when test="$use_mail_and_fn_uuid and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']">
-					<xsl:text>dn=</xsl:text>
+					<xsl:text>cn=</xsl:text>
 					<xsl:value-of select="vcard:fn/vcard:text/text()"/>
 					<xsl:text>,mail=</xsl:text>
 					<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET'][1]/vcard:text/text()"/>
