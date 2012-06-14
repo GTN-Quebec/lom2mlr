@@ -437,6 +437,8 @@ Conversely, we could consider that if a work information (esp. phone or email) i
 
 The current heuristic is far from satisfying, but may be the best we can do given the imprecision of available information. Let us not forget, moreover, that the `WORK` subtypes are often left blank, or worse, filled arbitrarily by mail agents' user interfaces, and not systematically corrected by users. 
 
+Out of scope: We have not treated the case of a person with multiple organizations, using the (rare) vCard grouping mechanism.
+
 So to review, here is the information that triggers an organization entity:
 
 ##### `ORG`
@@ -567,6 +569,8 @@ In cases where no URL is available, Gilles Gauthier remarked that successive ana
 On the other hand, Marc-Antoine Parent believes that blank nodes accurately convey absence of information, which can be preferred in some cases. If a harvester receives MLR information from many converters, and each converter implements a different deterministic UUID, we will have many different identities for the same entity. 
 
 At first sight, this is identical to multiple blank nodes created in the same fashion, and less of an issue than the more frequent blank nodes created by multiple reads. However, either problem needs solving, and a heuristic for declaring entities as identical is necessary. Now, such algorithms are computationally expensive, and it would be convenient to restrict their application to nodes which are known not to have a proper identity, namely blank nodes. Creating many arbitrary identities requires applying identification heuristics to a much greater number of entities.
+
+Actually, it is quite likely that certain graph databases notice when a blank node is re-introduced with exactly the same relations, and optimize it away. This is only possible in a transactional context; otherwise the new blank node might get new relations later. If the blank node were to receive a random UUID on successive introductions, that optimization would be defeated. (We need to check on the state of the art in this regard.)
 
 Note that, in the case of deterministic UUIDs, this problem disappears if they are agreed upon in a norm. Otherwise, if we have divergent strategies for deterministic UUIDs, the problem of knowing what to match remains. For example, we could decide that, absent URL and Email, we will generate a UUID based on (e.g.) a person's home phone number or address as a strings in some appropriate namespace. If the strategy were common to all converters, collisions would happen to positive effect. A downside is that different vCards for the same person, with different subsets of identifying information, would again yield different identifiers, and the problem of finding correspondances between named (vs blank) entities reappears. As long as the strategies are shared, this problem is minimal, as we would know how to search for corresponding entities in that case; but until the algorithm for UUID generation is made part of the norm, such strategies may add to the problem instead of solving it.
 
@@ -1094,7 +1098,7 @@ Finally, an organization uses the following identifiers:
 
 ##### FOAF URL
 
-Just as persons, organizations can have a FOAF URL. (Note: Should we look for SIOC as well?)
+Just as persons, organizations can have a FOAF URL. Further investigation: we should also look for SIOC information.
 
     :::xml
     <lifeCycle>
@@ -1463,9 +1467,370 @@ But not, for example,
 
 The VCard contains much useful information besides the name and identity. However, much information can be ambiguous, and we have to resort to heuristics. Note that information coming from the vCard is normally considered non-linguistic.
 
+#### `N` and `FN`
+
+The `FN` element, when applied to a natural person, is carried over directly as `mlr9:DES0800`.
+
+The `N` element breaks down into the following components: surname, given, additional, prefix, and suffix.
+This is used both integrally in `mlr9:DES0700`, decomposed in `mlr9:DES0300` (family name) and `mlr9:DES0400` (given name), and re-composed in `mlr9:DES0500`. In the latter case, we simply use a standard order: "prefix given additional surname suffix".
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc;Antoine;M.;M.Sc.
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0001 ;
+                mlr9:DES0100 "Marc-Antoine Parent";
+                mlr9:DES0300 "Parent";
+                mlr9:DES0400 "Marc";
+                mlr9:DES0500 "M. Marc Antoine Parent M.Sc.";
+                mlr9:DES0700 "Parent;Marc;Antoine;M.;M.Sc.";
+                mlr9:DES0800 "Marc-Antoine Parent" ] ] .
+
+#### `FN` for a generic person
+
+The `FN` element, when applied to a generic person, is carried over directly as `mlr9:DES0200`.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr1:RC0003 ;
+                mlr9:DES0200 "Marc-Antoine Parent" ] ] .
+
+
 #### Organization
 
-If a person has an `ORG` field in their VCard, it can be expressed as an organization.
+The `ORG` element is also directly expressed as `mlr9:DES1200`, always on a `mlr9:RC0002` sub-element.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    ORG:GTN-Québec
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0002 ;
+                mlr9:DES1200 "GTN-Québec" ] ].
+
+
+#### Skype
+
+MLR-9 defines a field for skype: `mlr9:DES0600`. There is no standard field for skype in vCard, but two extensions are in common use: `X-SKYPE` and `X-SKYPE-USERNAME`.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    X-SKYPE:maparent
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0001 ;
+                mlr9:DES0600 "maparent" ] ].
+
+##### #####
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    X-SKYPE-USERNAME:maparent
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0001 ;
+                mlr9:DES0600 "maparent" ] ].
+
+#### Email
+
+The `EMAIL` element is also directly expressed as `mlr9:DES0900`. 
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    EMAIL;TYPE=INTERNET:map@ntic.org
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0001 ;
+                mlr9:DES0900 "map@ntic.org" ] ].
+
+##### #####
+
+Similarly for organizations.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    EMAIL;TYPE=INTERNET,WORK:map@ntic.org
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0002 ;
+                mlr9:DES0900 "map@ntic.org" ] ].
+
+
+##### #####
+
+There is the issue of whether a work email should be attributed to a person or organization when the vCard contains both. We currently attribute it to the latter, but this is under review.
+
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    EMAIL;TYPE=INTERNET,HOME:maparent@gmail.com
+    EMAIL;TYPE=INTERNET,WORK:map@ntic.org
+    ORG:GTN-Québec
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0001 ;
+                mlr9:DES0900 "maparent@gmail.com";
+                mlr9:DES1100 [ a mlr9:RC0002 ;
+                    mlr9:DES0900 "map@ntic.org" ] ] ].
+
+and not
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0001 ;
+                mlr9:DES0900 "map@ntic.org";
+                mlr9:DES0900 "maparent@gmail.com" ] ].
+
+#### `TEL`
+
+Only work phones are considered by MLR-9. They are expressed by `mlr9:DES1000` and attached to the person. Note: We feel the specifications should be altered so the range encompasses generic persons.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    TEL;TYPE=VOICE,HOME:1-514-555-9999
+    TEL;TYPE=VOICE,WORK:1-514-555-8888
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0001 ;
+                mlr9:DES1000 "1-514-555-8888" ] ].
+
+and not
+
+    :::N3
+    []  a mlr1:RC0002; 
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0001 ;
+                mlr9:DES1000 "1-514-555-9999" ] ].
+
+
+### Address elements
+
+A work `ADR` element in the vCard is expressed as a geographical location on the organization (`mlr9:RC0003`) through the location property (`mlr9:DES1300`). The `ADR` element is composed of the following components: box, extended, street, city, region, code, country. Those are recomposed using the following pattern:
+
+    :::
+    box extended
+    street
+    city, region, code
+    country
+
+This recomposed address is then attributed to the location using `mlr9:DES1700`.
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    ADR;TYPE=POST,WORK:;;455\, rue du Parvis;Québec;Québec;G1K 9H6;Canada
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    [] a mlr1:RC0002;
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0001;
+                mlr9:DES1100 [ a mlr9:RC0002;
+                    mlr9:DES1300 [ a mlr9:RC0003;
+                        mlr9:DES1700 """455, rue du Parvis
+    Québec, Québec, G1K 9H6
+    Canada""" ] ] ] ] .
+
+#### `GEO`
+
+vCard Geo information is also attached to the geographical location in the case of an organization. We have to decompose in latitude (`mlr9:DES1500`) and longitude (`mlr9:DES1400`).
+
+    :::xml
+    <lifeCycle>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:GTN-Québec
+    ORG:GTN-Québec
+    GEO:37.386013;-122.082932
+    END:VCARD
+    </entity>
+        </contribute>
+    </lifeCycle>
+
+Becomes
+
+    :::N3
+    [] a mlr1:RC0002;
+        mlr5:DES1700 [ a mlr5:RC0003;
+            mlr5:DES1800 [ a mlr9:RC0002;
+                mlr9:DES1300 [ a mlr9:RC0003;
+                    mlr9:DES1400 "-122.082932"^^<http://www.w3.org/2001/XMLSchema#float>;
+                    mlr9:DES1500 "37.386013"^^<http://www.w3.org/2001/XMLSchema#float> ] ] ] .
+
+##### `GEO` for persons
+
+However, for persons, the GEO information may apply either to the home or work address; it is dropped for that reason. (Again, we could choose to rely on vCard grouping information, but did not so far.)
 
     :::xml
     <lifeCycle>
@@ -1479,6 +1844,7 @@ If a person has an `ORG` field in their VCard, it can be expressed as an organiz
     FN:Marc-Antoine Parent
     N:Parent;Marc-Antoine;;;
     ORG:GTN-Québec
+    GEO:37.386013;-122.082932
     END:VCARD
     </entity>
         </contribute>
@@ -1487,53 +1853,22 @@ If a person has an `ORG` field in their VCard, it can be expressed as an organiz
 Becomes
 
     :::N3
-    []  a mlr1:RC0002; 
+    [] a mlr1:RC0002;
         mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES1100 [ a mlr9:RC0002; ] ] ] .
+            mlr5:DES1800 [ a mlr9:RC0001;
+                mlr9:DES1100 [ a mlr9:RC0002 ] ] ].
 
-
-#### URL
-
-If a person has a URL marked as "work" in their vCard, it may refer to them specifically or to their organization as a whole. We assume the latter.
-
-    :::xml
-    <lifeCycle>
-        <contribute>
-            <role>
-                <source>LOMv1.0</source>
-                <value>author</value>
-            </role>
-            <entity>BEGIN:VCARD
-    VERSION:3.0
-    FN:Marc-Antoine Parent
-    N:Parent;Marc-Antoine;;;
-    URL;TYPE=WORK:http://www.gtn-quebec.org/
-    END:VCARD
-    </entity>
-        </contribute>
-    </lifeCycle>
-
-Becomes
+But not
 
     :::N3
-    []  a mlr1:RC0002; 
+    [] a mlr1:RC0002;
         mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES1100 <http://www.gtn-quebec.org/> ] ] .
-    <http://www.gtn-quebec.org/> a mlr9:RC0002.
+            mlr5:DES1800 [ a mlr9:RC0001;
+                mlr9:DES1100 [ a mlr9:RC0002;
+                    mlr9:DES1300 [ a mlr9:RC0003;
+                        mlr9:DES1400 "-122.082932"^^<http://www.w3.org/2001/XMLSchema#float>;
+                        mlr9:DES1500 "37.386013"^^<http://www.w3.org/2001/XMLSchema#float> ] ] ] ] .
 
-#### `N` and `FN`
-
-#### Skype
-
-#### Email
-
-#### `TEL`
-
-### Address elements
-
-#### `GEO`
 
 ### Contribution Date
 
