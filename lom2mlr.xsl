@@ -100,6 +100,7 @@
 	<xsl:template match="text()" mode="classification"/>
 	<xsl:template match="text()" mode="classification_curriculum"/>
 	<xsl:template match="text()" mode="vcard_org"/>
+	<xsl:template match="text()" mode="vcard_suborg"/>
 	<xsl:template match="text()" mode="vcard_np"/>
 	<xsl:template match="text()" mode="vcard_person"/>
 	<xsl:template match="text()" mode="address"/>
@@ -303,7 +304,7 @@
                                     </xsl:attribute>
                                 </xsl:if>
 								<xsl:call-template name="suborg_identity"/>
-								<xsl:apply-templates mode="vcard_org" />
+								<xsl:apply-templates mode="vcard_suborg" />
 								<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
 									<mlr9:DES1300>
 										<mlr9:RC0003>
@@ -619,6 +620,21 @@
 	</xsl:template>
 
 	<xsl:template match="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']" mode="vcard_np">
+		<!-- TODO: Edge case with a work email but no other org info should also be in. -->
+		<xsl:if test="not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK')">
+			<mlr9:DES0900>
+				<xsl:value-of select="vcard:text/text()"/>
+			</mlr9:DES0900>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template match="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']" mode="vcard_suborg">
+		<mlr9:DES0900>
+			<xsl:value-of select="vcard:text/text()"/>
+		</mlr9:DES0900>
+	</xsl:template>
+
+	<xsl:template match="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']" mode="vcard_org">
 		<mlr9:DES0900>
 			<xsl:value-of select="vcard:text/text()"/>
 		</mlr9:DES0900>
@@ -626,6 +642,13 @@
 
 	<xsl:template mode="address" match="vcard:adr">
 		<mlr9:DES1700>
+			<xsl:if test="vcard:box or vcard:extended">
+				<xsl:value-of select="vcard:box/text()"/>
+				<xsl:text> </xsl:text>
+				<xsl:value-of select="vcard:extended/text()"/>
+				<xsl:text>
+</xsl:text>
+			</xsl:if>
 			<xsl:value-of select="vcard:street/text()"/>
 			<xsl:text>
 </xsl:text>
@@ -641,6 +664,12 @@
 	</xsl:template>
 
 	<xsl:template match="vcard:org" mode="vcard_org">
+		<mlr9:DES1200>
+			<xsl:value-of select="vcard:text/text()"/>
+		</mlr9:DES1200>
+	</xsl:template>
+
+	<xsl:template match="vcard:org" mode="vcard_suborg">
 		<mlr9:DES1200>
 			<xsl:value-of select="vcard:text/text()"/>
 		</mlr9:DES1200>
@@ -695,6 +724,15 @@
 			<xsl:value-of select="vcard:text/text()"/>
 		</mlr9:DES1000>
 	</xsl:template>
+
+	<!--
+	Not allowed by the specifications of range.
+	<xsl:template match="vcard:tel[vcard:parameters/vcard:type/vcard:text/text() = 'VOICE']" mode="vcard_org">
+		<mlr9:DES1000>
+			<xsl:value-of select="vcard:text/text()"/>
+		</mlr9:DES1000>
+	</xsl:template>
+	-->
 
 	<!-- technical -->
 
