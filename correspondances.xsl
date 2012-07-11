@@ -35,18 +35,12 @@
 						<xslin:if test="@dest='mlr3:DES0700'">
 							<xsl:when test="/lom:lom/lom:general/lom:aggregationLevel[lom:source/text()='LOMv1.0' and lom:value/text()='collection']">
 								<mlr3:DES0700>
-									<xslin:attribute name="rdf:resource">
-										<xslin:value-of select="@voc"/>
-										<xslin:text>:T001</xslin:text> <!-- collection -->
-									</xslin:attribute>
+									<xslin:text>T001</xslin:text> <!-- collection -->
 								</mlr3:DES0700>
 							</xsl:when>
 							<xsl:when test="../lom:interactivityLevel[lom:source/text()='LOMv1.0' and (lom:value/text()='high' or lom:value/text()='very high')] or ../lom:interactivityType[lom:source/text()='LOMv1.0' and lom:value/text()='active']">
 								<mlr3:DES0700>
-									<xslin:attribute name="rdf:resource">
-										<xslin:value-of select="@voc"/>
-										<xslin:text>:T005</xslin:text> <!-- interactive ressource -->
-									</xslin:attribute>
+									<xslin:text>T005</xslin:text> <!-- interactive ressource -->
 								</mlr3:DES0700>
 							</xsl:when>
 						</xslin:if>
@@ -79,9 +73,7 @@
 				<xslin:text>'</xslin:text>
 			</xslin:attribute>
 			<xslin:element name="{../@dest}">
-				<xslin:attribute name="rdf:resource">
-					<xslin:value-of select="concat(../@voc,':',@dest)"/>
-				</xslin:attribute>
+				<xslin:value-of select="@dest"/>
 			</xslin:element>
 		</xsl:when>
 	</xslin:template>
