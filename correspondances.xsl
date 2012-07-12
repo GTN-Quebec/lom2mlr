@@ -48,6 +48,7 @@
 						<xslin:if test="@always = 'true'">
 							<xsl:otherwise>
 								<xslin:element name="{@dest}">
+									<xsl:text>*</xsl:text>
 									<xsl:value-of select="lom:value/text()"/>
 								</xslin:element>
 							</xsl:otherwise>
@@ -56,6 +57,7 @@
 				</xslin:when>
 				<xslin:when test="@always = 'true'">
 					<xslin:element name="{@dest}">
+						<xsl:text>*</xsl:text>
 						<xsl:value-of select="lom:value/text()"/>
 					</xslin:element>
 				</xslin:when>
