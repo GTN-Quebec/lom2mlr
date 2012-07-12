@@ -5,6 +5,7 @@ from cgi import escape
 import re
 import traceback
 import argparse
+from collections import defaultdict
 
 #Hack pour importer sw sans le mettre dans pygments
 import sw
@@ -127,42 +128,102 @@ class TestExtension(markdown.Extension):
         md.registerExtension(self)
 
 
+# Should I extract this from correspondances_type.xml?
+vocabularies_for_DES = {
+    "mlr3:DES0700": "ISO_IEC_19788-3-2011-VA.2",
+    "mlr5:DES0800": "ISO_IEC_19788-5-2012-VA.1",
+    "mlr5:DES0600": "ISO_IEC_19788-5-2012-VA.2",
+    "mlr5:DES2100": "ISO_IEC_19788-5-2012-VA.3",
+    "mlr5:DES2400": "ISO_IEC_19788-5-2012-VA.4",
+    "mlr5:DES0300": "ISO_IEC_19788-5-2012-VA.5",
+    "mlr8:DES1200": "ISO_IEC_19788-8-2012-VA.2.2"
+}
+
+VDEX_PREFIX='{http://www.imsglobal.org/xsd/imsvdex_v1p0}'
+
 class TranslateMlrTreeprocessor(Treeprocessor):
     "Translate mlr strings"
-    def __init__(self, md, lang):
-        self.lang = lang
+
+    mlr_r = re.compile(r'\b(mlr[0-9]:(?:DES|RC)[0-9]+)( "(T[0-9]+)")?')
+
+    def __init__(self, md):
         name_trans = re.compile(u"[ '\u2019]")
         tree = etree.parse('translations/translation.xml')
-        translations = {}
+        translations = defaultdict(dict)
         for idtag in tree.getiterator('id'):
             for termtag in idtag.getiterator('term'):
-                if termtag.get('lang') == lang:
-                    translations["%s:%s" % (idtag.get('ns'), idtag.get('id'))] = \
+                lang = termtag.get('lang')
+                translations[lang]["%s:%s" % (idtag.get('ns'), idtag.get('id'))] = \
                         u"%s_%s:%s" % (idtag.get('ns'), lang, name_trans.sub("_", termtag.text))
-                    break
         self.translations = translations
+        vocs = {}
+
+        for voc in vocabularies_for_DES.values():
+            vocs[voc] = defaultdict(dict)
+            tree = etree.parse('vdex/%s.vdex' % (voc))
+            for term in tree.findall(VDEX_PREFIX + 'term'):
+                id = str(term.find(VDEX_PREFIX + 'termIdentifier').text)
+                captions = term.find(VDEX_PREFIX + 'caption')
+                for cap in captions.findall(VDEX_PREFIX + 'langstring'):
+                    vocs[voc][str(cap.get('language'))][id] = cap.text
+        self.vocabularies = vocs
+
+    def _trans(self, lang, match):
+        c = match.group(1)
+        t = match.group(3)
+        if t:
+            trans = self.vocabularies[vocabularies_for_DES[c]][lang].get(str(t))
+            if trans:
+                t = ' "%s"@%s' % (trans, lang)
+            else:
+                t = ' "%s"' % (t, )
+        else:
+            t = ''
+        return self.translations[lang].get(c, c) + t
 
     def run(self, root):
-        mlr_r = re.compile(r'\b(mlr[0-9]:(?:DES|RC)[0-9]+)')
-
-        def trans(match):
-            c = match.group(0)
-            return self.translations.get(c, c)
-        for code in root.iter("code"):
-            t = code.text
-            if isinstance(t, str):
-                t = t.decode('utf-8')
-            code.text = mlr_r.sub(trans, t)
+        for div in root.iter("div"):
+            if div.get("class") != 'example':
+                continue
+            div_els = div.getchildren()
+            div.clear()
+            count = 0
+            for el in div_els:
+                if el.tag == 'pre':
+                    if count == 0:
+                        css_class = "lom"
+                    else:
+                        css_class = "n3 mlr"
+                    new_div = etree.Element('div', {'class': css_class})
+                    div.append(new_div)
+                    new_div.append(el)
+                    if count > 0:
+                        code = [e for e in el.getchildren() if e.tag == 'code']
+                        if not code:
+                            print "missing code"
+                            continue
+                        code = code[0]
+                        t = code.text
+                        if isinstance(t, str):
+                            t = t.decode('utf-8')
+                        for lang in self.translations.keys():
+                            new_div = etree.Element('div', {'class': 'n3 lang_' + lang})
+                            div.append(new_div)
+                            new_pre = etree.Element('pre')
+                            new_div.append(new_pre)
+                            new_code = etree.Element('code')
+                            new_pre.append(new_code)
+                            new_code.text = self.mlr_r.sub(lambda m: self._trans(lang, m), t)
+                    count += 1
+                else:
+                    div.append(el)
         return root
 
 
 class TranslateMlrExtension(markdown.Extension):
-    def __init__(self, lang):
-        self.lang = lang
-
     def extendMarkdown(self, md, md_globals):
         """ Add Embed to Markdown instance. """
-        translateMlr = TranslateMlrTreeprocessor(md, self.lang)
+        translateMlr = TranslateMlrTreeprocessor(md)
         md.treeprocessors.add("translateMlr", translateMlr, "<inline")
         md.registerExtension(self)
 
@@ -184,17 +245,19 @@ class EmbedTreeprocessor(Treeprocessor):
             head.append(jquery)
         html.append(head)
         html.append(body)
+        langs = set(('fr', 'en', 'ru'))
         if not self.delete_eg:
-            buttons = etree.Element('p')
-            button = etree.Element('button', {'onclick': "$('.example').show();"})
-            button.text = 'Show'
-            buttons.append(button)
-            button.tail = ' or '
-            button = etree.Element('button', {'onclick': "$('.example').hide();"})
-            button.text = 'Hide'
-            button.tail = ' all examples'
-            buttons.append(button)
-            body.append(buttons)
+            div = etree.Element('div', {'class': 'controls'})
+            form = etree.Element('form')
+            div.append(form)
+            button = etree.Element('input', {'type': 'radio', 'checked': 'checked', 'name': 'lang', 'onclick': "$('.n3').hide();$('.mlr').show();"})
+            button.tail = 'MLR '
+            form.append(button)
+            for lang in langs:
+                button = etree.Element('input', {'type': 'radio', 'name': 'lang', 'onclick': "$('.n3').hide();$('.lang_" + lang + "').show();"})
+                button.tail = lang+" "
+                form.append(button)
+            body.append(div)
         elements = list(root)  # should be an iterator, but 2.6 getiterator vs 2.7 iter.
         for n in elements:
             root.remove(n)
@@ -216,24 +279,18 @@ class EmbedExtension(markdown.Extension):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Create the documentation file')
-    parser.add_argument('-l', help='Express using language')
+    parser.add_argument('-l', help='Give language translations', default=False, action='store_true')
     parser.add_argument('-b', help='Add buttons for each example', default=False, action='store_true')
     parser.add_argument('--hide', help='Hide examples by default', default=False, action='store_true')
     parser.add_argument('--delete', help='Delete examples', default=False, action='store_true')
-    parser.add_argument('--output', help='Output file name')
+    parser.add_argument('--output', help='Output file name', default="documentation.html")
     args = parser.parse_args()
     extensions = [TestExtension(args.b, args.hide, args.delete), CodeHiliteExtension({}), EmbedExtension(args.delete)]
     target_name = args.output
-    if not target_name:
-        if args.l:
-            target_name = 'documentation_%s.html' % (args.l,)
-        else:
-            target_name = 'documentation.html'
     if args.l:
-        extensions.insert(1, TranslateMlrExtension(args.l))
-        target_name = 'documentation_%s.html' % (args.l,)
+        extensions.insert(1, TranslateMlrExtension())
     markdown.markdownFromFile(
         input='documentation.md',
-        output=target_name,
+        output=args.output,
         encoding='utf-8',
         extensions=extensions)

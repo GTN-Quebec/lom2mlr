@@ -5,7 +5,7 @@ VOCS := ISO_IEC_19788-3-2011-VA.2 ISO_IEC_19788-5-2012-VA.2 ISO_IEC_19788-5-2012
 VDEX := $(foreach voc, $(VOCS), $(voc).vdex)
 SKOS := $(foreach voc, $(VOCS), $(voc).skos)
 
-all: $(SKOS)
+all: $(SKOS) $(VDEX)
 
 %.vdex: %.txt
 	./make_vdex.py $< > $@

@@ -1,5 +1,5 @@
 
-TARGETS = correspondances_xsl.xsl  documentation_x.rtf documentation.html documentation_en.html
+TARGETS = correspondances_xsl.xsl documentation.html
 
 DIRS = translations vdex
 
@@ -26,19 +26,7 @@ correspondances_xsl.xsl: correspondances_type.xml correspondances.xsl
 
 
 documentation.html: documentation.md lom2mlr.xsl
-	./make_documentation.py
-
-documentation_x.html: documentation.md lom2mlr.xsl
-	./make_documentation.py --output $@ --delete
-
-documentation_fr.html: documentation.md lom2mlr.xsl
-	./make_documentation.py -l fr
-
-documentation_en.html: documentation.md lom2mlr.xsl
-	./make_documentation.py -l en
-
-documentation_ru.html: documentation.md lom2mlr.xsl
-	./make_documentation.py -l ru
+	./make_documentation.py -l
 
 %.rtf: %.html
 	textutil -inputencoding utf-8 -convert rtf $<

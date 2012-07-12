@@ -1,5 +1,13 @@
 /* Taken from http://daarchitect.wordpress.com/2008/04/09/numbered-headings-in-css/ */
 
+.controls {
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 1ex;
+    background-color: white;
+}
+
 h1 {
     counter-reset: mynum-h2;
 }
@@ -38,6 +46,16 @@ h5 {
 h5:before {
     content: counter(mynum-h2) "." counter(mynum-h3) "." counter(mynum-h4) "." counter(mynum-h5) " ";
     counter-increment: mynum-h5;
+}
+
+.lang_en {
+    display: none;
+}
+.lang_ru {
+    display: none;
+}
+.lang_fr {
+    display: none;
 }
 
 .example {border:2px solid black; padding: 1ex;}
