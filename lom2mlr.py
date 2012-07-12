@@ -3,7 +3,7 @@ import argparse
 import sys
 import os.path
 
-from uuid import UUID, uuid3, uuid4, uuid5, NAMESPACE_URL
+from uuid import UUID, uuid1, uuid5, NAMESPACE_URL
 from lxml import etree
 from rdflib import Graph
 
@@ -31,20 +31,19 @@ def uuid_url(context, url, namespace=None):
 
 
 @unwrap_seq
-def uuid_random(context):
-    'Return a random UUID'
-    return str(uuid4())
+def uuid_unique(context):
+    'Return a unique UUID composed from the MAC address and timestamp'
+    return str(uuid1())
 
 
 @unwrap_seq
 def uuid_string(context, s, namespace=None):
     'Return a UUID based on a string'
     if namespace is None:
-        namespace = NAMESPACE_MLR
+        namespace = NAMESPACE_URL
     elif not isinstance(namespace, UUID):
         namespace = UUID(namespace)
-    s = s.encode('ascii','backslashreplace')
-    return str(uuid3(namespace, s))
+    return str(uuid5(namespace, s.encode('utf-8')))
 
 
 class Converter(object):
@@ -71,7 +70,7 @@ class Converter(object):
             extensions={
                 (VCARDC_NS, 'convert'): convert,
                 (URL_MLR_EXT, 'uuid_string'): uuid_string,
-                (URL_MLR_EXT, 'uuid_random'): uuid_random,
+                (URL_MLR_EXT, 'uuid_unique'): uuid_unique,
                 (URL_MLR_EXT, 'uuid_url'): uuid_url,
                 })
 
