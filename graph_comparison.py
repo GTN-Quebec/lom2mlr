@@ -3,6 +3,7 @@
 
 from collections import defaultdict
 from itertools import chain
+import re
 
 from lxml import etree
 from rdflib import Graph, BNode, URIRef
@@ -28,12 +29,25 @@ PATTERN1 = "@prefix mlr%d: <http://standards.iso.org/iso-iec/19788/-%d/ed-1/en/>
 PATTERN2 = "@prefix mlr%d_%s: <http://standards.iso.org/iso-iec/19788/-%d/ed-1/en/%s/> ."
 N3_PREFIXES = "\n".join([PATTERN1 % (s, s) for s in SECTIONS])+"\n"+\
               "\n".join(chain(*[[PATTERN2 % (s, l, s, l) for s in SECTIONS] for l in LANGUAGES]))
+BLANK_UUID_RE = re.compile(u'^urn:uuid:00000000-0000-0000-0000-([0-9]{12})$')
+UUID_RE = re.compile(u'^urn:uuid:[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$')
 
 
 def translate_triple(triple, map):
     s, p, o = triple
     return (map.get(s, s), p, map.get(o, o))
 
+
+def treat_as_blank(node):
+    """Whether this node has to be treated as a local reference.
+    Also applies to some UUIDs, so as to match equivalent UUID-1s."""
+    return isinstance(node, BNode) or BLANK_UUID_RE.match(unicode(node))
+
+
+def invalid_uuid_correspondance(blank_node, node):
+    return (BLANK_UUID_RE.match(unicode(blank_node))
+        and not (type(blank_node) == type(node)
+                and UUID_RE.match(unicode(node))))
 
 class GraphCorrespondence(object):
     "Finds which nodes in dest correspond to blank nodes in source."
@@ -57,15 +71,16 @@ class GraphCorrespondence(object):
         unknown = 0
         objects = defaultdict(int)
         for s, p, o in object_sig:
-            if isinstance(s, BNode):
+            if treat_as_blank(s):
                 if s in self.blank_map:
                     s = self.blank_map[s]
                 else:
                     unknown += 1
                     continue
-            else:
-                for s2, p2, o2 in self.dest.triples((s, p, None)):
-                    objects[o2] += 1
+            for s2, p2, o2 in self.dest.triples((s, p, None)):
+                if invalid_uuid_correspondance(s_node, o2):
+                    continue
+                objects[o2] += 1
         return len(object_sig) - unknown, objects
 
     def identify_one_by_subjects(self, s_node):
@@ -73,22 +88,25 @@ class GraphCorrespondence(object):
         unknown = 0
         subjects = defaultdict(int)
         for s, p, o in subject_sig:
-            if isinstance(o, BNode):
+            if treat_as_blank(o):
                 if o in self.blank_map:
                     o = self.blank_map[o]
                 else:
                     unknown += 1
                     continue
-            else:
-                for s2, p2, o2 in self.dest.triples((None, p, o)):
-                    subjects[s2] += 1
+            for s2, p2, o2 in self.dest.triples((None, p, o)):
+                if invalid_uuid_correspondance(s_node, s2):
+                    continue
+                subjects[s2] += 1
         return len(subject_sig) - unknown, subjects
 
     def identify(self):
         subjects_s = set(self.source.subjects())
-        blanks_s = set((n for n in subjects_s if isinstance(n, BNode)))
+        subjects_s.update(set(n for n in self.source.objects() if BLANK_UUID_RE.match(unicode(n))))
+        blanks_s = set((n for n in subjects_s if treat_as_blank(n)))
         subjects_d = set(self.dest.subjects())
-        blanks_d = set((n for n in subjects_d if isinstance(n, BNode)))
+        subjects_d.update(set(n for n in self.dest.objects() if UUID_RE.match(unicode(n))))
+        blanks_d = set((n for n in subjects_d if treat_as_blank(n)))
         loose_d = subjects_d - blanks_d - subjects_s
         # first candidates identified by objects
         for n in blanks_s:
