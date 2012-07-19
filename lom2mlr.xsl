@@ -180,7 +180,7 @@
 	<xsl:template match="text()" mode="vcard_org"/>
 	<xsl:template match="text()" mode="vcard_suborg_attributes"/>
 	<xsl:template match="text()" mode="vcard_suborg"/>
-	<xsl:template match="text()" mode="vcard_suborg_nogroup"/>
+	<xsl:template match="text()" mode="vcard_suborg_group"/>
 	<xsl:template match="text()" mode="vcard_np"/>
 	<xsl:template match="text()" mode="vcard_person"/>
 	<xsl:template match="text()" mode="address"/>
@@ -659,49 +659,51 @@
 
 
 	<xsl:template match="*" mode="vcard_suborg">
-		<xsl:apply-templates mode="vcard_suborg_nogroup" select="."/>
+		<xsl:if test="vcard:org[not(@group)] or vcard:url[not(@group) and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or vcard:adr[not(@group) and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or (($suborg_use_work_email) and vcard:email[not(@group) and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'])">
+			<xsl:apply-templates mode="vcard_suborg_group" select="."/>
+		</xsl:if>
 		<xsl:apply-templates mode="vcard_suborg_search_group" select="*[@group and (name(.) = 'org' or vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]"/>
 	</xsl:template>
 
 	<xsl:template match="vcard:*" mode="vcard_suborg_search_group">
 		<xsl:variable name="group" select="@group"/>
 		<xsl:if test="not(preceding-sibling::*[@group=$group and (name(.)='org' or vcard:parameters/vcard:type/vcard:text/text() = 'WORK')])">
-			<xsl:apply-templates mode="vcard_suborg_group" select="parent::*">
+			<xsl:apply-templates mode="vcard_suborg_group" select="..">
 				<xsl:with-param name="group" select="$group"/>
 			</xsl:apply-templates>
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="*" mode="vcard_suborg_group">
+	<xsl:template match="vcard:vcard"  mode="vcard_suborg_group">
 		<xsl:param name="group"/>
-		<xsl:comment>
-			Group is <xsl:value-of select="$group"/>
-		</xsl:comment>
-	</xsl:template>
-
-	<xsl:template match="vcard:vcard" mode="vcard_suborg_nogroup">
 		<mlr9:DES1100>
 			<mlr9:RC0002>
 				<xsl:attribute name="rdf:about">
-					<xsl:call-template name="suborg_identity_url"/>
+					<xsl:call-template name="suborg_identity_url">
+						<xsl:with-param name="group" select="$group"/>
+					</xsl:call-template>
 				</xsl:attribute>
 				<xsl:variable name="identity">
-					<xsl:call-template name="suborg_identity"/>
+					<xsl:call-template name="suborg_identity">
+						<xsl:with-param name="group" select="$group"/>
+					</xsl:call-template>
 				</xsl:variable>
 				<xsl:if test="string($identity) != ''">
 					<mlr9:DES0100>
 						<xsl:value-of select="$identity"/>
 					</mlr9:DES0100>
 				</xsl:if>
-				<xsl:apply-templates mode="vcard_suborg_attributes" />
-				<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+				<xsl:apply-templates mode="vcard_suborg_attributes">
+					<xsl:with-param name="group" select="$group"/>
+				</xsl:apply-templates>
+				<xsl:if test="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
 					<mlr9:DES1300>
 						<mlr9:RC0003>
 							<xsl:attribute name="rdf:about">
 								<xsl:text>urn:uuid:</xsl:text>
 								<xsl:value-of select="mlrext:uuid_unique()"/>
 							</xsl:attribute>
-							<xsl:apply-templates mode="address" select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']"/>
+							<xsl:apply-templates mode="address" select="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']"/>
 							<!-- skip geo which might be home address -->
 						</mlr9:RC0003>
 					</mlr9:DES1300>
@@ -713,50 +715,50 @@
 	<xsl:template name="suborg_identity_url">
 		<xsl:param name="group"/>
 		<xsl:choose>
-			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
-				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:uri/text()"/>
+			<xsl:when test="vcard:url[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:value-of select="vcard:url[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:uri/text()"/>
 			</xsl:when>
-			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
-				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:uri/text()"/>
+			<xsl:when test="vcard:url[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+				<xsl:value-of select="vcard:url[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:uri/text()"/>
 			</xsl:when>
-			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org[string(@group) = $group] and vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
 				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_string(vcard:org/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text())))"/>
+				<xsl:value-of select="mlrext:uuid_string(vcard:org[string(@group) = $group]/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text())))"/>
 			</xsl:when>
-			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org[string(@group) = $group] and vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
 				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_string(vcard:org/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text())))"/>
+				<xsl:value-of select="mlrext:uuid_string(vcard:org[string(@group) = $group]/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text())))"/>
 			</xsl:when>
-			<xsl:when test="$org_url_from_email and $suborg_use_work_email and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+			<xsl:when test="$org_url_from_email and $suborg_use_work_email and vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
 				<xsl:text>mailto:</xsl:text>
-				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text()"/>
+				<xsl:value-of select="vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text()"/>
 			</xsl:when>
-			<xsl:when test="$org_url_from_email and $suborg_use_work_email and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+			<xsl:when test="$org_url_from_email and $suborg_use_work_email and vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
 				<xsl:text>mailto:</xsl:text>
-				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
+				<xsl:value-of select="vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
 			</xsl:when>
-			<xsl:when test="$org_uuid_from_org_address and vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] and vcard:org">
+			<xsl:when test="$org_uuid_from_org_address and vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] and vcard:org[string(@group) = $group]">
 				<xsl:variable name="id">
-					<xsl:value-of select="vcard:org/vcard:text/text()"/>
-					<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()">
+					<xsl:value-of select="vcard:org[string(@group) = $group]/vcard:text/text()"/>
+					<xsl:if test="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()">
 						<xsl:text>;</xsl:text>
-						<xsl:value-of select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()"/>
+						<xsl:value-of select="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()"/>
 					</xsl:if>
-					<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:region/text()">
+					<xsl:if test="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:region/text()">
 						<xsl:text>;</xsl:text>
-						<xsl:value-of select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:region/text()"/>
+						<xsl:value-of select="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:region/text()"/>
 					</xsl:if>
-					<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:city/text()">
+					<xsl:if test="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:city/text()">
 						<xsl:text>;</xsl:text>
-						<xsl:value-of select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:city/text()"/>
+						<xsl:value-of select="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:city/text()"/>
 					</xsl:if>
 				</xsl:variable>
 				<xsl:text>urn:uuid:</xsl:text>
 				<xsl:value-of select="mlrext:uuid_string($id)"/>
 			</xsl:when>
-			<xsl:when test="$org_uuid_from_org_or_fn and vcard:org">
+			<xsl:when test="$org_uuid_from_org_or_fn and vcard:org[string(@group) = $group]">
 				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_string(vcard:org/vcard:text/text())"/>
+				<xsl:value-of select="mlrext:uuid_string(vcard:org[string(@group) = $group]/vcard:text/text())"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text>urn:uuid:</xsl:text>
@@ -768,63 +770,69 @@
 	<xsl:template name="suborg_identity">
 		<xsl:param name="group"/>
 		<xsl:choose>
-			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
-				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:uri/text()"/>
+			<xsl:when test="vcard:url[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:value-of select="vcard:url[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:uri/text()"/>
 			</xsl:when>
-			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
-				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:uri/text()"/>
+			<xsl:when test="vcard:url[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+				<xsl:value-of select="vcard:url[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:uri/text()"/>
 			</xsl:when>
-			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org and vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
 				<xsl:text>cn=</xsl:text>
 				<xsl:value-of select="vcard:org/vcard:text/text()"/>
 				<xsl:text>,mail=</xsl:text>
-				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text()"/>
+				<xsl:value-of select="vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text()"/>
 			</xsl:when>
-			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org[string(@group) = $group] and vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
 				<xsl:text>cn=</xsl:text>
-				<xsl:value-of select="vcard:org/vcard:text/text()"/>
+				<xsl:value-of select="vcard:org[string(@group) = $group]/vcard:text/text()"/>
 				<xsl:text>,mail=</xsl:text>
-				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
+				<xsl:value-of select="vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
 			</xsl:when>
-			<xsl:when test="$org_url_from_email and $suborg_use_work_email and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
-				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text()"/>
+			<xsl:when test="$org_url_from_email and $suborg_use_work_email and vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:value-of select="vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text()"/>
 			</xsl:when>
-			<xsl:when test="$org_url_from_email and $suborg_use_work_email and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
-				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
+			<xsl:when test="$org_url_from_email and $suborg_use_work_email and vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+				<xsl:value-of select="vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
 			</xsl:when>
-			<xsl:when test="$org_uuid_from_org_address and vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] and vcard:org">
-				<xsl:value-of select="vcard:org/vcard:text/text()"/>
-				<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()">
+			<xsl:when test="$org_uuid_from_org_address and vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] and vcard:org[string(@group) = $group]">
+				<xsl:value-of select="vcard:org[string(@group) = $group]/vcard:text/text()"/>
+				<xsl:if test="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()">
 					<xsl:text>;</xsl:text>
-					<xsl:value-of select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()"/>
+					<xsl:value-of select="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()"/>
 				</xsl:if>
-				<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:region/text()">
+				<xsl:if test="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:region/text()">
 					<xsl:text>;</xsl:text>
-					<xsl:value-of select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:region/text()"/>
+					<xsl:value-of select="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:region/text()"/>
 				</xsl:if>
-				<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:city/text()">
+				<xsl:if test="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:city/text()">
 					<xsl:text>;</xsl:text>
-					<xsl:value-of select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:city/text()"/>
+					<xsl:value-of select="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:city/text()"/>
 				</xsl:if>
 			</xsl:when>
 			<xsl:when test="$org_uuid_from_org_or_fn and vcard:org">
-				<xsl:value-of select="vcard:org/vcard:text/text()"/>
+				<xsl:value-of select="vcard:org[string(@group) = $group]/vcard:text/text()"/>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
 
 
 	<xsl:template match="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']" mode="vcard_suborg_attributes">
-		<mlr9:DES0900>
-			<xsl:value-of select="vcard:text/text()"/>
-		</mlr9:DES0900>
+		<xsl:param name="group"/>
+		<xsl:if test="string(@group) = $group">
+			<mlr9:DES0900>
+				<xsl:value-of select="vcard:text/text()"/>
+			</mlr9:DES0900>
+		</xsl:if>
 	</xsl:template>
 
 
 	<xsl:template match="vcard:org" mode="vcard_suborg_attributes">
-		<mlr9:DES1200>
-			<xsl:value-of select="vcard:text/text()"/>
-		</mlr9:DES1200>
+		<xsl:param name="group"/>
+		<xsl:if test="string(@group) = $group">
+			<mlr9:DES1200>
+				<xsl:value-of select="vcard:text/text()"/>
+			</mlr9:DES1200>
+		</xsl:if>
 	</xsl:template>
 
 

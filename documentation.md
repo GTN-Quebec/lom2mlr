@@ -1531,7 +1531,7 @@ But if `suborg_use_work_email` is set to true:
 
 ##### Multiple organizations
 
-It is possible for a vCard to associate multiple organizations with a single person, using the vCard grouping mechanism. This was considered out of scope, but in theory we should have:
+It is possible for a vCard to associate multiple organizations with a single person, using the vCard grouping mechanism.
 
     :::xml
     <lifeCycle>
@@ -1544,10 +1544,10 @@ It is possible for a vCard to associate multiple organizations with a single per
     VERSION:3.0
     FN:Marc-Antoine Parent
     N:Parent;Marc-Antoine;;;
-    URL:TYPE=HOME:http://maparent.ca/
-    gtn.URL:http://www.gtn-quebec.org/
+    URL;TYPE=HOME:http://maparent.ca/
+    gtn.URL;TYPE=WORK:http://www.gtn-quebec.org/
     gtn.ORG:GTN-Québec
-    vte.URL:http://vteducation.org/
+    vte.URL;TYPE=WORK:http://vteducation.org/
     vte.ORG:Vitrine Technologie-Éducation
     END:VCARD
     </entity>
@@ -1561,13 +1561,15 @@ Leading to
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 <http://maparent.ca/> ] .
     <http://maparent.ca/> a mlr9:RC0001 ;
-                mlr9:DES0100 "Marc-Antoine Parent" ;
-                mlr9:DES1100 <http://www.gtn-quebec.org/> ;
-                mlr9:DES1100 <http://vteducation.org/> .
+                mlr9:DES0100 "http://maparent.ca/" ;
+                mlr9:DES1100 <http://www.gtn-quebec.org/> ,
+                             <http://vteducation.org/> .
     <http://www.gtn-quebec.org/> a mlr9:RC0002;
-        mlr9:DES0100 "GTN-Québec.org" .
+        mlr9:DES0100 "http://www.gtn-quebec.org/";
+        mlr9:DES1200 "GTN-Québec" .
     <http://vteducation.org/> a mlr9:RC0002;
-        mlr9:DES0100 "Vitrine Technologie-Éducation" .
+        mlr9:DES0100 "http://vteducation.org/";
+        mlr9:DES1200 "Vitrine Technologie-Éducation" .
 
 ### Generic persons
 
