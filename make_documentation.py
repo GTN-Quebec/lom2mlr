@@ -24,6 +24,12 @@ from util import splitcode
 HEADER_R = re.compile(r'^h[1-9]$', re.I)
 
 
+def stringify_error_element(n):
+    try:
+        return escape(n.n3())
+    except AttributeError:
+        return escape(u'"%s"' % (n))
+
 class TestTreeprocessor(Treeprocessor):
     def __init__(self, md, buttons, hide_eg, delete_eg):
         self.graph_tester = GraphTester()
@@ -40,26 +46,7 @@ class TestTreeprocessor(Treeprocessor):
         assert len(graphs) in range(2, 4), "%d sections of code" % (len(graphs),)
         errors = self.graph_tester.test_graphs(*graphs)
         if errors:
-            div = etree.Element('div', {"class": "error"})
-            p = etree.Element('p')
-            p.text = "Erreur. Obtenu: "
-            div.append(p)
-            pre = etree.Element('pre')
-            div.append(pre)
-            graph_e = etree.Element('code')
-            pre.append(graph_e)
-            result = graphs[0].serialize(format='n3', encoding='utf-8')
-            graph_e.text = ':::N3\n' + self.remove_namespace(result).decode('utf-8')
-            for err_type, error in errors:
-                p = etree.Element('p')
-                errors = [escape(x) for x in error]
-                if err_type == GraphTester.MISSING:
-                    p.text = u"Il manque < %s %s %s >." % error
-                elif  err_type == GraphTester.UNEXPECTED:
-                    p.text = u"< %s %s %s > est présent et ne devrait pas l'être." % error
-                print '*', p.text
-                div.append(p)
-            return div
+            pass
 
     def run(self, root):
         elements = list(root)  # should be an iterator, but 2.6 getiterator vs 2.7 iter.
@@ -80,31 +67,68 @@ class TestTreeprocessor(Treeprocessor):
                 print " " * int(element.tag[1]) + element.text
             elif element.tag == 'pre':
                 sub = list(element)
-                assert len(sub) == 1 and sub[0].tag == 'code'
-                format, code = splitcode(sub[0].text)
-                if format.lower() in ('n3', 'xml'):
-                    if target is root:
-                        example_num += 1
-                        if self.buttons:
-                            button = etree.Element('button', {'onclick': "$('#eg%d').toggle();" % (example_num,)})
-                            button.text = 'Example'
-                            root.append(button)
-                        divattr = {"class": "example", 'id': 'eg%d' % (example_num,)}
-                        if self.hide_eg:
-                            divattr['style'] = 'display:none'
-                        div = etree.Element('div', divattr)
-                        if not self.delete_eg:
-                            root.append(div)
-                        target = div
+                assert len(sub) == 1
+                code_el = sub[0]
+                assert code_el.tag == 'code'
+                format, code, args = splitcode(code_el.text)
+                code_el.text = ":::%s\n%s" % (format, code)  # remove args
+                if target is root:
+                    example_num += 1
+                    if self.buttons:
+                        button = etree.Element('button', {'onclick': "$('#eg%d').toggle();" % (example_num,)})
+                        button.text = 'Example'
+                        root.append(button)
+                    divattr = {"class": "example", 'id': 'eg%d' % (example_num,)}
+                    if self.hide_eg:
+                        divattr['style'] = 'display:none'
+                    div = etree.Element('div', divattr)
+                    if not self.delete_eg:
+                        root.append(div)
+                    target = div
+                if format.lower() == 'xml':
                     try:
-                        graph = self.graph_tester.convert(format, code)
-                        graphs.append(graph)
+                        self.graph_tester.set_lom(code)
                     except Exception as e:
+                        target.append(element)
                         p2 = etree.Element('pre', {"class": "error"})
                         tr = etree.Element('code')
                         p2.append(tr)
                         tr.text = ":::Python Traceback\n" + traceback.format_exc()
-                        target.append(p2)
+                        element = p2
+                        print '*', e
+                        error = True
+                elif format.lower() == 'n3':
+                    try:
+                        graph, errors = self.graph_tester.test_n3(code, args)
+                        if errors:
+                            target.append(element)
+                            diverrors = etree.Element('div', {"class": "error"})
+                            p = etree.Element('p')
+                            p.text = "Erreur. Obtenu: "
+                            diverrors.append(p)
+                            pre = etree.Element('pre')
+                            diverrors.append(pre)
+                            graph_e = etree.Element('code')
+                            pre.append(graph_e)
+                            result = graph.serialize(format='n3', encoding='utf-8')
+                            graph_e.text = ':::N3\n' + self.remove_namespace(result).decode('utf-8')
+                            for err_type, error in errors:
+                                p = etree.Element('p')
+                                error = tuple(map(stringify_error_element, error))
+                                if err_type == GraphTester.MISSING:
+                                    p.text = u"Il manque &lt; %s %s %s &gt;." % error
+                                elif  err_type == GraphTester.UNEXPECTED:
+                                    p.text = u"&lt; %s %s %s &lt; est présent et ne devrait pas l'être." % error
+                                print '*', p.text
+                                diverrors.append(p)
+                            element = diverrors
+                    except Exception as e:
+                        target.append(element)
+                        p2 = etree.Element('pre', {"class": "error"})
+                        tr = etree.Element('code')
+                        p2.append(tr)
+                        tr.text = ":::Python Traceback\n" + traceback.format_exc()
+                        element = p2
                         print '*', e
                         error = True
             target.append(element)
@@ -139,7 +163,8 @@ vocabularies_for_DES = {
     "mlr8:DES1200": "ISO_IEC_19788-8-2012-VA.2.2"
 }
 
-VDEX_PREFIX='{http://www.imsglobal.org/xsd/imsvdex_v1p0}'
+VDEX_PREFIX = '{http://www.imsglobal.org/xsd/imsvdex_v1p0}'
+
 
 class TranslateMlrTreeprocessor(Treeprocessor):
     "Translate mlr strings"
@@ -154,7 +179,7 @@ class TranslateMlrTreeprocessor(Treeprocessor):
             for termtag in idtag.getiterator('term'):
                 lang = termtag.get('lang')
                 translations[lang]["%s:%s" % (idtag.get('ns'), idtag.get('id'))] = \
-                        u"%s_%s:%s" % (idtag.get('ns'), lang, name_trans.sub("_", termtag.text))
+                    u"%s_%s:%s" % (idtag.get('ns'), lang, name_trans.sub("_", termtag.text))
         self.translations = translations
         vocs = {}
 
@@ -255,7 +280,7 @@ class EmbedTreeprocessor(Treeprocessor):
             form.append(button)
             for lang in langs:
                 button = etree.Element('input', {'type': 'radio', 'name': 'lang', 'onclick': "$('.n3').hide();$('.lang_" + lang + "').show();"})
-                button.tail = lang+" "
+                button.tail = lang + " "
                 form.append(button)
             body.append(div)
         elements = list(root)  # should be an iterator, but 2.6 getiterator vs 2.7 iter.

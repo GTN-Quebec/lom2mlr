@@ -1,6 +1,4 @@
 import re
-import unittest
-import sys
 
 import markdown
 
@@ -11,33 +9,33 @@ HEADER_R = re.compile(r'^h[1-9]$', re.I)
 
 graphtester = GraphTester()
 
-def t_function(code, title):
-    print code
-    assert len(code) in range(2, 4), "%d sections of code" % (len(code),)
-    if len(code) == 2:
-        code.append(('N3',''))
-    assert [t.lower() for t, c in code] == ['xml','n3','n3']
-    code = [c for t, c in code]
-    obtained_graph, errors = graphtester.test_lom(*code)
-    assert not errors, title+' '+`errors`
+
+def t_function(data, title):
+    assert len(data) > 1
+    assert data[0][0].lower() == 'xml', data
+    for (format, code, args) in data:
+        graph, errors = graphtester.process_line(
+            format, code, args)
+        assert not errors, title + ' ' + repr(errors)
+
 
 def test_document():
     m = markdown.Markdown()
     data = open('documentation.md').read().decode('utf-8')
     root = m.parser.parseDocument(data.split('\n')).getroot()
-    code = []
+    data = []
+    title = ''
     for element in root.getiterator():
         if HEADER_R.match(element.tag):
-            if code:
-                yield t_function, code, title
-                code = []
+            if data:
+                yield t_function, data, title
+                data = []
             title = element.text
         if element.tag == 'pre':
             sub = list(element)
             assert len(sub) == 1 and sub[0].tag == 'code'
-            tag, text = splitcode(sub[0].text)
-            if tag:
-                code.append((tag, text))
-    if code:
-        yield t_function, code, title
-
+            format, text, args = splitcode(sub[0].text)
+            if format:
+                data.append((format, text, args))
+    if data:
+        yield t_function, data, title
