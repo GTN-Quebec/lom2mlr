@@ -16,45 +16,58 @@ class testGraphComparison(unittest.TestCase):
         return Graph().parse(data=N3_PREFIXES+source, format="n3")
 
     def test_find_missing(self):
-        errors = self.graphtester.test_graphs(self.parse('''
-            <http://example.com> a mlr1:RC0002.
-            '''),self.parse('''
+        errors = self.graphtester.find_missing(
+            self.parse('''
             <http://example.com> a mlr1:RC0002 ;
             mlr2:DES0100 "Titre" ;
             mlr2:DES0200 "Auteur" .
+            '''), self.parse('''
+            <http://example.com> a mlr1:RC0002.
             '''))
         assert len(errors)==2
 
     def test_find_missing_on_blank(self):
-        errors = self.graphtester.test_graphs(self.parse('''
-            <http://example.com> a mlr1:RC0002 ;
-            mlr5:DES1300 [
-                a mlr5:RC0001 ] .
-            '''),self.parse('''
+        errors = self.graphtester.find_missing(
+            self.parse('''
             <http://example.com> a mlr1:RC0002 ;
             mlr5:DES1300 [
                 a mlr5:RC0001;
                 mlr5:DES0200 "Commentaire" ] .
+            '''), self.parse('''
+            <http://example.com> a mlr1:RC0002 ;
+            mlr5:DES1300 [
+                a mlr5:RC0001 ] .
             '''))
         assert len(errors)==1
         error = errors[0]
-        assert error[0] == GraphTester.MISSING
-        assert error[1][2] == u"Commentaire"
+        assert error[2] == u"Commentaire"
+
+    def test_find_missing_on_uuid(self):
+        errors = self.graphtester.find_missing(
+            self.parse('''
+<urn:uuid:10000000-0000-0000-0000-000000000001> a mlr1:RC0002.
+<urn:uuid:10000000-0000-0000-0000-000000000001> mlr5:DES1700 <urn:uuid:10000000-0000-0000-0000-000000000002>.
+            '''), self.parse('''
+<urn:uuid:75411ac2-d077-11e1-b25b-c8bcc8f0abdf> a mlr1:RC0002.
+<urn:uuid:75411ac2-d077-11e1-b25b-c8bcc8f0abdf> mlr5:DES1700 <urn:uuid:75411ac2-d077-11e1-b25b-c8bcc8f0abcd> .
+            '''))
+        assert len(errors)==0, errors
 
     def test_find_unexpected(self):
-        errors = self.graphtester.test_graphs(self.parse('''
+        obtained = self.parse('''
             <http://example.com> a mlr1:RC0002 ;
-            mlr2:DES0100 "Titre" .
-            '''),self.parse('''
-            <http://example.com> a mlr1:RC0002 .
-            '''),self.parse('''
-            <http://example.com> a mlr1:RC0002 ;
-            mlr2:DES0100 "Titre" .
-            '''))
+            mlr2:DES0100 "Titre" . ''')
+        expected = self.parse('<http://example.com> a mlr1:RC0002 .')
+        forbidden = self.parse('''
+             <http://example.com> a mlr1:RC0002 ;
+            mlr2:DES0100 "Titre" . ''')
+
+        errors = self.graphtester.find_missing(expected, obtained)
+        assert not errors
+        errors = self.graphtester.find_forbidden(forbidden, obtained)
         assert len(errors)==1
         error = errors[0]
-        assert error[0] == GraphTester.UNEXPECTED
-        assert error[1][2] == u"Titre"
+        assert error[2] == u"Titre"
 
     def test_identify_blanks(self):
         g1 = Graph()
