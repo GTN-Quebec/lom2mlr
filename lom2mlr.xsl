@@ -4,10 +4,12 @@
 	xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
 	xmlns:regexp="http://exslt.org/regular-expressions"
 	xmlns:str="http://exslt.org/strings"
+	xmlns:sets="http://exslt.org/sets"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dc="http://purl.org/dc/elements/1.1/"
 	xmlns:vcardconv="http://ntic.org/vcard"
 	xmlns:vcard="urn:ietf:params:xml:ns:vcard-4.0"
+	xmlns:gtnq="http://www.gtn-quebec.org/ns/"
 	xmlns:mlrext="http://standards.iso.org/iso-iec/19788/ext/"
 	xmlns:mlr1="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/"
 	xmlns:mlr2="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/"
@@ -16,40 +18,63 @@
 	xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
 	xmlns:mlr9="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/"
-	extension-element-prefixes="regexp str vcardconv mlrext"
+	extension-element-prefixes="regexp sets str vcardconv mlrext"
 	>
 	<xsl:output method="xml" encoding="UTF-8"/>
 
-    <xsl:param name="use_mail_and_fn_uuid" select="true()"/>
-    <!-- Use combination of mail and fn as basis for a uuid. In the case of an organization, use mail and org. -->
+	<xsl:param name="use_mlr3" select="true()"/>
+	<!-- Allow use of MLR3 properties that refine the corresponding mlr2 properties. -->
 
-    <xsl:param name="use_mail_uuid" select="false()"/>
-    <!-- Use mail alone as basis for a uuid -->
+	<xsl:param name="person_url_from_email" select="false()"/>
+	<!-- Use email alone as basis for a (natural) person's identity. Never a good idea. -->
 
-    <xsl:param name="use_mail_url" select="false()"/>
-    <!-- Use email URL alone as basis for identity -->
+	<xsl:param name="person_uuid_from_email_fn" select="true()"/>
+	<!-- Use combination of mail and fn (or N) as basis for a (natural) person's uuid. -->
 
-    <xsl:param name="use_org_uuid" select="true()"/>
-    <!-- do we use a UUID generated from vcard:org as an organization identity? -->
+	<xsl:param name="person_uuid_from_fn" select="false()"/>
+	<!-- Use fn (or N) alone as basis for a (natural) person's uuid -->
 
-    <xsl:param name="use_fn_uuid" select="false()"/>
-    <!-- Use fn alone as basis for a uuid -->
 
-    <xsl:param name="use_random_uuid" select="false()"/>
-    <!--
-    About the use_random_uuid value and its default:
-    Gilles Gauthier proposes not to use blank nodes, and instead assigning random IDs, because the blank node's
-    proliferation may pollute the namespace. I prefer to leave blank nodes, as they can be used as a basis for
-    identifying similar nodes by content. -->
+	<xsl:param name="org_url_from_email" select="true()"/>
+	<!-- Use the email alone as a basis for an organization's identifying URL. -->
 
-    <xsl:variable name="mlr_namespace" select="'http://standards.iso.org/iso-iec/19788/'"/>
-    <xsl:variable name="gtn_namespace" select="'http://gtn-quebec.org/ns/'"/>
-    <xsl:variable name="vcardorg_namespace" select="concat($gtn_namespace,'vcarduuid/org/')"/>
-    <xsl:variable name="vcardfn_namespace" select="concat($gtn_namespace,'vcarduuid/fn/')"/>
-    <xsl:variable name="vcardorg_namespace_uuid" select="mlrext:uuid_url($vcardorg_namespace)"/>
-    <xsl:variable name="vcardfn_namespace_uuid" select="mlrext:uuid_url($vcardfn_namespace)"/>
+	<xsl:param name="org_uuid_from_org_address" select="true()"/>
+	<!-- Combine org (or fn) with country, region, city as basis for an organization's uuid -->
 
-    <!-- vocabularies -->
+	<xsl:param name="org_uuid_from_email_org" select="true()"/>
+	<!-- Use the org and email as a basis for an organization's uuid -->
+
+	<xsl:param name="org_uuid_from_email_fn" select="true()"/>
+	<!-- Use the fn and email as a basis for an organization's uuid -->
+
+	<xsl:param name="org_uuid_from_org_or_fn" select="false()"/>
+	<!-- Use a org (or fn) as a basis for an organization's uuid -->
+
+	<xsl:param name="suborg_use_work_email" select="false()"/>
+	<!-- If a natural person has a work email, 
+	assume it is the organization's email and not the person's email at work. -->
+
+
+
+
+	<xsl:param name="mark_unique_uuid" select="false()"/>
+	<!-- If true, unique (non-reproducible) UUIDs will be marked with a gtnq:irreproducible predicate. -->
+
+
+	<xsl:param name="doi_identity_prefix" select="'doi:'"/>
+	<!-- DOI URIs can be formed by prefixing 'doi:', 'hndl:' or 'http://dx.doi.org/'  -->
+
+
+	<xsl:variable name="mlr_namespace" select="'http://standards.iso.org/iso-iec/19788/'"/>
+	<xsl:variable name="mlr1rc2" select="'http://standards.iso.org/iso-iec/19788/-1/ed-1/en/RC0002'"/>
+	<xsl:variable name="mlr1rc2_uuid" select="mlrext:uuid_url($mlr1rc2)" />
+	<xsl:variable name="gtn_namespace" select="'http://gtn-quebec.org/ns/'"/>
+	<xsl:variable name="vcardorg_namespace" select="concat($gtn_namespace,'vcarduuid/org/')"/>
+	<xsl:variable name="vcardfn_namespace" select="concat($gtn_namespace,'vcarduuid/fn/')"/>
+	<xsl:variable name="vcardorg_namespace_uuid" select="mlrext:uuid_url($vcardorg_namespace)"/>
+	<xsl:variable name="vcardfn_namespace_uuid" select="mlrext:uuid_url($vcardfn_namespace)"/>
+
+	<!-- vocabularies -->
 	<xsl:include href="correspondances_xsl.xsl"/>
 
 	<!-- top-level templates -->
@@ -60,25 +85,78 @@
 	</xsl:template>
 
 	<xsl:template match="lom:lom">
-		<mlr1:RC0002>
+		<xsl:variable name="catalog" select="lom:general/lom:identifier/lom:catalog" />
+		<xsl:variable name="identifier">
 			<xsl:choose>
-				<xsl:when test="lom:general/lom:identifier/lom:entry">
-					<xsl:attribute name="rdf:about">
-						<xsl:value-of select="lom:general/lom:identifier[1]/lom:entry/text()" />
-					</xsl:attribute>
+				<xsl:when test="lom:general/lom:identifier/lom:catalog[text() = 'URI']">
+					<xsl:value-of select="lom:general/lom:identifier[lom:catalog/text() = 'URI'][1]/lom:entry/text()" />
+				</xsl:when>
+				<xsl:when test="lom:general/lom:identifier/lom:catalog[text() = 'URL']">
+					<xsl:value-of select="lom:general/lom:identifier[lom:catalog/text() = 'URL'][1]/lom:entry/text()" />
+				</xsl:when>
+				<xsl:when test="lom:general/lom:identifier/lom:catalog[text() = 'ISBN']">
+					<xsl:text>urn:ISBN:</xsl:text>
+					<xsl:value-of select="lom:general/lom:identifier[lom:catalog/text() = 'ISBN'][1]/lom:entry/text()" />
+				</xsl:when>
+				<xsl:when test="lom:general/lom:identifier/lom:catalog[text() = 'ISSN']">
+					<xsl:text>urn:ISSN:</xsl:text>
+					<xsl:value-of select="lom:general/lom:identifier[lom:catalog/text() = 'ISSN'][1]/lom:entry/text()" />
+				</xsl:when>
+				<xsl:when test="lom:general/lom:identifier/lom:catalog[text() = 'ISSN']">
+					<xsl:text>urn:ISSN:</xsl:text>
+					<xsl:value-of select="lom:general/lom:identifier[lom:catalog/text() = 'ISSN'][1]/lom:entry/text()" />
+				</xsl:when>
+				<xsl:when test="lom:general/lom:identifier/lom:catalog[text() = 'DOI']">
+					<xsl:value-of select="concat($doi_identity_prefix, lom:general/lom:identifier[lom:catalog/text() = 'DOI'][1]/lom:entry/text())" />
 				</xsl:when>
 				<xsl:when test="lom:technical/lom:location">
-					<xsl:attribute name="rdf:about">
-						<xsl:value-of select="lom:technical/lom:location[1]/text()" />
-					</xsl:attribute>
+					<xsl:value-of select="lom:technical/lom:location[1]/text()" />
 				</xsl:when>
-				<xsl:when test="$use_random_uuid">
-					<xsl:attribute name="rdf:about">
-						<xsl:text>urn:uuid:</xsl:text>
-                        <xsl:value-of select="mlrext:uuid_random()"/>
-					</xsl:attribute>
+				<xsl:when test="lom:general/lom:identifier">
+					<xsl:value-of select="lom:general/lom:identifier[1]/lom:catalog/text()" />
+					<xsl:text>|</xsl:text>
+					<xsl:value-of select="lom:general/lom:identifier[1]/lom:entry/text()" />
 				</xsl:when>
-				</xsl:choose>
+				<xsl:otherwise>
+					<xsl:text>urn:uuid:</xsl:text>
+					<xsl:value-of select="mlrext:uuid_unique()"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="identity">
+			<xsl:choose>
+				<xsl:when test="substring-after($identifier, '|') != ''">
+					<xsl:value-of select="concat('urn:uuid:',mlrext:uuid_string($identifier, $mlr1rc2_uuid))"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$identifier"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<mlr1:RC0002>
+			<xsl:attribute name="rdf:about">
+				<xsl:value-of select="$identity" />
+			</xsl:attribute>
+			<xsl:choose>
+				<xsl:when test="substring-after($identifier, '|') != ''">
+					<mlr2:DES1000>
+						<xsl:value-of select="$identifier"/>
+					</mlr2:DES1000>
+				</xsl:when>
+				<xsl:when test="not(lom:general/lom:identifier or lom:technical/lom:location)">
+					<mlr2:DES1000>
+						<xsl:value-of select="$identifier"/>
+					</mlr2:DES1000>
+					<xsl:if test="$mark_unique_uuid">
+						<gtnq:irreproducible rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</gtnq:irreproducible>
+					</xsl:if>
+				</xsl:when>
+				<xsl:otherwise>
+					<mlr3:DES0400>
+						<xsl:value-of select="$identifier"/>
+					</mlr3:DES0400>
+				</xsl:otherwise>
+			</xsl:choose>
 			<xsl:apply-templates mode="top"/>
 		</mlr1:RC0002>
 	</xsl:template>
@@ -100,7 +178,9 @@
 	<xsl:template match="text()" mode="classification"/>
 	<xsl:template match="text()" mode="classification_curriculum"/>
 	<xsl:template match="text()" mode="vcard_org"/>
+	<xsl:template match="text()" mode="vcard_suborg_attributes"/>
 	<xsl:template match="text()" mode="vcard_suborg"/>
+	<xsl:template match="text()" mode="vcard_suborg_nogroup"/>
 	<xsl:template match="text()" mode="vcard_np"/>
 	<xsl:template match="text()" mode="vcard_person"/>
 	<xsl:template match="text()" mode="address"/>
@@ -226,13 +306,11 @@
 	<xsl:template match="lom:contribute" mode="lifeCycle_ed">
 		<mlr5:DES1700>
 			<mlr5:RC0003>
-                <xsl:if test="$use_random_uuid">
-                    <xsl:attribute name="rdf:about">
-                    	<xsl:text>urn:uuid:</xsl:text>
-                        <xsl:value-of select="mlrext:uuid_random()"/>
-                    </xsl:attribute>
-                </xsl:if>
-                <xsl:apply-templates mode="lifeCycle_ed"/>
+				<xsl:attribute name="rdf:about">
+					<xsl:text>urn:uuid:</xsl:text>
+					<xsl:value-of select="mlrext:uuid_unique()"/>
+				</xsl:attribute>
+				<xsl:apply-templates mode="lifeCycle_ed"/>
 			</mlr5:RC0003>
 		</mlr5:DES1700>
 	</xsl:template>
@@ -274,78 +352,49 @@
 						<xsl:call-template name="has_suborg"/>
 					</xsl:variable>
 					<xsl:variable name="has_suborg" select="$has_suborg_text = 'true'"/>
-					<xsl:variable name="identity_url">
+					<xsl:attribute name="rdf:about">
 						<xsl:call-template name="natural_person_identity_url">
-							<xsl:with-param name="has_suborg">
-								<xsl:value-of select="$has_suborg"/>
-							</xsl:with-param>
+							<xsl:with-param name="has_suborg" select="$has_suborg"/>
+						</xsl:call-template>
+					</xsl:attribute>
+					<xsl:variable name="identity">
+						<xsl:call-template name="natural_person_identity">
+							<xsl:with-param name="has_suborg" select="$has_suborg"/>
 						</xsl:call-template>
 					</xsl:variable>
-                    <xsl:if test="$identity_url != ''">
-                        <xsl:attribute name="rdf:about">
-                            <xsl:value-of select="$identity_url"/>
-                        </xsl:attribute>
-                    </xsl:if>
-                	<xsl:call-template name="natural_person_identity">
-						<xsl:with-param name="has_suborg">
-							<xsl:value-of select="$has_suborg"/>
-						</xsl:with-param>
-					</xsl:call-template>
+					<xsl:if test="string($identity) != ''">
+						<mlr9:DES0100>
+							<xsl:value-of select="$identity"/>
+						</mlr9:DES0100>
+					</xsl:if>
 					<xsl:apply-templates mode="vcard_np" />
 					<xsl:if test="$has_suborg">
-						<mlr9:DES1100>
-							<mlr9:RC0002>
-								<xsl:variable name="org_identity_url">
-									<xsl:call-template name="suborg_identity_url"/>
-								</xsl:variable>
-                                <xsl:if test="$org_identity_url != ''">
-                                    <xsl:attribute name="rdf:about">
-                                        <xsl:value-of select="$org_identity_url"/>
-                                    </xsl:attribute>
-                                </xsl:if>
-								<xsl:call-template name="suborg_identity"/>
-								<xsl:apply-templates mode="vcard_suborg" />
-								<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
-									<mlr9:DES1300>
-										<mlr9:RC0003>
-                                            <xsl:if test="$use_random_uuid">
-                                                <xsl:attribute name="rdf:about">
-                                                	<xsl:text>urn:uuid:</xsl:text>
-                                                    <xsl:value-of select="mlrext:uuid_random()"/>
-                                                </xsl:attribute>
-                                            </xsl:if>
-                                            <xsl:apply-templates mode="address" select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']"/>
-											<!-- skip geo which might be home address -->
-										</mlr9:RC0003>
-									</mlr9:DES1300>
-								</xsl:if>
-							</mlr9:RC0002>
-						</mlr9:DES1100>
+						<xsl:apply-templates mode="vcard_suborg" select="."/>
 					</xsl:if>
 				</mlr9:RC0001>
 			</xsl:when>
 			<xsl:when test="vcard:org or (vcard:*[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] and not(vcard:*[vcard:parameters/vcard:type/vcard:text/text() = 'HOME']))">
 				<mlr9:RC0002>
-					<xsl:variable name="org_identity_url">
+					<xsl:attribute name="rdf:about">
 						<xsl:call-template name="org_identity_url"/>
+					</xsl:attribute>
+					<xsl:variable name="identity">
+						<xsl:call-template name="org_identity"/>
 					</xsl:variable>
-                    <xsl:if test="$org_identity_url != ''">
-                            <xsl:attribute name="rdf:about">
-                                <xsl:value-of select="$org_identity_url"/>
-                            </xsl:attribute>
-                    </xsl:if>
-					<xsl:call-template name="org_identity"/>
+					<xsl:if test="string($identity) != ''">
+						<mlr9:DES0100>
+							<xsl:value-of select="$identity"/>
+						</mlr9:DES0100>
+					</xsl:if>
 					<xsl:apply-templates mode="vcard_org" />
 					<xsl:if test="vcard:geo or vcard:adr">
 						<mlr9:DES1300>
 							<mlr9:RC0003>
-                                <xsl:if test="$use_random_uuid">
-                                    <xsl:attribute name="rdf:about">
-                                    	<xsl:text>urn:uuid:</xsl:text>
-                                        <xsl:value-of select="mlrext:uuid_random()"/>
-                                    </xsl:attribute>
-                                </xsl:if>
-                                <xsl:apply-templates mode="address" select="vcard:adr"/>
+								<xsl:attribute name="rdf:about">
+									<xsl:text>urn:uuid:</xsl:text>
+									<xsl:value-of select="mlrext:uuid_unique()"/>
+								</xsl:attribute>
+								<xsl:apply-templates mode="address" select="vcard:adr"/>
 								<xsl:if test="vcard:geo">
 									<mlr9:DES1500 rdf:datatype="http://www.w3.org/2001/XMLSchema#float">
 										<xsl:value-of select="substring-before(vcard:geo[1]/vcard:uri/text(),';')"/>
@@ -361,53 +410,22 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<mlr1:RC0003>
-					<xsl:call-template name="natural_person_identity">
-						<xsl:with-param name="has_suborg">
-							<xsl:value-of select="false()"/>
-						</xsl:with-param>
-					</xsl:call-template>
+					<!-- for identity, treat persons like natural persons -->
+					<xsl:variable name="identity">
+						<xsl:call-template name="natural_person_identity"/>
+					</xsl:variable>
+					<xsl:if test="string($identity) != ''">
+						<mlr9:DES0100>
+							<xsl:value-of select="$identity"/>
+						</mlr9:DES0100>
+					</xsl:if>
 					<xsl:apply-templates mode="vcard_person" />
 				</mlr1:RC0003>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template name="natural_person_identity">
-		<xsl:param name="has_suborg"/>
-		<mlr9:DES0100>
-			<xsl:choose>
-				<xsl:when test="vcard:x-ablabel[vcard:unknown/text()='FOAF' and @group]">
-					<!-- From http://www.w3.org/2002/12/cal/vcard-notes.html -->
-					<xsl:variable name='group' select="vcard:x-ablabel[vcard:unknown/text()='FOAF' and @group]/@group"/>
-					<xsl:attribute name='rdf:resource'>
-						<xsl:value-of select="vcard:url[@group=$group]/vcard:uri/text()"/>
-					</xsl:attribute>
-				</xsl:when>
-				<xsl:when test="vcard:url[not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK') and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
-					<xsl:attribute name='rdf:resource'>
-						<xsl:value-of select="vcard:url[not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK') and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:uri/text()"/>
-					</xsl:attribute>
-				</xsl:when>
-				<xsl:when test="vcard:url[not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
-					<xsl:attribute name='rdf:resource'>
-						<xsl:value-of select="vcard:url[not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:uri/text()"/>
-					</xsl:attribute>
-				</xsl:when>
-				<xsl:when test="$use_mail_and_fn_uuid and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
-					<xsl:text>cn=</xsl:text>
-					<xsl:value-of select="vcard:fn/vcard:text/text()"/>
-					<xsl:text>,mail=</xsl:text>
-					<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:text/text()"/>
-				</xsl:when>
-				<xsl:when test="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
-					<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:text/text()"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="vcard:fn/vcard:text/text()"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</mlr9:DES0100>
-	</xsl:template>
+	<!-- VCard: natural persons -->
 
 	<xsl:template name="natural_person_identity_url">
 		<xsl:param name="has_suborg"/>
@@ -417,184 +435,131 @@
 				<xsl:variable name='group' select="vcard:x-ablabel[vcard:unknown/text()='FOAF' and @group]/@group"/>
 				<xsl:value-of select="vcard:url[@group=$group]/vcard:uri/text()"/>
 			</xsl:when>
-			<xsl:when test="vcard:url[not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK') and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
-				<xsl:value-of select="vcard:url[not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK') and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:uri/text()"/>
+			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'pref' and not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
+				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'pref' and not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:uri/text()"/>
 			</xsl:when>
 			<xsl:when test="vcard:url[not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
 				<xsl:value-of select="vcard:url[not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:uri/text()"/>
 			</xsl:when>
-			<xsl:when test="$use_mail_and_fn_uuid and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
+			<xsl:when test="$person_uuid_from_email_fn and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
+				<xsl:variable name="fn">
+					<xsl:choose>
+						<xsl:when test="vcard:fn">
+							<xsl:value-of select="vcard:fn/vcard:text/text()"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<!-- we know vcard:n exists -->
+							<xsl:call-template name="convert_n_to_fn"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
 				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_string(vcard:fn/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:text/text())))"/>
+				<xsl:value-of select="mlrext:uuid_string($fn, mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:text/text())))"/>
 			</xsl:when>
-			<xsl:when test="$use_mail_uuid and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
+			<xsl:when test="$person_uuid_from_email_fn and vcard:email[not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
+				<xsl:variable name="fn">
+					<xsl:choose>
+						<xsl:when test="vcard:fn">
+							<xsl:value-of select="vcard:fn/vcard:text/text()"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<!-- we know vcard:n exists -->
+							<xsl:call-template name="convert_n_to_fn"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
 				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:text/text()))"/>
+				<xsl:value-of select="mlrext:uuid_string($fn, mlrext:uuid_url(concat('mailto:', vcard:email[not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:text/text())))"/>
 			</xsl:when>
-			<xsl:when test="$use_mail_url and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
-				<xsl:value-of select="concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:text/text())"/>
+			<xsl:when test="$person_url_from_email and vcard:email[not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
+				<xsl:text>mailto:</xsl:text>
+				<xsl:value-of select="vcard:email[not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:text/text()"/>
 			</xsl:when>
-			<xsl:when test="$use_fn_uuid">
+			<xsl:when test="$person_uuid_from_fn">
+				<xsl:variable name="fn">
+					<xsl:choose>
+						<xsl:when test="vcard:fn">
+							<xsl:value-of select="vcard:fn/vcard:text/text()"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<!-- we know vcard:n exists -->
+							<xsl:call-template name="convert_n_to_fn"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
 				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_string(vcard:fn/vcard:text/text(), $vcardfn_namespace_uuid)"/>
+				<xsl:value-of select="mlrext:uuid_string($fn)"/>
 			</xsl:when>
-			<xsl:when test="$use_random_uuid">
+			<xsl:otherwise>
 				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_random()"/>
-			</xsl:when>
+				<xsl:value-of select="mlrext:uuid_unique()"/>
+			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template name="has_suborg">
-		<!-- Used on a natural person vcard to determine whether we will define a organization for that person -->
-		<xsl:value-of select="vcard:org or vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or (($use_mail_uuid or $use_mail_url) and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'])"/>
-	</xsl:template>
-
-	<xsl:template name="suborg_identity">
-		<xsl:choose>
-			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
-				<mlr9:DES0100>
-					<xsl:attribute name='rdf:resource'>
-						<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:uri/text()"/>
-					</xsl:attribute>
-				</mlr9:DES0100>
-			</xsl:when>
-			<xsl:when test="$use_mail_and_fn_uuid and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
-				<mlr9:DES0100>
-					<xsl:text>cn=</xsl:text>
-					<xsl:value-of select="vcard:org/vcard:text/text()"/>
-					<xsl:text>,mail=</xsl:text>
-					<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
-				</mlr9:DES0100>
-			</xsl:when>
-			<xsl:when test="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
-				<mlr9:DES0100>
-					<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
-				</mlr9:DES0100>
-			</xsl:when>
-			<xsl:when test="vcard:org">
-				<mlr9:DES0100>
-					<xsl:value-of select="vcard:org/vcard:text/text()"/>
-				</mlr9:DES0100>
-			</xsl:when>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template name="suborg_identity_url">
-		<xsl:choose>
-			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
-				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:uri/text()"/>
-			</xsl:when>
-			<xsl:when test="$use_mail_and_fn_uuid and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
-				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_string(vcard:org/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text())))"/>
-			</xsl:when>
-			<xsl:when test="$use_mail_uuid and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
-				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()))"/>
-			</xsl:when>
-			<xsl:when test="$use_mail_url and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
-				<xsl:value-of select="concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text())"/>
-			</xsl:when>
-			<xsl:when test="$use_org_uuid and vcard:org">
-				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_string(vcard:org/vcard:text/text(), $vcardorg_namespace_uuid)"/>
-			</xsl:when>
-			<xsl:when test="$use_random_uuid">
-				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_random()"/>
-			</xsl:when>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template name="org_identity">
-		<mlr9:DES0100>
-			<xsl:choose>
-				<xsl:when test="vcard:x-ablabel[vcard:unknown/text()='FOAF' and @group]">
-					<!-- From http://www.w3.org/2002/12/cal/vcard-notes.html -->
-					<xsl:variable name='group' select="vcard:x-ablabel[vcard:unknown/text()='FOAF' and @group]/@group"/>
-					<xsl:attribute name='rdf:resource'>
-						<xsl:value-of select="vcard:url[@group=$group]/vcard:uri/text()"/>
-					</xsl:attribute>
-				</xsl:when>
-				<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
-					<xsl:attribute name='rdf:resource'>
-						<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:uri/text()"/>
-					</xsl:attribute>
-				</xsl:when>
-				<xsl:when test="vcard:url">
-					<xsl:attribute name='rdf:resource'>
-						<xsl:value-of select="vcard:url[1]/vcard:uri/text()"/>
-					</xsl:attribute>
-				</xsl:when>
-				<xsl:when test="$use_mail_and_fn_uuid and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']">
-					<xsl:text>cn=</xsl:text>
-					<xsl:value-of select="vcard:org/vcard:text/text()"/>
-					<xsl:text>,mail=</xsl:text>
-					<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET'][1]/vcard:text/text()"/>
-				</xsl:when>
-				<xsl:when test="$use_mail_and_fn_uuid and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']">
-					<xsl:text>cn=</xsl:text>
-					<xsl:value-of select="vcard:fn/vcard:text/text()"/>
-					<xsl:text>,mail=</xsl:text>
-					<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET'][1]/vcard:text/text()"/>
-				</xsl:when>
-				<xsl:when test="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']">
-					<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET'][1]/vcard:text/text()"/>
-				</xsl:when>
-				<xsl:when test="vcard:org">
-					<xsl:value-of select="vcard:org/vcard:text/text()"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="vcard:fn/vcard:text/text()"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</mlr9:DES0100>
-	</xsl:template>
-
-	<xsl:template name="org_identity_url">
+	<xsl:template name="natural_person_identity">
+		<xsl:param name="has_suborg"/>
 		<xsl:choose>
 			<xsl:when test="vcard:x-ablabel[vcard:unknown/text()='FOAF' and @group]">
 				<!-- From http://www.w3.org/2002/12/cal/vcard-notes.html -->
 				<xsl:variable name='group' select="vcard:x-ablabel[vcard:unknown/text()='FOAF' and @group]/@group"/>
 				<xsl:value-of select="vcard:url[@group=$group]/vcard:uri/text()"/>
 			</xsl:when>
-			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
-				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:uri/text()"/>
+			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'pref' and not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
+				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'pref' and not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:uri/text()"/>
 			</xsl:when>
-			<xsl:when test="vcard:url">
-				<xsl:value-of select="vcard:url[1]/vcard:uri/text()"/>
+			<xsl:when test="vcard:url[not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
+				<xsl:value-of select="vcard:url[not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:uri/text()"/>
 			</xsl:when>
-			<xsl:when test="$use_mail_and_fn_uuid and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']">
-				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_string(vcard:org/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET'][1]/vcard:text/text())))"/>
+			<xsl:when test="$person_uuid_from_email_fn and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
+				<xsl:text>cn=</xsl:text>
+				<xsl:choose>
+					<xsl:when test="vcard:fn">
+						<xsl:value-of select="vcard:fn/vcard:text/text()"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<!-- we know vcard:n exists -->
+						<xsl:call-template name="convert_n_to_fn"/>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:text>,mail=</xsl:text>
+				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref' and not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:text/text()"/>
 			</xsl:when>
-			<xsl:when test="$use_mail_and_fn_uuid and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']">
-				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_string(vcard:fn/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET'][1]/vcard:text/text())))"/>
+			<xsl:when test="$person_uuid_from_email_fn and vcard:email[not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
+				<xsl:text>cn=</xsl:text>
+				<xsl:choose>
+					<xsl:when test="vcard:fn">
+						<xsl:value-of select="vcard:fn/vcard:text/text()"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<!-- we know vcard:n exists -->
+						<xsl:call-template name="convert_n_to_fn"/>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:text>,mail=</xsl:text>
+				<xsl:value-of select="vcard:email[not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:text/text()"/>
 			</xsl:when>
-			<xsl:when test="$use_mail_uuid and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']">
-				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET'][1]/vcard:text/text()))"/>
+			<xsl:when test="$person_url_from_email and vcard:email[not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]">
+				<xsl:text>mailto:</xsl:text>
+				<xsl:value-of select="vcard:email[not($has_suborg and vcard:parameters/vcard:type/vcard:text/text() = 'WORK')][1]/vcard:text/text()"/>
 			</xsl:when>
-			<xsl:when test="$use_mail_url and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']">
-				<xsl:value-of select="concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET'][1]/vcard:text/text())"/>
-			</xsl:when>
-			<xsl:when test="$use_org_uuid and vcard:org">
-				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_string(vcard:org/vcard:text/text(), $vcardorg_namespace_uuid)"/>
-			</xsl:when>
-			<xsl:when test="$use_fn_uuid">
-				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_string(vcard:fn/vcard:text/text(), $vcardfn_namespace_uuid)"/>
-			</xsl:when>
-			<xsl:when test="$use_random_uuid">
-				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_random()"/>
+			<xsl:when test="$person_uuid_from_fn">
+				<xsl:choose>
+					<xsl:when test="vcard:fn">
+						<xsl:value-of select="vcard:fn/vcard:text/text()"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<!-- we know vcard:n exists -->
+						<xsl:call-template name="convert_n_to_fn"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
 
+
+
+	<!-- vcard persons and natural persons -->
 	<xsl:template match="vcard:fn" mode="vcard_person">
 		<mlr9:DES0200>
 			<xsl:value-of select="vcard:text/text()"/>
@@ -619,7 +584,7 @@
 		</mlr9:DES0600>
 	</xsl:template>
 
-	<xsl:template match="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']" mode="vcard_np">
+	<xsl:template match="vcard:email" mode="vcard_np">
 		<!-- TODO: Edge case with a work email but no other org info should also be in. -->
 		<xsl:if test="not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK')">
 			<mlr9:DES0900>
@@ -628,51 +593,10 @@
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET' and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']" mode="vcard_suborg">
-		<mlr9:DES0900>
+	<xsl:template match="vcard:tel[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'VOICE']" mode="vcard_np">
+		<mlr9:DES1000>
 			<xsl:value-of select="vcard:text/text()"/>
-		</mlr9:DES0900>
-	</xsl:template>
-
-	<xsl:template match="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'INTERNET']" mode="vcard_org">
-		<mlr9:DES0900>
-			<xsl:value-of select="vcard:text/text()"/>
-		</mlr9:DES0900>
-	</xsl:template>
-
-	<xsl:template mode="address" match="vcard:adr">
-		<mlr9:DES1700>
-			<xsl:if test="vcard:box or vcard:extended">
-				<xsl:value-of select="vcard:box/text()"/>
-				<xsl:text> </xsl:text>
-				<xsl:value-of select="vcard:extended/text()"/>
-				<xsl:text>
-</xsl:text>
-			</xsl:if>
-			<xsl:value-of select="vcard:street/text()"/>
-			<xsl:text>
-</xsl:text>
-			<xsl:value-of select="vcard:city/text()"/>
-			<xsl:text>, </xsl:text>
-			<xsl:value-of select="vcard:region/text()"/>
-			<xsl:text>, </xsl:text>
-			<xsl:value-of select="vcard:code/text()"/>
-			<xsl:text>
-</xsl:text>
-			<xsl:value-of select="vcard:country/text()"/>
-		</mlr9:DES1700>
-	</xsl:template>
-
-	<xsl:template match="vcard:org" mode="vcard_org">
-		<mlr9:DES1200>
-			<xsl:value-of select="vcard:text/text()"/>
-		</mlr9:DES1200>
-	</xsl:template>
-
-	<xsl:template match="vcard:org" mode="vcard_suborg">
-		<mlr9:DES1200>
-			<xsl:value-of select="vcard:text/text()"/>
-		</mlr9:DES1200>
+		</mlr9:DES1000>
 	</xsl:template>
 
 	<xsl:template match="vcard:n" mode="vcard_np">
@@ -719,11 +643,391 @@
 		</mlr9:DES0400>
 	</xsl:template>
 
-	<xsl:template match="vcard:tel[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'VOICE']" mode="vcard_np">
-		<mlr9:DES1000>
-			<xsl:value-of select="vcard:text/text()"/>
-		</mlr9:DES1000>
+	<xsl:template name="convert_n_to_fn">
+		<!-- TODO: Better -->
+		<xsl:value-of select="vcard:n/vcard:given/text()"/>
+		<xsl:text> </xsl:text>
+		<xsl:value-of select="vcard:n/vcard:surname/text()"/>
 	</xsl:template>
+
+
+	<!-- vcard: Sub-organization -->
+	<xsl:template name="has_suborg">
+		<!-- Used on a natural person vcard to determine whether we will define a organization for that person -->
+		<xsl:value-of select="vcard:org or vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or (($suborg_use_work_email) and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'])"/>
+	</xsl:template>
+
+
+	<xsl:template match="*" mode="vcard_suborg">
+		<xsl:apply-templates mode="vcard_suborg_nogroup" select="."/>
+		<xsl:apply-templates mode="vcard_suborg_search_group" select="*[@group and (name(.) = 'org' or vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]"/>
+	</xsl:template>
+
+	<xsl:template match="vcard:*" mode="vcard_suborg_search_group">
+		<xsl:variable name="group" select="@group"/>
+		<xsl:if test="not(preceding-sibling::*[@group=$group and (name(.)='org' or vcard:parameters/vcard:type/vcard:text/text() = 'WORK')])">
+			<xsl:apply-templates mode="vcard_suborg_group" select="parent::*">
+				<xsl:with-param name="group" select="$group"/>
+			</xsl:apply-templates>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template match="*" mode="vcard_suborg_group">
+		<xsl:param name="group"/>
+		<xsl:comment>
+			Group is <xsl:value-of select="$group"/>
+		</xsl:comment>
+	</xsl:template>
+
+	<xsl:template match="vcard:vcard" mode="vcard_suborg_nogroup">
+		<mlr9:DES1100>
+			<mlr9:RC0002>
+				<xsl:attribute name="rdf:about">
+					<xsl:call-template name="suborg_identity_url"/>
+				</xsl:attribute>
+				<xsl:variable name="identity">
+					<xsl:call-template name="suborg_identity"/>
+				</xsl:variable>
+				<xsl:if test="string($identity) != ''">
+					<mlr9:DES0100>
+						<xsl:value-of select="$identity"/>
+					</mlr9:DES0100>
+				</xsl:if>
+				<xsl:apply-templates mode="vcard_suborg_attributes" />
+				<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+					<mlr9:DES1300>
+						<mlr9:RC0003>
+							<xsl:attribute name="rdf:about">
+								<xsl:text>urn:uuid:</xsl:text>
+								<xsl:value-of select="mlrext:uuid_unique()"/>
+							</xsl:attribute>
+							<xsl:apply-templates mode="address" select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']"/>
+							<!-- skip geo which might be home address -->
+						</mlr9:RC0003>
+					</mlr9:DES1300>
+				</xsl:if>
+			</mlr9:RC0002>
+		</mlr9:DES1100>
+	</xsl:template>
+
+	<xsl:template name="suborg_identity_url">
+		<xsl:param name="group"/>
+		<xsl:choose>
+			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:uri/text()"/>
+			</xsl:when>
+			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:uri/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_string(vcard:org/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text())))"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_string(vcard:org/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text())))"/>
+			</xsl:when>
+			<xsl:when test="$org_url_from_email and $suborg_use_work_email and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:text>mailto:</xsl:text>
+				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_url_from_email and $suborg_use_work_email and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+				<xsl:text>mailto:</xsl:text>
+				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_org_address and vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] and vcard:org">
+				<xsl:variable name="id">
+					<xsl:value-of select="vcard:org/vcard:text/text()"/>
+					<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()">
+						<xsl:text>;</xsl:text>
+						<xsl:value-of select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()"/>
+					</xsl:if>
+					<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:region/text()">
+						<xsl:text>;</xsl:text>
+						<xsl:value-of select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:region/text()"/>
+					</xsl:if>
+					<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:city/text()">
+						<xsl:text>;</xsl:text>
+						<xsl:value-of select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:city/text()"/>
+					</xsl:if>
+				</xsl:variable>
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_string($id)"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_org_or_fn and vcard:org">
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_string(vcard:org/vcard:text/text())"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_unique()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="suborg_identity">
+		<xsl:param name="group"/>
+		<xsl:choose>
+			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:uri/text()"/>
+			</xsl:when>
+			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:uri/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:text>cn=</xsl:text>
+				<xsl:value-of select="vcard:org/vcard:text/text()"/>
+				<xsl:text>,mail=</xsl:text>
+				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+				<xsl:text>cn=</xsl:text>
+				<xsl:value-of select="vcard:org/vcard:text/text()"/>
+				<xsl:text>,mail=</xsl:text>
+				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_url_from_email and $suborg_use_work_email and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_url_from_email and $suborg_use_work_email and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
+				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_org_address and vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] and vcard:org">
+				<xsl:value-of select="vcard:org/vcard:text/text()"/>
+				<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()">
+					<xsl:text>;</xsl:text>
+					<xsl:value-of select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()"/>
+				</xsl:if>
+				<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:region/text()">
+					<xsl:text>;</xsl:text>
+					<xsl:value-of select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:region/text()"/>
+				</xsl:if>
+				<xsl:if test="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:city/text()">
+					<xsl:text>;</xsl:text>
+					<xsl:value-of select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:city/text()"/>
+				</xsl:if>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_org_or_fn and vcard:org">
+				<xsl:value-of select="vcard:org/vcard:text/text()"/>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
+
+	<xsl:template match="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']" mode="vcard_suborg_attributes">
+		<mlr9:DES0900>
+			<xsl:value-of select="vcard:text/text()"/>
+		</mlr9:DES0900>
+	</xsl:template>
+
+
+	<xsl:template match="vcard:org" mode="vcard_suborg_attributes">
+		<mlr9:DES1200>
+			<xsl:value-of select="vcard:text/text()"/>
+		</mlr9:DES1200>
+	</xsl:template>
+
+
+	<!-- VCard : Organizations -->
+
+	<xsl:template name="org_identity_url">
+		<xsl:choose>
+			<xsl:when test="vcard:x-ablabel[vcard:unknown/text()='FOAF' and @group]">
+				<!-- From http://www.w3.org/2002/12/cal/vcard-notes.html -->
+				<xsl:variable name='group' select="vcard:x-ablabel[vcard:unknown/text()='FOAF' and @group]/@group"/>
+				<xsl:value-of select="vcard:url[@group=$group]/vcard:uri/text()"/>
+			</xsl:when>
+			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:uri/text()"/>
+			</xsl:when>
+			<xsl:when test="vcard:url">
+				<xsl:value-of select="vcard:url[1]/vcard:uri/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_email_org and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_string(vcard:org/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text())))"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_email_org and vcard:org and vcard:email">
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_string(vcard:org/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[1]/vcard:text/text())))"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_email_fn and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_string(vcard:fn/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text())))"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_email_fn and vcard:email">
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_string(vcard:fn/vcard:text/text(), mlrext:uuid_url(concat('mailto:', vcard:email[1]/vcard:text/text())))"/>
+			</xsl:when>
+			<xsl:when test="$org_url_from_email and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:text>mailto:</xsl:text>
+				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_url_from_email and vcard:email">
+				<xsl:text>mailto:</xsl:text>
+				<xsl:value-of select="vcard:email[1]/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_org_address and vcard:adr and (vcard:org or vcard:fn)">
+				<xsl:variable name="id">
+					<xsl:choose>
+						<xsl:when test="vcard:org">
+							<xsl:value-of select="vcard:org/vcard:text/text()"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="vcard:fn/vcard:text/text()"/>
+						</xsl:otherwise>
+					</xsl:choose>
+					<xsl:if test="vcard:adr/vcard:country/text()">
+						<xsl:text>;</xsl:text>
+						<xsl:value-of select="vcard:adr/vcard:country/text()"/>
+					</xsl:if>
+					<xsl:if test="vcard:adr/vcard:region/text()">
+						<xsl:text>;</xsl:text>
+						<xsl:value-of select="vcard:adr/vcard:region/text()"/>
+					</xsl:if>
+					<xsl:if test="vcard:adr/vcard:city/text()">
+						<xsl:text>;</xsl:text>
+						<xsl:value-of select="vcard:adr/vcard:city/text()"/>
+					</xsl:if>
+				</xsl:variable>
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_string($id)"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_org_or_fn and (vcard:org or vcard:fn)">
+				<xsl:variable name="id">
+					<xsl:choose>
+						<xsl:when test="vcard:org">
+							<xsl:value-of select="vcard:org/vcard:text/text()"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="vcard:fn/vcard:text/text()"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_string($id)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_unique()"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="org_identity">
+		<xsl:choose>
+			<xsl:when test="vcard:x-ablabel[vcard:unknown/text()='FOAF' and @group]">
+				<!-- From http://www.w3.org/2002/12/cal/vcard-notes.html -->
+				<xsl:variable name='group' select="vcard:x-ablabel[vcard:unknown/text()='FOAF' and @group]/@group"/>
+				<xsl:value-of select="vcard:url[@group=$group]/vcard:uri/text()"/>
+			</xsl:when>
+			<xsl:when test="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:value-of select="vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:uri/text()"/>
+			</xsl:when>
+			<xsl:when test="vcard:url">
+				<xsl:value-of select="vcard:url[1]/vcard:uri/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_email_org and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:text>cn=</xsl:text>
+				<xsl:value-of select="vcard:org/vcard:text/text()"/>
+				<xsl:text>,mail=</xsl:text>
+				<xsl:value-of select="vcard:email[1][vcard:parameters/vcard:type/vcard:text/text() = 'pref']/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_email_org and vcard:org and vcard:email">
+				<xsl:text>cn=</xsl:text>
+				<xsl:value-of select="vcard:org/vcard:text/text()"/>
+				<xsl:text>,mail=</xsl:text>
+				<xsl:value-of select="vcard:email[1]/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_email_fn and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:text>cn=</xsl:text>
+				<xsl:value-of select="vcard:fn/vcard:text/text()"/>
+				<xsl:text>,mail=</xsl:text>
+				<xsl:value-of select="vcard:email[1][vcard:parameters/vcard:type/vcard:text/text() = 'pref']/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_email_fn and vcard:email">
+				<xsl:text>cn=</xsl:text>
+				<xsl:value-of select="vcard:fn/vcard:text/text()"/>
+				<xsl:text>,mail=</xsl:text>
+				<xsl:value-of select="vcard:email[1]/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_url_from_email and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
+				<xsl:value-of select="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_url_from_email and vcard:email">
+				<xsl:value-of select="vcard:email[1]/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_org_address and vcard:adr and (vcard:org or vcard:fn)">
+				<xsl:choose>
+					<xsl:when test="vcard:org">
+						<xsl:value-of select="vcard:org/vcard:text/text()"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="vcard:fn/vcard:text/text()"/>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:if test="vcard:adr/vcard:country/text()">
+					<xsl:text>;</xsl:text>
+					<xsl:value-of select="vcard:adr/vcard:country/text()"/>
+				</xsl:if>
+				<xsl:if test="vcard:adr/vcard:region/text()">
+					<xsl:text>;</xsl:text>
+					<xsl:value-of select="vcard:adr/vcard:region/text()"/>
+				</xsl:if>
+				<xsl:if test="vcard:adr/vcard:city/text()">
+					<xsl:text>;</xsl:text>
+					<xsl:value-of select="vcard:adr/vcard:city/text()"/>
+				</xsl:if>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_org_or_fn and vcard:org">
+				<xsl:value-of select="vcard:org/vcard:text/text()"/>
+			</xsl:when>
+			<xsl:when test="$org_uuid_from_org_or_fn and vcard:fn">
+				<xsl:value-of select="vcard:fn/vcard:text/text()"/>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
+
+
+
+	<xsl:template match="vcard:email" mode="vcard_org">
+		<mlr9:DES0900>
+			<xsl:value-of select="vcard:text/text()"/>
+		</mlr9:DES0900>
+	</xsl:template>
+
+	<xsl:template match="vcard:adr" mode="address">
+		<mlr9:DES1700>
+			<xsl:if test="vcard:box or vcard:extended">
+				<xsl:value-of select="vcard:box/text()"/>
+				<xsl:text> </xsl:text>
+				<xsl:value-of select="vcard:extended/text()"/>
+				<xsl:text>
+</xsl:text>
+			</xsl:if>
+			<xsl:value-of select="vcard:street/text()"/>
+			<xsl:text>
+</xsl:text>
+			<xsl:value-of select="vcard:city/text()"/>
+			<xsl:text>, </xsl:text>
+			<xsl:value-of select="vcard:region/text()"/>
+			<xsl:text>, </xsl:text>
+			<xsl:value-of select="vcard:code/text()"/>
+			<xsl:text>
+</xsl:text>
+			<xsl:value-of select="vcard:country/text()"/>
+		</mlr9:DES1700>
+	</xsl:template>
+
+	<xsl:template match="vcard:org" mode="vcard_org">
+		<mlr9:DES1200>
+			<xsl:value-of select="vcard:text/text()"/>
+		</mlr9:DES1200>
+	</xsl:template>
+
+
+
 
 	<!--
 	Not allowed by the specifications of range.
@@ -907,39 +1211,33 @@
 		<xsl:variable name="learning_activity">
 			<mlr5:DES2000>
 				<mlr5:RC0005>
-                    <xsl:if test="$use_random_uuid">
-                        <xsl:attribute name="rdf:about">
-                        	<xsl:text>urn:uuid:</xsl:text>
-                            <xsl:value-of select="mlrext:uuid_random()"/>
-                        </xsl:attribute>
-                    </xsl:if>
-                    <xsl:apply-templates mode="educational_learning_activity"/>
+					<xsl:attribute name="rdf:about">
+						<xsl:text>urn:uuid:</xsl:text>
+						<xsl:value-of select="mlrext:uuid_unique()"/>
+					</xsl:attribute>
+					<xsl:apply-templates mode="educational_learning_activity"/>
 				</mlr5:RC0005>
 			</mlr5:DES2000>
 		</xsl:variable>
 		<xsl:variable name="audience">
 			<mlr5:DES1500>
 				<mlr5:RC0002>
-                    <xsl:if test="$use_random_uuid">
-                        <xsl:attribute name="rdf:about">
-                        	<xsl:text>urn:uuid:</xsl:text>
-                            <xsl:value-of select="mlrext:uuid_random()"/>
-                        </xsl:attribute>
-                    </xsl:if>
-                    <xsl:apply-templates mode="educational_audience"/>
+					<xsl:attribute name="rdf:about">
+						<xsl:text>urn:uuid:</xsl:text>
+						<xsl:value-of select="mlrext:uuid_unique()"/>
+					</xsl:attribute>
+					<xsl:apply-templates mode="educational_audience"/>
 				</mlr5:RC0002>
 			</mlr5:DES1500>
 		</xsl:variable>
 		<xsl:variable name="annotation">
 			<mlr5:DES1300>
 				<mlr5:RC0001>
-                    <xsl:if test="$use_random_uuid">
-                        <xsl:attribute name="rdf:about">
-                        	<xsl:text>urn:uuid:</xsl:text>
-                            <xsl:value-of select="mlrext:uuid_random()"/>
-                        </xsl:attribute>
-                    </xsl:if>
-                    <xsl:apply-templates mode="educational_annotation"/>
+					<xsl:attribute name="rdf:about">
+						<xsl:text>urn:uuid:</xsl:text>
+						<xsl:value-of select="mlrext:uuid_unique()"/>
+					</xsl:attribute>
+					<xsl:apply-templates mode="educational_annotation"/>
 				</mlr5:RC0001>
 			</mlr5:DES1300>
 		</xsl:variable>
@@ -1005,13 +1303,11 @@
 	<xsl:template match="lom:description" mode="educational">
 		<mlr5:DES1300>
 			<mlr5:RC0001>
-                <xsl:if test="$use_random_uuid">
-                    <xsl:attribute name="rdf:about">
-                    	<xsl:text>urn:uuid:</xsl:text>
-                        <xsl:value-of select="mlrext:uuid_random()"/>
-                    </xsl:attribute>
-                </xsl:if>
-                <xsl:apply-templates select="lom:string" mode="langstring">
+				<xsl:attribute name="rdf:about">
+					<xsl:text>urn:uuid:</xsl:text>
+					<xsl:value-of select="mlrext:uuid_unique()"/>
+				</xsl:attribute>
+				<xsl:apply-templates select="lom:string" mode="langstring">
 					<xsl:with-param name="nodename" select="'mlr5:DES0200'"/>
 				</xsl:apply-templates>
 			</mlr5:RC0001>
@@ -1069,13 +1365,11 @@
 		<xsl:variable name="curriculum">
 			<mlr5:DES1900>
 				<mlr5:RC0004>
-                    <xsl:if test="$use_random_uuid">
-                        <xsl:attribute name="rdf:about">
-                            <xsl:text>urn:uuid:</xsl:text>
-                            <xsl:value-of select="mlrext:uuid_random()"/>
-                        </xsl:attribute>
-                    </xsl:if>
-                    <xsl:apply-templates mode="classification_curriculum" select="."/>
+					<xsl:attribute name="rdf:about">
+						<xsl:text>urn:uuid:</xsl:text>
+						<xsl:value-of select="mlrext:uuid_unique()"/>
+					</xsl:attribute>
+					<xsl:apply-templates mode="classification_curriculum" select="."/>
 				</mlr5:RC0004>
 			</mlr5:DES1900>
 		</xsl:variable>
@@ -1127,7 +1421,7 @@
 
 	<!-- utility functions -->
 
-	<xsl:template mode="langstring" match="lom:string">
+	<xsl:template match="lom:string" mode="langstring">
 		<xsl:param name="nodename" />
 		<xsl:element name="{$nodename}">
 			<xsl:if test="@language">
@@ -1136,18 +1430,20 @@
 			<xsl:value-of select="text()" />
 		</xsl:element>
 	</xsl:template>
-	<xsl:template mode="langstring" match="*">
+
+	<xsl:template match="*" mode="langstring">
 		<xsl:message terminate="yes">Langstring called on non-string</xsl:message>
 	</xsl:template>
 
 <!-- copy -->
-	<xsl:template mode="copy" match="*">
+	<xsl:template match="*" mode="copy">
 		<xsl:copy>
 			<xsl:apply-templates select="@*" mode="copy"/>
 			<xsl:apply-templates select="*|text()" mode="copy"/>
 		</xsl:copy>
 	</xsl:template>
-	<xsl:template mode="copy" match="@*|text()">
+
+	<xsl:template match="@*|text()" mode="copy">
 		<xsl:copy />
 	</xsl:template>
 
