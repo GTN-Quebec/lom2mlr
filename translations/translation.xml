@@ -25,7 +25,7 @@
 <id ns="mlr3" id="DES0400"><term lang="en">identifier</term><term lang="fr">identificateur</term><term lang="ru">идентификатор</term></id>
 <id ns="mlr3" id="DES0500"><term lang="en">language</term><term lang="fr">langue</term><term lang="ru">язык</term></id>
 <id ns="mlr3" id="DES0600"><term lang="en">source</term><term lang="fr">source</term><term lang="ru">источник</term></id>
-<id ns="mlr3" id="DES0700"><term lang="en">type</term><term lang="fr">type</term><term lang="ru">тип</term></id>
+<id ns="mlr3" id="DES0700" vocab="ISO_IEC_19788-3-2011-VA.2"><term lang="en">type</term><term lang="fr">type</term><term lang="ru">тип</term></id>
 <id ns="mlr4" id="DES0100"><term lang="en">Location</term></id>
 <id ns="mlr4" id="DES0200"><term lang="en">Size</term></id>
 <id ns="mlr4" id="DES0300"><term lang="en">Duration</term></id>
@@ -37,12 +37,12 @@
 <id ns="mlr4" id="RC0002"><term lang="en">Technical Delivery Context</term></id>
 <id ns="mlr5" id="DES0100"><term lang="en">annotation date</term><term lang="fr">date d’annotation</term></id>
 <id ns="mlr5" id="DES0200"><term lang="en">annotation text</term><term lang="fr">texte de l’annotation</term></id>
-<id ns="mlr5" id="DES0300"><term lang="en">annotation type</term><term lang="fr">type d’annotation</term></id>
+<id ns="mlr5" id="DES0300" vocab="ISO_IEC_19788-5-2012-VA.5"><term lang="en">annotation type</term><term lang="fr">type d’annotation</term></id>
 <id ns="mlr5" id="DES0400"><term lang="en">audience language</term><term lang="fr">langue du public cible</term></id>
 <id ns="mlr5" id="DES0500"><term lang="en">audience level</term><term lang="fr">niveau du public cible</term></id>
-<id ns="mlr5" id="DES0600"><term lang="en">audience role</term><term lang="fr">rôle du public cible</term></id>
+<id ns="mlr5" id="DES0600" vocab="ISO_IEC_19788-5-2012-VA.2"><term lang="en">audience role</term><term lang="fr">rôle du public cible</term></id>
 <id ns="mlr5" id="DES0700"><term lang="en">contribution date</term><term lang="fr">date de contribution</term></id>
-<id ns="mlr5" id="DES0800"><term lang="en">contributor role</term><term lang="fr">rôle du contributeur</term></id>
+<id ns="mlr5" id="DES0800" vocab="ISO_IEC_19788-5-2012-VA.1"><term lang="en">contributor role</term><term lang="fr">rôle du contributeur</term></id>
 <id ns="mlr5" id="DES0900"><term lang="en">curriculum assessment</term><term lang="fr">évaluation liée au curriculum</term></id>
 <id ns="mlr5" id="DES1000"><term lang="en">curriculum level</term><term lang="fr">niveau du programme d’études</term></id>
 <id ns="mlr5" id="DES1100"><term lang="en">curriculum specification</term><term lang="fr">nom du programme d’études</term></id>
@@ -55,10 +55,10 @@
 <id ns="mlr5" id="DES1800"><term lang="en">has contributor</term><term lang="fr">a pour contributeur</term></id>
 <id ns="mlr5" id="DES1900"><term lang="en">has curriculum</term><term lang="fr">a pour curriculum</term></id>
 <id ns="mlr5" id="DES2000"><term lang="en">has learning activity</term><term lang="fr">a pour activité d’apprentissage</term></id>
-<id ns="mlr5" id="DES2100"><term lang="en">induced activity</term><term lang="fr">activité induite</term></id>
+<id ns="mlr5" id="DES2100" vocab="ISO_IEC_19788-5-2012-VA.3"><term lang="en">induced activity</term><term lang="fr">activité induite</term></id>
 <id ns="mlr5" id="DES2200"><term lang="en">learning activity occurrence</term><term lang="fr">évènement de l’activité d’apprentissage</term></id>
-<id ns="mlr5" id="DES2300"><term lang="en">learning method</term><term lang="fr">méthode d’apprentissage</term></id>
-<id ns="mlr5" id="DES2400"><term lang="en">learning method</term><term lang="fr">méthode d’apprentissage</term></id>
+<id ns="mlr5" id="DES2300" vocab="ISO_IEC_19788-5-2012-VA.3"><term lang="en">learning method</term><term lang="fr">méthode d’apprentissage</term></id>
+<id ns="mlr5" id="DES2400" vocab="ISO_IEC_19788-5-2012-VA.3"><term lang="en">learning method</term><term lang="fr">méthode d’apprentissage</term></id>
 <id ns="mlr5" id="DES2500"><term lang="en">maximum age</term><term lang="fr">âge maximum</term></id>
 <id ns="mlr5" id="DES2600"><term lang="en">minimum age</term><term lang="fr">âge minimum</term></id>
 <id ns="mlr5" id="DES2700"><term lang="en">pedagogical relation</term><term lang="fr">relation pédagogique</term></id>
@@ -74,14 +74,14 @@
 <id ns="mlr8" id="DES0200"><term lang="en">describe</term><term lang="fr">décrit</term></id>
 <id ns="mlr8" id="DES0300"><term lang="en">has Record</term><term lang="fr">enregistrement</term></id>
 <id ns="mlr8" id="DES0400"><term lang="en">language</term><term lang="fr">langue</term></id>
-<id ns="mlr8" id="DES0500"><term lang="en">is Mutable</term><term lang="fr">est mutable</term></id>
+<id ns="mlr8" id="DES0500" vocab="ISO_IEC_19788-8-2012-VA.2.1"><term lang="en">is Mutable</term><term lang="fr">est mutable</term></id>
 <id ns="mlr8" id="DES0600"><term lang="en">has Application Profile</term><term lang="fr">profil d’application</term></id>
 <id ns="mlr8" id="DES0700"><term lang="en">contribution</term><term lang="fr">contribution</term></id>
 <id ns="mlr8" id="DES0800"><term lang="en">record Repository</term><term lang="fr">entrepôt</term></id>
 <id ns="mlr8" id="DES0900"><term lang="en">record Last Update</term><term lang="fr">dernière mise à jour</term></id>
 <id ns="mlr8" id="DES1000"><term lang="en">entity</term><term lang="fr">entité</term></id>
 <id ns="mlr8" id="DES1100"><term lang="en">entities</term><term lang="fr">entités</term></id>
-<id ns="mlr8" id="DES1200"><term lang="en">role</term><term lang="fr">rôle</term></id>
+<id ns="mlr8" id="DES1200" vocab="ISO_IEC_19788-8-2012-VA.2.2"><term lang="en">role</term><term lang="fr">rôle</term></id>
 <id ns="mlr8" id="DES1300"><term lang="en">date</term><term lang="fr">date</term></id>
 <id ns="mlr8" id="RC0001"><term lang="en">MLR Record</term><!-- fiche RÉA? --></id>
 <id ns="mlr8" id="RC0002"><term lang="en">Contribution</term><term lang="fr">Contribution</term></id>

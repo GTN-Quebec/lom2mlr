@@ -2,28 +2,38 @@ VOCS := ISO_IEC_19788-3-2011-VA.2 ISO_IEC_19788-5-2012-VA.2 ISO_IEC_19788-5-2012
 	ISO_IEC_19788-8-2012-VA.2.1 ISO_IEC_19788-5-2012-VA.1 ISO_IEC_19788-5-2012-VA.3\
 	ISO_IEC_19788-5-2012-VA.5 ISO_IEC_19788-8-2012-VA.2.2
 
+LANGS := fr en ru
+
 VDEX := $(foreach voc, $(VOCS), $(voc).vdex)
 SKOS := $(foreach voc, $(VOCS), $(voc).skos)
+TO_LANG := $(foreach voc, $(VOCS), $(foreach lang, $(LANGS), $(voc)_$(lang).xsl))
+FROM_LANG := $(foreach voc, $(VOCS), $(voc)_mlr.xsl)
 
-all: $(SKOS) $(VDEX)
+all: $(SKOS) $(VDEX) $(TO_LANG) $(FROM_LANG)
+
+clean:
+	rm $(VDEX) $(SKOS) $(TO_LANG) $(FROM_LANG)
 
 %.vdex: %.txt
 	./make_vdex.py $< > $@
 
+%.vdex: %_ru.txt
+	./make_vdex.py --lang ru $< > $@
+
+%.vdex: %_nodef.txt
+	./make_vdex.py --nodef $< > $@
+
 %.skos: %.vdex
 	xsltproc vdex2skos.xsl $< | xmllint --format - > $@
 
-ISO_IEC_19788-3-2011-VA.2.vdex: ISO_IEC_19788-3-2011-VA.2.txt
-	./make_vdex.py --lang ru $< > $@	
+%_fr.xsl: %.vdex
+	xsltproc --stringparam lang fr -o $@ make_translation_tolang.xsl $<
 
-ISO_IEC_19788-8-2012-VA.2.1.vdex: ISO_IEC_19788-8-2012-VA.2.1.txt
-	./make_vdex.py --lang ru $< > $@	
+%_en.xsl: %.vdex
+	xsltproc --stringparam lang en -o $@ make_translation_tolang.xsl $<
 
-ISO_IEC_19788-8-2012-VA.2.2.vdex: ISO_IEC_19788-8-2012-VA.2.2.txt
-	./make_vdex.py --nodef --lang ru $< > $@
+%_ru.xsl: %.vdex
+	xsltproc --stringparam lang ru -o $@ make_translation_tolang.xsl $<
 
-ISO_IEC_19788-5-2012-VA.5.vdex: ISO_IEC_19788-5-2012-VA.5.txt
-	./make_vdex.py --nodef $< > $@
-
-clean:
-	rm *.vdex
+%_mlr.xsl: %.vdex
+	xsltproc -o $@ make_translation_fromlang.xsl $<

@@ -19,6 +19,8 @@ if __name__ == '__main__':
     vocname = args.voc
     if (vocname[-4:] == '.txt'):
         vocname = vocname[:-4]
+    if vocname.rsplit('_',1)[-1] in ('ru', 'nodef'):
+        vocname = vocname.rsplit('_',1)[0]
     lines = open(fname).readlines()
     print """<?xml version="1.0" encoding="utf-8"?>
 <vdex:vdex xmlns:vdex="http://www.imsglobal.org/xsd/imsvdex_v1p0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsvdex_v1p0 http://www.imsglobal.org/xsd/imsvdex_v1p0.xsd" xs:version="0.2">
