@@ -180,7 +180,6 @@
 	<xsl:template match="text()" mode="vcard_org"/>
 	<xsl:template match="text()" mode="vcard_suborg_attributes"/>
 	<xsl:template match="text()" mode="vcard_suborg"/>
-	<xsl:template match="text()" mode="vcard_suborg_group"/>
 	<xsl:template match="text()" mode="vcard_np"/>
 	<xsl:template match="text()" mode="vcard_person"/>
 	<xsl:template match="text()" mode="address"/>
@@ -348,10 +347,14 @@
 		<xsl:choose>
 			<xsl:when test="vcard:n">
 				<mlr9:RC0001>
-					<xsl:variable name="has_suborg_text">
-						<xsl:call-template name="has_suborg"/>
+					<!-- Whether we will define a organization for that person -->
+					<xsl:variable name="has_suborg_groupless" select="vcard:org[not(@group)] or vcard:url[not(@group) and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or vcard:adr[not(@group) and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or (($suborg_use_work_email) and vcard:email[not(@group) and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'])"/>
+					<xsl:variable name="suborg_groups">
+						<xsl:text>:</xsl:text>
+						<xsl:apply-templates mode="vcard_suborg_search_group" select="*[@group and (name(.) = 'org' or vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]"/>
 					</xsl:variable>
-					<xsl:variable name="has_suborg" select="$has_suborg_text = 'true'"/>
+					<xsl:variable name="has_group_suborg" select="string-length($suborg_groups) &gt; 1"/>
+					<xsl:variable name="has_suborg" select="$has_group_suborg or $has_suborg_groupless"/>
 					<xsl:attribute name="rdf:about">
 						<xsl:call-template name="natural_person_identity_url">
 							<xsl:with-param name="has_suborg" select="$has_suborg"/>
@@ -368,8 +371,13 @@
 						</mlr9:DES0100>
 					</xsl:if>
 					<xsl:apply-templates mode="vcard_np" />
-					<xsl:if test="$has_suborg">
+					<xsl:if test="$has_suborg_groupless">
 						<xsl:apply-templates mode="vcard_suborg" select="."/>
+					</xsl:if>
+					<xsl:if test="$has_group_suborg">
+						<xsl:apply-templates mode="vcard_apply_group_to_suborg" select="str:tokenize($suborg_groups, ':')">
+							<xsl:with-param name="vcard" select="."/>
+						</xsl:apply-templates>
 					</xsl:if>
 				</mlr9:RC0001>
 			</xsl:when>
@@ -652,29 +660,23 @@
 
 
 	<!-- vcard: Sub-organization -->
-	<xsl:template name="has_suborg">
-		<!-- Used on a natural person vcard to determine whether we will define a organization for that person -->
-		<xsl:value-of select="vcard:org or vcard:url[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or (($suborg_use_work_email) and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'])"/>
-	</xsl:template>
-
-
-	<xsl:template match="*" mode="vcard_suborg">
-		<xsl:if test="vcard:org[not(@group)] or vcard:url[not(@group) and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or vcard:adr[not(@group) and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or (($suborg_use_work_email) and vcard:email[not(@group) and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'])">
-			<xsl:apply-templates mode="vcard_suborg_group" select="."/>
-		</xsl:if>
-		<xsl:apply-templates mode="vcard_suborg_search_group" select="*[@group and (name(.) = 'org' or vcard:parameters/vcard:type/vcard:text/text() = 'WORK')]"/>
-	</xsl:template>
 
 	<xsl:template match="vcard:*" mode="vcard_suborg_search_group">
 		<xsl:variable name="group" select="@group"/>
 		<xsl:if test="not(preceding-sibling::*[@group=$group and (name(.)='org' or vcard:parameters/vcard:type/vcard:text/text() = 'WORK')])">
-			<xsl:apply-templates mode="vcard_suborg_group" select="..">
-				<xsl:with-param name="group" select="$group"/>
-			</xsl:apply-templates>
+			<xsl:value-of select="@group"/>
+			<xsl:text>:</xsl:text>
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="vcard:vcard"  mode="vcard_suborg_group">
+	<xsl:template match="*" mode="vcard_apply_group_to_suborg">
+		<xsl:param name="vcard"/>
+		<xsl:apply-templates select="$vcard" mode="vcard_suborg">
+			<xsl:with-param name="group" select="text()"/>
+		</xsl:apply-templates>
+	</xsl:template>
+
+	<xsl:template match="vcard:vcard"  mode="vcard_suborg">
 		<xsl:param name="group"/>
 		<mlr9:DES1100>
 			<mlr9:RC0002>
