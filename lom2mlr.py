@@ -3,7 +3,7 @@ import argparse
 import sys
 import os.path
 
-from uuid import UUID, uuid1, uuid5, NAMESPACE_URL
+from uuid import UUID, uuid1, uuid5, NAMESPACE_URL, RFC_4122
 from lxml import etree
 from rdflib import Graph
 
@@ -45,6 +45,15 @@ def uuid_string(context, s, namespace=None):
         namespace = UUID(namespace)
     return str(uuid5(namespace, s.encode('utf-8')))
 
+
+@unwrap_seq
+def is_uuid1(context, uuid):
+    'Return a UUID based on a string'
+    if not uuid.startswith('urn:uuid:'):
+        return false
+    u = UUID(uuid[9:])
+    assert u.variant == RFC_4122
+    return u.version == 1
 
 class Converter(object):
     """A converter between LOM and MLR formats.
@@ -88,6 +97,7 @@ class Converter(object):
                 (URL_MLR_EXT, 'uuid_string'): uuid_string,
                 (URL_MLR_EXT, 'uuid_unique'): uuid_unique,
                 (URL_MLR_EXT, 'uuid_url'): uuid_url,
+                (URL_MLR_EXT, 'is_uuid1'): is_uuid1,
             })
 
     def set_options_from_dict(self, options):

@@ -83,6 +83,9 @@
 <id ns="mlr8" id="DES1100"><term lang="en">entities</term><term lang="fr">entités</term></id>
 <id ns="mlr8" id="DES1200" vocab="ISO_IEC_19788-8-2012-VA.2.2"><term lang="en">role</term><term lang="fr">rôle</term></id>
 <id ns="mlr8" id="DES1300"><term lang="en">date</term><term lang="fr">date</term></id>
+<id ns="mlr8" id="DES1400"><term lang="en">original record</term><term lang="fr">fiche originale</term></id>
+<id ns="mlr8" id="DES1500"><term lang="en">original record format</term><term lang="fr">format de la fiche originale</term></id>
+<id ns="mlr8" id="DES1600"><term lang="en">conversion software</term><term lang="fr">logiciel de conversion</term></id>
 <id ns="mlr8" id="RC0001"><term lang="en">MLR Record</term><!-- fiche RÉA? --></id>
 <id ns="mlr8" id="RC0002"><term lang="en">Contribution</term><term lang="fr">Contribution</term></id>
 <id ns="mlr8" id="RC0003"><term lang="en">Mutable MLR Record</term></id>

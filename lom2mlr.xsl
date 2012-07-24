@@ -60,10 +60,12 @@
 	<xsl:param name="mark_unique_uuid" select="false()"/>
 	<!-- If true, unique (non-reproducible) UUIDs will be marked with a gtnq:irreproducible predicate. -->
 
-
 	<xsl:param name="doi_identity_prefix" select="'doi:'"/>
 	<!-- DOI URIs can be formed by prefixing 'doi:', 'hndl:' or 'http://dx.doi.org/'  -->
 
+	<xsl:param name="translator_id" select="'http://www.gtn-quebec/ns/lom2mlr/version/'"/>
+	<!-- A URI for the translation machinery.  -->
+	<xsl:param name="translator_version" select="'0.1'"/>
 
 	<xsl:variable name="mlr_namespace" select="'http://standards.iso.org/iso-iec/19788/'"/>
 	<xsl:variable name="mlr1rc2" select="'http://standards.iso.org/iso-iec/19788/-1/ed-1/en/RC0002'"/>
@@ -73,6 +75,7 @@
 	<xsl:variable name="vcardfn_namespace" select="concat($gtn_namespace,'vcarduuid/fn/')"/>
 	<xsl:variable name="vcardorg_namespace_uuid" select="mlrext:uuid_url($vcardorg_namespace)"/>
 	<xsl:variable name="vcardfn_namespace_uuid" select="mlrext:uuid_url($vcardfn_namespace)"/>
+	<xsl:variable name="translator_id_v" select="concat($translator_id, string($translator_version))"/>
 
 	<!-- vocabularies -->
 	<xsl:include href="correspondances_xsl.xsl"/>
@@ -85,46 +88,17 @@
 	</xsl:template>
 
 	<xsl:template match="lom:lom">
-		<xsl:variable name="catalog" select="lom:general/lom:identifier/lom:catalog" />
 		<xsl:variable name="identifier">
-			<xsl:choose>
-				<xsl:when test="lom:general/lom:identifier/lom:catalog[text() = 'URI']">
-					<xsl:value-of select="lom:general/lom:identifier[lom:catalog/text() = 'URI'][1]/lom:entry/text()" />
-				</xsl:when>
-				<xsl:when test="lom:general/lom:identifier/lom:catalog[text() = 'URL']">
-					<xsl:value-of select="lom:general/lom:identifier[lom:catalog/text() = 'URL'][1]/lom:entry/text()" />
-				</xsl:when>
-				<xsl:when test="lom:general/lom:identifier/lom:catalog[text() = 'ISBN']">
-					<xsl:text>urn:ISBN:</xsl:text>
-					<xsl:value-of select="lom:general/lom:identifier[lom:catalog/text() = 'ISBN'][1]/lom:entry/text()" />
-				</xsl:when>
-				<xsl:when test="lom:general/lom:identifier/lom:catalog[text() = 'ISSN']">
-					<xsl:text>urn:ISSN:</xsl:text>
-					<xsl:value-of select="lom:general/lom:identifier[lom:catalog/text() = 'ISSN'][1]/lom:entry/text()" />
-				</xsl:when>
-				<xsl:when test="lom:general/lom:identifier/lom:catalog[text() = 'ISSN']">
-					<xsl:text>urn:ISSN:</xsl:text>
-					<xsl:value-of select="lom:general/lom:identifier[lom:catalog/text() = 'ISSN'][1]/lom:entry/text()" />
-				</xsl:when>
-				<xsl:when test="lom:general/lom:identifier/lom:catalog[text() = 'DOI']">
-					<xsl:value-of select="concat($doi_identity_prefix, lom:general/lom:identifier[lom:catalog/text() = 'DOI'][1]/lom:entry/text())" />
-				</xsl:when>
-				<xsl:when test="lom:technical/lom:location">
-					<xsl:value-of select="lom:technical/lom:location[1]/text()" />
-				</xsl:when>
-				<xsl:when test="lom:general/lom:identifier">
-					<xsl:value-of select="lom:general/lom:identifier[1]/lom:catalog/text()" />
-					<xsl:text>|</xsl:text>
-					<xsl:value-of select="lom:general/lom:identifier[1]/lom:entry/text()" />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:text>urn:uuid:</xsl:text>
-					<xsl:value-of select="mlrext:uuid_unique()"/>
-				</xsl:otherwise>
-			</xsl:choose>
+			<xsl:apply-templates mode="identifier" select="lom:general">
+				<xsl:with-param name="technical" select="true()"/>
+			</xsl:apply-templates>
 		</xsl:variable>
 		<xsl:variable name="identity">
 			<xsl:choose>
+				<xsl:when test="$identifier = ''">
+					<xsl:text>urn:uuid:</xsl:text>
+					<xsl:value-of select="mlrext:uuid_unique()"/>
+				</xsl:when>
 				<xsl:when test="substring-after($identifier, '|') != ''">
 					<xsl:value-of select="concat('urn:uuid:',mlrext:uuid_string($identifier, $mlr1rc2_uuid))"/>
 				</xsl:when>
@@ -143,9 +117,9 @@
 						<xsl:value-of select="$identifier"/>
 					</mlr2:DES1000>
 				</xsl:when>
-				<xsl:when test="not(lom:general/lom:identifier or lom:technical/lom:location)">
+				<xsl:when test="$identifier = ''">
 					<mlr2:DES1000>
-						<xsl:value-of select="$identifier"/>
+						<xsl:value-of select="$identity"/>
 					</mlr2:DES1000>
 					<xsl:if test="$mark_unique_uuid">
 						<gtnq:irreproducible rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</gtnq:irreproducible>
@@ -177,6 +151,7 @@
 	<xsl:template match="text()" mode="relation"/>
 	<xsl:template match="text()" mode="classification"/>
 	<xsl:template match="text()" mode="classification_curriculum"/>
+	<xsl:template match="text()" mode="vcard"/>
 	<xsl:template match="text()" mode="vcard_org"/>
 	<xsl:template match="text()" mode="vcard_suborg_attributes"/>
 	<xsl:template match="text()" mode="vcard_suborg"/>
@@ -202,7 +177,57 @@
 	</xsl:template>
 
 	<xsl:template match="lom:metaMetadata" mode="top">
-		<xsl:apply-templates mode="metaMetadata"/>
+		<xsl:if test="sets:intersection(lom:identifier/lom:entry/text(),../lom:general/lom:identifier/lom:entry/text()|../lom:technical/lom:location/text())">
+			<xsl:message terminate="yes">Error: same identifier used for data and metadata!</xsl:message>
+		</xsl:if>
+		<xsl:variable name="identifier">
+			<xsl:apply-templates mode="identifier" select=".">
+				<xsl:with-param name="technical" select="false()"/>
+			</xsl:apply-templates>
+		</xsl:variable>
+		<xsl:variable name="record_id">
+			<xsl:choose>
+				<xsl:when test="$identifier != ''">
+					<xsl:value-of select="mlrext:uuid_string($identifier, mlrext:uuid_url($translator_id_v))"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>urn:uuid:</xsl:text>
+					<xsl:value-of select="mlrext:uuid_unique()"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<mlr8:DES0200>
+			<xsl:attribute name="rdf:resource">
+				<xsl:value-of select="$record_id"/>
+			</xsl:attribute>
+		</mlr8:DES0200>
+		<mlr8:DES0300>
+			<mlr8:RC0001>
+				<xsl:attribute name="rdf:about">
+					<xsl:value-of select="$record_id"/>
+				</xsl:attribute>
+				<mlr8:DES0100>
+					<xsl:value-of select="$record_id"/>
+				</mlr8:DES0100>
+				<xsl:if test="$identifier">
+					<!-- should I create a uuid1? -->
+					<mlr8:DES1400>
+						<xsl:value-of select="$identifier"/>
+					</mlr8:DES1400>
+				</xsl:if>
+				<mlr8:DES1500 rdf:resource="http://ltsc.ieee.org/xsd/LOM" />
+				<mlr8:DES1600>
+					<xsl:attribute name="rdf:resource">
+						<xsl:value-of select="$translator_id_v"/>
+					</xsl:attribute>
+				</mlr8:DES1600>
+				<xsl:if test="$mark_unique_uuid and $identifier = ''">
+					<gtnq:irreproducible rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</gtnq:irreproducible>
+				</xsl:if>
+				<mlr8:DES0500>T002</mlr8:DES0500>
+				<xsl:apply-templates mode="metaMetadata"/>
+			</mlr8:RC0001>
+		</mlr8:DES0300>
 	</xsl:template>
 
 	<xsl:template match="lom:technical" mode="top">
@@ -337,13 +362,13 @@
 	<xsl:template match="lom:entity" mode="lifeCycle_ed">
 		<mlr5:DES1800>
 			<!-- <xsl:copy-of select="vcardconv:convert(text())" /> -->
-			<xsl:apply-templates mode="lifeCycle_ed" select="vcardconv:convert(text())" />
+			<xsl:apply-templates mode="vcard" select="vcardconv:convert(text())" />
 		</mlr5:DES1800>
 	</xsl:template>
 
 	<!-- vcard handling -->
 
-	<xsl:template match="vcard:vcard" mode="lifeCycle_ed">
+	<xsl:template match="vcard:vcard" mode="vcard">
 		<xsl:choose>
 			<xsl:when test="vcard:n">
 				<mlr9:RC0001>
@@ -1047,6 +1072,90 @@
 		</mlr9:DES1000>
 	</xsl:template>
 	-->
+
+	<!-- metametadata -->
+
+	<xsl:template match="*" mode="identifier">
+		<xsl:param name="technical"/>
+		<xsl:choose>
+			<xsl:when test="lom:identifier/lom:catalog[text() = 'URI']">
+				<xsl:value-of select="lom:identifier[lom:catalog/text() = 'URI'][1]/lom:entry/text()" />
+			</xsl:when>
+			<xsl:when test="lom:identifier/lom:catalog[text() = 'URL']">
+				<xsl:value-of select="lom:identifier[lom:catalog/text() = 'URL'][1]/lom:entry/text()" />
+			</xsl:when>
+			<xsl:when test="lom:identifier/lom:catalog[text() = 'ISBN']">
+				<xsl:text>urn:ISBN:</xsl:text>
+				<xsl:value-of select="lom:identifier[lom:catalog/text() = 'ISBN'][1]/lom:entry/text()" />
+			</xsl:when>
+			<xsl:when test="lom:identifier/lom:catalog[text() = 'ISSN']">
+				<xsl:text>urn:ISSN:</xsl:text>
+				<xsl:value-of select="lom:identifier[lom:catalog/text() = 'ISSN'][1]/lom:entry/text()" />
+			</xsl:when>
+			<xsl:when test="lom:identifier/lom:catalog[text() = 'ISSN']">
+				<xsl:text>urn:ISSN:</xsl:text>
+				<xsl:value-of select="lom:identifier[lom:catalog/text() = 'ISSN'][1]/lom:entry/text()" />
+			</xsl:when>
+			<xsl:when test="lom:identifier/lom:catalog[text() = 'DOI']">
+				<xsl:value-of select="$doi_identity_prefix"/>
+				<xsl:value-of select="lom:identifier[lom:catalog/text() = 'DOI'][1]/lom:entry/text()" />
+			</xsl:when>
+			<xsl:when test="$technical and ../lom:technical/lom:location/text()">
+				<xsl:value-of select="../lom:technical/lom:location[1]/text()" />
+			</xsl:when>
+			<xsl:when test="lom:identifier">
+				<xsl:value-of select="lom:identifier[1]/lom:catalog/text()" />
+				<xsl:text>|</xsl:text>
+				<xsl:value-of select="lom:identifier[1]/lom:entry/text()" />
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
+
+	<xsl:template match="lom:metadataSchema" mode="metaMetadata">
+		<!-- note that a URI would be preferrable... Should we identify the frequent ones? -->
+		<mlr8:DES0600>
+			<xsl:value-of select="text()"/>
+		</mlr8:DES0600>
+	</xsl:template>
+
+	<xsl:template match="lom:contribute" mode="metaMetadata">
+		<mlr8:DES0700>
+			<mlr8:RC0002>
+				<xsl:attribute name="rdf:about">
+					<xsl:text>urn:uuid:</xsl:text>
+					<xsl:value-of select="mlrext:uuid_unique()"/>
+				</xsl:attribute>
+				<xsl:apply-templates mode="metaMetadata"/>
+			</mlr8:RC0002>
+		</mlr8:DES0700>
+	</xsl:template>
+
+	<xsl:template match="lom:role" mode="metaMetadata">
+		<xsl:call-template name="mlr8_DES1200"/>
+	</xsl:template>
+
+	<xsl:template match="lom:date" mode="metaMetadata">
+		<xsl:choose>
+			<!-- first cases: valid 8601 date or datetime -->
+			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6]))))$')">
+				<mlr8:DES1300 rdf:datatype="http://www.w3.org/2001/XMLSchema#date">
+					<xsl:value-of select="lom:dateTime/text()" />
+				</mlr8:DES1300>
+			</xsl:when>
+			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$')">
+				<mlr8:DES1300 rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">
+					<xsl:value-of select="lom:dateTime/text()" />
+				</mlr8:DES1300>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="lom:entity" mode="metaMetadata">
+		<mlr8:DES1000>
+			<xsl:apply-templates mode="vcard" select="vcardconv:convert(text())" />
+		</mlr8:DES1000>
+	</xsl:template>
 
 	<!-- technical -->
 
