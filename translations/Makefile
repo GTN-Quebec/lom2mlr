@@ -1,4 +1,4 @@
-LANGS = en fr ru
+LANGS = eng fra rus
 
 TRANS := $(foreach lang, $(LANGS), translation_$(lang).xsl)
 

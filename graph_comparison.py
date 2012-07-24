@@ -25,7 +25,7 @@ N3_PREFIXES = u'''
 '''
 
 SECTIONS = (1, 2, 3, 4, 5, 9)
-LANGUAGES = ('en', 'fr', 'ru')
+LANGUAGES = ('eng', 'fra', 'rus')
 PATTERN1 = "@prefix mlr%d: <http://standards.iso.org/iso-iec/19788/-%d/ed-1/en/> ."
 PATTERN2 = "@prefix mlr%d_%s: <http://standards.iso.org/iso-iec/19788/-%d/ed-1/en/%s/> ."
 N3_PREFIXES = "\n".join([PATTERN1 % (s, s) for s in SECTIONS]) + "\n" + \

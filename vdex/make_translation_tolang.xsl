@@ -6,21 +6,21 @@
         xmlns:mlr3="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/"
         xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
         xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
-        xmlns:mlr3_en="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/en/"
-        xmlns:mlr5_en="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/en/"
-        xmlns:mlr8_en="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/en/"
-        xmlns:mlr3_fr="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/fr/"
-        xmlns:mlr5_fr="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/fr/"
-        xmlns:mlr8_fr="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/fr/"
-        xmlns:mlr3_ru="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/ru/"
-        xmlns:mlr5_ru="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/ru/"
-        xmlns:mlr8_ru="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/ru/"
+        xmlns:mlr3_eng="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/eng/"
+        xmlns:mlr5_eng="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/eng/"
+        xmlns:mlr8_eng="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/eng/"
+        xmlns:mlr3_fra="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/fra/"
+        xmlns:mlr5_fra="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/fra/"
+        xmlns:mlr8_fra="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/fra/"
+        xmlns:mlr3_rus="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/rus/"
+        xmlns:mlr5_rus="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/rus/"
+        xmlns:mlr8_rus="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/rus/"
         extension-element-prefixes="vdex"
         >
     <xslin:namespace-alias stylesheet-prefix="xsl" result-prefix="xslin"/>
     <xslin:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
     <xslin:param name="lang">
-        <xslin:text>fr</xslin:text>
+        <xslin:text>fra</xslin:text>
     </xslin:param>
 
     <xslin:variable name="voc" select="/vdex:vdex/vdex:vocabIdentifier/text()" />

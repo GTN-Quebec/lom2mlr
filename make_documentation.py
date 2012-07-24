@@ -270,7 +270,7 @@ class EmbedTreeprocessor(Treeprocessor):
             head.append(jquery)
         html.append(head)
         html.append(body)
-        langs = set(('fr', 'en', 'ru'))
+        langs = set(('fra', 'eng', 'rus'))
         if not self.delete_eg:
             div = etree.Element('div', {'class': 'controls'})
             form = etree.Element('form')

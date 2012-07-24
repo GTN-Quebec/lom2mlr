@@ -9,34 +9,34 @@
 	xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
 	xmlns:mlr9="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/"
-	xmlns:mlr1_en="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/en/"
-	xmlns:mlr2_en="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/en/"
-	xmlns:mlr3_en="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/en/"
-	xmlns:mlr4_en="http://standards.iso.org/iso-iec/19788/-4/ed-1/en/en/"
-	xmlns:mlr5_en="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/en/"
-	xmlns:mlr8_en="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/en/"
-	xmlns:mlr9_en="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/en/"
-	xmlns:mlr1_fr="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/fr/"
-	xmlns:mlr2_fr="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/fr/"
-	xmlns:mlr3_fr="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/fr/"
-	xmlns:mlr4_fr="http://standards.iso.org/iso-iec/19788/-4/ed-1/en/fr/"
-	xmlns:mlr5_fr="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/fr/"
-	xmlns:mlr8_fr="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/fr/"
-	xmlns:mlr9_fr="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/fr/"
-	xmlns:mlr1_ru="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/ru/"
-	xmlns:mlr2_ru="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/ru/"
-	xmlns:mlr3_ru="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/ru/"
-	xmlns:mlr4_ru="http://standards.iso.org/iso-iec/19788/-4/ed-1/en/ru/"
-	xmlns:mlr5_ru="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/ru/"
-	xmlns:mlr8_ru="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/ru/"
-	xmlns:mlr9_ru="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/ru/"
+	xmlns:mlr1_eng="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/eng/"
+	xmlns:mlr2_eng="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/eng/"
+	xmlns:mlr3_eng="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/eng/"
+	xmlns:mlr4_eng="http://standards.iso.org/iso-iec/19788/-4/ed-1/en/eng/"
+	xmlns:mlr5_eng="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/eng/"
+	xmlns:mlr8_eng="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/eng/"
+	xmlns:mlr9_eng="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/eng/"
+	xmlns:mlr1_fra="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/fra/"
+	xmlns:mlr2_fra="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/fra/"
+	xmlns:mlr3_fra="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/fra/"
+	xmlns:mlr4_fra="http://standards.iso.org/iso-iec/19788/-4/ed-1/en/fra/"
+	xmlns:mlr5_fra="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/fra/"
+	xmlns:mlr8_fra="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/fra/"
+	xmlns:mlr9_fra="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/fra/"
+	xmlns:mlr1_rus="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/rus/"
+	xmlns:mlr2_rus="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/rus/"
+	xmlns:mlr3_rus="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/rus/"
+	xmlns:mlr4_rus="http://standards.iso.org/iso-iec/19788/-4/ed-1/en/rus/"
+	xmlns:mlr5_rus="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/rus/"
+	xmlns:mlr8_rus="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/rus/"
+	xmlns:mlr9_rus="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/rus/"
 	>
 
 	<!-- TODO changer les namespaces pour GTN-Québec-->
 	<xslin:namespace-alias stylesheet-prefix="xsl" result-prefix="xslin"/>
 	<xslin:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
 	<xslin:param name="lang">
-		<xslin:text>fr</xslin:text>
+		<xslin:text>fra</xslin:text>
 	</xslin:param>
 	<xslin:variable name="trfrom"> '’</xslin:variable>
 	<xslin:variable name="trto">___</xslin:variable>

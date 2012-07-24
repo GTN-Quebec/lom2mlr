@@ -1209,7 +1209,7 @@
 	</xsl:template>
 
 	<xsl:template match="lom:requirement" mode="technical">
-		<mlr4:DES0400 xml:lang="fr-CA">
+		<mlr4:DES0400 xml:lang="fra-CA">
 			<xsl:variable name="multiple" select="count(lom:orComposite)&gt;1"/>
 			<xsl:if test="$multiple">
 				<xsl:text>Une des options suivantes:&#160;</xsl:text>
@@ -1470,13 +1470,13 @@
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:when test="lom:cost[lom:source/text()='LOMv1.0' and lom:value/text()='yes']">
-				<mlr2:DES1500 xml:lang="fr">Coût</mlr2:DES1500>
+				<mlr2:DES1500 xml:lang="fra">Coût</mlr2:DES1500>
 			</xsl:when>
 			<xsl:when test="lom:copyrightAndOtherRestrictions[lom:source/text()='LOMv1.0' and lom:value/text()='yes']">
-				<mlr2:DES1500 xml:lang="fr">Copyright ou autres restrictions</mlr2:DES1500>
+				<mlr2:DES1500 xml:lang="fra">Copyright ou autres restrictions</mlr2:DES1500>
 			</xsl:when>
 			<xsl:when test="lom:cost[lom:source/text()='LOMv1.0' and lom:value/text()='no'] and lom:copyrightAndOtherRestrictions[lom:source/text()='LOMv1.0' and lom:value/text()='no']">
-				<mlr2:DES1500 xml:lang="fr">Pas de copyright</mlr2:DES1500>
+				<mlr2:DES1500 xml:lang="fra">Pas de copyright</mlr2:DES1500>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>

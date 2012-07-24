@@ -12,7 +12,7 @@
     <xslin:namespace-alias stylesheet-prefix="xsl" result-prefix="xslin"/>
     <xslin:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
     <xslin:param name="langs">
-        <xslin:text>en fr ru</xslin:text>
+        <xslin:text>eng fra rus</xslin:text>
     </xslin:param>
 
     <xslin:variable name="voc" select="/vdex:vdex/vdex:vocabIdentifier/text()" />
@@ -40,15 +40,22 @@
                 <xslin:text>_</xslin:text>
                 <xslin:value-of select="$lang"/>
             </xslin:attribute>
-            <xsl:choose>
-                <xslin:apply-templates>
-                    <xslin:with-param name="lang" select="$lang"/>
-                </xslin:apply-templates>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="@*"/>
+            <xslin:choose>
+                <xslin:when test="vdex:term/vdex:caption/vdex:langstring[@language=$lang]">
+                    <xsl:choose>
+                        <xslin:apply-templates>
+                            <xslin:with-param name="lang" select="$lang"/>
+                        </xslin:apply-templates>
+                        <xsl:otherwise>
+                            <xsl:apply-templates select="@*"/>
+                            <xsl:value-of select="text()"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xslin:when>
+                <xslin:otherwise>
                     <xsl:value-of select="text()"/>
-                </xsl:otherwise>
-            </xsl:choose>
+                </xslin:otherwise>
+            </xslin:choose>
         </xsl:template>
     </xslin:template>
 
