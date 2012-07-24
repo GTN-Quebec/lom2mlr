@@ -125,10 +125,18 @@
 						<gtnq:irreproducible rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</gtnq:irreproducible>
 					</xsl:if>
 				</xsl:when>
-				<xsl:otherwise>
+				<xsl:when test="$use_mlr3">
 					<mlr3:DES0400>
 						<xsl:value-of select="$identifier"/>
 					</mlr3:DES0400>
+					<mlr2:DES1000>
+						<xsl:value-of select="$identifier"/>
+					</mlr2:DES1000>
+				</xsl:when>
+				<xsl:otherwise>
+					<mlr2:DES1000>
+						<xsl:value-of select="$identifier"/>
+					</mlr2:DES1000>
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:apply-templates mode="top"/>
@@ -237,11 +245,18 @@
 	<!-- General templates -->
 
 	<xsl:template match="lom:identifier" mode="general">
-		<mlr3:DES0400>
+		<mlr2:DES1000>
 			<xsl:attribute name="rdf:resource">
 				<xsl:value-of select="lom:entry/text()"/>
 			</xsl:attribute>
-		</mlr3:DES0400>
+		</mlr2:DES1000>
+		<xsl:if test="$use_mlr3">
+			<mlr3:DES0400>
+				<xsl:attribute name="rdf:resource">
+					<xsl:value-of select="lom:entry/text()"/>
+				</xsl:attribute>
+			</mlr3:DES0400>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="lom:title" mode="general">
@@ -251,24 +266,25 @@
 	</xsl:template>
 
 	<xsl:template match="lom:language" mode="general">
-		<xsl:choose>
-			<xsl:when test="regexp:test(text(),'^[a-z][a-z][a-z]?(\-[A-Z][A-Z])?$')">
-				<mlr3:DES0500>
-					<xsl:value-of select="text()"/>
-				</mlr3:DES0500>
-			</xsl:when>
-			<xsl:otherwise>
-				<mlr2:DES1200>
-					<xsl:value-of select="text()"/>
-				</mlr2:DES1200>
-			</xsl:otherwise>
-		</xsl:choose>
+		<xsl:if test="$use_mlr3 and regexp:test(text(),'^[a-z][a-z][a-z]?(\-[A-Z][A-Z])?$')">
+			<mlr3:DES0500>
+				<xsl:value-of select="text()"/>
+			</mlr3:DES0500>
+		</xsl:if>
+		<mlr2:DES1200>
+			<xsl:value-of select="text()"/>
+		</mlr2:DES1200>
 	</xsl:template>
 
 	<xsl:template match="lom:description" mode="general">
 		<xsl:apply-templates select="lom:string" mode="langstring">
-			<xsl:with-param name="nodename" select="'mlr3:DES0200'"/>
+			<xsl:with-param name="nodename">mlr2:DES0400</xsl:with-param>
 		</xsl:apply-templates>
+		<xsl:if test="$use_mlr3">
+			<xsl:apply-templates select="lom:string" mode="langstring">
+				<xsl:with-param name="nodename">mlr3:DES0200</xsl:with-param>
+			</xsl:apply-templates>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="lom:keyword" mode="general">
@@ -290,21 +306,23 @@
 			<xsl:value-of select="vcardconv:convert(lom:entity/text())/vcard:fn/vcard:text/text()" />
 		</mlr2:DES0200>
 		<xsl:choose>
-			<!-- first cases: valid 8601 date or datetime -->
-			<xsl:when test="lom:date/lom:dateTime and regexp:test(lom:date/lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6]))))$')">
-				<mlr3:DES0100 rdf:datatype="http://www.w3.org/2001/XMLSchema#date">
-					<xsl:value-of select="lom:date/lom:dateTime/text()" />
-				</mlr3:DES0100>
-			</xsl:when>
-			<xsl:when test="lom:date/lom:dateTime and regexp:test(lom:date/lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$')">
-				<mlr3:DES0100 rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">
-					<xsl:value-of select="lom:date/lom:dateTime/text()" />
-				</mlr3:DES0100>
-			</xsl:when>
 			<xsl:when test="lom:date/lom:dateTime">
-				<mlr2:DES0700 rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">
+				<mlr2:DES0700>
 					<xsl:value-of select="lom:date/lom:dateTime/text()" />
 				</mlr2:DES0700>
+				<xsl:choose>
+					<!-- first cases: valid 8601 date or datetime -->
+					<xsl:when test="$use_mlr3 and lom:date/lom:dateTime and regexp:test(lom:date/lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6]))))$')">
+						<mlr3:DES0100 rdf:datatype="http://www.w3.org/2001/XMLSchema#date">
+							<xsl:value-of select="lom:date/lom:dateTime/text()" />
+						</mlr3:DES0100>
+					</xsl:when>
+					<xsl:when test="$use_mlr3 and lom:date/lom:dateTime and regexp:test(lom:date/lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$')">
+						<mlr3:DES0100 rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">
+							<xsl:value-of select="lom:date/lom:dateTime/text()" />
+						</mlr3:DES0100>
+					</xsl:when>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:when test="lom:date/lom:description">
 				<xsl:apply-templates select="lom:date/lom:description/lom:string" mode="langstring">
@@ -1160,22 +1178,20 @@
 	<!-- technical -->
 
 	<xsl:template match="lom:format" mode="technical">
+		<mlr2:DES0900>
+			<xsl:value-of select="text()"/>
+		</mlr2:DES0900>
 		<xsl:choose>
-			<xsl:when test="text()='non-digital'">
+			<xsl:when test="$use_mlr3 and text()='non-digital'">
 				<mlr3:DES0300>
 					<xsl:value-of select="text()"/>
 				</mlr3:DES0300>
 			</xsl:when>
-			<xsl:when test="regexp:test(text(),'^\w+\/\w+$')">
+			<xsl:when test="$use_mlr3 and regexp:test(text(),'^\w+\/\w+$')">
 				<mlr3:DES0300>
 					<xsl:value-of select="text()"/>
 				</mlr3:DES0300>
 			</xsl:when>
-			<xsl:otherwise>
-				<mlr2:DES0900>
-					<xsl:value-of select="text()"/>
-				</mlr2:DES0900>
-			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 
@@ -1370,7 +1386,12 @@
 	</xsl:template>
 
 	<xsl:template match="lom:learningResourceType" mode="educational">
-		<xsl:call-template name="mlr3_DES0700"/>
+        <mlr2:DES0800>
+          <xsl:value-of select="lom:value/text()"/>
+        </mlr2:DES0800>
+		<xsl:if test="$use_mlr3">
+			<xsl:call-template name="mlr3_DES0700"/>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="lom:learningResourceType" mode="educational_learning_activity">
@@ -1463,11 +1484,18 @@
 	<!-- relations -->
 
 	<xsl:template match="lom:relation[lom:kind[lom:source/text()='LOMv1.0' and lom:value/text()='isbasedon']]" mode="top">
-		<mlr3:DES0600>
+		<mlr2:DES1100>
 			<xsl:attribute name="rdf:resource">
 				<xsl:value-of select="lom:resource/lom:identifier/lom:entry/text()"/>
 			</xsl:attribute>
-		</mlr3:DES0600>
+		</mlr2:DES1100>
+		<xsl:if test="$use_mlr3">
+			<mlr3:DES0600>
+				<xsl:attribute name="rdf:resource">
+					<xsl:value-of select="lom:resource/lom:identifier/lom:entry/text()"/>
+				</xsl:attribute>
+			</mlr3:DES0600>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="lom:relation" mode="top">
