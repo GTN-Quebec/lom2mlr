@@ -3,6 +3,9 @@
         xmlns:xslin="http://www.w3.org/1999/XSL/Transform"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform/Out"
         xmlns:vdex="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+        xmlns:mlr3="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/"
+        xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
+        xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
         xmlns:mlr3_en="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/en/"
         xmlns:mlr5_en="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/en/"
         xmlns:mlr8_en="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/en/"
@@ -39,12 +42,19 @@
                     <xslin:text>{$ename}</xslin:text>
                 </xslin:attribute>
                 <xsl:apply-templates select="@*"/>
-                <xsl:choose>
-                    <xslin:apply-templates />
-                    <xsl:otherwise>
+                <xslin:choose>
+                    <xslin:when test="vdex:term/vdex:caption/vdex:langstring[@language=$lang]">
+                        <xsl:choose>
+                            <xslin:apply-templates />
+                            <xsl:otherwise>
+                                <xsl:value-of select="text()"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xslin:when>
+                    <xslin:otherwise>
                         <xsl:value-of select="text()"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                    </xslin:otherwise>
+                </xslin:choose>
             </xsl:element>
         </xsl:template>
     </xslin:template>
