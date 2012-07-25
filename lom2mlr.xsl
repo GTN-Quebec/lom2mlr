@@ -77,8 +77,9 @@
 	<xsl:variable name="vcardfn_namespace_uuid" select="mlrext:uuid_url($vcardfn_namespace)"/>
 	<xsl:variable name="translator_id_v" select="concat($translator_id, string($translator_version))"/>
 
-	<!-- vocabularies -->
+	<!-- vocabularies and utilities -->
 	<xsl:include href="correspondances_xsl.xsl"/>
+	<xsl:include href="iso639.xsl"/>
 
 	<!-- top-level templates -->
 	<xsl:template match="/">
@@ -268,11 +269,15 @@
 	<xsl:template match="lom:language" mode="general">
 		<xsl:if test="$use_mlr3 and regexp:test(text(),'^[a-z][a-z][a-z]?(\-[A-Z][A-Z])?$')">
 			<mlr3:DES0500>
-				<xsl:value-of select="text()"/>
+			<xsl:call-template name="language">
+				<xsl:with-param name="l" select="text()"/>
+			</xsl:call-template>
 			</mlr3:DES0500>
 		</xsl:if>
 		<mlr2:DES1200>
-			<xsl:value-of select="text()"/>
+			<xsl:call-template name="language">
+				<xsl:with-param name="l" select="text()"/>
+			</xsl:call-template>
 		</mlr2:DES1200>
 	</xsl:template>
 
@@ -298,6 +303,25 @@
 			<xsl:with-param name="nodename" select="'mlr2:DES1400'"/>
 		</xsl:apply-templates>
 	</xsl:template>
+
+	<xsl:template name="language">
+		<xsl:param name="l"/>
+		<xsl:choose>
+			<xsl:when test="regexp:test($l,'^[a-z][a-z](\-[A-Z][A-Z])?$')">
+				<xsl:call-template name="iso639_2to3">
+					<xsl:with-param name="l" select="substring-before($l,'-')"/>
+				</xsl:call-template>
+				<xsl:if test="substring-after($l,'-') != ''">
+					<xsl:text>-</xsl:text>
+					<xsl:value-of select="substring-after($l,'-')"/>
+				</xsl:if>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$l"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
 
 	<!-- lifeCycle -->
 
@@ -1153,6 +1177,14 @@
 		<xsl:call-template name="mlr8_DES1200"/>
 	</xsl:template>
 
+	<xsl:template match="lom:language" mode="metaMetadata">
+		<mlr8:DES0400>
+			<xsl:call-template name="language">
+				<xsl:with-param name="l" select="text()"/>
+			</xsl:call-template>
+		</mlr8:DES0400>
+	</xsl:template>
+
 	<xsl:template match="lom:date" mode="metaMetadata">
 		<xsl:choose>
 			<!-- first cases: valid 8601 date or datetime -->
@@ -1456,7 +1488,9 @@
 
 	<xsl:template match="lom:language" mode="educational_audience">
 		<mlr5:DES0400>
-			<xsl:value-of select="text()"/>
+			<xsl:call-template name="language">
+				<xsl:with-param name="l" select="text()"/>
+			</xsl:call-template>
 		</mlr5:DES0400>
 	</xsl:template>
 
@@ -1572,7 +1606,11 @@
 		<xsl:param name="nodename" />
 		<xsl:element name="{$nodename}">
 			<xsl:if test="@language">
-				<xsl:attribute name="xml:lang"><xsl:value-of select="@language" /></xsl:attribute>
+				<xsl:attribute name="xml:lang">
+					<xsl:call-template name="language">
+						<xsl:with-param name="l" select="@language"/>
+					</xsl:call-template>
+				</xsl:attribute>
 			</xsl:if>
 			<xsl:value-of select="text()" />
 		</xsl:element>
