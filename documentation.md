@@ -2,16 +2,10 @@
 
 TODO: Ouvrir compte GTN-Québec GitHub.
 TODO: Lots: Avec ou sans MLR record. (Toggle)
-MLR8: Donner l'identifiant de la fiche d'origine, et l'identifiant du convertisseur.
 MLR9: Suggestions
-    Définir le profil (mlr8:DES0600) comme une ressource!
     Contribution should be a partial MLR record
     Repository should be a resource with entry point URIs (and repository type?)
     DES1100... pourquoi séquence? Préférences? (Maudit RDF!)
-    Ajouter notion que record est un graphe?
-    ou Possède un graphe?
-    Ajouter notion de fiche traduite, et outil de traduction.
-Vocabulaires: Litéraux, pas URI. Améliorer traduction.
 Identifier les heuristiques vs normatif comme telles. (couleur?)
 Toggle: Ajouter des informations hors-scope, comme l'addresse de vcard.owl
 trouver comment éliminer le marqueur linguistique dans le MLR traduit.
@@ -35,6 +29,10 @@ Inria extension from http://www-sop.inria.fr/members/Fabien.Gandon/docs/NameThat
 
 Right. In the meantime, make a bunch of graphs, make it conjunctive by hand, and serialize to trix, and trix only. OK, or nquads. Sigh.
 Should improve n3 serializer to handle graphs! Non-trivial. Or create a TriG serializer. Re-sigh.
+
+TODO: Refactor XSL, use unique and implode?
+FOAF: Make sure non-work group! sigh.
+
 
 ## Naming entities
 
@@ -201,14 +199,15 @@ Many elements have a direct translation in DublinCore, and hence in MLR-2.
 
 #### general/title
 
-The title is translated directly as `mlr2:DES0100`.
+The title is translated directly as `mlr2:DES0100`. The language is carried in the literal as-is, but ISO-639-2 language tags are translated to their ISO-639-3 equivalents.
 
-TODO: standardiser la langue à 639-3
+TODO: What if the language tag is not ISO-639? Should we use it at all? The RDF spec is vague on valid identifiers.
+
 
     :::xml
     <general>
         <title>
-            <string language="fra-CA">Conditions favorables à l'intégration des TIC...</string>
+            <string language="fr-CA">Conditions favorables à l'intégration des TIC...</string>
         </title>
     </general>
 
@@ -217,15 +216,13 @@ Becomes
     :::N3
     [] mlr2:DES0100 "Conditions favorables à l'intégration des TIC..."@fra-CA .
 
-#### general/language following ISO 639-3
+#### general/language following ISO-639-3
 
-Ideally, language should follow ISO 639-3. This can be detected by a regular expression, and we can then translate as `MLR-3:DES0500`. Note that some letter triplets might not be valid ISO 639-3, which would not be detected by a simple regular expression.
-
-TODO: Supprimer le pays? 
+Ideally, language should follow ISO-639-3. This can be detected by a regular expression, and we can then translate as `MLR-3:DES0500`. Again, valid ISO-639-2 language tags are translated to their ISO-639-3 equivalents. Note that some letter triplets might not be valid ISO-639-3 (or -2), which would not be detected by a simple regular expression.
 
     :::xml
     <general>
-        <language>fra-CA</language>
+        <language>fr-CA</language>
     </general>
 
 Becomes
@@ -236,10 +233,7 @@ Becomes
 
 #### general/language
 
-If the language description does not follow the pattern, we can use the MLR-2 version of that property. (We may translate ISO 639-2 codes to ISO 639-3.)
-
-TODO: Vérifier que ça ne passe pas dans les indicateurs de langue!
-TODO: Supprimer les indicateurs de langue s'ils ne sont pas du 639-2 ou 3. (Vérifier spec rdf)
+If the language description does not follow the pattern, we can use the MLR-2 version of that property.
 
     :::xml
     <general>
@@ -251,11 +245,14 @@ Becomes
     :::N3
     [] mlr2:DES1200 "français" .
 
+But does not become
+
+    :::N3 forbidden
+    [] mlr3:DES0500 "français" .
+
 #### general/description
 
 Description could be interpreted as `mlr2:DES0400`, but in practice there is never any reason not to use `mlr3:DES0200` instead.
-
-TODO: toggle pour débrancher MLR3, et utiliser MLR2 à la place.
 
     :::xml
     <general>
@@ -271,7 +268,7 @@ Becomes
 
 As well as
 
-    :::N3 {'id_from_mlr3':'false()'}
+    :::N3 -id_from_mlr3
     [] mlr2:DES0400 "L'enseignant identifie les contraintes..."@fra-CA .
 
 #### general/keyword ####
@@ -735,7 +732,7 @@ In the case of natural persons (and persons), we can use the following informati
 
 ##### FOAF URL
 
-Though it is not in much use, a strategy exists to identify FOAF URLs in a vCard, as noted in [this study](http://www.w3.org/2002/12/cal/vcard-notes.html). 
+Though it is not in much use, a strategy exists to identify FOAF URLs in a vCard, as noted in [this study](http://www.w3.org/2002/12/cal/vcard-notes.html). Question: Should we avoid FOAF work URLs?
 
     :::xml
     <lifeCycle>
@@ -968,7 +965,7 @@ Note the absence of mlr9:DES0100 in that case, so we do not have:
 
 But if we set `person_uuid_from_fn`, we then have:
 
-    :::N3 {'person_uuid_from_fn':'true()'}
+    :::N3 person_uuid_from_fn
     <urn:uuid:10000000-0000-0000-0000-000000000001>  a mlr1:RC0002; 
         mlr5:DES1700 <urn:uuid:10000000-0000-0000-0000-000000000002> .
     <urn:uuid:10000000-0000-0000-0000-000000000002> a mlr5:RC0003;
@@ -1007,7 +1004,7 @@ Uses a UUID1, thus:
 
 But if we set `person_uuid_from_fn`, we then have:
 
-    :::N3 {'person_uuid_from_fn':'true()'}
+    :::N3 person_uuid_from_fn
     <urn:uuid:10000000-0000-0000-0000-000000000001>  a mlr1:RC0002; 
         mlr5:DES1700 <urn:uuid:10000000-0000-0000-0000-000000000002> .
     <urn:uuid:10000000-0000-0000-0000-000000000002> a mlr5:RC0003;
@@ -1264,7 +1261,7 @@ Using an organization's email alone as identity is possible, and more appropriat
 
 Becomes
 
-    :::N3 {'org_uuid_from_email_fn': 'false()'}
+    :::N3 -org_uuid_from_email_fn
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 <mailto:info@gtn-quebec.org> ] .
@@ -1367,7 +1364,7 @@ As mentioned, it is debatable whether the `ORG` alone could be considered distin
 
 Becomes, with `org_uuid_from_org_or_fn`,
 
-    :::N3 {'org_uuid_from_org_or_fn':'true()'}
+    :::N3 org_uuid_from_org_or_fn
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 <urn:uuid:88e3aa1b-9aec-51c4-86d2-58a8080832b9> ] .
@@ -1396,7 +1393,7 @@ What we said above about `ORG` also applies to `FN`.
 
 Becomes, with `org_uuid_from_org_or_fn`,
 
-    :::N3 {'org_uuid_from_org_or_fn':'true()'}
+    :::N3 org_uuid_from_org_or_fn
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 [ a mlr9:RC0002;
@@ -1520,7 +1517,7 @@ Becomes
 
 But if `suborg_use_work_email` is set to true:
 
-    :::N3 {'suborg_use_work_email':'true()'}
+    :::N3 suborg_use_work_email
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 [a mlr9:RC0001 ;
@@ -1556,7 +1553,7 @@ It is possible for a vCard to associate multiple organizations with a single per
 
 Leading to
 
-    :::N3 {'suborg_use_work_email':'true()'}
+    :::N3 suborg_use_work_email
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 <http://maparent.ca/> ] .
@@ -2113,6 +2110,13 @@ without
             mlr5:DES0700 "mi-XVIème siècle"@fra-CA ] .
 
 ## Metametadata
+
+MLR8: Donner l'identifiant de la fiche d'origine, et l'identifiant du convertisseur.
+Définir le profil (mlr8:DES0600) comme une ressource!
+    Ajouter notion que record est un graphe?
+    ou Possède un graphe?
+    Ajouter notion de fiche traduite, et outil de traduction.
+
 
 ## Technical
 ### Format
