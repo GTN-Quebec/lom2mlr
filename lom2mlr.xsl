@@ -9,6 +9,7 @@
 	xmlns:dc="http://purl.org/dc/elements/1.1/"
 	xmlns:vcardconv="http://ntic.org/vcard"
 	xmlns:vcard="urn:ietf:params:xml:ns:vcard-4.0"
+	xmlns:cos="http://www.inria.fr/acacia/corese#"
 	xmlns:gtnq="http://www.gtn-quebec.org/ns/"
 	xmlns:mlrext="http://standards.iso.org/iso-iec/19788/ext/"
 	xmlns:mlr1="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/"
@@ -89,6 +90,26 @@
 	</xsl:template>
 
 	<xsl:template match="lom:lom">
+		<xsl:if test="sets:intersection(lom:metaMetadata/lom:identifier/lom:entry/text(), lom:general/lom:identifier/lom:entry/text()|lom:technical/lom:location/text())">
+			<xsl:message terminate="yes">Error: same identifier used for data and metadata!</xsl:message>
+		</xsl:if>
+		<xsl:variable name="lom_identifier">
+			<xsl:apply-templates mode="identifier" select="lom:metaMetadata">
+				<xsl:with-param name="technical" select="false()"/>
+			</xsl:apply-templates>
+		</xsl:variable>
+		<xsl:variable name="record_id">
+			<xsl:choose>
+				<xsl:when test="$lom_identifier != ''">
+					<xsl:text>urn:uuid:</xsl:text>
+					<xsl:value-of select="mlrext:uuid_string($lom_identifier, mlrext:uuid_url($translator_id_v))"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>urn:uuid:</xsl:text>
+					<xsl:value-of select="mlrext:uuid_unique()"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 		<xsl:variable name="identifier">
 			<xsl:apply-templates mode="identifier" select="lom:general">
 				<xsl:with-param name="technical" select="true()"/>
@@ -101,7 +122,8 @@
 					<xsl:value-of select="mlrext:uuid_unique()"/>
 				</xsl:when>
 				<xsl:when test="substring-after($identifier, '|') != ''">
-					<xsl:value-of select="concat('urn:uuid:',mlrext:uuid_string($identifier, $mlr1rc2_uuid))"/>
+					<xsl:text>urn:uuid:</xsl:text>
+					<xsl:value-of select="mlrext:uuid_string($identifier, $mlr1rc2_uuid)"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="$identifier"/>
@@ -109,6 +131,9 @@
 			</xsl:choose>
 		</xsl:variable>
 		<mlr1:RC0002>
+			<xsl:attribute name="cos:graph">
+				<xsl:value-of select="$record_id"/>
+			</xsl:attribute>
 			<xsl:attribute name="rdf:about">
 				<xsl:value-of select="$identity" />
 			</xsl:attribute>
@@ -141,6 +166,10 @@
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:apply-templates mode="top"/>
+			<xsl:apply-templates mode="metaMetadata" select="lom:metaMetadata">
+				<xsl:with-param name="lom_identifier" select="$lom_identifier"/>
+				<xsl:with-param name="record_id" select="$record_id"/>
+			</xsl:apply-templates>
 		</mlr1:RC0002>
 	</xsl:template>
 
@@ -185,26 +214,9 @@
 		<xsl:apply-templates mode="lifeCycle_ed"/>
 	</xsl:template>
 
-	<xsl:template match="lom:metaMetadata" mode="top">
-		<xsl:if test="sets:intersection(lom:identifier/lom:entry/text(),../lom:general/lom:identifier/lom:entry/text()|../lom:technical/lom:location/text())">
-			<xsl:message terminate="yes">Error: same identifier used for data and metadata!</xsl:message>
-		</xsl:if>
-		<xsl:variable name="identifier">
-			<xsl:apply-templates mode="identifier" select=".">
-				<xsl:with-param name="technical" select="false()"/>
-			</xsl:apply-templates>
-		</xsl:variable>
-		<xsl:variable name="record_id">
-			<xsl:choose>
-				<xsl:when test="$identifier != ''">
-					<xsl:value-of select="mlrext:uuid_string($identifier, mlrext:uuid_url($translator_id_v))"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:text>urn:uuid:</xsl:text>
-					<xsl:value-of select="mlrext:uuid_unique()"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
+	<xsl:template match="lom:metaMetadata" mode="metaMetadata">
+		<xsl:param name="lom_identifier"/>
+		<xsl:param name="record_id"/>
 		<mlr8:DES0200>
 			<xsl:attribute name="rdf:resource">
 				<xsl:value-of select="$record_id"/>
@@ -218,10 +230,10 @@
 				<mlr8:DES0100>
 					<xsl:value-of select="$record_id"/>
 				</mlr8:DES0100>
-				<xsl:if test="$identifier">
+				<xsl:if test="$lom_identifier">
 					<!-- should I create a uuid1? -->
 					<mlr8:DES1400>
-						<xsl:value-of select="$identifier"/>
+						<xsl:value-of select="$lom_identifier"/>
 					</mlr8:DES1400>
 				</xsl:if>
 				<mlr8:DES1500 rdf:resource="http://ltsc.ieee.org/xsd/LOM" />
@@ -230,7 +242,7 @@
 						<xsl:value-of select="$translator_id_v"/>
 					</xsl:attribute>
 				</mlr8:DES1600>
-				<xsl:if test="$mark_unique_uuid and $identifier = ''">
+				<xsl:if test="$mark_unique_uuid and $lom_identifier = ''">
 					<gtnq:irreproducible rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</gtnq:irreproducible>
 				</xsl:if>
 				<mlr8:DES0500>T002</mlr8:DES0500>
