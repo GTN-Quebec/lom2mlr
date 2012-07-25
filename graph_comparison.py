@@ -232,11 +232,15 @@ class GraphTester(object):
                         self.find_forbidden(graph, self.last_graph)]
         else:
             if args:
-                args = eval(args)
-                assert isinstance(args, dict)
-                self.converter.set_options_from_dict(args)
+                options = {}
+                for arg in args.split():
+                    if arg[0] == '-':
+                        options[arg[1:]] = False
+                    else:
+                        options[arg] = True
+                self.converter.set_options_from_dict(options)
             else:
-                self.converter.set_options_from_list()
+                self.converter.set_options_from_dict()
             obtained_graph = self.converter.lomxml2graph(self.last_lom)
             self.last_graph = obtained_graph
             errors = [(self.MISSING, e) for e in self.find_missing(graph, obtained_graph)]

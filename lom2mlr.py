@@ -55,42 +55,25 @@ def is_uuid1(context, uuid):
     assert u.variant == RFC_4122
     return u.version == 1
 
+
+def to_xsl_option(val):
+    if val is True:
+        return "true()"
+    elif val is False:
+        return "false()"
+    else:
+        return "'%s'" % (val, )
+
+
 class Converter(object):
     """A converter between LOM and MLR formats.
 
     Can take a file or lxml object; can return rdf-xml or rdflib graphs."""
 
-    default_options = {
-    # Allow use of MLR3 properties that refine the corresponding mlr2 properties.
-    "use_mlr3": "true()",
-    # Use email alone as basis for a (natural) person's identity. Never a good idea.
-    "person_url_from_email": "false()",
-    # Use combination of mail and fn (or N) as basis for a (natural) person's uuid.
-    "person_uuid_from_email_fn": "true()",
-    # Use fn (or N) alone as basis for a (natural) person's uuid
-    "person_uuid_from_fn": "false()",
-    # Use the email alone as a basis for an organization's identifying URL.
-    "org_url_from_email": "true()",
-    # Combine org (or fn) with country, region, city as basis for an organization's uuid
-    "org_uuid_from_org_address": "true()",
-    # Use the org and email as a basis for an organization's uuid
-    "org_uuid_from_email_org": "true()",
-    # Use the fn and email as a basis for an organization's uuid
-    "org_uuid_from_email_fn": "true()",
-    # Use a org (or fn) as a basis for an organization's uuid
-    "org_uuid_from_org_or_fn": "false()",
-    # If a natural person has a work email, assume it is the organization's email and not the person's email at work.
-    "suborg_use_work_email": "false()",
-    # If true, unique (non-reproducible) UUIDs will be marked with a gtnq:irreproducible predicate.
-    "mark_unique_uuid": "false()"
-    }
-
-    def __init__(self, stylesheet=STYLESHEET, options=None):
+    def __init__(self, stylesheet=STYLESHEET):
         stylesheet_xml = etree.parse(stylesheet)
+        self.read_options(stylesheet_xml)
         self.langsheets = {}
-        self.set_options_from_list(options)
-        #self.output = stylesheet_xml.xpath('xsl:output/@method',
-        #	namespaces={'xsl':XSLT_NS})
         self.stylesheet = etree.XSLT(stylesheet_xml,
             extensions={
                 (VCARDC_NS, 'convert'): convert,
@@ -100,17 +83,26 @@ class Converter(object):
                 (URL_MLR_EXT, 'is_uuid1'): is_uuid1,
             })
 
-    def set_options_from_dict(self, options):
-        opt = self.default_options.copy()
-        opt.update(options)
-        self.options = opt
+    def read_options(self, stylesheet):
+        comment = None
+        options = {}
+        option_defaults = {}
+        for c in stylesheet.getroot().getchildren():
+            if isinstance(c, etree._Comment):
+                comment = c.text.strip()
+            elif isinstance(c, etree._Element) and \
+                c.tag == '{http://www.w3.org/1999/XSL/Transform}param':
+                option_name = c.attrib['name']
+                options[option_name] = comment or ''
+                option_defaults[option_name] = c.attrib['select'] or ''
+        self.sheet_options = options
+        self.option_defaults = option_defaults
 
-    def set_options_from_list(self, options=None):
-        if options is None:
-            self.options = self.default_options
-        else:
-            self.options = {k: 'true()' if k in options else 'false()'
-                            for k in self.default_options.keys()}
+    def set_options_from_dict(self, options=None):
+        options = options or {}
+        self.options = {str(k): to_xsl_option(v) 
+            for k, v in options.items() if str(k) in self.sheet_options}
+        print self.options
 
     def get_lang_sheet(self, lang):
         if lang in self.langsheets:
@@ -155,24 +147,26 @@ class Converter(object):
 
 
 if __name__ == '__main__':
+    converter = Converter(STYLESHEET)
     parser = argparse.ArgumentParser(
         description='Apply a XSLT stylesheet to a LOM file')
-    parser.add_argument('-s', '--stylesheet',
-                        default=STYLESHEET, help='Name of the stylesheet')
     parser.add_argument('-l', '--language', help='Express using language')
     parser.add_argument('-f', '--format', default='rawxml',
                         help="output format: one of 'rawxml', 'xml', 'n3',"
                              " 'turtle', 'nt', 'pretty-xml', trix'")
     parser.add_argument('-o', '--output', help="Output file",
                         type=argparse.FileType('w'), default=sys.stdout)
-    parser.add_argument('-x', '--option', action='append',
-                        help="""Stylesheet options: any combination of:
-*use_mail_and_fn_uuid, use_mail_uuid, use_mail_url, *use_org_uuid,
-use_fn_uuid, use_random_uuid. See stylesheet for definition.
-Starred items are on if no option is specified.""")
+    for name, desc in converter.sheet_options.items():
+        default = converter.option_defaults[name]
+        if default == 'true()':
+            parser.add_argument('--no-'+name, action='store_false', dest=name, help=desc, default=True)
+        elif default == 'false()':
+            parser.add_argument('--'+name, action='store_true', help=desc, default=False)
+        elif default[0] == "'" and default[-1] == "'":
+            parser.add_argument('--'+name, help=desc, default=default[1:-1])
     parser.add_argument('infile')
     args = parser.parse_args()
-    converter = Converter(args.stylesheet, args.option)
+    converter.set_options_from_dict(vars(args))
 
     try:
         if (args.format == 'rawxml'):

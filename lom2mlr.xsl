@@ -23,50 +23,49 @@
 	>
 	<xsl:output method="xml" encoding="UTF-8"/>
 
-	<xsl:param name="use_mlr3" select="true()"/>
 	<!-- Allow use of MLR3 properties that refine the corresponding mlr2 properties. -->
+	<xsl:param name="use_mlr3" select="true()"/>
 
-	<xsl:param name="person_url_from_email" select="false()"/>
 	<!-- Use email alone as basis for a (natural) person's identity. Never a good idea. -->
+	<xsl:param name="person_url_from_email" select="false()"/>
 
-	<xsl:param name="person_uuid_from_email_fn" select="true()"/>
 	<!-- Use combination of mail and fn (or N) as basis for a (natural) person's uuid. -->
+	<xsl:param name="person_uuid_from_email_fn" select="true()"/>
 
-	<xsl:param name="person_uuid_from_fn" select="false()"/>
 	<!-- Use fn (or N) alone as basis for a (natural) person's uuid -->
+	<xsl:param name="person_uuid_from_fn" select="false()"/>
 
 
-	<xsl:param name="org_url_from_email" select="true()"/>
 	<!-- Use the email alone as a basis for an organization's identifying URL. -->
+	<xsl:param name="org_url_from_email" select="true()"/>
 
-	<xsl:param name="org_uuid_from_org_address" select="true()"/>
 	<!-- Combine org (or fn) with country, region, city as basis for an organization's uuid -->
+	<xsl:param name="org_uuid_from_org_address" select="true()"/>
 
-	<xsl:param name="org_uuid_from_email_org" select="true()"/>
 	<!-- Use the org and email as a basis for an organization's uuid -->
+	<xsl:param name="org_uuid_from_email_org" select="true()"/>
 
-	<xsl:param name="org_uuid_from_email_fn" select="true()"/>
 	<!-- Use the fn and email as a basis for an organization's uuid -->
+	<xsl:param name="org_uuid_from_email_fn" select="true()"/>
 
-	<xsl:param name="org_uuid_from_org_or_fn" select="false()"/>
 	<!-- Use a org (or fn) as a basis for an organization's uuid -->
+	<xsl:param name="org_uuid_from_org_or_fn" select="false()"/>
 
-	<xsl:param name="suborg_use_work_email" select="false()"/>
 	<!-- If a natural person has a work email, 
 	assume it is the organization's email and not the person's email at work. -->
+	<xsl:param name="suborg_use_work_email" select="false()"/>
 
-
-
-
-	<xsl:param name="mark_unique_uuid" select="false()"/>
 	<!-- If true, unique (non-reproducible) UUIDs will be marked with a gtnq:irreproducible predicate. -->
+	<xsl:param name="mark_unique_uuid" select="false()"/>
 
-	<xsl:param name="doi_identity_prefix" select="'doi:'"/>
 	<!-- DOI URIs can be formed by prefixing 'doi:', 'hndl:' or 'http://dx.doi.org/'  -->
+	<xsl:param name="doi_identity_prefix" select="'doi:'"/>
 
-	<xsl:param name="translator_id" select="'http://www.gtn-quebec/ns/lom2mlr/version/'"/>
-	<!-- A URI for the translation machinery.  -->
-	<xsl:param name="translator_version" select="'0.1'"/>
+	<!-- A URI for the conversion machinery.  -->
+	<xsl:param name="converter_id" select="'http://www.gtn-quebec/ns/lom2mlr/version/'"/>
+
+	<!-- the version number of the converter -->
+	<xsl:param name="converter_version" select="'0.1'"/>
 
 	<xsl:variable name="mlr_namespace" select="'http://standards.iso.org/iso-iec/19788/'"/>
 	<xsl:variable name="mlr1rc2" select="'http://standards.iso.org/iso-iec/19788/-1/ed-1/en/RC0002'"/>
@@ -76,7 +75,7 @@
 	<xsl:variable name="vcardfn_namespace" select="concat($gtn_namespace,'vcarduuid/fn/')"/>
 	<xsl:variable name="vcardorg_namespace_uuid" select="mlrext:uuid_url($vcardorg_namespace)"/>
 	<xsl:variable name="vcardfn_namespace_uuid" select="mlrext:uuid_url($vcardfn_namespace)"/>
-	<xsl:variable name="translator_id_v" select="concat($translator_id, string($translator_version))"/>
+	<xsl:variable name="converter_id_v" select="concat($converter_id, string($converter_version))"/>
 
 	<!-- vocabularies and utilities -->
 	<xsl:include href="correspondances_xsl.xsl"/>
@@ -102,7 +101,7 @@
 			<xsl:choose>
 				<xsl:when test="$lom_identifier != ''">
 					<xsl:text>urn:uuid:</xsl:text>
-					<xsl:value-of select="mlrext:uuid_string($lom_identifier, mlrext:uuid_url($translator_id_v))"/>
+					<xsl:value-of select="mlrext:uuid_string($lom_identifier, mlrext:uuid_url($converter_id_v))"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:text>urn:uuid:</xsl:text>
@@ -239,7 +238,7 @@
 				<mlr8:DES1500 rdf:resource="http://ltsc.ieee.org/xsd/LOM" />
 				<mlr8:DES1600>
 					<xsl:attribute name="rdf:resource">
-						<xsl:value-of select="$translator_id_v"/>
+						<xsl:value-of select="$converter_id_v"/>
 					</xsl:attribute>
 				</mlr8:DES1600>
 				<xsl:if test="$mark_unique_uuid and $lom_identifier = ''">
