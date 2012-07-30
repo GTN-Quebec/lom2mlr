@@ -102,7 +102,6 @@ class Converter(object):
         options = options or {}
         self.options = {str(k): to_xsl_option(v) 
             for k, v in options.items() if str(k) in self.sheet_options}
-        print self.options
 
     def get_lang_sheet(self, lang):
         if lang in self.langsheets:
