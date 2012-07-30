@@ -21,10 +21,11 @@ N3_PREFIXES = u'''
 @prefix mlr3: <http://standards.iso.org/iso-iec/19788/-3/ed-1/en/> .
 @prefix mlr4: <http://standards.iso.org/iso-iec/19788/-4/ed-1/en/> .
 @prefix mlr5: <http://standards.iso.org/iso-iec/19788/-5/ed-1/en/> .
+@prefix mlr8: <http://standards.iso.org/iso-iec/19788/-8/ed-1/en/> .
 @prefix mlr9: <http://standards.iso.org/iso-iec/19788/-9/ed-1/en/> .
 '''
 
-SECTIONS = (1, 2, 3, 4, 5, 9)
+SECTIONS = (1, 2, 3, 4, 5, 8, 9)
 LANGUAGES = ('eng', 'fra', 'rus')
 PATTERN1 = "@prefix mlr%d: <http://standards.iso.org/iso-iec/19788/-%d/ed-1/en/> ."
 PATTERN2 = "@prefix mlr%d_%s: <http://standards.iso.org/iso-iec/19788/-%d/ed-1/en/%s/> ."
