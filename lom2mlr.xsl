@@ -55,6 +55,9 @@
 	assume it is the organization's email and not the person's email at work. -->
 	<xsl:param name="suborg_use_work_email" select="false()"/>
 
+	<!-- Mark the record with the graph information using cos:graph. -->
+	<xsl:param name="use_subgraph" select="true()"/>
+
 	<!-- If true, unique (non-reproducible) UUIDs will be marked with a gtnq:irreproducible predicate. -->
 	<xsl:param name="mark_unique_uuid" select="false()"/>
 
@@ -130,12 +133,14 @@
 			</xsl:choose>
 		</xsl:variable>
 		<mlr1:RC0002>
-			<xsl:attribute name="cos:graph">
-				<xsl:value-of select="$record_id"/>
-			</xsl:attribute>
 			<xsl:attribute name="rdf:about">
 				<xsl:value-of select="$identity" />
 			</xsl:attribute>
+			<xsl:if test="$use_subgraph">
+				<xsl:attribute name="cos:graph">
+					<xsl:value-of select="$record_id"/>
+				</xsl:attribute>
+			</xsl:if>
 			<xsl:choose>
 				<xsl:when test="substring-after($identifier, '|') != ''">
 					<mlr2:DES1000>
@@ -168,6 +173,7 @@
 			<xsl:apply-templates mode="metaMetadata" select="lom:metaMetadata">
 				<xsl:with-param name="lom_identifier" select="$lom_identifier"/>
 				<xsl:with-param name="record_id" select="$record_id"/>
+				<xsl:with-param name="resource_id" select="$identity"/>
 			</xsl:apply-templates>
 		</mlr1:RC0002>
 	</xsl:template>
@@ -216,11 +222,7 @@
 	<xsl:template match="lom:metaMetadata" mode="metaMetadata">
 		<xsl:param name="lom_identifier"/>
 		<xsl:param name="record_id"/>
-		<mlr8:DES0200>
-			<xsl:attribute name="rdf:resource">
-				<xsl:value-of select="$record_id"/>
-			</xsl:attribute>
-		</mlr8:DES0200>
+		<xsl:param name="resource_id"/>
 		<mlr8:DES0300>
 			<mlr8:RC0001>
 				<xsl:attribute name="rdf:about">
@@ -229,6 +231,11 @@
 				<mlr8:DES0100>
 					<xsl:value-of select="$record_id"/>
 				</mlr8:DES0100>
+				<mlr8:DES0200>
+					<xsl:attribute name="rdf:resource">
+						<xsl:value-of select="$resource_id"/>
+					</xsl:attribute>
+				</mlr8:DES0200>
 				<xsl:if test="$lom_identifier">
 					<!-- should I create a uuid1? -->
 					<mlr8:DES1400>
