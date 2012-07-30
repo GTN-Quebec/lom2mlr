@@ -80,7 +80,6 @@ Annexe avec l'ontologie des sous-propriétés pour fins d'inférence.
 Utiliser technical location comme seed plutôt que identifier?
 S'il y en a plusieurs?
 
-Open questions: How to incorporate the `catalog` information? What if the identifier `entry` is not a URI?
 
 
 #### URI catalog
@@ -218,7 +217,21 @@ Becomes
 
 #### general/language following ISO-639-3
 
-Ideally, language should follow ISO-639-3. This can be detected by a regular expression, and we can then translate as `MLR-3:DES0500`. Again, valid ISO-639-2 language tags are translated to their ISO-639-3 equivalents. Note that some letter triplets might not be valid ISO-639-3 (or -2), which would not be detected by a simple regular expression.
+Ideally, language should follow ISO-639-3. This can be detected by a regular expression, and we can then translate as `MLR-3:DES0500`. 
+
+    :::xml
+    <general>
+        <language>fra-CA</language>
+    </general>
+
+Becomes
+
+    :::N3
+    [] mlr3:DES0500 "fra-CA" .
+
+#### general/language following ISO-639-2
+
+ISO-639-2 language tags can also be detected by a regular expression, and are then translated to their ISO-639-3 equivalents. Note that some letter triplets might not be valid ISO-639-3 (or -2), which would not be detected by a simple regular expression.
 
     :::xml
     <general>
@@ -2111,20 +2124,329 @@ without
 
 ## Metametadata
 
-MLR8: Donner l'identifiant de la fiche d'origine, et l'identifiant du convertisseur.
-Définir le profil (mlr8:DES0600) comme une ressource!
-    Ajouter notion que record est un graphe?
-    ou Possède un graphe?
-    Ajouter notion de fiche traduite, et outil de traduction.
+The LOM record is a metadata record, related to but distinct from the the MLR record obtained by converting it. We can use the LOM record's identity as a basis for the translated MLR record, but we must keep them distinct. The MLR record should also mention, besides the original LOM record's identity, the identity of the conversion software used.
 
+### LOM identifier
+
+The LOM identifier is derived from the `metaMetadata/identifier` in much the same way as the resource identifier; though technical URLs, which pertain to the resource, are obviously not taken into account.
+
+#### URI catalog
+
+This is the simplest case: We can use it both as identity and identifier. We use a literal.
+
+    :::xml
+    <metaMetadata>
+        <identifier>
+            <catalog>URI</catalog>
+            <entry>http://www.example.com/lom/1234</entry>
+        </identifier>
+    </metaMetadata>
+
+Becomes
+
+    :::N3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+    mlr8:DES0300 [ a mlr8:RC0001;
+        mlr8:DES1400 "http://www.example.com/lom/1234" ] .
+
+
+#### Other global catalogs
+
+Metadata records, being learning resources in their own right, also sometimes have global identifiers such as ISSN, ISBN, or DOI. Those are treated as for the resource identifier.
+
+    :::xml
+    <metaMetadata>
+        <identifier>
+            <catalog>ISBN</catalog>
+            <entry>0-201-61633-5</entry>
+        </identifier>
+    </metaMetadata>
+
+Becomes
+
+    :::N3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+    mlr8:DES0300 [ a mlr8:RC0001;
+        mlr8:DES1400 "urn:ISBN:0-201-61633-5" ] .
+
+
+#### Local catalog
+
+If we have a local catalog, we can, again, combine the catalog with the local identifier to obtain a local identifier. We use '|' as a separator, since it cannot be part of a URI, and this allows us to differentiate from URI identifiers. 
+
+    :::xml
+    <metaMetadata>
+        <identifier>
+            <catalog>MyDatabase</catalog>
+            <entry>123123</entry>
+        </identifier>
+    </metaMetadata>
+
+Becomes
+
+    :::N3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+    mlr8:DES0300 [ a mlr8:RC0001;
+        mlr8:DES1400 "MyDatabase|123123" ] .
+
+#### External URL
+
+TODO: It should be possible to provide the LOM record's URL as a parameter if there is no identifying information in the LOM record itself.
+
+#### No identifier
+
+Even if not identified, the LOM record exists. However, it is not necessary to give it an identity if it has none that can be determined.
+
+    :::xml
+    <metaMetadata>
+    </metaMetadata>
+
+Becomes
+
+    :::N3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr8:RC0001 .
+
+But not
+
+    :::N3 forbidden
+    <urn:uuid:10000000-0000-0000-0000-000000000000> mlr8:DES1400 "urn:uuid:10000000-0000-0000-0000-000000000000"  .
+
+### Converter URL
+
+The converter software has a URL that identifies it, and identifies the record as a converted record. It is also used to construct the MLR record's identity. This URL should include versioning information. Question: should we also integrate conversion settings information?
+
+    :::xml
+    <metaMetadata>
+    </metaMetadata>
+
+Becomes
+
+    :::N3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr8:RC0001 ;
+        mlr8:DES1600 <http://www.gtn-quebec/ns/lom2mlr/version/0.1>  .
+
+### MLR Record identity
+
+With this information in hand, we can often create a repeatable identity for the converted MLR Record.
+
+The identity of the conversion software could also be integrated in the identity given to the converted MLR record.
+
+#### Constructed LOM identity and converter URL 
+
+If we have determined a LOM identity, we can create an identity for the MLR record by combining it with the converter URL, as follows: 
+
+1. First, create a namespace UUID from the converter URL: `UUID5(NAMESPACE_URL, converter_URL)`, which in our case would be `CONVERTER_NAMESPACE_UUID=db3821e4-d6ed-5339-a1a1-1a760b0e1cc4`
+2. Second, use this as a namespace for the LOM identity, taken as a string. `UUID5(CONVERTER_NAMESPACE_UUID, LOM_IDENTITY)`. (In our example, 1d9c8ec0-32e4-52be-bcba-ad32ba11a422)
+
+This identity is also the MLR record identifier. This identity also allows to define the bidirectional relationship between the resource and its MLR record, defined in the `mlr8:DES0200-mlr8:DES0300` pair.
+
+    :::xml
+    <general>
+        <identifier>
+            <catalog>URI</catalog>
+            <entry>http://www.example.com/entry/4321</entry>
+        </identifier>
+    </general>
+    <metaMetadata>
+        <identifier>
+            <catalog>URI</catalog>
+            <entry>http://www.example.com/lom/1234</entry>
+        </identifier>
+    </metaMetadata>
+
+Becomes
+
+    :::N3
+    <http://www.example.com/entry/4321> a mlr1:RC0002;
+        mlr8:DES0300 <urn:uuid:1d9c8ec0-32e4-52be-bcba-ad32ba11a422> .
+    <urn:uuid:1d9c8ec0-32e4-52be-bcba-ad32ba11a422> a mlr8:RC0001;
+        mlr8:DES0100 "urn:uuid:1d9c8ec0-32e4-52be-bcba-ad32ba11a422" ;
+        mlr8:DES0200 <http://www.example.com/entry/4321> ;
+        mlr8:DES1400 "http://www.example.com/lom/1234" .
+
+#### Absence of LOM identity
+
+In the absence of LOM identity, the simplest solution is to create a UUID-1.
+
+    :::xml
+    <metaMetadata>
+    </metaMetadata>
+
+Becomes
+
+    :::N3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr8:DES0300 <urn:uuid:10000000-0000-0000-0000-000000000001> .
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr8:RC0001;
+        mlr8:DES0100 "urn:uuid:10000000-0000-0000-0000-000000000001" .
+
+
+### Record as a graph
+
+Some applications may choose to contain the results of metadata conversion in a subgraph, so as to apply different levels of trust to varying sources. In that case, the metadata record's ID can also be used as a graph ID. This is controlled by the `use_subgraph` parameter (which is on by default.)
+
+However, there is no agreed-upon way to identify subgraphs in rdf:xml, which is used internally by the converter. We use the non-standard `cos:graph` attribute, proposed by [INRIA](http://www-sop.inria.fr/members/Fabien.Gandon/docs/NameThatGraph/), but most tools will not carry that information over in translation.
+
+    :::xml
+    <metaMetadata>
+        <identifier>
+            <catalog>URI</catalog>
+            <entry>http://www.example.com/lom/1234</entry>
+        </identifier>
+    </metaMetadata>
+
+Becomes
+
+    :::rdf-xml
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+            xmlns:cos="http://www.inria.fr/acacia/corese#" 
+            xmlns:mlr1="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/"
+            xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/">
+        <mlr1:RC0002 rdf:about="urn:uuid:10000000-0000-0000-0000-000000000000"
+                cos:graph="urn:uuid:1d9c8ec0-32e4-52be-bcba-ad32ba11a422">
+            <mlr8:DES0300>
+                <mlr8:RC0001 rdf:about="urn:uuid:1d9c8ec0-32e4-52be-bcba-ad32ba11a422">
+                    <mlr8:DES0100>urn:uuid:1d9c8ec0-32e4-52be-bcba-ad32ba11a422</mlr8:DES0100>
+                    <mlr8:DES0200 rdf:resource="urn:uuid:10000000-0000-0000-0000-000000000000"/>
+                    <mlr8:DES1400>http://www.example.com/lom/1234</mlr8:DES1400>
+                </mlr8:RC0001>
+            </mlr8:DES0300>
+        </mlr1:RC0002>
+    </rdf:RDF>
+
+### Contributions
+
+Metametadata contributions are treated much as metadata contributions, above.
+
+#### Roles
+
+The roles defined for metametadata contributors in LOM 1.0 are `creator` and `validator`, which correspond to `T001` and `T002` respectively in the `ISO_IEC_19788-8:2012::VA.2.2` vocabulary. 
+
+##### Creator
+
+    :::xml
+    <metaMetadata>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>creator</value>
+            </role>
+            <entity>BEGIN:VCARD
+    VERSION:3.0
+    FN:Marc-Antoine Parent
+    N:Parent;Marc-Antoine;;;
+    URL:http://maparent.ca/
+    END:VCARD
+    </entity>
+            <date>
+                <dateTime>1999-12-01</dateTime>
+            </date>
+        </contribute>
+    </metaMetadata>
+
+Becomes
+
+    :::N3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr8:RC0001;
+        mlr8:DES0700 <urn:uuid:10000000-0000-0000-0000-000000000001> .
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr8:RC0002;
+        mlr8:DES1200 "T001" ;
+        mlr8:DES1000 <http://maparent.ca/> ;
+        mlr8:DES1300 "1999-12-01"^^<http://www.w3.org/2001/XMLSchema#date> .
+
+##### Validator
+
+    :::xml
+    <metaMetadata>
+        <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>validator</value>
+            </role>
+        </contribute>
+    </metaMetadata>
+
+Becomes
+
+    :::N3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr8:RC0001;
+        mlr8:DES0700 <urn:uuid:10000000-0000-0000-0000-000000000001> .
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr8:RC0002;
+        mlr8:DES1200 "T002" .
+
+### Metadata Schema
+
+The LOM `metadataSchema`, is simply carried over to `mlr8:DES0600`.
+Note: It would be possible, and maybe desirable, to identify some common metadataschemas as resources, with an appropriate URL. This may be explored in the future.
+
+    :::xml
+    <metaMetadata>
+        <metadataSchema>LOMv1.0</metadataSchema>
+    </metaMetadata>
+
+Becomes
+
+    :::N3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr8:RC0001;
+        mlr8:DES0600 "LOMv1.0" .
+
+### Language
+
+Language is treated as before, except that we do not have the distinction between valid and invalid language tags, and either will translated as `mlr8:DES0400`.
+
+#### ISO-639-3
+
+    :::xml
+    <metaMetadata>
+        <language>fra-CA</language>
+    </metaMetadata>
+
+Becomes
+
+    :::N3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr8:RC0001;
+        mlr8:DES0400 "fra-CA" .
+
+#### ISO-639-2
+
+ISO-639-2 language tags can also be detected by a regular expression, and are then translated to their ISO-639-3 equivalents.
+
+    :::xml
+    <metaMetadata>
+        <language>fr-CA</language>
+    </metaMetadata>
+
+Becomes
+
+    :::N3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr8:RC0001;
+        mlr8:DES0400 "fra-CA" .
+
+
+#### other language values
+
+    :::xml
+    <metaMetadata>
+        <language>français</language>
+    </metaMetadata>
+
+Becomes
+
+    :::N3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr8:RC0001;
+        mlr8:DES0400 "français" .
 
 ## Technical
+
+
+
 ### Format
 ### Size
 ### Location
 ### Requirement
 ### Installation remarks
 ### Other platform requirements
+
 ## Educational
 ### Learning_activity
 #### Learning resource type
@@ -2133,10 +2455,12 @@ Définir le profil (mlr8:DES0600) comme une ressource!
 #### Intended end user role
 #### Typical age range
 #### Context
+
 ### Annotation
 ### Learning resource type
 ### Description
 ### Language
+
 ## Rights
 ## Relations
 ## Annotation
