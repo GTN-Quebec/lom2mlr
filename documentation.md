@@ -16,21 +16,11 @@ trouver comment éliminer le marqueur linguistique dans le MLR traduit.
 
 This tool aims to parse LOM records and create a MLR-compliant set of RDF triples. Some information needed by MLR cannot be found in a LOM record; this is especially true of VCard information. In this case, the tool uses some heuristics to deduce likely values for the MLR records. The most unreliable heuristics can be individually disabled with command-line options. (See the help.)
 
-## MLR Record
 
-MLR information coming from a conversion process forms a logical grouping, and there are many use cases for keeping track of such groupings, especially to define trust levels. MLR-8 defines MLR Records, a set of MLR information to be considered as a bundle, for such purposes. Thus, it can be desirable to embed the MLR information extracted from a LOM record within a RDF graph, which will be associated with the corresponding MLR Record. This is defined by option....
 
-Inria extension from http://www-sop.inria.fr/members/Fabien.Gandon/docs/NameThatGraph/
 
-    :::xml
-    <xml 
-    xmlns:cos="http://www.inria.fr/acacia/corese#"
-    cos:graph="http://www.w3.org/...." >...</xml>
 
-Right. In the meantime, make a bunch of graphs, make it conjunctive by hand, and serialize to trix, and trix only. OK, or nquads. Sigh.
-Should improve n3 serializer to handle graphs! Non-trivial. Or create a TriG serializer. Re-sigh.
-
-TODO: Refactor XSL, use unique and implode?
+TODO:
 FOAF: Make sure non-work group! sigh.
 
 
@@ -2437,8 +2427,6 @@ Becomes
         mlr8:DES0400 "français" .
 
 ## Technical
-
-
 
 ### Format
 ### Size
