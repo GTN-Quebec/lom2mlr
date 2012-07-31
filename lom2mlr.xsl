@@ -64,6 +64,9 @@
 	<!-- DOI URIs can be formed by prefixing 'doi:', 'hndl:' or 'http://dx.doi.org/'  -->
 	<xsl:param name="doi_identity_prefix" select="'doi:'"/>
 
+	<!-- Natural language to be used for text generation (esp. for mlr4:DES0400.) -->
+	<xsl:param name="text_language" select="'eng'"/>
+
 	<!-- A URI for the conversion machinery.  -->
 	<xsl:param name="converter_id" select="'http://www.gtn-quebec/ns/lom2mlr/version/'"/>
 
@@ -79,6 +82,8 @@
 	<xsl:variable name="vcardorg_namespace_uuid" select="mlrext:uuid_url($vcardorg_namespace)"/>
 	<xsl:variable name="vcardfn_namespace_uuid" select="mlrext:uuid_url($vcardfn_namespace)"/>
 	<xsl:variable name="converter_id_v" select="concat($converter_id, string($converter_version))"/>
+	<xsl:variable name="lc">abcdefghijklmnopqrstuvwxyz</xsl:variable>
+	<xsl:variable name="uc">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
 
 	<!-- vocabularies and utilities -->
 	<xsl:include href="correspondances_xsl.xsl"/>
@@ -1259,35 +1264,89 @@
 	</xsl:template>
 
 	<xsl:template match="lom:requirement" mode="technical">
-		<mlr4:DES0400 xml:lang="fra-CA">
-			<xsl:variable name="multiple" select="count(lom:orComposite)&gt;1"/>
-			<xsl:if test="$multiple">
-				<xsl:text>Une des options suivantes:&#160;</xsl:text>
+		<mlr4:DES0400>
+			<xsl:if test="$text_language = 'eng' or $text_language = 'fra'">
+				<xsl:attribute name="xml:lang">
+					<xsl:value-of select="$text_language"/>
+				</xsl:attribute>
 			</xsl:if>
-			<xsl:apply-templates mode="tech-requirement" select="lom:orComposite">
-				<xsl:with-param name="multiple" select="$multiple"/>
-			</xsl:apply-templates>
+			<xsl:variable name="text">
+				<xsl:if test="count(lom:orComposite)&gt;1">
+					<xsl:choose>
+						<xsl:when test="$text_language = 'eng'">
+							<xsl:text>One of the following options: </xsl:text>
+						</xsl:when>
+						<xsl:when test="$text_language = 'fra'">
+							<xsl:text>Une des options suivantes: </xsl:text>
+						</xsl:when>
+					</xsl:choose>
+				</xsl:if>
+				<xsl:apply-templates mode="tech-requirement" select="lom:orComposite"/>
+			</xsl:variable>
+			<xsl:choose>
+				<xsl:when test="$text_language = 'eng' or $text_language = 'fra'">
+					<xsl:value-of select="concat(translate(substring($text, 1, 1),$lc, $uc), substring($text, 2))"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$text"/>
+				</xsl:otherwise>
+			</xsl:choose>
 		</mlr4:DES0400>
 	</xsl:template>
 
 
 	<xsl:template match="lom:orComposite" mode="tech-requirement">
-		<xsl:param name="multiple"/>
-		<xsl:if test="$multiple">
-			<xsl:value-of select="position()"/>
-			<xsl:text>.&#160;</xsl:text>
+		<xsl:if test="preceding-sibling::lom:orComposite">
+			<xsl:choose>
+				<xsl:when test="$text_language = 'eng'">
+					<xsl:text>; or </xsl:text>
+				</xsl:when>
+				<xsl:when test="$text_language = 'fra'">
+					<xsl:text>; ou </xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text> ⋁ </xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:if>
 		<xsl:apply-templates mode="tech-requirement"/>
-		<xsl:text>. </xsl:text>
+		<xsl:if test="not(following-sibling::lom:orComposite) and ($text_language = 'eng' or $text_language = 'fra')">
+			<xsl:text>.</xsl:text>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="lom:type" mode="tech-requirement">
 		<xsl:choose>
 			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='browser'">
-				<xsl:text>Le fureteur</xsl:text>
+				<xsl:choose>
+					<xsl:when test="$text_language = 'eng'">
+						<xsl:text>the browser</xsl:text>
+					</xsl:when>
+					<xsl:when test="$text_language = 'fra'">
+						<xsl:text>le fureteur</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="lom:value/text()"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='operating system'">
-				<xsl:text>Le système d'exploitation</xsl:text>
+				<xsl:choose>
+					<xsl:when test="$text_language = 'eng'">
+						<xsl:text>the operating system</xsl:text>
+					</xsl:when>
+					<xsl:when test="$text_language = 'fra'">
+						<xsl:text>le système d'exploitation</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="lom:value/text()"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:when test="$text_language = 'eng' or $text_language = 'fra'">
+				<xsl:text>'</xsl:text>
+				<xsl:value-of select="lom:value/text()"/>
+				<xsl:text>'</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="lom:value/text()"/>
@@ -1297,37 +1356,113 @@
 
 	<xsl:template match="lom:name" mode="tech-requirement">
 		<xsl:choose>
-			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='ms-internet-explorer'">
-				<xsl:text> doit être Microsoft Internet Explorer</xsl:text>
-			</xsl:when>
-			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='any'">
-				<xsl:text> peut être n'importe lequel</xsl:text>
+			<xsl:when test="lom:source/text()='LOMv1.0' and (lom:value/text()='any' or lom:value/text()='multi-os')">
+				<xsl:choose>
+					<xsl:when test="$text_language = 'eng'">
+						<xsl:text> can be any </xsl:text>
+						<xsl:value-of select="../type/value/text()"/>
+						<xsl:choose>
+							<xsl:when test="preceding-sibling::lom:type/lom:value/text() = 'browser'">
+								<xsl:text>browser</xsl:text>
+							</xsl:when>
+							<xsl:when test="preceding-sibling::lom:type/lom:value/text() = 'operating system'">
+								<xsl:text>operating system</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:text>'</xsl:text>
+								<xsl:value-of select="preceding-sibling::lom:type/lom:value/text()"/>
+								<xsl:text>'</xsl:text>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:when test="$text_language = 'fra'">
+						<xsl:text> peut être n'importe quel </xsl:text>
+						<xsl:choose>
+							<xsl:when test="preceding-sibling::lom:type/lom:value/text() = 'browser'">
+								<xsl:text>fureteur</xsl:text>
+							</xsl:when>
+							<xsl:when test="preceding-sibling::lom:type/lom:value/text() = 'operating system'">
+								<xsl:text>système d'exploitation</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:text>'</xsl:text>
+								<xsl:value-of select="preceding-sibling::lom:type/lom:value/text()"/>
+								<xsl:text>'</xsl:text>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text> = ?</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='none'">
-				<xsl:text> n'est pas pertinent</xsl:text>
-			</xsl:when>
-			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='multi-os'">
-				<xsl:text> peut être n'importe lequel</xsl:text>
-			</xsl:when>
-			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='pc-dos'">
-				<xsl:text> doit être DOS</xsl:text>
-			</xsl:when>
-			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='ms-windows'">
-				<xsl:text> doit être Microsoft Windows</xsl:text>
-			</xsl:when>
-			<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='macos'">
-				<xsl:text> doit être Mac OS</xsl:text>
+				<xsl:choose>
+					<xsl:when test="$text_language = 'eng'">
+						<xsl:text> is not needed</xsl:text>
+					</xsl:when>
+					<xsl:when test="$text_language = 'fra'">
+						<xsl:text> n'est pas nécessaire</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text> = 0</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:text> doit être </xsl:text>
-				<xsl:value-of select="lom:value/text()"/>
+				<xsl:choose>
+					<xsl:when test="$text_language = 'eng'">
+						<xsl:text> must be </xsl:text>
+					</xsl:when>
+					<xsl:when test="$text_language = 'fra'">
+						<xsl:text> doit être </xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text> = </xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:choose>
+					<xsl:when test="$text_language = 'fra' or $text_language = 'eng'">
+						<xsl:choose>
+							<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='ms-internet explorer'">
+								<xsl:text>Microsoft Internet Explorer</xsl:text>
+							</xsl:when>
+							<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='pc-dos'">
+								<xsl:text>MS-DOS</xsl:text>
+							</xsl:when>
+							<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='ms-windows'">
+								<xsl:text>Microsoft Windows</xsl:text>
+							</xsl:when>
+							<xsl:when test="lom:source/text()='LOMv1.0' and lom:value/text()='macos'">
+								<xsl:text>Mac OS</xsl:text>
+							</xsl:when>
+							<!-- unix, netscape communicator, opera, and amaya names are used as-is. -->
+							<xsl:otherwise>
+								<xsl:value-of select="lom:value/text()"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="lom:value/text()"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="lom:minimumVersion" mode="tech-requirement">
 		<xsl:if test="text()">
-			<xsl:text>, version au moins </xsl:text>
+			<xsl:choose>
+				<xsl:when test="$text_language = 'eng'">
+					<xsl:text>, version at least </xsl:text>
+				</xsl:when>
+				<xsl:when test="$text_language = 'fra'">
+					<xsl:text>, version au moins </xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text> &gt;= </xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
 			<xsl:value-of select="text()"/>
 		</xsl:if>
 	</xsl:template>
@@ -1336,10 +1471,30 @@
 		<xsl:if test="text()">
 			<xsl:choose>
 				<xsl:when test="../lom:minimumVersion">
-					<xsl:text> et au plus </xsl:text>
+					<xsl:choose>
+						<xsl:when test="$text_language = 'eng'">
+							<xsl:text> and at most </xsl:text>
+						</xsl:when>
+						<xsl:when test="$text_language = 'fra'">
+							<xsl:text> et au plus </xsl:text>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:text> &amp; &lt;= </xsl:text>
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:text>, version au plus </xsl:text>
+					<xsl:choose>
+						<xsl:when test="$text_language = 'eng'">
+							<xsl:text>, version at most </xsl:text>
+						</xsl:when>
+						<xsl:when test="$text_language = 'fra'">
+							<xsl:text>, version au plus </xsl:text>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:text> &lt;= </xsl:text>
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:value-of select="text()"/>
@@ -1373,18 +1528,18 @@
 	</xsl:template>
 
 	<xsl:template match="lom:duration" mode="technical">
-		<xsl:if test="lom:duration and regexp:test(lom:duration/text(),'^PT([0-9]+H)?([0-9]+M)?([0-9]+S)?$')">
+		<xsl:if test="regexp:test(text(),'^PT([0-9]+H)?([0-9]+M)?([0-9]+S)?$')">
 			<mlr4:DES0300 rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">
 				<xsl:call-template name="as_00num">
-					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+H'),'H')"/>
+					<xsl:with-param name="v" select="substring-before(regexp:match(text(),'[0-9]+H'),'H')"/>
 				</xsl:call-template>
 				<xsl:text>:</xsl:text>
 				<xsl:call-template name="as_00num">
-					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+M'),'M')"/>
+					<xsl:with-param name="v" select="substring-before(regexp:match(text(),'[0-9]+M'),'M')"/>
 				</xsl:call-template>
 				<xsl:text>:</xsl:text>
 				<xsl:call-template name="as_00num">
-					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+S'),'S')"/>
+					<xsl:with-param name="v" select="substring-before(regexp:match(text(),'[0-9]+S'),'S')"/>
 				</xsl:call-template>
 			</mlr4:DES0300>
 		</xsl:if>
@@ -1394,45 +1549,48 @@
 
 	<xsl:template match="lom:educational" mode="top">
 		<xsl:variable name="learning_activity">
+			<xsl:apply-templates mode="educational_learning_activity"/>
+		</xsl:variable>
+		<xsl:if test="string-length($learning_activity)&gt;0">
 			<mlr5:DES2000>
 				<mlr5:RC0005>
 					<xsl:attribute name="rdf:about">
 						<xsl:text>urn:uuid:</xsl:text>
 						<xsl:value-of select="mlrext:uuid_unique()"/>
 					</xsl:attribute>
-					<xsl:apply-templates mode="educational_learning_activity"/>
+					<xsl:copy-of select="$learning_activity"/>
 				</mlr5:RC0005>
 			</mlr5:DES2000>
-		</xsl:variable>
+		</xsl:if>
 		<xsl:variable name="audience">
+			<xsl:apply-templates mode="educational_audience"/>
+		</xsl:variable>
+		<xsl:if test="string-length($audience)&gt;0">
 			<mlr5:DES1500>
 				<mlr5:RC0002>
 					<xsl:attribute name="rdf:about">
 						<xsl:text>urn:uuid:</xsl:text>
 						<xsl:value-of select="mlrext:uuid_unique()"/>
 					</xsl:attribute>
-					<xsl:apply-templates mode="educational_audience"/>
+					<xsl:copy-of select="$audience"/>
 				</mlr5:RC0002>
 			</mlr5:DES1500>
-		</xsl:variable>
+		</xsl:if>
 		<xsl:variable name="annotation">
+			<xsl:apply-templates mode="educational_annotation"/>
+		</xsl:variable>
+		<xsl:if test="string-length($annotation)&gt;0">
 			<mlr5:DES1300>
 				<mlr5:RC0001>
 					<xsl:attribute name="rdf:about">
 						<xsl:text>urn:uuid:</xsl:text>
 						<xsl:value-of select="mlrext:uuid_unique()"/>
 					</xsl:attribute>
-					<xsl:apply-templates mode="educational_annotation"/>
+					<xsl:copy-of select="$annotation"/>
 				</mlr5:RC0001>
 			</mlr5:DES1300>
-		</xsl:variable>
+		</xsl:if>
 		<xsl:apply-templates mode="educational"/>
-		<xsl:if test="string-length($learning_activity)&gt;0">
-			<xsl:copy-of select="$learning_activity"/>
-		</xsl:if>
-		<xsl:if test="string-length($audience)&gt;0">
-			<xsl:copy-of select="$audience"/>
-		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="lom:learningResourceType" mode="educational">
