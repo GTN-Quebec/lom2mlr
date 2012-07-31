@@ -3339,7 +3339,54 @@ Becomes
 
 ## Relations
 
+### Source
 
+The LOMv1.0 relationship `isbasedon` translates to source, that is `mlr2:DES1100` and optionally `mlr3:DES0600`. Identifiers are treated as usual (with a uuid-string for local catalogs, etc.)
+
+    :::xml
+    <relation>
+        <kind>
+            <source>LOMv1.0</source>
+            <value>isbasedon</value>
+        </kind>
+        <resource>
+            <identifier>
+                <catalog>URI</catalog>
+                <entry>http://www.example.com/resources/1234</entry>
+            </identifier>
+        </resource>
+    </relation>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES1100 "http://www.example.com/resources/1234" ;
+        mlr3:DES0600 "http://www.example.com/resources/1234".
+
+### Other relations
+
+Any other relation are expressed with the `mlr2:DES1300` tag. The nature of the relation is lost.
+
+    :::xml
+    <relation>
+        <kind>
+            <source>LOMv1.0</source>
+            <value>requires</value>
+        </kind>
+        <resource>
+            <identifier>
+                <catalog>URI</catalog>
+                <entry>http://www.example.com/resources/1234</entry>
+            </identifier>
+        </resource>
+    </relation>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES1300 "http://www.example.com/resources/1234" .
 
 ## Annotation
 ## Classification

@@ -1706,7 +1706,7 @@
 			<xsl:when test="lom:cost[lom:source/text()='LOMv1.0' and lom:value/text()='no'] and lom:copyrightAndOtherRestrictions[lom:source/text()='LOMv1.0' and lom:value/text()='no']">
 				<xsl:choose>
 					<xsl:when test="$text_language='eng'">
-						<mlr2:DES1500 xml:lang="fra">Free, no copyright.</mlr2:DES1500>
+						<mlr2:DES1500 xml:lang="eng">Free, no copyright.</mlr2:DES1500>
 					</xsl:when>
 					<xsl:when test="$text_language='fra'">
 						<mlr2:DES1500 xml:lang="fra">Gratuit, pas de copyright.</mlr2:DES1500>
@@ -1718,27 +1718,42 @@
 
 	<!-- relations -->
 
-	<xsl:template match="lom:relation[lom:kind[lom:source/text()='LOMv1.0' and lom:value/text()='isbasedon']]" mode="top">
-		<mlr2:DES1100>
-			<xsl:attribute name="rdf:resource">
-				<xsl:value-of select="lom:resource/lom:identifier/lom:entry/text()"/>
-			</xsl:attribute>
-		</mlr2:DES1100>
-		<xsl:if test="$use_mlr3">
-			<mlr3:DES0600>
-				<xsl:attribute name="rdf:resource">
-					<xsl:value-of select="lom:resource/lom:identifier/lom:entry/text()"/>
-				</xsl:attribute>
-			</mlr3:DES0600>
-		</xsl:if>
-	</xsl:template>
-
 	<xsl:template match="lom:relation" mode="top">
-		<mlr2:DES1300>
-			<xsl:attribute name="rdf:resource">
-				<xsl:value-of select="lom:resource/lom:identifier/lom:entry/text()"/>
-			</xsl:attribute>
-		</mlr2:DES1300>
+		<xsl:variable name="resource_id">
+			<xsl:apply-templates mode="identifier" select="lom:resource">
+				<xsl:with-param name="technical" select="false()"/>
+			</xsl:apply-templates>
+		</xsl:variable>
+		<xsl:variable name="resource_id_uri">
+			<xsl:choose>
+				<xsl:when test="substring-before($resource_id,'|')!=''">
+					<xsl:text>urn:uuid:</xsl:text>
+					<xsl:value-of select="mlrext:uuid_string($resource_id)"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$resource_id"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:if test="string-length($resource_id_uri) &gt; 0">
+			<xsl:choose>
+				<xsl:when test="lom:kind[lom:source/text()='LOMv1.0' and lom:value/text()='isbasedon']">
+					<mlr2:DES1100>
+						<xsl:value-of select="$resource_id_uri"/>
+					</mlr2:DES1100>
+					<xsl:if test="$use_mlr3">
+						<mlr3:DES0600>
+							<xsl:value-of select="$resource_id_uri"/>
+						</mlr3:DES0600>
+					</xsl:if>
+				</xsl:when>
+				<xsl:otherwise>
+					<mlr2:DES1300>
+						<xsl:value-of select="$resource_id_uri"/>
+					</mlr2:DES1300>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
 	</xsl:template>
 
 	<!-- classification -->
