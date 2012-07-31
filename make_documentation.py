@@ -16,6 +16,7 @@ import markdown
 from markdown.treeprocessors import Treeprocessor
 from markdown.util import etree
 from markdown.extensions.codehilite import CodeHiliteExtension
+from markdown.extensions.tables import TableExtension
 
 from graph_comparison import GraphTester
 from util import splitcode
@@ -310,7 +311,7 @@ if __name__ == '__main__':
     parser.add_argument('--delete', help='Delete examples', default=False, action='store_true')
     parser.add_argument('--output', help='Output file name', default="documentation.html")
     args = parser.parse_args()
-    extensions = [TestExtension(args.b, args.hide, args.delete), CodeHiliteExtension({}), EmbedExtension(args.delete)]
+    extensions = [TestExtension(args.b, args.hide, args.delete), CodeHiliteExtension({}), EmbedExtension(args.delete), TableExtension()]
     target_name = args.output
     if args.l:
         extensions.insert(1, TranslateMlrExtension())
