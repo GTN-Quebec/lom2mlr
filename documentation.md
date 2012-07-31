@@ -3423,6 +3423,129 @@ Becomes
         mlr5:DES0100 "2004-04-01"^^<http://www.w3.org/2001/XMLSchema#date> .
 
 ## Classification
+
+LOMv1.0 distinguishes many purposes of resource classification. 
+
+* discipline
+* idea
+* prerequisite
+* educational objective
+* accessibility restrictions
+* educational level
+* skill level
+* security level
+* competency
+
+Of those, we translate only discipline and educational level into `mlr2:DES0200` and `mlr5:DES1000` respectively.
+
 ### Discipline
-### Curriculum
-#### Educational level
+
+#### Description
+
+The discipline description can be translated directly as `mlr2:DES0200`.
+
+    :::xml
+    <classification>
+        <purpose>
+            <source>LOMv1.0</source>
+            <value>discipline</value>
+        </purpose>
+        <description>
+            <string language="fra">Mathématiques</string>
+        </description>
+    </classification>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES0300 "Mathématiques"@fra.
+
+#### Keywords
+
+In the absence of description, we can also use keywords as a basis for topic.
+
+    :::xml
+    <classification>
+        <purpose>
+            <source>LOMv1.0</source>
+            <value>discipline</value>
+        </purpose>
+        <keyword>
+            <string language="fra">Mathématiques</string>
+            <string language="fra">Algèbre linéaire</string>
+        </keyword>
+    </classification>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES0300 "Mathématiques"@fra ;
+        mlr2:DES0300 "Algèbre linéaire"@fra .
+
+#### Taxon path
+
+If we have neither description nor keywords, we can use the last (most precise) item of a taxon path. Sometimes, it is necessary to give context rather than the most precise taxon, but that is unfortunately difficult to determine.
+
+    :::xml
+    <classification>
+        <purpose>
+            <source>LOMv1.0</source>
+            <value>discipline</value>
+        </purpose>
+        <taxonPath>
+            <source>
+                <string language="eng">DDC 22nd ed.</string>
+            </source>
+            <taxon>
+                <entry>
+                    <id>500</id>
+                    <string language="eng">Natural Sciences and Mathemetics</string>
+                </entry>
+            </taxon>
+            <taxon>
+                <entry>
+                    <id>510</id>
+                    <string language="eng">Mathematics</string>
+                </entry>
+            </taxon>
+            <taxon>
+                <entry>
+                    <id>512</id>
+                    <string language="eng">Algebra</string>
+                </entry>
+            </taxon>
+        </taxonPath>
+    </classification>
+
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES0300 "Algebra"@eng .
+
+
+### Educational level
+
+Educational level classifications correspond to Curriculum level in mlr5. This requires creating a curriculum resource with an ad-hoc UUID-1 identity. Otherwise the logic is the same: Use description, keywords or the last element of the taxon path.
+
+    :::xml
+    <classification>
+        <purpose>
+            <source>LOMv1.0</source>
+            <value>educational level</value>
+        </purpose>
+        <description>
+            <string language="fra">CÉGEP</string>
+        </description>
+    </classification>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr5:DES1900 <urn:uuid:10000000-0000-0000-0000-000000000001> .
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr5:RC0004;
+        mlr5:DES1000 "CÉGEP"@fra.

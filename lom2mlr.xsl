@@ -199,7 +199,6 @@
 	<xsl:template match="text()" mode="relation"/>
 	<xsl:template match="text()" mode="annotation"/>
 	<xsl:template match="text()" mode="classification"/>
-	<xsl:template match="text()" mode="classification_curriculum"/>
 	<xsl:template match="text()" mode="vcard"/>
 	<xsl:template match="text()" mode="vcard_org"/>
 	<xsl:template match="text()" mode="vcard_suborg_attributes"/>
@@ -327,28 +326,6 @@
 			<xsl:with-param name="nodename" select="'mlr2:DES1400'"/>
 		</xsl:apply-templates>
 	</xsl:template>
-
-	<xsl:template name="language">
-		<xsl:param name="l"/>
-		<xsl:choose>
-			<xsl:when test="regexp:test($l,'^[a-z][a-z]\-[A-Z][A-Z]$')">
-				<xsl:call-template name="iso639_2to3">
-					<xsl:with-param name="l" select="substring-before($l,'-')"/>
-				</xsl:call-template>
-				<xsl:text>-</xsl:text>
-				<xsl:value-of select="substring-after($l,'-')"/>
-			</xsl:when>
-			<xsl:when test="regexp:test($l,'^[a-z][a-z]$')">
-				<xsl:call-template name="iso639_2to3">
-					<xsl:with-param name="l" select="$l"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="$l"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
 
 	<!-- lifeCycle -->
 
@@ -1208,30 +1185,6 @@
 		</xsl:call-template>
 	</xsl:template>
 
-
-	<xsl:template name="date">
-		<xsl:param name="nodename"/>
-		<xsl:choose>
-			<!-- first cases: valid 8601 date or datetime -->
-			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6]))))$')">
-				<xsl:element name="{$nodename}">
-					<xsl:attribute name="rdf:datatype">
-						<xsl:text>http://www.w3.org/2001/XMLSchema#date</xsl:text>
-					</xsl:attribute>
-					<xsl:value-of select="lom:dateTime/text()" />
-				</xsl:element>
-			</xsl:when>
-			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$')">
-				<xsl:element name="{$nodename}">
-					<xsl:attribute name="rdf:datatype">
-						<xsl:text>http://www.w3.org/2001/XMLSchema#dateTime</xsl:text>
-					</xsl:attribute>
-					<xsl:value-of select="lom:dateTime/text()" />
-				</xsl:element>
-			</xsl:when>
-		</xsl:choose>
-	</xsl:template>
-
 	<xsl:template match="lom:entity" mode="metaMetadata">
 		<mlr8:DES1000>
 			<xsl:apply-templates mode="vcard" select="vcardconv:convert(text())" />
@@ -1798,58 +1751,55 @@
 	<!-- classification -->
 
 	<xsl:template match="lom:classification" mode="top">
-		<xsl:variable name="curriculum">
+		<xsl:apply-templates mode="classification" select="." />
+	</xsl:template>
+
+	<xsl:template match="lom:classification[lom:purpose[lom:source/text()='LOMv1.0' and lom:value/text()='discipline']]" mode="classification">
+		<xsl:variable name="target">
+			<xsl:call-template name="classification_content" >
+				<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:if test="string-length($target)">
+			<xsl:copy-of select="$target"/>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template match="lom:classification[lom:purpose[lom:source/text()='LOMv1.0' and lom:value/text()='educational level']]" mode="classification">
+		<xsl:variable name="target">
+			<xsl:call-template name="classification_content" >
+				<xsl:with-param name="nodename" select="'mlr5:DES1000'"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:if test="string-length($target)&gt;0">
 			<mlr5:DES1900>
 				<mlr5:RC0004>
 					<xsl:attribute name="rdf:about">
 						<xsl:text>urn:uuid:</xsl:text>
 						<xsl:value-of select="mlrext:uuid_unique()"/>
 					</xsl:attribute>
-					<xsl:apply-templates mode="classification_curriculum" select="."/>
+					<xsl:copy-of select="$target"/>
 				</mlr5:RC0004>
 			</mlr5:DES1900>
-		</xsl:variable>
-		<xsl:apply-templates mode="classification" select="." />
-		<xsl:if test="string-length($curriculum)&gt;0">
-			<xsl:copy-of select="$curriculum"/>
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="lom:classification[lom:purpose[lom:source/text()='LOMv1.0' and lom:value/text()='discipline']]" mode="classification">
+	<xsl:template name="classification_content" >
+		<xsl:param name="nodename"/>
 		<xsl:choose>
 			<xsl:when test="lom:description">
 				<xsl:apply-templates select="lom:description/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
+					<xsl:with-param name="nodename" select="$nodename"/>
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:when test="lom:keyword">
 				<xsl:apply-templates select="lom:keyword/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
+					<xsl:with-param name="nodename" select="$nodename"/>
 				</xsl:apply-templates>
 			</xsl:when>
-			<xsl:when test="lom:taxonPath">
-				<xsl:apply-templates select="lom:taxonPath/lom:taxon[last()]/lom:entry/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
-				</xsl:apply-templates>
-			</xsl:when>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template match="lom:classification[lom:purpose[lom:source/text()='LOMv1.0' and lom:value/text()='educational level']]" mode="classification_curriculum">
-		<xsl:choose>
-			<xsl:when test="lom:description">
-				<xsl:apply-templates select="lom:description/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr5:DES1000'"/>
-				</xsl:apply-templates>
-			</xsl:when>
-			<xsl:when test="lom:keyword">
-				<xsl:apply-templates select="lom:keyword/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr5:DES1000'"/>
-				</xsl:apply-templates>
-			</xsl:when>
-			<xsl:when test="lom:taxonPath">
-				<xsl:apply-templates select="lom:taxonPath/lom:taxon[last()]/lom:entry/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr5:DES1000'"/>
+			<xsl:when test="lom:taxonPath[lom:taxon/lom:entry/lom:string]">
+				<xsl:apply-templates select="lom:taxonPath/lom:taxon[lom:entry/lom:string][last()]/lom:entry/lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="$nodename"/>
 				</xsl:apply-templates>
 			</xsl:when>
 		</xsl:choose>
@@ -1873,6 +1823,50 @@
 
 	<xsl:template match="*" mode="langstring">
 		<xsl:message terminate="yes">Langstring called on non-string</xsl:message>
+	</xsl:template>
+
+	<xsl:template name="language">
+		<xsl:param name="l"/>
+		<xsl:choose>
+			<xsl:when test="regexp:test($l,'^[a-z][a-z]\-[A-Z][A-Z]$')">
+				<xsl:call-template name="iso639_2to3">
+					<xsl:with-param name="l" select="substring-before($l,'-')"/>
+				</xsl:call-template>
+				<xsl:text>-</xsl:text>
+				<xsl:value-of select="substring-after($l,'-')"/>
+			</xsl:when>
+			<xsl:when test="regexp:test($l,'^[a-z][a-z]$')">
+				<xsl:call-template name="iso639_2to3">
+					<xsl:with-param name="l" select="$l"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$l"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="date">
+		<xsl:param name="nodename"/>
+		<xsl:choose>
+			<!-- first cases: valid 8601 date or datetime -->
+			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6]))))$')">
+				<xsl:element name="{$nodename}">
+					<xsl:attribute name="rdf:datatype">
+						<xsl:text>http://www.w3.org/2001/XMLSchema#date</xsl:text>
+					</xsl:attribute>
+					<xsl:value-of select="lom:dateTime/text()" />
+				</xsl:element>
+			</xsl:when>
+			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$')">
+				<xsl:element name="{$nodename}">
+					<xsl:attribute name="rdf:datatype">
+						<xsl:text>http://www.w3.org/2001/XMLSchema#dateTime</xsl:text>
+					</xsl:attribute>
+					<xsl:value-of select="lom:dateTime/text()" />
+				</xsl:element>
+			</xsl:when>
+		</xsl:choose>
 	</xsl:template>
 
 <!-- copy -->
