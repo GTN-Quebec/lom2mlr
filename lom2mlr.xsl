@@ -330,14 +330,17 @@
 	<xsl:template name="language">
 		<xsl:param name="l"/>
 		<xsl:choose>
-			<xsl:when test="regexp:test($l,'^[a-z][a-z](\-[A-Z][A-Z])?$')">
+			<xsl:when test="regexp:test($l,'^[a-z][a-z]\-[A-Z][A-Z]$')">
 				<xsl:call-template name="iso639_2to3">
 					<xsl:with-param name="l" select="substring-before($l,'-')"/>
 				</xsl:call-template>
-				<xsl:if test="substring-after($l,'-') != ''">
-					<xsl:text>-</xsl:text>
-					<xsl:value-of select="substring-after($l,'-')"/>
-				</xsl:if>
+				<xsl:text>-</xsl:text>
+				<xsl:value-of select="substring-after($l,'-')"/>
+			</xsl:when>
+			<xsl:when test="regexp:test($l,'^[a-z][a-z]$')">
+				<xsl:call-template name="iso639_2to3">
+					<xsl:with-param name="l" select="$l"/>
+				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$l"/>
@@ -1602,12 +1605,32 @@
 		</xsl:if>
 	</xsl:template>
 
+	<xsl:template match="lom:description" mode="educational">
+		<mlr5:DES1300>
+			<mlr5:RC0001>
+				<xsl:attribute name="rdf:about">
+					<xsl:text>urn:uuid:</xsl:text>
+					<xsl:value-of select="mlrext:uuid_unique()"/>
+				</xsl:attribute>
+				<xsl:apply-templates select="lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="'mlr5:DES0200'"/>
+				</xsl:apply-templates>
+			</mlr5:RC0001>
+		</mlr5:DES1300>
+	</xsl:template>
+
 	<xsl:template match="lom:learningResourceType" mode="educational_learning_activity">
-		<xsl:call-template name="mlr5_DES2800"/>
+		<xsl:call-template name="mlr5_DES2100"/>
 	</xsl:template>
 
 	<xsl:template match="lom:intendedEndUserRole" mode="educational_audience">
 		<xsl:call-template name="mlr5_DES0600"/>
+	</xsl:template>
+
+	<xsl:template match="lom:typicalLearningTime[lom:duration]" mode="educational_learning_activity">
+		<mlr5:DES3000 rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">
+			<xsl:value-of select="lom:duration/text()"/>
+		</mlr5:DES3000>
 	</xsl:template>
 
 	<xsl:template match="lom:context" mode="educational_audience">
@@ -1642,26 +1665,6 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template match="lom:typicalLearningTime[lom:duration]" mode="educational_learning_activity">
-		<mlr5:DES3000 rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">
-			<xsl:value-of select="lom:duration/text()"/>
-		</mlr5:DES3000>
-	</xsl:template>
-
-	<xsl:template match="lom:description" mode="educational">
-		<mlr5:DES1300>
-			<mlr5:RC0001>
-				<xsl:attribute name="rdf:about">
-					<xsl:text>urn:uuid:</xsl:text>
-					<xsl:value-of select="mlrext:uuid_unique()"/>
-				</xsl:attribute>
-				<xsl:apply-templates select="lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr5:DES0200'"/>
-				</xsl:apply-templates>
-			</mlr5:RC0001>
-		</mlr5:DES1300>
-	</xsl:template>
-
 	<xsl:template match="lom:language" mode="educational_audience">
 		<mlr5:DES0400>
 			<xsl:call-template name="language">
@@ -1669,6 +1672,7 @@
 			</xsl:call-template>
 		</mlr5:DES0400>
 	</xsl:template>
+
 
 	<!-- rights -->
 
@@ -1680,13 +1684,34 @@
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:when test="lom:cost[lom:source/text()='LOMv1.0' and lom:value/text()='yes']">
-				<mlr2:DES1500 xml:lang="fra">Coût</mlr2:DES1500>
+				<xsl:choose>
+					<xsl:when test="$text_language='eng'">
+						<mlr2:DES1500 xml:lang="eng">There are costs.</mlr2:DES1500>
+					</xsl:when>
+					<xsl:when test="$text_language='fra'">
+						<mlr2:DES1500 xml:lang="fra">Il y a des coûts.</mlr2:DES1500>
+					</xsl:when>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:when test="lom:copyrightAndOtherRestrictions[lom:source/text()='LOMv1.0' and lom:value/text()='yes']">
-				<mlr2:DES1500 xml:lang="fra">Copyright ou autres restrictions</mlr2:DES1500>
+				<xsl:choose>
+					<xsl:when test="$text_language='eng'">
+						<mlr2:DES1500 xml:lang="eng">Copyright or other restrictions apply.</mlr2:DES1500>
+					</xsl:when>
+					<xsl:when test="$text_language='fra'">
+						<mlr2:DES1500 xml:lang="fra">Un copyright ou d'autres restrictions s'appliquent.</mlr2:DES1500>
+					</xsl:when>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:when test="lom:cost[lom:source/text()='LOMv1.0' and lom:value/text()='no'] and lom:copyrightAndOtherRestrictions[lom:source/text()='LOMv1.0' and lom:value/text()='no']">
-				<mlr2:DES1500 xml:lang="fra">Pas de copyright</mlr2:DES1500>
+				<xsl:choose>
+					<xsl:when test="$text_language='eng'">
+						<mlr2:DES1500 xml:lang="fra">Free, no copyright.</mlr2:DES1500>
+					</xsl:when>
+					<xsl:when test="$text_language='fra'">
+						<mlr2:DES1500 xml:lang="fra">Gratuit, pas de copyright.</mlr2:DES1500>
+					</xsl:when>
+				</xsl:choose>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
