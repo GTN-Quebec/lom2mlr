@@ -3014,21 +3014,333 @@ Without
     <urn:uuid:10000000-0000-0000-0000-000000000000> mlr4:DES0300 "one fortnight".
 
 ## Educational
+
+### Learning resource type
+
+The learning resource type is integrated as-is in `mlr2:DES0800`. Moreover, if MLR3 is enabled an the learning resource type is known, and corresponds to a MLR resource type from vocabulary `ISO_IEC_19788-3:2011::VA.2 `, it will be translated in `mlr3:DES0700`.
+
+However, there is extremely limited overlap between known LOM resource types and MLR resource types. We have identified the following:
+
+| LOMv1.0        | ISO_IEC_19788-3:2011::VA.2 |
+|:---------------|:------------|
+| diagram        |        T011 |
+| figure         |        T011 |
+| graph          |        T011 |
+| slide          |        T011 |
+| table          |        T002 |
+| narrative text |        T012 |
+
+Leaving out `exercise`, `simulation`, `questionnaire`, `index`, `exam`, `experiment`, `problem statement`, `self assessment`, and `lecture`.
+
+Still, given 
+
+    :::xml
+    <educational>
+        <learningResourceType>
+            <source>LOMv1.0</source>
+            <value>table</value>
+        </learningResourceType>
+    </educational>
+
+We obtain
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES0800 "table";
+        mlr3:DES0700 "T002".
+
+### Difficulty, semantic density, interactivity level.
+
+Those LOM concepts have no clear MLR equivalent.
+
 ### Learning_activity
-#### Learning resource type
+
+If learning activity information is found, a new learning activity object with a UUID-1 is created. It is unfortunately impossible to identify learning activities in LOM records.
+
+#### Inferring activity from learning resource types
+
+Some learning resource types allow us to infer learning activity. We have identified the following:
+
+| LOMv1.0        | ISO_IEC_19788-5:2012::VA.3 |
+|:---------------|:------------|
+|exercise          |T140|
+|simulation        |T160|
+|questionnaire     |T130|
+|exam              |T130|
+|experiment        |T150|
+|problem statement |T150|
+|self assessment   |T130|
+
+Leaving out `diagram`, `figure`, `graph`, `index`, `slide`, `table`, `narrative text` and `lecture`.
+
+Still, given 
+
+    :::xml
+    <educational>
+        <learningResourceType>
+            <source>LOMv1.0</source>
+            <value>self assessment</value>
+        </learningResourceType>
+    </educational>
+
+We obtain
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr5:DES2000 <urn:uuid:10000000-0000-0000-0000-000000000001>.
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr5:RC0005;
+        mlr5:DES2100 "T130".
+
 #### Typical learning time
+
+The typical learning time, carries durations over directly to `mlr5:DES3000`. So from
+
+    :::xml
+    <educational>
+        <typicalLearningTime>
+            <duration>P2T</duration>
+        </typicalLearningTime>
+    </educational>
+
+We obtain
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr5:DES2000 <urn:uuid:10000000-0000-0000-0000-000000000001>.
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr5:RC0005;
+        mlr5:DES3000 "P2T"^^<http://www.w3.org/2001/XMLSchema#duration>.
+
 ### Audience
+
+As with learning activity, if information relevant to the audience is found, a audience object with a UUID-1 is created.
+
 #### Intended end user role
+
+LOMv1.0 Intended user roles translates to the MLR5 `ISO_IEC_19788-5:2012::VA.2` audience role vocabulary as follows:
+
+| LOMv1.0        | ISO_IEC_19788-5:2012::VA.2 |
+|:---------------|:------------|
+|teacher|T040|
+|author|?|
+|learner|T010|
+|manager|T020|
+
+So 
+
+    :::xml
+    <educational>
+        <intendedEndUserRole>
+            <source>LOMv1.0</source>
+            <value>teacher</value>
+        </intendedEndUserRole>
+    </educational>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr5:DES1500 <urn:uuid:10000000-0000-0000-0000-000000000001>.
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr5:RC0002;
+        mlr5:DES0600 "T040".
+
 #### Typical age range
+
+The LOM typical age range is usually given in one of the following formats. Any other format is ignored.
+
+##### Closed range
+
+    :::xml
+    <educational>
+        <typicalAgeRange>
+            <string>10-13</string>
+        </typicalAgeRange>
+    </educational>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr5:DES1500 <urn:uuid:10000000-0000-0000-0000-000000000001>.
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr5:RC0002;
+        mlr5:DES2600 "10"^^<http://www.w3.org/2001/XMLSchema#int>;
+        mlr5:DES2500 "13"^^<http://www.w3.org/2001/XMLSchema#int>.
+
+##### Open range
+
+    :::xml
+    <educational>
+        <typicalAgeRange>
+            <string>10-</string>
+        </typicalAgeRange>
+    </educational>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr5:DES1500 <urn:uuid:10000000-0000-0000-0000-000000000001>.
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr5:RC0002;
+        mlr5:DES2600 "10"^^<http://www.w3.org/2001/XMLSchema#int>.
+
+##### Single year
+
+    :::xml
+    <educational>
+        <typicalAgeRange>
+            <string>10</string>
+        </typicalAgeRange>
+    </educational>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr5:DES1500 <urn:uuid:10000000-0000-0000-0000-000000000001>.
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr5:RC0002;
+        mlr5:DES2600 "10"^^<http://www.w3.org/2001/XMLSchema#int>;
+        mlr5:DES2500 "10"^^<http://www.w3.org/2001/XMLSchema#int>.
+
 #### Context
 
-### Annotation
-### Learning resource type
+Educational context text is used as-is in `mlr5:DES0500`. (To be improved.)
+
+    :::xml
+    <educational>
+        <context>
+          <source>LOMv1.0</source>
+          <value>School</value>
+        </context>
+    </educational>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr5:DES1500 <urn:uuid:10000000-0000-0000-0000-000000000001>.
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr5:RC0002;
+        mlr5:DES0500 "School".
+
+#### Language
+
+The resource educational language is assigned to the audience. It is treated as usual, with ISO-636-2 being converted to ISO-636-3, and other values being used as-is.
+
+    :::xml
+    <educational>
+        <language>fr</language>
+    </educational>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr5:DES1500 <urn:uuid:10000000-0000-0000-0000-000000000001>.
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr5:RC0002;
+        mlr5:DES0400 "fra".
+
 ### Description
-### Language
+
+Descriptions are treated as a form of annotation.
+
+    :::xml
+    <educational>
+        <description>
+            <string language="eng">Use this resource for group activities.</string>
+        </description>
+    </educational>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr5:DES1300 <urn:uuid:10000000-0000-0000-0000-000000000001>.
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr5:RC0001;
+        mlr5:DES0200 "Use this resource for group activities."@eng.
+
 
 ## Rights
+
+The MLR rights document is still under discussion, but some aspects of LOM rights can be introduced as `mlr2:DES1500`. Unfortunately, those aspects have to be translated into a linguistic string, so we are again resorting to `text_language` for conversion.
+
+### Copyright description
+
+The description can be transferred as is.
+
+    :::xml
+    <rights>
+        <description>
+            <string language="fra">Domaine public.</string>
+        </description>
+    </rights>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES1500 "Domaine public."@fra .
+
+### Costs
+
+When there is no description, but costs exist, they can be mentioned as such. (Copyright is then assumed to apply.)
+
+    :::xml
+    <rights>
+        <cost>
+            <source>LOMv1.0</source>
+            <value>yes</value>
+        </cost>
+    </rights>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES1500 "There are costs."@eng .
+
+### Copyright and other restrictions
+
+When there is no cost, but copyright is mentioned, we can mention that as well.
+
+    :::xml
+    <rights>
+        <copyrightAndOtherRestrictions>
+            <source>LOMv1.0</source>
+            <value>yes</value>
+        </copyrightAndOtherRestrictions>
+    </rights>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES1500 "Copyright or other restrictions apply."@eng .
+
+### No cost or copyright
+
+If cost and copyright are both explicitly absent, we can mention that. Other possibilities are not analyzed.
+
+
+    :::xml
+    <rights>
+        <cost>
+            <source>LOMv1.0</source>
+            <value>no</value>
+        </cost>
+        <copyrightAndOtherRestrictions>
+            <source>LOMv1.0</source>
+            <value>no</value>
+        </copyrightAndOtherRestrictions>
+    </rights>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES1500 "Free, no copyright."@eng .
+
 ## Relations
+
+
+
 ## Annotation
 ## Classification
 ### Discipline
