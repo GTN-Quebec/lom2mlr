@@ -3389,6 +3389,39 @@ Becomes
         mlr2:DES1300 "http://www.example.com/resources/1234" .
 
 ## Annotation
+
+LOM annotations are treated as educational annotations of an unknown type. Treatment of dates and vcards is as usual.
+
+
+    :::xml
+    <annotation>
+        <entity>
+            <vcard>BEGIN:VCARD
+    VERSION:3.0
+    N:Parent;Marc-Antoine.
+    FN:Marc-Antoine Parent
+    URL:http://maparent.ca/
+    END:VCARD
+    </vcard>
+        </entity>
+        <date>
+            <dateTime>2004-04-01</dateTime>
+        </date>
+        <description>
+            <string language="fra">Cette ressource exige beaucoup d'aide de l'enseignant.</string>
+        </description>
+    </annotation>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr5:DES1300 <urn:uuid:10000000-0000-0000-0000-000000000001>.
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr5:RC0001;
+        mlr5:DES1400 <http://maparent.ca/> ;
+        mlr5:DES0200 "Cette ressource exige beaucoup d'aide de l'enseignant."@fra ;
+        mlr5:DES0100 "2004-04-01"^^<http://www.w3.org/2001/XMLSchema#date> .
+
 ## Classification
 ### Discipline
 ### Curriculum
