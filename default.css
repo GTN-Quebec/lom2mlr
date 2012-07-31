@@ -48,13 +48,13 @@ h5:before {
     counter-increment: mynum-h5;
 }
 
-.lang_en {
+.lang_eng {
     display: none;
 }
-.lang_ru {
+.lang_rus {
     display: none;
 }
-.lang_fr {
+.lang_fra {
     display: none;
 }
 
