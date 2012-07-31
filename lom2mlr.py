@@ -144,6 +144,20 @@ class Converter(object):
         if xml:
             return Graph().parse(data=etree.tounicode(xml), format="xml")
 
+    def populate_argparser(self, parser=None):
+        if parser is None:
+            parser = argparse.ArgumentParser()
+        for name, desc in self.sheet_options.items():
+            default = self.option_defaults[name]
+            if default == 'true()':
+                parser.add_argument('--no-'+name, action='store_false', dest=name, help=desc, default=True)
+            elif default == 'false()':
+                parser.add_argument('--'+name, action='store_true', help=desc, default=False)
+            elif default[0] == "'" and default[-1] == "'":
+                parser.add_argument('--'+name, help=desc, default=default[1:-1])
+        return parser
+
+
 
 if __name__ == '__main__':
     converter = Converter(STYLESHEET)
@@ -155,14 +169,7 @@ if __name__ == '__main__':
                              " 'turtle', 'nt', 'pretty-xml', trix'")
     parser.add_argument('-o', '--output', help="Output file",
                         type=argparse.FileType('w'), default=sys.stdout)
-    for name, desc in converter.sheet_options.items():
-        default = converter.option_defaults[name]
-        if default == 'true()':
-            parser.add_argument('--no-'+name, action='store_false', dest=name, help=desc, default=True)
-        elif default == 'false()':
-            parser.add_argument('--'+name, action='store_true', help=desc, default=False)
-        elif default[0] == "'" and default[-1] == "'":
-            parser.add_argument('--'+name, help=desc, default=default[1:-1])
+    converter.populate_argparser(parser)
     parser.add_argument('infile')
     args = parser.parse_args()
     converter.set_options_from_dict(vars(args))

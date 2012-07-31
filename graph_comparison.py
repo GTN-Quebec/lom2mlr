@@ -162,6 +162,7 @@ class GraphTester(object):
 
     def __init__(self):
         self.converter = Converter()
+        self.parser = self.converter.populate_argparser()
         self.reset()
 
     def normalizeTerm(self, graph, term):
@@ -220,7 +221,7 @@ class GraphTester(object):
         triples = forbidden_graph.triples((None, None, None))
         for triple in triples:
             if list(obtained_graph.triples(comparator_fo.translate_triple(triple))) \
-                and not list(expected_graph.triples(translate_triple(triple, map_fe))):
+                    and not list(expected_graph.triples(translate_triple(triple, map_fe))):
                 errors.append(tuple([self.normalizeTerm(nsm, x) for x in triple]))
         return errors
 
@@ -229,17 +230,12 @@ class GraphTester(object):
         errors = []
         if args and args.lower() == 'forbidden':
             assert(self.last_graph)
-            errors = [(self.UNEXPECTED, e) for e in 
-                        self.find_forbidden(graph, self.last_graph)]
+            errors = [(self.UNEXPECTED, e) for e in
+                      self.find_forbidden(graph, self.last_graph)]
         else:
             if args:
-                options = {}
-                for arg in args.split():
-                    if arg[0] == '-':
-                        options[arg[1:]] = False
-                    else:
-                        options[arg] = True
-                self.converter.set_options_from_dict(options)
+                options = self.parser.parse_args(args.split())
+                self.converter.set_options_from_dict(vars(options))
             else:
                 self.converter.set_options_from_dict()
             obtained_graph = self.converter.lomxml2graph(self.last_lom)
