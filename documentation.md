@@ -267,12 +267,8 @@ Description could be interpreted as `mlr2:DES0400`, but in practice there is nev
 Becomes
 
     :::N3
-    [] mlr3:DES0200 "L'enseignant identifie les contraintes..."@fra-CA .
-
-As well as
-
-    :::N3 -id_from_mlr3
-    [] mlr2:DES0400 "L'enseignant identifie les contraintes..."@fra-CA .
+    [] mlr3:DES0200 "L'enseignant identifie les contraintes..."@fra-CA ;
+       mlr2:DES0400 "L'enseignant identifie les contraintes..."@fra-CA .
 
 #### general/keyword ####
 
@@ -968,7 +964,7 @@ Note the absence of mlr9:DES0100 in that case, so we do not have:
 
 But if we set `person_uuid_from_fn`, we then have:
 
-    :::N3 person_uuid_from_fn
+    :::N3 --person_uuid_from_fn
     <urn:uuid:10000000-0000-0000-0000-000000000001>  a mlr1:RC0002; 
         mlr5:DES1700 <urn:uuid:10000000-0000-0000-0000-000000000002> .
     <urn:uuid:10000000-0000-0000-0000-000000000002> a mlr5:RC0003;
@@ -1007,7 +1003,7 @@ Uses a UUID1, thus:
 
 But if we set `person_uuid_from_fn`, we then have:
 
-    :::N3 person_uuid_from_fn
+    :::N3 --person_uuid_from_fn
     <urn:uuid:10000000-0000-0000-0000-000000000001>  a mlr1:RC0002; 
         mlr5:DES1700 <urn:uuid:10000000-0000-0000-0000-000000000002> .
     <urn:uuid:10000000-0000-0000-0000-000000000002> a mlr5:RC0003;
@@ -1264,7 +1260,7 @@ Using an organization's email alone as identity is possible, and more appropriat
 
 Becomes
 
-    :::N3 -org_uuid_from_email_fn
+    :::N3 --no-org_uuid_from_email_fn
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 <mailto:info@gtn-quebec.org> ] .
@@ -1367,7 +1363,7 @@ As mentioned, it is debatable whether the `ORG` alone could be considered distin
 
 Becomes, with `org_uuid_from_org_or_fn`,
 
-    :::N3 org_uuid_from_org_or_fn
+    :::N3 --org_uuid_from_org_or_fn
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 <urn:uuid:88e3aa1b-9aec-51c4-86d2-58a8080832b9> ] .
@@ -1396,7 +1392,7 @@ What we said above about `ORG` also applies to `FN`.
 
 Becomes, with `org_uuid_from_org_or_fn`,
 
-    :::N3 org_uuid_from_org_or_fn
+    :::N3 --org_uuid_from_org_or_fn
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 [ a mlr9:RC0002;
@@ -1520,7 +1516,7 @@ Becomes
 
 But if `suborg_use_work_email` is set to true:
 
-    :::N3 suborg_use_work_email
+    :::N3 --suborg_use_work_email
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 [a mlr9:RC0001 ;
@@ -1556,7 +1552,7 @@ It is possible for a vCard to associate multiple organizations with a single per
 
 Leading to
 
-    :::N3 suborg_use_work_email
+    :::N3 --suborg_use_work_email
     []  a mlr1:RC0002; 
         mlr5:DES1700 [ a mlr5:RC0003;
             mlr5:DES1800 <http://maparent.ca/> ] .
@@ -2428,12 +2424,594 @@ Becomes
 
 ## Technical
 
+Most technical properties are translated in a straightforward way,  with the exception of requirements.
+
 ### Format
+
+Format carries over to `mlr2:DES0900`. 
+
+    :::xml
+    <technical>
+        <format>interactive</format>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES0900 "interactive" .
+
+#### Mime types
+
+If the format is a MIME type (recognized by a regexp), it will also be identified as `mlr3:DES0300` (provided mlr3 tags are enabled.)
+
+    :::xml
+    <technical>
+        <format>text/html</format>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES0900 "text/html" ;
+        mlr3:DES0300 "text/html".
+
+
+#### non-digital
+
+Similarly for format marked as "non-digital".
+
+    :::xml
+    <technical>
+        <format>non-digital</format>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES0900 "non-digital" ;
+        mlr3:DES0300 "non-digital".
+
+
 ### Size
+
+LOM size is given in bytes, and is an integer.
+
+    :::xml
+    <technical>
+        <size>1024</size>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0200 "1024"^^<http://www.w3.org/2001/XMLSchema#int> .
+
 ### Location
+
+Location URLs are translated as literals.
+
+    :::xml
+    <technical>
+        <location>http://example.com/resource/1234.html</location>
+        <location>http://example.com/resource/1234.pdf</location>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0100 "http://example.com/resource/1234.html" ,
+             "http://example.com/resource/1234.pdf" .
+
 ### Requirement
-### Installation remarks
-### Other platform requirements
+
+LOM requirements are highly structured, and allow for disjunction (`orComposite`) of a set of conjoined terms. Each term may involve constraints of type and minimum or maximum version on the OS or browser. Unfortunately, MLR technical requirements are much less structured, and conversion involves translating those structured requirements into a natural language literal. There is a further downside to this: such translation must be language-dependent, whereas most of MLR strives to be language-independant. Downstream translation machinery cannot re-translate the resulting literal, at least in most cases.
+
+We have introduced a `text_language` parameter, defaulting to `eng`, for this linguistic generation.
+
+#### OS requirements
+##### Defined OS
+
+LOM defines the OS values `pc-dos`, `ms-windows`, `unix` and `macos`.
+
+    :::xml
+    <technical>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>operating system</value>
+                </type>
+                <name>
+                    <source>LOMv1.0</source>
+                    <value>pc-dos</value>
+                </name>
+            </orComposite>
+        </requirement>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "The operating system must be MS-DOS."@eng .
+
+Without a known `text_language`, we attempt to give a neutral string.
+
+    :::n3 --text_language xxx
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "operating system = pc-dos" .
+
+##### Any OS
+
+LOM also allows the os value to be `multi-os`.
+
+    :::xml
+    <technical>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>operating system</value>
+                </type>
+                <name>
+                    <source>LOMv1.0</source>
+                    <value>multi-os</value>
+                </name>
+            </orComposite>
+        </requirement>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "The operating system can be any operating system."@eng .
+
+Without a known `text_language`, we attempt to give a neutral string.
+
+    :::n3 --text_language xxx
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "operating system = ?" .
+
+##### Any OS
+
+LOM also allows the os value to be `none`.
+
+    :::xml
+    <technical>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>operating system</value>
+                </type>
+                <name>
+                    <source>LOMv1.0</source>
+                    <value>none</value>
+                </name>
+            </orComposite>
+        </requirement>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "The operating system is not needed."@eng .
+
+Without a known `text_language`, we attempt to give a neutral string.
+
+    :::n3 --text_language xxx
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "operating system = 0" .
+
+#### Browser requirements
+
+##### Defined Browser
+
+LOM defines the browser values `netscape communicator`, `ms-internet explorer`, `opera`, `amaya`. 
+
+    :::xml
+    <technical>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>browser</value>
+                </type>
+                <name>
+                    <source>LOMv1.0</source>
+                    <value>ms-internet explorer</value>
+                </name>
+            </orComposite>
+        </requirement>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "The browser must be Microsoft Internet Explorer."@eng .
+
+Without a known `text_language`, we attempt to give a neutral string.
+
+    :::n3 --text_language xxx
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "browser = ms-internet explorer" .
+
+##### Any browser
+
+LOM also allows the browser to be `any`.
+
+    :::xml
+    <technical>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>browser</value>
+                </type>
+                <name>
+                    <source>LOMv1.0</source>
+                    <value>any</value>
+                </name>
+            </orComposite>
+        </requirement>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "The browser can be any browser."@eng .
+
+Without a known `text_language`, we attempt to give a neutral string.
+
+    :::n3 --text_language xxx
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "browser = ?" .
+
+##### No browser
+
+LOM also allows the browser value to be `none`.
+
+    :::xml
+    <technical>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>browser</value>
+                </type>
+                <name>
+                    <source>LOMv1.0</source>
+                    <value>none</value>
+                </name>
+            </orComposite>
+        </requirement>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "The browser is not needed."@eng .
+
+Without a known `text_language`, we attempt to give a neutral string.
+
+    :::n3 --text_language xxx
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "browser = 0" .
+
+##### Unknown browser or operating system
+
+If the browser or operating system is not a known value from the LOMv1.0 vocabulary, it is used as is, and the source is discarded.
+
+    :::xml
+    <technical>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>operating system</value>
+                </type>
+                <name>
+                    <source>http://palm.com</source>
+                    <value>PalmOS</value>
+                </name>
+            </orComposite>
+        </requirement>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "The operating system must be PalmOS."@eng .
+
+Without a known `text_language`, we attempt to give a neutral string.
+
+    :::n3 --text_language xxx
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "operating system = PalmOS" .
+
+##### Unknown requirement type
+
+If the requirement type is not a known value from the LOMv1.0 vocabulary, it is used as is, and the source is discarded.
+
+    :::xml
+    <technical>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>http://microsoft.com</source>
+                    <value>graphic card</value>
+                </type>
+                <name>
+                    <source>http://microsoft.com</source>
+                    <value>DirectX</value>
+                </name>
+            </orComposite>
+        </requirement>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "'graphic card' must be DirectX."@eng .
+
+Without a known `text_language`, we attempt to give a neutral string.
+
+    :::n3 --text_language xxx
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "graphic card = DirectX" .
+
+
+#### Minimum version
+
+The minimum version is integrated in the text.
+
+    :::xml
+    <technical>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>operating system</value>
+                </type>
+                <name>
+                    <source>LOMv1.0</source>
+                    <value>macos</value>
+                </name>
+                <minimumVersion>10.6.1</minimumVersion>
+            </orComposite>
+        </requirement>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "The operating system must be Mac OS, version at least 10.6.1."@eng .
+
+Without a known `text_language`, we attempt to give a neutral string.
+
+    :::n3 --text_language xxx
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "operating system = macos >= 10.6.1" .
+
+
+#### Maximum version
+
+So is the maximum version.
+
+    :::xml
+    <technical>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>operating system</value>
+                </type>
+                <name>
+                    <source>LOMv1.0</source>
+                    <value>macos</value>
+                </name>
+                <maximumVersion>10.6</maximumVersion>
+            </orComposite>
+        </requirement>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "The operating system must be Mac OS, version at most 10.6."@eng .
+
+Without a known `text_language`, we attempt to give a neutral string.
+
+    :::n3 --text_language xxx
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "operating system = macos <= 10.6" .
+
+#### Both minimum and maximum version
+
+The text is adjusted accordingly when both values are given.
+
+    :::xml
+    <technical>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>operating system</value>
+                </type>
+                <name>
+                    <source>LOMv1.0</source>
+                    <value>macos</value>
+                </name>
+                <minimumVersion>10.4</minimumVersion>
+                <maximumVersion>10.7</maximumVersion>
+            </orComposite>
+        </requirement>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "The operating system must be Mac OS, version at least 10.4 and at most 10.7."@eng .
+
+Without a known `text_language`, we attempt to give a neutral string.
+
+    :::n3 --text_language xxx
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "operating system = macos >= 10.4 & <= 10.7" .
+
+#### Disjunction
+
+When many `orComposite` elements are given in a technical `requirement`, they represent a logical disjunction.
+
+    :::xml
+    <technical>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>operating system</value>
+                </type>
+                <name>
+                    <source>LOMv1.0</source>
+                    <value>macos</value>
+                </name>
+            </orComposite>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>operating system</value>
+                </type>
+                <name>
+                    <source>LOMv1.0</source>
+                    <value>unix</value>
+                </name>
+            </orComposite>
+        </requirement>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "One of the following options: the operating system must be Mac OS; or the operating system must be unix."@eng .
+
+Without a known `text_language`, we attempt to give a neutral string.
+
+    :::n3 --text_language xxx
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "operating system = macos ⋁ operating system = unix" .
+
+
+#### Conjunction
+
+Logical conjunction is represented by multiple requirement elements, which are simply translated in so many constraint elements.
+
+    :::xml
+    <technical>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>operating system</value>
+                </type>
+                <name>
+                    <source>LOMv1.0</source>
+                    <value>macos</value>
+                </name>
+            </orComposite>
+        </requirement>
+        <requirement>
+            <orComposite>
+                <type>
+                    <source>LOMv1.0</source>
+                    <value>browser</value>
+                </type>
+                <name>
+                    <source>LOMv1.0</source>
+                    <value>amaya</value>
+                </name>
+            </orComposite>
+        </requirement>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 "The operating system must be Mac OS."@eng,
+                     "The browser must be amaya."@eng.
+
+### Installation remarks and other platform requirements
+
+Installation remarks and other platform requirements are also transferred as-is in the technical requirements.
+
+
+    :::xml
+    <technical>
+        <installationRemarks>
+            <string language="eng">This software requires administrator permissions to install.</string>
+        </installationRemarks>
+        <otherPlatformRequirements>
+            <string language="eng">This software needs internet connectivity.</string>
+        </otherPlatformRequirements>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0400 
+            "This software requires administrator permissions to install."@eng,
+            "This software needs internet connectivity."@eng.
+
+### Duration
+
+The LOM duration may be defined using the ISO-8601 duration format, which may be detected by a regexp. In that case, it would be reformatted in the 'hh:mm:ss' format and transferred into the `mlr4:DES0300` field.
+
+    :::xml
+    <technical>
+        <duration>PT1H12M30S</duration>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr4:DES0300 "01:12:30"^^<http://www.w3.org/2001/XMLSchema#duration>.
+
+#### Unparsable duration
+
+Unparsable duration is ignored:
+
+    :::xml
+    <technical>
+        <duration>one fortnight</duration>
+    </technical>
+
+Becomes
+    
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002.
+
+Without 
+
+    :::n3 forbidden
+    <urn:uuid:10000000-0000-0000-0000-000000000000> mlr4:DES0300 "one fortnight".
 
 ## Educational
 ### Learning_activity
