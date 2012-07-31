@@ -64,10 +64,10 @@
 
     </group>
 
-    <group context="educational" element="learningResourceType" voc="" dest="mlr5:DES2800" always="false">
-        <term source="LOMv1.0" value="exercise" dest=""/>
-        <term source="LOMv1.0" value="simulation" dest=""/>
-        <term source="LOMv1.0" value="questionnaire" dest=""/>
+    <group context="educational" element="learningResourceType" voc="" dest="mlr5:DES2100" always="false">
+        <term source="LOMv1.0" value="exercise" dest="T140"/>
+        <term source="LOMv1.0" value="simulation" dest="T160"/>
+        <term source="LOMv1.0" value="questionnaire" dest="T130"/>
         <term source="LOMv1.0" value="diagram" dest=""/>
         <term source="LOMv1.0" value="figure" dest=""/>
         <term source="LOMv1.0" value="graph" dest=""/>
@@ -75,10 +75,10 @@
         <term source="LOMv1.0" value="slide" dest=""/>
         <term source="LOMv1.0" value="table" dest=""/>
         <term source="LOMv1.0" value="narrative text" dest=""/>
-        <term source="LOMv1.0" value="exam" dest=""/>
-        <term source="LOMv1.0" value="experiment" dest=""/>
-        <term source="LOMv1.0" value="problem statement" dest=""/>
-        <term source="LOMv1.0" value="self assessment" dest=""/>
+        <term source="LOMv1.0" value="exam" dest="T130"/>
+        <term source="LOMv1.0" value="experiment" dest="T150"/>
+        <term source="LOMv1.0" value="problem statement" dest="T150"/>
+        <term source="LOMv1.0" value="self assessment" dest="T130"/>
         <term source="LOMv1.0" value="lecture" dest=""/>
 
         <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="evaluation" dest=""/>
@@ -154,7 +154,7 @@
         <term source="LOMv1.0" value="learner" dest="T010"/>
         <term source="LOMv1.0" value="manager" dest="T020"/>
     </group>
-    <!-- group context="education" element="" voc="ISO_IEC_19788-5:2012::VA.3" dest="mlr5:DES2100" always="false">
+    <!-- group context="education" element="" voc="ISO_IEC_19788-5:2012::VA.3" dest="mlr5:DES2800" always="false">
         induced activity 
     </group>
     <group context="education" element="" voc="ISO_IEC_19788-5:2012::VA.4" dest="mlr5:DES2400" always="false">
