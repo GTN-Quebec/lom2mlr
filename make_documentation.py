@@ -180,7 +180,8 @@ class TranslateMlrTreeprocessor(Treeprocessor):
             for termtag in idtag.getiterator('term'):
                 lang = termtag.get('lang')
                 translations[lang]["%s:%s" % (idtag.get('ns'), idtag.get('id'))] = \
-                    u"%s_%s:%s" % (idtag.get('ns'), lang, name_trans.sub("_", termtag.text))
+                    u"%s:%s" % (idtag.get('ns'), name_trans.sub("_", termtag.text))
+#                   u"%s_%s:%s" % (idtag.get('ns'), lang, name_trans.sub("_", termtag.text))
         self.translations = translations
         vocs = {}
 
