@@ -228,7 +228,6 @@ class TranslateMlrTreeprocessor(Treeprocessor):
                 if 'mlr' in classes:
                     classes.remove('mlr')
                     pre = [e for e in el.getchildren() if e.tag == 'pre']
-                    print pre
                     assert len(pre) == 1
                     pre = pre[0]
                     code = [e for e in pre.getchildren() if e.tag == 'code']
