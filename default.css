@@ -58,6 +58,9 @@ h5:before {
     display: none;
 }
 
+.forbidden {border-left:5px solid red;}
+.forbidden div { background-color: fcc;}
+
 .example {border:2px solid black; padding: 1ex;}
 .codehilite {background-color:#ddd; border:1px dashed black; padding-left: 1em;}
 .error {background-color:#fdd;}

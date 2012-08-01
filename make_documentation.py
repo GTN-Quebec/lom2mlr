@@ -73,6 +73,14 @@ class TestTreeprocessor(Treeprocessor):
                 assert code_el.tag == 'code'
                 format, code, args = splitcode(code_el.text)
                 code_el.text = ":::%s\n%s" % (format, code)  # remove args
+                divclasses = [format]
+                if args == 'forbidden':
+                    divclasses.append(args)
+                if format.lower() == 'n3':
+                    divclasses.append('mlr')
+                subdiv = etree.Element('div', {'class':' '.join(divclasses)})
+                subdiv.append(element)
+                element = subdiv
                 if target is root:
                     example_num += 1
                     if self.buttons:
@@ -214,36 +222,31 @@ class TranslateMlrTreeprocessor(Treeprocessor):
                 continue
             div_els = div.getchildren()
             div.clear()
-            count = 0
             for el in div_els:
-                if el.tag == 'pre':
-                    if count == 0:
-                        css_class = "lom"
-                    else:
-                        css_class = "n3 mlr"
-                    new_div = etree.Element('div', {'class': css_class})
-                    div.append(new_div)
-                    new_div.append(el)
-                    if count > 0:
-                        code = [e for e in el.getchildren() if e.tag == 'code']
-                        if not code:
-                            print "missing code"
-                            continue
-                        code = code[0]
-                        t = code.text
-                        if isinstance(t, str):
-                            t = t.decode('utf-8')
-                        for lang in self.translations.keys():
-                            new_div = etree.Element('div', {'class': 'n3 lang_' + lang})
-                            div.append(new_div)
-                            new_pre = etree.Element('pre')
-                            new_div.append(new_pre)
-                            new_code = etree.Element('code')
-                            new_pre.append(new_code)
-                            new_code.text = self.mlr_r.sub(lambda m: self._trans(lang, m), t)
-                    count += 1
-                else:
-                    div.append(el)
+                div.append(el)
+                classes = set(el.get("class","").split())
+                if 'mlr' in classes:
+                    classes.remove('mlr')
+                    pre = [e for e in el.getchildren() if e.tag == 'pre']
+                    print pre
+                    assert len(pre) == 1
+                    pre = pre[0]
+                    code = [e for e in pre.getchildren() if e.tag == 'code']
+                    assert len(code) == 1
+                    code = code[0]
+                    t = code.text
+                    if isinstance(t, str):
+                        t = t.decode('utf-8')
+                    for lang in self.translations.keys():
+                        cl = classes.copy()
+                        cl.add('lang_' + lang)
+                        new_div = etree.Element('div', {'class': ' '.join(cl)})
+                        div.append(new_div)
+                        new_pre = etree.Element('pre')
+                        new_div.append(new_pre)
+                        new_code = etree.Element('code')
+                        new_pre.append(new_code)
+                        new_code.text = self.mlr_r.sub(lambda m: self._trans(lang, m), t)
         return root
 
 
