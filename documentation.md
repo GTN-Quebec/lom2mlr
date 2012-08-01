@@ -1,5 +1,6 @@
 # Converting LOM to MLR
 
+<!-- 
 TODO: Ouvrir compte GTN-Québec GitHub.
 TODO: Lots: Avec ou sans MLR record. (Toggle)
 MLR9: Suggestions
@@ -9,20 +10,14 @@ MLR9: Suggestions
 Identifier les heuristiques vs normatif comme telles. (couleur?)
 Toggle: Ajouter des informations hors-scope, comme l'addresse de vcard.owl
 trouver comment éliminer le marqueur linguistique dans le MLR traduit.
+FOAF: Make sure non-work group! sigh.
+-->
 
 # General principles
 
 ## Optional heuristics
 
 This tool aims to parse LOM records and create a MLR-compliant set of RDF triples. Some information needed by MLR cannot be found in a LOM record; this is especially true of VCard information. In this case, the tool uses some heuristics to deduce likely values for the MLR records. The most unreliable heuristics can be individually disabled with command-line options. (See the help.)
-
-
-
-
-
-TODO:
-FOAF: Make sure non-work group! sigh.
-
 
 ## Naming entities
 
@@ -55,22 +50,7 @@ What should the RDF identifier (`rdf:about`) of the resource be? There are two a
 By design, the LOM 'general/identifier' may be either a global or local identifier. Global identifiers are identified with a known global value for the `identifier/catalog`: Often one of `URI`, `URL`, `ISSN`, `DOI`, `PURL`, `ISBN`, etc. Any of those global identifiers can be made into a URI if it is not one already. This URI can also be used as-is for the literal identifier. Any other catalog value is treated as a local identifier. In the latter case, we cannot use the `mlr3:DES0400` marker, which should refer to a global identifier, unlike `mlr2:DES1000`.
 
 
-
-
-
 The `general/identifier` LOM tag is preferred as a RDF identification. It is also used for the mlr3:DES0400 element, the equivalent to `dc:identifier`.
-
-Attention: litéral dans DC... en théorie mais souvent un URI en pratique.
-Mettre comme litéral dans identifier.
-
-TODO: Traiter l'absence d'identifiants.
-Utiliser l'identifiant MLR2 si catalog contextuel vs catalog URI...
-(Mettre une note pour les inférences?)
-Annexe avec l'ontologie des sous-propriétés pour fins d'inférence.
-Utiliser technical location comme seed plutôt que identifier?
-S'il y en a plusieurs?
-
-
 
 #### URI catalog
 
@@ -146,8 +126,6 @@ If we have a local catalog and no location URL we can use as a global identifier
 1. Combine the catalog with the local identifier to obtain a local identifier. We use '|' as a separator, since it cannot be part of a URI, and this allows us to differentiate from URI identifiers. This can be used for the `mlr2:DES1000` value. (Recall we cannot use the `mlr3:DES0400` marker, which must refer to a global identifier.)
 2. For the resource identity, which must be a URI, generate a UUID-5 from the combined identifier above. This requires a base UUID as a namespace: I suggest we use `UUID5(NAMESPACE_URL, 'http://standards.iso.org/iso-iec/19788/-1/ed-1/en/RC0002')`, which is `cd6fbe1e-df95-5959-8a71-1e8ca353a0f3`.
 
-TODO: Should we include tool id and version in those UUIDs? That makes them change more, not less! So maybe a namespace UUID for the strategy?
-
 In this example, we would use `UUID5(UUID5(NAMESPACE_URL, 'http://standards.iso.org/iso-iec/19788/-1/ed-1/en/RC0002'), 'MyDatabase|123123')` 
 
     :::xml
@@ -190,8 +168,9 @@ Many elements have a direct translation in DublinCore, and hence in MLR-2.
 
 The title is translated directly as `mlr2:DES0100`. The language is carried in the literal as-is, but ISO-639-2 language tags are translated to their ISO-639-3 equivalents.
 
+<!-- 
 TODO: What if the language tag is not ISO-639? Should we use it at all? The RDF spec is vague on valid identifiers.
-
+-->
 
     :::xml
     <general>
@@ -474,7 +453,9 @@ Becomes
 
 Various contributors may be interpreted as entities of the Person type (`mlr1:RC0003`), or the subtypes Natural person (`mlr9:RC0001`) or Organisation (`mlr9:RC0002`).
 
+<!--
 TODO: The text would be clearer with two full examples.
+-->
 
 #### Identifying natural persons
 
@@ -889,8 +870,7 @@ Becomes
 
 ##### A UUID calculated from non-work email and `N` (`person_uuid_from_email_fn`, enabled)
 
-In the (pathological) absence of FN, we can recompose it from the `N`.
-TODO: Explain name transition.
+In the (pathological) absence of FN, we can assemble it from the `N` elements. In that case, we use the western sequence: prefix, given, additional, surname, suffix.
 
     :::xml
     <lifeCycle>
@@ -1867,9 +1847,6 @@ and not
 
 A work `ADR` element in the vCard is expressed as a geographical location on the organization (`mlr9:RC0003`) through the location property (`mlr9:DES1300`). The `ADR` element is composed of the following components: box, extended, street, city, region, code, country. Those are recomposed using the following pattern:
 
-
-TODO: Supprimer (et mettre ailleurs)
-
     :::
     box extended
     street
@@ -1940,8 +1917,9 @@ Becomes
 
 ##### `GEO` for persons
 
-TODO: Pas dans le standard!
-
+<!--
+TODO: Ancienne note: Pas dans le standard! Pas certain de ce que je voulais dire.
+-->
 
 However, for persons, the GEO information may apply either to the home or work address; it is dropped for that reason. (Again, we could choose to rely on vCard grouping information, but did not so far.)
 
@@ -2116,6 +2094,10 @@ The LOM record is a metadata record, related to but distinct from the the MLR re
 
 The LOM identifier is derived from the `metaMetadata/identifier` in much the same way as the resource identifier; though technical URLs, which pertain to the resource, are obviously not taken into account.
 
+#### External URL
+
+In cases where an internal identifier is not provided, it is possible to override it with the `lom_uri` parameter.
+
 #### URI catalog
 
 This is the simplest case: We can use it both as identity and identifier. We use a literal.
@@ -2175,9 +2157,6 @@ Becomes
     mlr8:DES0300 [ a mlr8:RC0001;
         mlr8:DES1400 "MyDatabase|123123" ] .
 
-#### External URL
-
-TODO: It should be possible to provide the LOM record's URL as a parameter if there is no identifying information in the LOM record itself.
 
 #### No identifier
 
