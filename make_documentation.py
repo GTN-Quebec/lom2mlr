@@ -257,8 +257,9 @@ class TranslateMlrExtension(markdown.Extension):
 class EmbedTreeprocessor(Treeprocessor):
     "Embed the root in html/body tags."
 
-    def __init__(self, md, delete_eg):
+    def __init__(self, md, delete_eg, trans):
         self.delete_eg = delete_eg
+        self.trans = trans
 
     def run(self, root):
         html = etree.Element('html')
@@ -272,7 +273,7 @@ class EmbedTreeprocessor(Treeprocessor):
         html.append(head)
         html.append(body)
         langs = set(('fra', 'eng', 'rus'))
-        if not self.delete_eg:
+        if self.trans and not self.delete_eg:
             div = etree.Element('div', {'class': 'controls'})
             form = etree.Element('form')
             div.append(form)
@@ -294,12 +295,13 @@ class EmbedTreeprocessor(Treeprocessor):
 
 
 class EmbedExtension(markdown.Extension):
-    def __init__(self, delete_eg=False):
+    def __init__(self, delete_eg=False, trans=False):
         self.delete_eg = delete_eg
+        self.trans = trans
 
     def extendMarkdown(self, md, md_globals):
         """ Add Embed to Markdown instance. """
-        embed = EmbedTreeprocessor(md, self.delete_eg)
+        embed = EmbedTreeprocessor(md, self.delete_eg, self.trans)
         md.treeprocessors.add("embed", embed, "<inline")
         md.registerExtension(self)
 
@@ -311,7 +313,7 @@ if __name__ == '__main__':
     parser.add_argument('--delete', help='Delete examples', default=False, action='store_true')
     parser.add_argument('--output', help='Output file name', default="documentation.html")
     args = parser.parse_args()
-    extensions = [TestExtension(args.b, args.hide, args.delete), CodeHiliteExtension({}), EmbedExtension(args.delete), TableExtension()]
+    extensions = [TestExtension(args.b, args.hide, args.delete), TableExtension(), CodeHiliteExtension({}), EmbedExtension(args.delete, args.l)]
     target_name = args.output
     if args.l:
         extensions.insert(1, TranslateMlrExtension())
