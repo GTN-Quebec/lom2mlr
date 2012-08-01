@@ -69,6 +69,10 @@
 	<!-- A URI for the conversion machinery.  -->
 	<xsl:param name="converter_id" select="'http://www.gtn-quebec/ns/lom2mlr/version/'"/>
 
+	<!-- A URI for the LOM itself if none is specifified in metaMetadata.  -->
+	<xsl:param name="lom_uri" select="''"/>
+
+
 	<!-- the version number of the converter -->
 	<xsl:param name="converter_version" select="'0.1'"/>
 
@@ -100,9 +104,16 @@
 			<xsl:message terminate="yes">Error: same identifier used for data and metadata!</xsl:message>
 		</xsl:if>
 		<xsl:variable name="lom_identifier">
-			<xsl:apply-templates mode="identifier" select="lom:metaMetadata">
-				<xsl:with-param name="technical" select="false()"/>
-			</xsl:apply-templates>
+			<xsl:choose>
+				<xsl:when test="string-length($lom_uri) &gt; 0">
+					<xsl:value-of select="$lom_uri"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:apply-templates mode="identifier" select="lom:metaMetadata">
+						<xsl:with-param name="technical" select="false()"/>
+					</xsl:apply-templates>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="record_id">
 			<xsl:choose>
