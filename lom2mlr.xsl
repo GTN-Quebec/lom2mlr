@@ -35,7 +35,6 @@
 	<!-- Use fn (or N) alone as basis for a (natural) person's uuid -->
 	<xsl:param name="person_uuid_from_fn" select="false()"/>
 
-
 	<!-- Use the email alone as a basis for an organization's identifying URL. -->
 	<xsl:param name="org_url_from_email" select="true()"/>
 
@@ -205,6 +204,7 @@
 	<xsl:template match="text()" mode="vcard_suborg"/>
 	<xsl:template match="text()" mode="vcard_np"/>
 	<xsl:template match="text()" mode="vcard_person"/>
+	<xsl:template match="text()" mode="convert_n_to_fn"/>
 	<xsl:template match="text()" mode="address"/>
 
 	<xsl:template match="*">
@@ -518,7 +518,7 @@
 						</xsl:when>
 						<xsl:otherwise>
 							<!-- we know vcard:n exists -->
-							<xsl:call-template name="convert_n_to_fn"/>
+							<xsl:apply-templates mode="convert_n_to_fn" select="vcard:n"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
@@ -533,7 +533,7 @@
 						</xsl:when>
 						<xsl:otherwise>
 							<!-- we know vcard:n exists -->
-							<xsl:call-template name="convert_n_to_fn"/>
+							<xsl:apply-templates mode="convert_n_to_fn" select="vcard:n"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
@@ -552,7 +552,7 @@
 						</xsl:when>
 						<xsl:otherwise>
 							<!-- we know vcard:n exists -->
-							<xsl:call-template name="convert_n_to_fn"/>
+							<xsl:apply-templates mode="convert_n_to_fn" select="vcard:n"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
@@ -588,7 +588,7 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<!-- we know vcard:n exists -->
-						<xsl:call-template name="convert_n_to_fn"/>
+						<xsl:apply-templates mode="convert_n_to_fn" select="vcard:n"/>
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:text>,mail=</xsl:text>
@@ -602,7 +602,7 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<!-- we know vcard:n exists -->
-						<xsl:call-template name="convert_n_to_fn"/>
+						<xsl:apply-templates mode="convert_n_to_fn" select="vcard:n"/>
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:text>,mail=</xsl:text>
@@ -619,7 +619,7 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<!-- we know vcard:n exists -->
-						<xsl:call-template name="convert_n_to_fn"/>
+						<xsl:apply-templates mode="convert_n_to_fn" select="vcard:n"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
@@ -670,28 +670,7 @@
 
 	<xsl:template match="vcard:n" mode="vcard_np">
 		<mlr9:DES0500>
-			<xsl:variable name="name">
-				<xsl:if test="vcard:prefix">
-					<xsl:value-of select="vcard:prefix/text()"/>
-					<xsl:text> </xsl:text>
-				</xsl:if>
-				<xsl:if test="vcard:given">
-					<xsl:value-of select="vcard:given/text()"/>
-					<xsl:text> </xsl:text>
-				</xsl:if>
-				<xsl:if test="vcard:additional">
-					<xsl:value-of select="vcard:additional/text()"/>
-					<xsl:text> </xsl:text>
-				</xsl:if>
-				<xsl:if test="vcard:surname">
-					<xsl:value-of select="vcard:surname/text()"/>
-					<xsl:text> </xsl:text>
-				</xsl:if>
-				<xsl:if test="vcard:suffix">
-					<xsl:value-of select="vcard:suffix/text()"/>
-				</xsl:if>
-			</xsl:variable>
-			<xsl:value-of select="normalize-space($name)"/>
+			<xsl:apply-templates mode="convert_n_to_fn" select="."/>
 		</mlr9:DES0500>
 		<mlr9:DES0700>
 			<xsl:value-of select="vcard:surname/text()"/>
@@ -712,13 +691,28 @@
 		</mlr9:DES0400>
 	</xsl:template>
 
-	<xsl:template name="convert_n_to_fn">
-		<!-- TODO: Better -->
-		<xsl:value-of select="vcard:n/vcard:given/text()"/>
-		<xsl:text> </xsl:text>
-		<xsl:value-of select="vcard:n/vcard:surname/text()"/>
+	<xsl:template match="vcard:n" mode="convert_n_to_fn">
+		<xsl:variable name="fn">
+			<xsl:value-of select="vcard:prefix/text()"/>
+			<xsl:if test="vcard:given">
+				<xsl:text> </xsl:text>
+				<xsl:value-of select="vcard:given/text()"/>
+			</xsl:if>
+			<xsl:if test="vcard:additional">
+				<xsl:text> </xsl:text>
+				<xsl:value-of select="vcard:additional/text()"/>
+			</xsl:if>
+			<xsl:if test="vcard:surname">
+				<xsl:text> </xsl:text>
+				<xsl:value-of select="vcard:surname/text()"/>
+			</xsl:if>
+			<xsl:if test="vcard:suffix">
+				<xsl:text> </xsl:text>
+				<xsl:value-of select="vcard:suffix/text()"/>
+			</xsl:if>
+		</xsl:variable>
+		<xsl:value-of select="normalize-space($fn)"/>
 	</xsl:template>
-
 
 	<!-- vcard: Sub-organization -->
 
