@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lom xmlns="http://ltsc.ieee.org/xsd/LOM">
     <general>
-    <identifier>
-      <catalog>TEST</catalog>
-      <entry>oai:test.licef.ca:123123</entry>
-    </identifier>
+        <identifier>
+            <catalog>URI</catalog>
+            <entry>oai:aquops.qc.ca:videos:8</entry>
+        </identifier>
         <title>
             <string language="fra-CA">Conditions favorables à l'intégration des TIC...</string>
         </title>
@@ -103,8 +103,8 @@ END:VCARD
     </lifeCycle>
     <metaMetadata>
         <identifier>
-            <catalog>URI</catalog>
-            <entry>oai:aquops.qc.ca:videos:8</entry>
+          <catalog>TEST</catalog>
+          <entry>oai:test.licef.ca:123123</entry>
         </identifier>
         <metadataSchema>LOMv1.0</metadataSchema>
         <language>fra-CA</language>
