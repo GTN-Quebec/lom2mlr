@@ -15,7 +15,7 @@ clean:
 	rm $(VDEX) $(SKOS) $(TO_LANG) $(FROM_LANG)
 
 %.vdex: %.txt
-	./make_vdex.py $< > $@
+	./make_vdex.py $<
 
 %.skos: %.vdex
 	xsltproc vdex2skos.xsl $< | xmllint --format - > $@

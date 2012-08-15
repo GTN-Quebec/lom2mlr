@@ -3,6 +3,8 @@ from functools import partial
 
 from lxml import etree
 
+from lom2mlr.vdex.make_vdex import make_vdex
+
 builders = {}
 
 
@@ -83,7 +85,11 @@ def process_trans(env, source):
     l.append(env.Trans_mlr(source))
     return l
 
-builders['Txt_Vdex'] = Builder(action = './lom2mlr/vdex/make_vdex.py $SOURCE > $TARGET',
+def make_vdex_scons(target, source, env):
+    assert len(source) == 1, source
+    make_vdex(source[0].get_path())
+
+builders['Txt_Vdex'] = Builder(action = make_vdex_scons,
                      suffix = '.vdex',
                      src_suffix = '.txt')
 
