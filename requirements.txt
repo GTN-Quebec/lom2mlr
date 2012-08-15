@@ -6,3 +6,4 @@ isodate
 nose
 pygments
 Markdown
+SCons
