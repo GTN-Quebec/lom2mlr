@@ -1,3 +1,4 @@
+eng fra rus
 T001
 collection
 A collection is an aggregation of items.

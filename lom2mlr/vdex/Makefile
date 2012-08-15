@@ -17,12 +17,6 @@ clean:
 %.vdex: %.txt
 	./make_vdex.py $< > $@
 
-%.vdex: %_rus.txt
-	./make_vdex.py --lang rus $< > $@
-
-%.vdex: %_nodef.txt
-	./make_vdex.py --nodef $< > $@
-
 %.skos: %.vdex
 	xsltproc vdex2skos.xsl $< | xmllint --format - > $@
 
