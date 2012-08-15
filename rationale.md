@@ -2415,7 +2415,7 @@ Format carries over to `mlr2:DES0900`.
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr2:DES0900 "interactive" .
@@ -2430,7 +2430,7 @@ If the format is a MIME type (recognized by a regexp), it will also be identifie
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr2:DES0900 "text/html" ;
@@ -2447,7 +2447,7 @@ Similarly for format marked as "non-digital".
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr2:DES0900 "non-digital" ;
@@ -2464,7 +2464,7 @@ LOM size is given in bytes, and is an integer.
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0200 "1024"^^<http://www.w3.org/2001/XMLSchema#int> .
@@ -2480,7 +2480,7 @@ Location URLs are translated as literals.
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0100 "http://example.com/resource/1234.html" ,
@@ -2514,7 +2514,7 @@ LOM defines the OS values `pc-dos`, `ms-windows`, `unix` and `macos`.
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 "The operating system must be MS-DOS."@eng .
@@ -2546,7 +2546,7 @@ LOM also allows the os value to be `multi-os`.
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 "The operating system can be any operating system."@eng .
@@ -2578,7 +2578,7 @@ LOM also allows the os value to be `none`.
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 "The operating system is not needed."@eng .
@@ -2612,7 +2612,7 @@ LOM defines the browser values `netscape communicator`, `ms-internet explorer`, 
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 "The browser must be Microsoft Internet Explorer."@eng .
@@ -2644,7 +2644,7 @@ LOM also allows the browser to be `any`.
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 "The browser can be any browser."@eng .
@@ -2676,7 +2676,7 @@ LOM also allows the browser value to be `none`.
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 "The browser is not needed."@eng .
@@ -2708,7 +2708,7 @@ If the browser or operating system is not a known value from the LOMv1.0 vocabul
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 "The operating system must be PalmOS."@eng .
@@ -2740,7 +2740,7 @@ If the requirement type is not a known value from the LOMv1.0 vocabulary, it is 
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 "'graphic card' must be DirectX."@eng .
@@ -2774,7 +2774,7 @@ The minimum version is integrated in the text.
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 "The operating system must be Mac OS, version at least 10.6.1."@eng .
@@ -2808,7 +2808,7 @@ So is the maximum version.
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 "The operating system must be Mac OS, version at most 10.6."@eng .
@@ -2842,7 +2842,7 @@ The text is adjusted accordingly when both values are given.
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 "The operating system must be Mac OS, version at least 10.4 and at most 10.7."@eng .
@@ -2884,7 +2884,7 @@ When many `orComposite` elements are given in a technical `requirement`, they re
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 "One of the following options: the operating system must be Mac OS; or the operating system must be unix."@eng .
@@ -2929,7 +2929,7 @@ Logical conjunction is represented by multiple requirement elements, which are s
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 "The operating system must be Mac OS."@eng,
@@ -2951,7 +2951,7 @@ Installation remarks and other platform requirements are also transferred as-is 
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0400 
@@ -2968,7 +2968,7 @@ The LOM duration may be defined using the ISO-8601 duration format, which may be
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr4:DES0300 "01:12:30"^^<http://www.w3.org/2001/XMLSchema#duration>.
@@ -2983,7 +2983,7 @@ Unparsable duration is ignored:
     </technical>
 
 Becomes
-    
+
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002.
 

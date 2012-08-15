@@ -11,7 +11,7 @@ graphtester = GraphTester()
 
 
 def t_function(data, title):
-    assert len(data) > 1
+    assert len(data) > 1, data
     assert data[0][0].lower() == 'xml', data
     for (format, code, args) in data:
         graph, errors = graphtester.process_line(

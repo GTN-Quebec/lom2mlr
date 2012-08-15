@@ -77,6 +77,7 @@ class Converter(object):
         stylesheet_xml = etree.parse(stylesheet)
         self._read_options(stylesheet_xml)
         self.langsheets = {}
+        self.options = {}
         self.stylesheet = etree.XSLT(stylesheet_xml,
             extensions={
                 (VCARDC_NS, 'convert'): convert,
