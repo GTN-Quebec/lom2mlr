@@ -21,7 +21,7 @@ test:
 	nosetests
 
 rationale.html: rationale.md lom2mlr/lom2mlr.xsl
-	python -m lom2mlr.markdown.compile -l -c
+	python -m lom2mlr.markdown -l -c rationale.md
 
 result.rdf.xml: lom2mlr/tests/data/Valid.xml lom2mlr/lom2mlr.xsl
 	python -m lom2mlr.transform -o $@ $<
