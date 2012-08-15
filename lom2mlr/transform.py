@@ -12,7 +12,9 @@ from vcard2xcard import convert
 
 VCARDC_NS = 'http://ntic.org/vcard'
 XSLT_NS = 'http://www.w3.org/1999/XSL/Transform'
-STYLESHEET = 'lom2mlr.xsl'
+
+this_dir, this_filename = os.path.split(__file__)
+STYLESHEET = os.path.join(this_dir, 'lom2mlr.xsl')
 
 URL_MLR = 'http://standards.iso.org/iso-iec/19788/'
 URL_GTN = 'http://gtn-quebec.org/ns/vcarduuid/'

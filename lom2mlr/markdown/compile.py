@@ -3,6 +3,7 @@
 
 from cgi import escape
 import re
+import os.path
 import traceback
 import argparse
 from collections import defaultdict
@@ -18,8 +19,8 @@ from markdown.util import etree
 from markdown.extensions.codehilite import CodeHiliteExtension
 from markdown.extensions.tables import TableExtension
 
-from graph_comparison import GraphTester
-from util import splitcode
+from lom2mlr.validate.graph_comparison import GraphTester
+from lom2mlr.util import splitcode
 
 
 HEADER_R = re.compile(r'^h[1-9]$', re.I)
@@ -30,6 +31,7 @@ def stringify_error_element(n):
         return escape(n.n3())
     except AttributeError:
         return escape(u'"%s"' % (n))
+
 
 class TestTreeprocessor(Treeprocessor):
     def __init__(self, md, buttons, hide_eg, delete_eg):
@@ -78,7 +80,7 @@ class TestTreeprocessor(Treeprocessor):
                     divclasses.append(args)
                 if format.lower() == 'n3':
                     divclasses.append('mlr')
-                subdiv = etree.Element('div', {'class':' '.join(divclasses)})
+                subdiv = etree.Element('div', {'class': ' '.join(divclasses)})
                 subdiv.append(element)
                 element = subdiv
                 if target is root:
@@ -174,6 +176,11 @@ vocabularies_for_DES = {
 
 VDEX_PREFIX = '{http://www.imsglobal.org/xsd/imsvdex_v1p0}'
 
+this_dir, this_filename = os.path.split(__file__)
+head_dir = os.path.split(this_dir)[0]
+TRANSLATION_FILE = os.path.join(head_dir, 'translations', 'translation.xml')
+VDEX_DIR = os.path.join(head_dir, 'vdex')
+
 
 class TranslateMlrTreeprocessor(Treeprocessor):
     "Translate mlr strings"
@@ -182,7 +189,7 @@ class TranslateMlrTreeprocessor(Treeprocessor):
 
     def __init__(self, md):
         name_trans = re.compile(u"[ '\u2019]")
-        tree = etree.parse('translations/translation.xml')
+        tree = etree.parse(TRANSLATION_FILE)
         translations = defaultdict(dict)
         for idtag in tree.getiterator('id'):
             for termtag in idtag.getiterator('term'):
@@ -195,7 +202,7 @@ class TranslateMlrTreeprocessor(Treeprocessor):
 
         for voc in vocabularies_for_DES.values():
             vocs[voc] = defaultdict(dict)
-            tree = etree.parse('vdex/%s.vdex' % (voc))
+            tree = etree.parse(os.path.join(VDEX_DIR, '%s.vdex' % (voc)))
             for term in tree.findall(VDEX_PREFIX + 'term'):
                 id = str(term.find(VDEX_PREFIX + 'termIdentifier').text)
                 captions = term.find(VDEX_PREFIX + 'caption')
@@ -224,7 +231,7 @@ class TranslateMlrTreeprocessor(Treeprocessor):
             div.clear()
             for el in div_els:
                 div.append(el)
-                classes = set(el.get("class","").split())
+                classes = set(el.get("class", "").split())
                 if 'mlr' in classes:
                     classes.remove('mlr')
                     pre = [e for e in el.getchildren() if e.tag == 'pre']
@@ -308,20 +315,24 @@ class EmbedExtension(markdown.Extension):
         md.treeprocessors.add("embed", embed, "<inline")
         md.registerExtension(self)
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Create the documentation file')
     parser.add_argument('-l', help='Give language translations', default=False, action='store_true')
+    parser.add_argument('-c', help='Check validity', default=False, action='store_true')
     parser.add_argument('-b', help='Add buttons for each example', default=False, action='store_true')
     parser.add_argument('--hide', help='Hide examples by default', default=False, action='store_true')
     parser.add_argument('--delete', help='Delete examples', default=False, action='store_true')
-    parser.add_argument('--output', help='Output file name', default="documentation.html")
+    parser.add_argument('--output', help='Output file name', default="rationale.html")
     args = parser.parse_args()
-    extensions = [TestExtension(args.b, args.hide, args.delete), TableExtension(), CodeHiliteExtension({}), EmbedExtension(args.delete, args.l)]
+    extensions = [TableExtension(), CodeHiliteExtension({}), EmbedExtension(args.delete, args.l)]
     target_name = args.output
     if args.l:
-        extensions.insert(1, TranslateMlrExtension())
+        extensions.insert(0, TranslateMlrExtension())
+    if args.c:
+        extensions.insert(0, TestExtension(args.b, args.hide, args.delete))
     markdown.markdownFromFile(
-        input='documentation.md',
+        input='rationale.md',
         output=args.output,
         encoding='utf-8',
         extensions=extensions)

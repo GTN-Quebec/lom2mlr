@@ -2,8 +2,8 @@ import re
 
 import markdown
 
-from graph_comparison import GraphTester
-from util import splitcode
+from lom2mlr.validate.graph_comparison import GraphTester
+from lom2mlr.util import splitcode
 
 HEADER_R = re.compile(r'^h[1-9]$', re.I)
 
@@ -21,7 +21,7 @@ def t_function(data, title):
 
 def test_document():
     m = markdown.Markdown()
-    data = open('documentation.md').read().decode('utf-8')
+    data = open('rationale.md').read().decode('utf-8')
     root = m.parser.parseDocument(data.split('\n')).getroot()
     data = []
     title = ''

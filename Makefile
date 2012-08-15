@@ -1,17 +1,16 @@
 
-TARGETS = correspondances_xsl.xsl documentation.html
+TARGETS = rationale.html result.rdf.xml
 
-DIRS = translations vdex
+SUBDIRS = lom2mlr
 
 .PHONY: subdirs $(SUBDIRS)
 
-all: $(TARGETS)
+all: subdirs $(TARGETS)
 	-for d in $(DIRS); do (cd $$d; $(MAKE) ); done
 
 clean:
 	rm -f $(TARGETS)
 	-for d in $(DIRS); do (cd $$d; $(MAKE) clean); done 
-
 
 subdirs: $(SUBDIRS)
 
@@ -21,12 +20,11 @@ $(SUBDIRS):
 test:
 	nosetests
 
-correspondances_xsl.xsl: correspondances_type.xml correspondances.xsl
-	xsltproc -o $@ correspondances.xsl $< 
+rationale.html: rationale.md lom2mlr/lom2mlr.xsl
+	python -m lom2mlr.markdown.compile -l -c
 
-
-documentation.html: documentation.md lom2mlr.xsl
-	./make_documentation.py -l
+result.rdf.xml: lom2mlr/tests/data/Valid.xml lom2mlr/lom2mlr.xsl
+	python -m lom2mlr.transform -o $@ $<
 
 %.rtf: %.html
 	textutil -inputencoding utf-8 -convert rtf $<
