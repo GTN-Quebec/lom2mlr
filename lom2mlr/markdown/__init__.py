@@ -41,6 +41,9 @@ def compile():
     if args.l:
         from translate import TranslateMlrExtension
         extensions.insert(0, TranslateMlrExtension())
+        if not args.c:
+            from embed_code import EmbedCodeExtension
+            extensions.insert(0, EmbedCodeExtension(args.b, args.hide, args.delete))
     if args.c:
         from test_mlr import TestExtension
         extensions.insert(0, TestExtension(args.b, args.hide, args.delete))

@@ -84,8 +84,6 @@ class TranslateMlrTreeprocessor(Treeprocessor):
             for el in div_els:
                 div.append(el)
                 classes = set(el.get("class", "").split())
-                # TODO: This is an undesirable dependency on the test_mlr stage...
-                # I might need to separate the identification stage from the check stage.
                 if 'mlr' in classes:
                     classes.remove('mlr')
                     pre = [e for e in el.getchildren() if e.tag == 'pre']
