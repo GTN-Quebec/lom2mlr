@@ -1,4 +1,5 @@
 #!/usr/bin/env python2.7
+
 import argparse
 import sys
 import os.path
@@ -58,7 +59,7 @@ def is_uuid1(context, uuid):
     return u.version == 1
 
 
-def to_xsl_option(val):
+def _to_xsl_option(val):
     if val is True:
         return "true()"
     elif val is False:
@@ -70,11 +71,11 @@ def to_xsl_option(val):
 class Converter(object):
     """A converter between LOM and MLR formats.
 
-    Can take a file or lxml object; can return rdf-xml or rdflib graphs."""
+    Can take a file or lxml object; can return raw rdf-xml or rdflib graphs."""
 
     def __init__(self, stylesheet=STYLESHEET):
         stylesheet_xml = etree.parse(stylesheet)
-        self.read_options(stylesheet_xml)
+        self._read_options(stylesheet_xml)
         self.langsheets = {}
         self.stylesheet = etree.XSLT(stylesheet_xml,
             extensions={
@@ -85,7 +86,10 @@ class Converter(object):
                 (URL_MLR_EXT, 'is_uuid1'): is_uuid1,
             })
 
-    def read_options(self, stylesheet):
+    def _read_options(self, stylesheet):
+        """Extract the stylesheet options
+        These will be presented to the user in the help.
+        """
         comment = None
         options = {}
         option_defaults = {}
@@ -93,7 +97,7 @@ class Converter(object):
             if isinstance(c, etree._Comment):
                 comment = c.text.strip()
             elif isinstance(c, etree._Element) and \
-                c.tag == '{http://www.w3.org/1999/XSL/Transform}param':
+                    c.tag == '{http://www.w3.org/1999/XSL/Transform}param':
                 option_name = c.attrib['name']
                 options[option_name] = comment or ''
                 option_defaults[option_name] = c.attrib['select'] or ''
@@ -101,11 +105,14 @@ class Converter(object):
         self.option_defaults = option_defaults
 
     def set_options_from_dict(self, options=None):
+        """Set options for the stylesheet from a python dict"""
         options = options or {}
-        self.options = {str(k): to_xsl_option(v) 
-            for k, v in options.items() if str(k) in self.sheet_options}
+        self.options = {str(k): _to_xsl_option(v)
+                        for k, v in options.items()
+                        if str(k) in self.sheet_options}
 
-    def get_lang_sheet(self, lang):
+    def _get_lang_sheet(self, lang):
+        "Obtain the cached language translation stylesheet."
         if lang in self.langsheets:
             return self.langsheets[lang]
         langsheet = None
@@ -124,7 +131,7 @@ class Converter(object):
         except:
             print self.stylesheet.error_log
             raise
-        langsheet = self.get_lang_sheet(lang)
+        langsheet = self._get_lang_sheet(lang)
         if langsheet:
             rdfxml = langsheet(rdfxml)
         return rdfxml
@@ -147,20 +154,25 @@ class Converter(object):
             return Graph().parse(data=etree.tounicode(xml), format="xml")
 
     def populate_argparser(self, parser=None):
+        """Add options from the stylesheet to the argparser"""
         if parser is None:
             parser = argparse.ArgumentParser()
         for name, desc in self.sheet_options.items():
             default = self.option_defaults[name]
             if default == 'true()':
-                parser.add_argument('--no-'+name, action='store_false', dest=name, help=desc, default=True)
+                parser.add_argument('--no-' + name, action='store_false',
+                                    dest=name, help=desc, default=True)
             elif default == 'false()':
-                parser.add_argument('--'+name, action='store_true', help=desc, default=False)
+                parser.add_argument('--' + name, action='store_true',
+                                    help=desc, default=False)
             elif default[0] == "'" and default[-1] == "'":
-                parser.add_argument('--'+name, help=desc, default=default[1:-1])
+                parser.add_argument('--' + name, help=desc,
+                                    default=default[1:-1])
         return parser
 
 
 def main():
+    """Apply a Converter to a LOM file according to command-line arguments."""
     converter = Converter(STYLESHEET)
     parser = argparse.ArgumentParser(
         description='Apply a XSLT stylesheet to a LOM file')

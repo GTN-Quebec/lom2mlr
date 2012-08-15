@@ -24,6 +24,18 @@ def stringify_error_element(n):
 
 
 class TestTreeprocessor(Treeprocessor):
+    """Treats a series of code fragments in a markdown document as a doctest.
+    Moreover, the results of the doctest are embedded in the resulting document.
+    XML fragments are assumed to be LOM fragments,
+    and are transformed into MLR by a Converter.
+    N3 fragments are assumed to be MLR fragments.
+    Each triple in a N3 fragment is required to be found
+    in the MLR generated from the previous LOM fragment.
+    Some N3 fragments are forbidden: triples from such fragments found
+    in the MLR generated from the previous LOM fragment
+    AND not in the previous (required) N3 fragment constitute an error.
+    The comparison uses the GraphTester.
+    """
     def __init__(self, md, buttons, hide_eg, delete_eg):
         self.graph_tester = GraphTester()
         self.buttons = buttons

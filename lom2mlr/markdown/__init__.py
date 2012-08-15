@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+"""Markdown extensions used to crate the rationale.html file"""
+
 
 import os.path
 import argparse
@@ -16,6 +18,7 @@ from embed import EmbedExtension
 
 
 def compile():
+    """Process a markdown file according to command-line arguments"""
     parser = argparse.ArgumentParser(
         description='Create the documentation file')
     parser.add_argument('-l', help='Give language translations',

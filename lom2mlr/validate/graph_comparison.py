@@ -60,7 +60,15 @@ def valid_uuid_correspondance(blank_node, node):
 
 
 class GraphCorrespondence(object):
-    "Finds which nodes in dest correspond to blank nodes in source."
+    """Identifies corresponding nodes between a source and destination RDF graph.
+    Nodes correspond if:
+    1. They are identical resources or literals
+    2. The dest node is a resource and the source node is a blank
+        (or "blank-like") nodes involved in identical relations to corresponding nodes.
+    This notion of correspondance is built iteratively.
+    blank-like nodes are UUID nodes where the first digit is the UUID type,
+        the next 19 digits are zero, and the last 12 digits are unique.
+    """
     def __init__(self, source, dest):
         self.source = source
         self.dest = dest
@@ -156,7 +164,17 @@ class GraphCorrespondence(object):
 
 
 class GraphTester(object):
-
+    """Compares MLR graphs obtained from converting LOM to expected graphs.
+    The graph tester is stateful.
+    1. Receives a LOM fragment and stores it.
+    2. Receives a required N3 MLR graph and LOM conversion parameters
+        2a. Converts the LOM fragment to a converted graph (with parameters.)
+        2b. Checks that all triples in the N3 graph are found in the converted
+            graph. Stores the required graph.
+    3. Receives a forbidden N3 MLR graph:
+        Checks that all triples in the forbidden graph are either present in
+        the required graph or absent from the converted graph.
+    """
     MISSING = 1
     UNEXPECTED = 2
 
@@ -171,15 +189,18 @@ class GraphTester(object):
         return term
 
     def reset(self):
+        "Clears the state"
         self.last_lom = None
         self.last_graph = None
         self.last_comparator = None
 
     def set_lom(self, lom):
+        "Sets the LOM fragment."
         self.reset()
         self.last_lom = etree.fromstring(LOM_TEMPLATE % (lom,))
 
     def process_line(self, format, code, args=None):
+        "Process a fragment."
         format = format.lower()
         if format == 'xml':
             self.set_lom(code)
@@ -189,12 +210,15 @@ class GraphTester(object):
         assert False, 'format should be xml or n3'
 
     def parse_n3(self, n3):
+        "Parse a N3 graph"
         return Graph().parse(data=N3_PREFIXES + n3, format="n3")
 
     def test_n3(self, n3, args=None):
+        "Test that the provided n3 fragment is conformant"
         return self.test_graph(self.parse_n3(n3), args)
 
     def find_missing(self, expected_graph, obtained_graph):
+        "List triples in the expected graph missing from the obtained graph."
         errors = []
         nsm = obtained_graph.namespace_manager
         comparator_eo = GraphCorrespondence(expected_graph, obtained_graph)
@@ -208,6 +232,9 @@ class GraphTester(object):
         return errors
 
     def find_forbidden(self, forbidden_graph, obtained_graph):
+        """List triples in the forbidden graph found in the obtained graph
+        and absent from the previous (stored) required graph.
+        """
         assert self.last_comparator
         expected_graph = self.last_comparator.source
         errors = []
@@ -226,6 +253,7 @@ class GraphTester(object):
         return errors
 
     def test_graph(self, graph, args=None):
+        "Test that the provided graph is conformant"
         assert self.last_lom is not None
         errors = []
         if args and args.lower() == 'forbidden':

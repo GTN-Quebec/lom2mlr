@@ -15,7 +15,7 @@ from markdown.treeprocessors import Treeprocessor
 from markdown.util import etree
 
 
-# Should I extract this from correspondances_type.xml?
+# TODO: Extract this from correspondances_type.xml
 vocabularies_for_DES = {
     "mlr3:DES0700": "ISO_IEC_19788-3-2011-VA.2",
     "mlr5:DES0800": "ISO_IEC_19788-5-2012-VA.1",
@@ -35,7 +35,7 @@ VDEX_DIR = os.path.join(head_dir, 'vdex')
 
 
 class TranslateMlrTreeprocessor(Treeprocessor):
-    "Translate mlr strings"
+    "Translate mlr strings in N3 code fragments marked as MLR."
 
     mlr_r = re.compile(r'\b(mlr[0-9]:(?:DES|RC)[0-9]+)( "(T[0-9]+)")?')
 
@@ -84,6 +84,8 @@ class TranslateMlrTreeprocessor(Treeprocessor):
             for el in div_els:
                 div.append(el)
                 classes = set(el.get("class", "").split())
+                # TODO: This is an undesirable dependency on the test_mlr stage...
+                # I might need to separate the identification stage from the check stage.
                 if 'mlr' in classes:
                     classes.remove('mlr')
                     pre = [e for e in el.getchildren() if e.tag == 'pre']

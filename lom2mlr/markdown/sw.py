@@ -7,6 +7,8 @@
 
     :copyright: 2007 by Philip Cooper <philip.cooper@openvest.com>.
     :license: BSD, see LICENSE for more details.
+
+    Some small modifications by Marc-Antoine Parent, esp. for unicode processing.
 """
 
 import re
