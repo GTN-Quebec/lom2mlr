@@ -6,8 +6,7 @@ import re
 TRE = re.compile('^T[0-9]+$')
 
 if __name__ == '__main__':
-    vocname = sys.argv[0]
-    fname = sys.argv[0]
+    fname = sys.argv[1]
     vocname = fname.rsplit('.', 1)[0]
     lines = open(fname).readlines()
     langs = lines.pop(0).split()
