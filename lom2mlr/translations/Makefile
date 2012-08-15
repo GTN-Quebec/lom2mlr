@@ -1,6 +1,6 @@
 LANGS = eng fra rus
 
-TRANS := $(foreach lang, $(LANGS), translation_$(lang).xsl)
+TRANS := $(foreach lang, $(LANGS), translation_$(lang).xsl) translation_mlr.xsl
 
 TARGETS = translation_mlr.xsl $(TRANS)
 
@@ -8,9 +8,6 @@ all: $(TARGETS)
 
 clean:
 	rm $(TARGETS)
-
-correspondances_xsl.xsl: correspondances_type.xml correspondances.xsl
-	xsltproc -o $@ correspondances.xsl $< 
 
 translation_mlr.xsl: translation.xml make_translation_fromlang.xsl
 	xsltproc -o $@ make_translation_fromlang.xsl $<
