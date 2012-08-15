@@ -160,8 +160,7 @@ class Converter(object):
         return parser
 
 
-
-if __name__ == '__main__':
+def main():
     converter = Converter(STYLESHEET)
     parser = argparse.ArgumentParser(
         description='Apply a XSLT stylesheet to a LOM file')
@@ -189,3 +188,6 @@ if __name__ == '__main__':
                     rdf.serialize(format=args.format, encoding='utf-8'))
     finally:
         args.output.close()
+
+if __name__ == '__main__':
+    main()

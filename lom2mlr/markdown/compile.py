@@ -316,7 +316,7 @@ class EmbedExtension(markdown.Extension):
         md.registerExtension(self)
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description='Create the documentation file')
     parser.add_argument('-l', help='Give language translations', default=False, action='store_true')
     parser.add_argument('-c', help='Check validity', default=False, action='store_true')
@@ -336,3 +336,6 @@ if __name__ == '__main__':
         output=args.output,
         encoding='utf-8',
         extensions=extensions)
+
+if __name__ == '__main__':
+    main()
