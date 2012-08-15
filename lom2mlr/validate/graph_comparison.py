@@ -207,6 +207,8 @@ class GraphTester(object):
             return None, []
         elif format == 'n3':
             return self.test_n3(code, args)
+        elif format == 'rdf-xml':
+            return self.test_graph(Graph().parse(data=code, format="xml"), args)
         assert False, 'format should be xml or n3'
 
     def parse_n3(self, n3):
