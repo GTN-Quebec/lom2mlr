@@ -11,6 +11,7 @@ MLR2 = Namespace('http://standards.iso.org/iso-iec/19788/-2/ed-1/en/')
 MLR3 = Namespace('http://standards.iso.org/iso-iec/19788/-3/ed-1/en/')
 MLR4 = Namespace('http://standards.iso.org/iso-iec/19788/-4/ed-1/en/')
 MLR5 = Namespace('http://standards.iso.org/iso-iec/19788/-5/ed-1/en/')
+MLR8 = Namespace('http://standards.iso.org/iso-iec/19788/-8/ed-1/en/')
 MLR9 = Namespace('http://standards.iso.org/iso-iec/19788/-9/ed-1/en/')
 
 prologue = '''
@@ -19,9 +20,10 @@ prologue = '''
 @prefix mlr3: <%s> .
 @prefix mlr4: <%s> .
 @prefix mlr5: <%s> .
+@prefix mlr8: <%s> .
 @prefix mlr9: <%s> .
 
-''' % (MLR1, MLR2, MLR3, MLR4, MLR5, MLR9)
+''' % (MLR1, MLR2, MLR3, MLR4, MLR5, MLR8, MLR9)
 
 
 MLR2_Element_names = {
@@ -72,6 +74,42 @@ MLR5_Element_names = {
     MLR5.DES2900: 'Prerequisite',
 }
 
+MLR8_Element_names = {
+    MLR8.DES0300: 'Has Record',
+    # MLR8.DES0400: 'Language',
+    # MLR8.DES0500: 'Type',
+    # MLR8.DES0600: 'Has Application Profile',
+    # MLR8.DES0700: 'Contribution',
+    # MLR8.DES0800: 'Record Repository',
+    # MLR8.DES0900: 'Record Last Update',
+    # MLR8.DES1000: 'Entity',
+    # MLR8.DES1100: 'Entities',
+    # MLR8.DES1200: 'Role',
+    # MLR8.DES1300: 'Date',
+    # MLR8.DES1400: 'Original Record',
+    # MLR8.DES1500: 'Original Record Format',
+    # MLR8.DES1600: 'Conversion software',
+}
+
+MLR9_Element_names = {
+    # MLR9.DES0100: 'Identifier',
+    # MLR9.DES0200: 'Name',
+    # MLR9.DES0300: 'Family Name',
+    # MLR9.DES0400: 'Given Name',
+    # MLR9.DES0500: 'Name',
+    # MLR9.DES0600: 'SkypeID',
+    # MLR9.DES0700: 'vCard N',
+    # MLR9.DES0800: 'vCard FN',
+    # MLR9.DES0900: 'Email',
+    # MLR9.DES1000: 'Work Telephone',
+    # MLR9.DES1100: 'Work For',
+    # MLR9.DES1200: 'vCard ORG',
+    # MLR9.DES1300: 'Location',
+    # MLR9.DES1400: 'Longitude',
+    # MLR9.DES1500: 'Latitude',
+    # MLR9.DES1600: 'Representation',
+    # MLR9.DES1700: 'Description'
+}
 
 MLR_codomain = {
     MLR5.DES1300: (MLR5.RC0001, ),  # Annotation
@@ -81,6 +119,11 @@ MLR_codomain = {
     MLR5.DES2000: (MLR5.RC0005, ),  # Learning activity
     MLR5.DES1400: (MLR1.RC0003, MLR9.RC0001, MLR9.RC0002),  # Person and subclasses
     MLR5.DES1800: (MLR1.RC0003, MLR9.RC0001, MLR9.RC0002),  # Person and subclasses
+    MLR8.DES0200: (MLR1.RC0002, ),  # Describes
+    MLR8.DES0300: (MLR8.RC0001, ),  # Has Record
+    MLR8.DES0700: (MLR8.RC0002, ),  # Contribution
+    MLR8.DES1000: (MLR1.RC0003, MLR9.RC0001, MLR9.RC0002),  # Person and subclasses
+    # MLR8.DES1100: (Seq(MLR1.RC0003), ),  # Entities
     MLR9.DES1100: (MLR9.RC0002, ),  # Organization
     MLR9.DES1300: (MLR9.RC0003, ),  # Geographical location
     MLR9.DES1600: (MLR9.RC0004, ),  # Digital media
@@ -124,6 +167,30 @@ MLR_Subclass_attributes = {
         # MLR5.DES2800: 'Pedagogical type',
         MLR5.DES3000: 'Typical learning time',
     },
+    MLR8.RC0001: {  # MLR Record
+        MLR8.DES0100: 'Record Identifier',
+        MLR8.DES0200: 'Describes',
+        MLR8.DES0400: 'Language',
+        MLR8.DES0500: 'Type',
+        MLR8.DES0600: 'Has Application Profile',
+        MLR8.DES0700: 'Contribution',
+        MLR8.DES0800: 'Record Repository',
+        MLR8.DES1400: 'Original Record',
+        MLR8.DES1500: 'Original Record Format',
+        MLR8.DES1600: 'Conversion software',
+    },
+    MLR8.RC0002: {  # Contribution
+        MLR8.DES1000: 'Entity',
+        MLR8.DES1200: 'Role',
+        MLR8.DES1300: 'Date',
+        MLR8.DES1400: 'Original Record',
+        MLR8.DES1500: 'Original Record Format',
+        MLR8.DES1600: 'Conversion software',
+    },
+    MLR8.RC0003: {  # Mutable MLR Record
+        MLR8.DES0900: 'Record Last Update',
+
+    },
     MLR9.RC0001: { # Natural Person
         MLR9.DES0100: 'Identifier',
         MLR9.DES0300: 'Family Name',
@@ -139,6 +206,7 @@ MLR_Subclass_attributes = {
     MLR9.RC0002: { # Organization
         MLR9.DES0100: 'Identifier',
         # MLR9.DES0200: 'Name', TODO: Is this necessary????
+        MLR9.DES0900: 'Email',
         MLR9.DES1200: 'vCard ORG',
         MLR9.DES1300: 'Location',
     },
@@ -158,6 +226,8 @@ Element_names.update(MLR2_Element_names)
 Element_names.update(MLR3_Element_names)
 Element_names.update(MLR4_Element_names)
 Element_names.update(MLR5_Element_names)
+Element_names.update(MLR8_Element_names)
+Element_names.update(MLR9_Element_names)
 
 Known_Missing = set([
     MLR2.DES0700,  # replaced by MLR3:DES0100
@@ -173,6 +243,9 @@ Known_Missing = set([
     MLR5.DES2400,
     MLR5.DES2900,
     MLR5.DES0700,  # occasionally missing
+    MLR8.DES0800,
+    MLR8.DES1400,
+    MLR8.DES1600,
     MLR9.DES0600,  # occasionally missing
     MLR9.DES1400,  # occasionally missing
     MLR9.DES1500,  # occasionally missing
@@ -196,7 +269,7 @@ Type_constraints = {
 }
 
 
-TEST_ID = "oai:test.licef.ca:123123"
+TEST_ID = "oai:aquops.qc.ca:videos:8"
 this_dir, this_filename = os.path.split(__file__)
 EXAMPLE = os.path.join(this_dir, 'data', 'Valid.xml')
 
@@ -230,13 +303,15 @@ class testMlr2(unittest.TestCase):
         triples = list(self.graph.triples((term.URIRef(TEST_ID), None, None)))
         predicates = set(p for (s, p, o) in triples)
         for p in predicates:
+            if p == term.URIRef('http://www.inria.fr/acacia/corese#graph'):
+                continue
             assert p in Element_names, "Unknown predicate: " + p
 
     def test_codomain(self):
         for predicate in MLR_codomain.keys():
             for s, p, o in self.graph.triples((None, term.URIRef(predicate), None)):
                 for s2, p2, o2 in self.graph.triples((o, RDF.type, None)):
-                    assert o2 in MLR_codomain[predicate]
+                    assert o2 in MLR_codomain[predicate], "did not expect %s to result in %s" % (predicate, o2)
 
     def test_subobjects_has_only_mlr_values(self):
         for s, p, o in self.graph.triples((None, RDF.type, None)):
