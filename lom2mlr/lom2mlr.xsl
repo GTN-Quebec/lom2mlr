@@ -1494,18 +1494,18 @@
 	</xsl:template>
 
 	<xsl:template match="lom:duration" mode="technical">
-		<xsl:if test="regexp:test(text(),'^PT([0-9]+H)?([0-9]+M)?([0-9]+S)?$')">
+		<xsl:if test="regexp:test(lom:duration/text(),'^PT([0-9]+H)?([0-9]+M)?([0-9]+S)?$')">
 			<mlr4:DES0300 rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">
 				<xsl:call-template name="as_00num">
-					<xsl:with-param name="v" select="substring-before(regexp:match(text(),'[0-9]+H'),'H')"/>
+					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+H'),'H')"/>
 				</xsl:call-template>
 				<xsl:text>:</xsl:text>
 				<xsl:call-template name="as_00num">
-					<xsl:with-param name="v" select="substring-before(regexp:match(text(),'[0-9]+M'),'M')"/>
+					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+M'),'M')"/>
 				</xsl:call-template>
 				<xsl:text>:</xsl:text>
 				<xsl:call-template name="as_00num">
-					<xsl:with-param name="v" select="substring-before(regexp:match(text(),'[0-9]+S'),'S')"/>
+					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+S'),'S')"/>
 				</xsl:call-template>
 			</mlr4:DES0300>
 		</xsl:if>
