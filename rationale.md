@@ -2964,7 +2964,7 @@ The LOM duration may be defined using the ISO-8601 duration format, which may be
 
     :::xml
     <technical>
-        <duration>PT1H12M30S</duration>
+        <duration><duration>PT1H12M30S</duration></duration>
     </technical>
 
 Becomes

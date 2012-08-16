@@ -1494,7 +1494,7 @@
 	</xsl:template>
 
 	<xsl:template match="lom:duration" mode="technical">
-		<xsl:if test="regexp:test(lom:duration/text(),'^PT([0-9]+H)?([0-9]+M)?([0-9]+S)?$')">
+		<xsl:if test="lom:duration and regexp:test(lom:duration/text(),'^PT([0-9]+H)?([0-9]+M)?([0-9]+S)?$')">
 			<mlr4:DES0300 rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">
 				<xsl:call-template name="as_00num">
 					<xsl:with-param name="v" select="substring-before(regexp:match(lom:duration/text(),'[0-9]+H'),'H')"/>
