@@ -1,5 +1,6 @@
 import unittest
 import os.path
+from collections import defaultdict
 
 from rdflib import RDF, Graph, term, Namespace
 
@@ -183,9 +184,6 @@ MLR_Subclass_attributes = {
         MLR8.DES1000: 'Entity',
         MLR8.DES1200: 'Role',
         MLR8.DES1300: 'Date',
-        MLR8.DES1400: 'Original Record',
-        MLR8.DES1500: 'Original Record Format',
-        MLR8.DES1600: 'Conversion software',
     },
     MLR8.RC0003: {  # Mutable MLR Record
         MLR8.DES0900: 'Record Last Update',
@@ -294,26 +292,36 @@ class testMlr2(unittest.TestCase):
         triples = list(self.graph.triples((term.URIRef(TEST_ID), None, None)))
         #sys.stderr.write(`triples`)
         predicates = set(p for (s, p, o) in triples)
+        missing_predicates = []
         for (p, n) in Element_names.items():
             if p in Known_Missing:
                 continue
-            assert p in predicates, "Missing predicate: " + p + ", " + n
+            if p not in predicates:
+                missing_predicates.append((p, n))
+        assert not missing_predicates, missing_predicates
 
     def test_has_only_mlr_values(self):
         triples = list(self.graph.triples((term.URIRef(TEST_ID), None, None)))
         predicates = set(p for (s, p, o) in triples)
+        extra_predicates = []
         for p in predicates:
             if p == term.URIRef('http://www.inria.fr/acacia/corese#graph'):
                 continue
-            assert p in Element_names, "Unknown predicate: " + p
+            if not p in Element_names:
+                extra_predicates.append(p)
+        assert not extra_predicates, extra_predicates
 
     def test_codomain(self):
+        wrong_codomain_type = []
         for predicate in MLR_codomain.keys():
             for s, p, o in self.graph.triples((None, term.URIRef(predicate), None)):
                 for s2, p2, o2 in self.graph.triples((o, RDF.type, None)):
-                    assert o2 in MLR_codomain[predicate], "did not expect %s to result in %s" % (predicate, o2)
+                    if o2 not in MLR_codomain[predicate]:
+                        wrong_codomain_type.append((predicate, o2))
+        assert not wrong_codomain_type, wrong_codomain_type
 
     def test_subobjects_has_only_mlr_values(self):
+        extra_predicates = []
         for s, p, o in self.graph.triples((None, RDF.type, None)):
             if o == MLR1.RC0002:
                 continue
@@ -322,20 +330,35 @@ class testMlr2(unittest.TestCase):
             for s2, p2, o2 in self.graph.triples((s, None, None)):
                 if RDF.type == p2:
                     continue
-                assert p2 in attributes, "unknown predicate: %s for a %s" % (p2, o)
+                if not p2 in attributes:
+                    extra_predicates.append((o, p2))
+        assert not extra_predicates, extra_predicates
 
     def test_subobjects_has_all_mlr_values(self):
+        missing_types = []
+        missing_predicates = []
+        res_by_type = defaultdict(set)
+        pred_by_type = defaultdict(set)
         for s, p, o in self.graph.triples((None, RDF.type, None)):
-            if o == MLR1.RC0002:
+            res_by_type[o].add(s)
+        for type_uri, ressources in res_by_type.items():
+            for r in ressources:
+                for s, p, o in self.graph.triples((r, None, None)):
+                    pred_by_type[type_uri].add(p)
+        for type_uri, predicates in pred_by_type.items():
+            if type_uri == MLR1.RC0002:
                 continue
-            assert o in MLR_Subclass_attributes, "Missing type:" + o
-            attributes = MLR_Subclass_attributes[o]
-            predicates = set((p2 for s2, p2, o2 in self.graph.triples((s, None, None))))
-            for p3, name in attributes.items():
-                if p3 in Known_Missing:
+            if type_uri not in MLR_Subclass_attributes:
+                missing_types.append(o)
+                continue
+            attributes = MLR_Subclass_attributes[type_uri]
+            for p, name in attributes.items():
+                if p in Known_Missing:
                     continue
-                assert p3 in predicates, \
-                    "Missing predicate: %s, %s for a %s" % (p3, name, o)
+                if not p in predicates:
+                    missing_predicates.append((p, name, o))
+        assert not missing_types, missing_types
+        assert not missing_predicates, missing_predicates
 
     def test_value_types(self):
         triples = list(self.graph.triples((None, None, None)))

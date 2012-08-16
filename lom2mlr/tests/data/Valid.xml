@@ -128,7 +128,7 @@ ADR;TYPE=WORK,POST:;;7400,boul. Saint-Laurent,Bureau 530;Montréal;Québec;H2R 2
 END:VCARD
 </entity>
             <date>
-                <description><string language="fr">2012-01-02</string></description>
+                <dateTime>2011-12-01</dateTime>
             </date>
         </contribute>
     </metaMetadata>
