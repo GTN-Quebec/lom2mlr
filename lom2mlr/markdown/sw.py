@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     pygments.lexers.sw
-    ~~~~~~~~~~~~~~~~~~~~~
+    ==================
 
     Lexers for semantic web languages.
 

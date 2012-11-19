@@ -62,12 +62,14 @@ def valid_uuid_correspondance(blank_node, node):
 class GraphCorrespondence(object):
     """Identifies corresponding nodes between a source and destination RDF graph.
     Nodes correspond if:
+
     1. They are identical resources or literals
     2. The dest node is a resource and the source node is a blank
-        (or "blank-like") nodes involved in identical relations to corresponding nodes.
+       (or "blank-like") nodes involved in identical relations to corresponding nodes.
+    
     This notion of correspondance is built iteratively.
     blank-like nodes are UUID nodes where the first digit is the UUID type,
-        the next 19 digits are zero, and the last 12 digits are unique.
+    the next 19 digits are zero, and the last 12 digits are unique.
     """
     def __init__(self, source, dest):
         self.source = source
@@ -166,11 +168,12 @@ class GraphCorrespondence(object):
 class GraphTester(object):
     """Compares MLR graphs obtained from converting LOM to expected graphs.
     The graph tester is stateful.
+
     1. Receives a LOM fragment and stores it.
     2. Receives a required N3 MLR graph and LOM conversion parameters
-        2a. Converts the LOM fragment to a converted graph (with parameters.)
-        2b. Checks that all triples in the N3 graph are found in the converted
-            graph. Stores the required graph.
+        A. Converts the LOM fragment to a converted graph (with parameters.)
+        B. Checks that all triples in the N3 graph are found in the converted
+           graph. Stores the required graph.
     3. Receives a forbidden N3 MLR graph:
         Checks that all triples in the forbidden graph are either present in
         the required graph or absent from the converted graph.

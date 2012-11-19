@@ -1,4 +1,5 @@
 #!/usr/bin/env python2.7
+__docformat__ = "restructuredtext en"
 
 import argparse
 import sys
@@ -71,13 +72,33 @@ def _to_xsl_option(val):
 class Converter(object):
     """A converter between LOM and MLR formats.
 
-    Can take a file or lxml object; can return raw rdf-xml or rdflib graphs."""
+    Through various methods, the Converter object can receive a file
+    or lxml object and return raw rdf-xml or rdflib graphs.            
+    """
 
     def __init__(self, stylesheet=STYLESHEET):
+        """
+        :param stylesheet: The path to the `lom2mlr.xslt` stylesheet
+        :type stylesheet: str
+        """
         stylesheet_xml = etree.parse(stylesheet)
+        self.sheet_options = {}
+        """
+        The name and comments for each option in the stylesheet.
+
+        :type: dict(str->str)
+        """
+        self.option_defaults = {}
+        """The default value for each option, as found in the stylesheet.
+
+        :type: dict(str->str)
+        """
         self._read_options(stylesheet_xml)
         self.langsheets = {}
+        ""
         self.options = {}
+        """The options that will be passed to the XSLT stylesheet.
+        The values are suitable to be passed as XSL params."""
         self.stylesheet = etree.XSLT(stylesheet_xml,
             extensions={
                 (VCARDC_NS, 'convert'): convert,
@@ -86,10 +107,16 @@ class Converter(object):
                 (URL_MLR_EXT, 'uuid_url'): uuid_url,
                 (URL_MLR_EXT, 'is_uuid1'): is_uuid1,
             })
+        """ :py:class:`lxml.etree.XSLT` object
+            The Converter's stylesheet """
 
     def _read_options(self, stylesheet):
         """Extract the stylesheet options
+
         These will be presented to the user in the help.
+
+        :type stylesheet: :py:class:`lxml.etree._ElementTree` object
+        :param stylesheet: The Converter's stylesheet (after parsing, before xslt)
         """
         comment = None
         options = {}
@@ -106,7 +133,13 @@ class Converter(object):
         self.option_defaults = option_defaults
 
     def set_options_from_dict(self, options=None):
-        """Set options for the stylesheet from a python dict"""
+        """Set options for the stylesheet
+
+        :type options: dict(str->object)
+        :param options: The options that will be passed to the stylesheet.
+            Strings will be quoted, booleans will be replaced by formula
+            according to :py:func:`_to_xsl_option`
+        """
         options = options or {}
         self.options = {str(k): _to_xsl_option(v)
                         for k, v in options.items()
