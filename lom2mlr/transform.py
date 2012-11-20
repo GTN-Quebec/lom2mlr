@@ -1,4 +1,7 @@
 #!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
+
+__doc__="""The :py:class:`Converter` transforms LOM records into MLR records."""
 __docformat__ = "restructuredtext en"
 
 import argparse
@@ -13,20 +16,31 @@ from util import unwrap_seq
 from vcard2xcard import convert
 
 VCARDC_NS = 'http://ntic.org/vcard'
+"""A namespace for XSLT extensions in :py:mod:`lom2mlr.vcard2xcard`"""
+
 XSLT_NS = 'http://www.w3.org/1999/XSL/Transform'
 
 this_dir, this_filename = os.path.split(__file__)
+
 STYLESHEET = os.path.join(this_dir, 'lom2mlr.xsl')
+""" The stylesheet used by the converter."""
 
 URL_MLR = 'http://standards.iso.org/iso-iec/19788/'
-URL_GTN = 'http://gtn-quebec.org/ns/vcarduuid/'
+""" The URL for the MLR standards, as a namespace."""
+
 URL_MLR_EXT = URL_MLR + 'ext/'
+"""A namespace for XSLT extensions that generate UUIDs"""
+
+URL_GTN = 'http://gtn-quebec.org/ns/vcarduuid/'
+""" A namespace URL for GTN-Québec.  Used to build UUIDs for vCards."""
+
 NAMESPACE_MLR = uuid5(NAMESPACE_URL, URL_GTN)
+"""The UUID5 built from the URL_GTN, used as a namespace for GTN-Québec extensions"""
 
 
 @unwrap_seq
 def uuid_url(context, url, namespace=None):
-    'Return a UUID based on a URL'
+    """A XSLT extension that returns a UUID based on a URL"""
     if namespace is None:
         namespace = NAMESPACE_URL
     elif not isinstance(namespace, UUID):
@@ -36,13 +50,13 @@ def uuid_url(context, url, namespace=None):
 
 @unwrap_seq
 def uuid_unique(context):
-    'Return a unique UUID composed from the MAC address and timestamp'
+    """A XSLT extension that returns a unique UUID composed from the MAC address and timestamp"""
     return str(uuid1())
 
 
 @unwrap_seq
 def uuid_string(context, s, namespace=None):
-    'Return a UUID based on a string'
+    """A XSLT extension that returns a UUID based on a string"""
     if namespace is None:
         namespace = NAMESPACE_MLR
     elif not isinstance(namespace, UUID):
@@ -52,7 +66,7 @@ def uuid_string(context, s, namespace=None):
 
 @unwrap_seq
 def is_uuid1(context, uuid):
-    'Return a UUID based on a string'
+    """A XSLT extension that returns a UUID based on a string"""
     if not uuid.startswith('urn:uuid:'):
         return false
     u = UUID(uuid[9:])
@@ -73,25 +87,26 @@ class Converter(object):
     """A converter between LOM and MLR formats.
 
     Through various methods, the Converter object can receive a file
-    or lxml object and return raw rdf-xml or rdflib graphs.            
+    or lxml object and return raw rdf-xml or rdflib graphs.
     """
 
-    def __init__(self, stylesheet=STYLESHEET):
+    def __init__(self, stylesheet=None):
         """
-        :param stylesheet: The path to the `lom2mlr.xslt` stylesheet
-        :type stylesheet: str
+        :param stylesheet: The path to the :file:`lom2mlr.xslt` stylesheet
         """
+        if stylesheet is None:
+            stylesheet = STYLESHEET
         stylesheet_xml = etree.parse(stylesheet)
         self.sheet_options = {}
         """
         The name and comments for each option in the stylesheet.
 
-        :type: dict(str->str)
+        :type: {str:str}
         """
         self.option_defaults = {}
         """The default value for each option, as found in the stylesheet.
 
-        :type: dict(str->str)
+        :type: {str:str}
         """
         self._read_options(stylesheet_xml)
         self.langsheets = {}
@@ -107,7 +122,7 @@ class Converter(object):
                 (URL_MLR_EXT, 'uuid_url'): uuid_url,
                 (URL_MLR_EXT, 'is_uuid1'): is_uuid1,
             })
-        """ :py:class:`lxml.etree.XSLT` object
+        """ :lxml-class:`XSLT` object
             The Converter's stylesheet """
 
     def _read_options(self, stylesheet):
@@ -115,8 +130,9 @@ class Converter(object):
 
         These will be presented to the user in the help.
 
-        :type stylesheet: :py:class:`lxml.etree._ElementTree` object
-        :param stylesheet: The Converter's stylesheet (after parsing, before xslt)
+        :type stylesheet: :lxml-class:`_ElementTree`
+        :param stylesheet: The Converter's stylesheet (as a documentTree,
+            before xslt)
         """
         comment = None
         options = {}
@@ -135,7 +151,7 @@ class Converter(object):
     def set_options_from_dict(self, options=None):
         """Set options for the stylesheet
 
-        :type options: dict(str->object)
+        :type options: {str:object}
         :param options: The options that will be passed to the stylesheet.
             Strings will be quoted, booleans will be replaced by formula
             according to :py:func:`_to_xsl_option`
@@ -146,7 +162,11 @@ class Converter(object):
                         if str(k) in self.sheet_options}
 
     def _get_lang_sheet(self, lang):
-        "Obtain the cached language translation stylesheet."
+        """Obtain the cached language translation stylesheet.
+
+        :param lang: a ISO-696-3 language identifier.
+        :returns: a :lxml-class:`XSLT` stylesheet.
+        """
         if lang in self.langsheets:
             return self.langsheets[lang]
         langsheet = None
@@ -159,7 +179,14 @@ class Converter(object):
         return langsheet
 
     def lomxml2rdfxml(self, xml, lang=None):
-        "Transform a lom xml object to a rdf-xml object"
+        """Transform a lom xml object to a rdf-xml object
+
+        :type xml: :lxml-class:`_ElementTree`
+        :param xml: the parsed LOM record.
+        :param lang: a ISO-696-3 language identifier.
+        :returns: a MLR record in RDF-XML format
+            (as a :lxml-class:`_ElementTree`)
+        """
         try:
             rdfxml = self.stylesheet(xml, **self.options)
         except:
@@ -171,24 +198,46 @@ class Converter(object):
         return rdfxml
 
     def lomfile2rdfxml(self, fname, lang=None):
-        "Takes a path to a lom file, returns a rdf-xml object"
+        """Takes a path to a lom file, returns a rdf-xml object
+
+        :param fname: a file path string
+        :param lang: a ISO-696-3 language identifier.
+        :returns: a MLR record in RDF-XML format
+            (as a :lxml-class:`_ElementTree`)
+        """
         xml = etree.parse(fname)
         return self.lomxml2rdfxml(xml, lang)
 
     def lomfile2graph(self, fname, lang=None):
-        "Takes a path to a lom file, returns a rdf graph"
+        """Takes a path to a lom file, returns a rdf graph
+
+        :param fname: a file path string
+        :param lang: a ISO-696-3 language identifier.
+        :returns: a MLR record in RDF-XML format
+            (as a :py:class:`rdflib Graph<rdflib:rdflib.graph.Graph>`)
+        """
         xml = self.lomfile2rdfxml(fname, lang)
         if xml:
             return Graph().parse(data=etree.tounicode(xml), format="xml")
 
     def lomxml2graph(self, xml, lang=None):
-        "Takes a LOM xml object, returns a rdf graph"
+        """Takes a LOM xml object, returns a rdf graph
+
+        :type xml: :lxml-class:`_ElementTree`
+        :param xml: the parsed LOM record.
+        :param lang: a ISO-696-3 language identifier.
+        :returns: a MLR record in RDF-XML format
+            (as a :py:class:`rdflib Graph<rdflib:rdflib.graph.Graph>`)
+        """
         xml = self.lomxml2rdfxml(xml, lang)
         if xml:
             return Graph().parse(data=etree.tounicode(xml), format="xml")
 
     def populate_argparser(self, parser=None):
-        """Add options from the stylesheet to the argparser"""
+        """Add options from the stylesheet to the argparser
+
+        :type parser: :py:class:`argparse.ArgumentParser`
+        """
         if parser is None:
             parser = argparse.ArgumentParser()
         for name, desc in self.sheet_options.items():

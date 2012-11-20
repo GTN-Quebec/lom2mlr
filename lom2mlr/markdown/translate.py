@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""A :markdown-ext:`treeprocessors` that adds translated versions of N3 MLR fragments."""
 
 import re
 import os.path

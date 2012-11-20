@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-"""Markdown extensions used to crate the rationale.html file"""
-
+"""Markdown extensions used to create the :file:`rationale.html` file"""
 
 import os.path
 import argparse
@@ -54,5 +53,3 @@ def compile():
         output=output,
         encoding='utf-8',
         extensions=extensions)
-
-__all__ = [compile]

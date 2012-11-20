@@ -1,3 +1,5 @@
+"""Integrates MLR doctests in :file:`rationale.md` as unit tests"""
+
 import re
 
 import markdown

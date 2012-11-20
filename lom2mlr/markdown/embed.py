@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""A :markdown-ext:`treeprocessors` that embeds the markdown fragment in a full HTML document."""
 
 import markdown
 from markdown.treeprocessors import Treeprocessor

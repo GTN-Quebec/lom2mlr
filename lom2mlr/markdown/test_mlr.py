@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""A :markdown-ext:`treeprocessors` that treats LOM fragments followed by MLR fragments as doctests."""
 
 from cgi import escape
 import re
@@ -25,6 +26,7 @@ def stringify_error_element(n):
 
 class TestTreeprocessor(Treeprocessor):
     """Treats a series of code fragments in a markdown document as a doctest.
+
     Moreover, the results of the doctest are embedded in the resulting document.
     XML fragments are assumed to be LOM fragments,
     and are transformed into MLR by a Converter.

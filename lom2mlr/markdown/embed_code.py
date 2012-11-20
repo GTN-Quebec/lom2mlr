@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""A :markdown-ext:`treeprocessors` that embeds each markdown code fragment in a div with relevant CSS classes."""
 
 from cgi import escape
 import re

@@ -19,7 +19,7 @@ Other flags reflect export options, and are documented in the :file:`rationale` 
 lom2mlr_markdown
 ----------------
 
-The :program:`lom2mlr_markdown` program (also self-documenting) will apply markdown transformation to a markdown document, using the :markdown:`Markdown <index>` library, generating a HTML file.
+The :program:`lom2mlr_markdown` program (also self-documenting) will apply markdown transformation to a markdown document, using the Markdown_ library, generating a HTML file.
 
 A few further transformations are applied to the document, through relevant extensions:
 
@@ -33,3 +33,4 @@ Note: Some aspects of the transformation generate random UUID. For testing purpo
 
 This script is mostly used to validate the :file:`rationale.md` document, which explains the design rationale of this tool.
 
+.. _Markdown: http://packages.python.org/Markdown/

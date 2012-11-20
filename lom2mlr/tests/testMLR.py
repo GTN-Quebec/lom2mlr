@@ -1,3 +1,5 @@
+"""Integration tests for :py:class:`lom2mlr.transform.Converter`"""
+
 import unittest
 import os.path
 from collections import defaultdict

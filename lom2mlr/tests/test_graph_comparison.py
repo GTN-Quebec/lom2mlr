@@ -1,3 +1,5 @@
+"""Unit tests for algorithms in :py:mod:`lom2mlr.validate.graph_comparison`"""
+
 import unittest
 
 from lom2mlr.validate.graph_comparison import (

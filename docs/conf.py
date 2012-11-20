@@ -13,9 +13,8 @@ master_doc = 'index'
 #templates_path = ['_templates']
 exclude_patterns = ['_build']
 
-autodoc_default_flags = ['members', 'undoc-members', 'private-members',
-                         'special-members', 'inherited-members',
-                         'show-inheritance']
+autodoc_default_flags = ['members', 'undoc-members',
+                         'show-inheritance', 'synopsis']
 
 project = 'lom2mlr'
 copyright = u'2012, GTN-Qu\u00e9bec'
@@ -59,7 +58,15 @@ todo_include_todos = True
 extlinks = {
     'rdflib_api': ('https://rdflib.readthedocs.org/en/latest/_static/api/'
                    'index.html#%s', ''),
-    'markdown': ('http://packages.python.org/Markdown/%s.html', '')}
+    'markdown-ext': ('http://packages.python.org/Markdown/extensions/api.html#%s', ''),
+    'etree': ('http://effbot.org/zone/element.htm#%s', ''),
+    'lxml-func': ('http://lxml.de/api/lxml.etree-module.html#%s', 'lxml.etree.'),
+    'lxml-class': ('http://lxml.de/api/lxml.etree.%s-class.html', 'lxml.etree.'),
+    'vobject-func': ('http://vobject.skyhouseconsulting.com/epydoc/public/vobject.vobject-module.html#%s', 'vobject.vobject.'),
+    'vobject-class': ('http://vobject.skyhouseconsulting.com/epydoc/public/vobject.vobject.%s-class.html', 'vobject.vobject.'),
+    'vcard-func': ('http://vobject.skyhouseconsulting.com/epydoc/public/vobject.vcard-module.html#%s', 'vobject.vcard.'),
+    'vcard-class': ('http://vobject.skyhouseconsulting.com/epydoc/public/vobject.vcard.%s-class.html', 'vobject.vcard.'),
+    }
 
 man_pages = [
     ('contents', 'lom2mlr-all', 'lom2mlr transformation engine',
@@ -103,7 +110,7 @@ def parse_event(env, sig, signode):
 def setup(app):
     from sphinx.ext.autodoc import cut_lines
     from sphinx.util.docfields import GroupedField
-    app.connect('autodoc-process-docstring', cut_lines(4, what=['module']))
+    #app.connect('autodoc-process-docstring', cut_lines(4, what=['module']))
     app.add_object_type('confval', 'confval',
                         objname='configuration value',
                         indextemplate='pair: %s; configuration value')
