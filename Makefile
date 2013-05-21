@@ -6,11 +6,11 @@ SUBDIRS = lom2mlr
 .PHONY: subdirs $(SUBDIRS)
 
 all: subdirs $(TARGETS)
-	-for d in $(DIRS); do (cd $$d; $(MAKE) ); done
+	-for d in $(SUBDIRS); do (cd $$d; $(MAKE) ); done
 
 clean:
 	rm -f $(TARGETS)
-	-for d in $(DIRS); do (cd $$d; $(MAKE) clean); done 
+	-for d in $(SUBDIRS); do (cd $$d; $(MAKE) clean); done
 
 subdirs: $(SUBDIRS)
 
