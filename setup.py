@@ -23,7 +23,7 @@ setup(name='lom2mlr',
           'vobject==0.8.1c',
           'lxml>=2.3',
           'python-dateutil<2.0',
-          'rdflib>=3.2',
+          'rdflib>=4.0',
           'isodate',
           'pygments',
           'Markdown'
