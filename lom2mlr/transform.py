@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-__doc__="""The :py:class:`Converter` transforms LOM records into MLR records."""
+__doc__ = """The :py:class:`Converter` transforms LOM records into MLR records."""
 __docformat__ = "restructuredtext en"
 
 import argparse
@@ -68,7 +68,7 @@ def uuid_string(context, s, namespace=None):
 def is_uuid1(context, uuid):
     """A XSLT extension that returns a UUID based on a string"""
     if not uuid.startswith('urn:uuid:'):
-        return false
+        return False
     u = UUID(uuid[9:])
     assert u.variant == RFC_4122
     return u.version == 1
@@ -114,7 +114,8 @@ class Converter(object):
         self.options = {}
         """The options that will be passed to the XSLT stylesheet.
         The values are suitable to be passed as XSL params."""
-        self.stylesheet = etree.XSLT(stylesheet_xml,
+        self.stylesheet = etree.XSLT(
+            stylesheet_xml,
             extensions={
                 (VCARDC_NS, 'convert'): convert,
                 (URL_MLR_EXT, 'uuid_string'): uuid_string,
@@ -172,7 +173,7 @@ class Converter(object):
         langsheet = None
         try:
             langsheet = etree.XSLT(etree.parse(os.path.join(
-                'translations', 'translation_%s.xsl' % (lang,))))
+                this_dir, 'translations', 'translation_%s.xsl' % (lang,))))
         except:
             pass
         self.langsheets[lang] = langsheet
