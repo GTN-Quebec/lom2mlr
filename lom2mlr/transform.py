@@ -7,6 +7,8 @@ __docformat__ = "restructuredtext en"
 import argparse
 import sys
 import os.path
+from urlparse import urlparse
+from urllib import urlopen
 
 from uuid import UUID, uuid1, uuid5, NAMESPACE_URL, RFC_4122
 from lxml import etree
@@ -198,26 +200,26 @@ class Converter(object):
             rdfxml = langsheet(rdfxml)
         return rdfxml
 
-    def lomfile2rdfxml(self, fname, lang=None):
+    def lomfile2rdfxml(self, afile, lang=None):
         """Takes a path to a lom file, returns a rdf-xml object
 
-        :param fname: a file path string
+        :param afile: a file-like object
         :param lang: a ISO-696-3 language identifier.
         :returns: a MLR record in RDF-XML format
             (as a :lxml-class:`_ElementTree`)
         """
-        xml = etree.parse(fname)
+        xml = etree.parse(afile)
         return self.lomxml2rdfxml(xml, lang)
 
-    def lomfile2graph(self, fname, lang=None):
+    def lomfile2graph(self, afile, lang=None):
         """Takes a path to a lom file, returns a rdf graph
 
-        :param fname: a file path string
+        :param afile: a file-like object
         :param lang: a ISO-696-3 language identifier.
         :returns: a MLR record in RDF-XML format
             (as a :py:class:`rdflib Graph<rdflib:rdflib.graph.Graph>`)
         """
-        xml = self.lomfile2rdfxml(fname, lang)
+        xml = self.lomfile2rdfxml(afile, lang)
         if xml:
             return Graph().parse(data=etree.tounicode(xml), format="xml")
 
@@ -266,24 +268,29 @@ def main():
                              " 'turtle', 'nt', 'pretty-xml', trix'")
     parser.add_argument('-o', '--output', help="Output file",
                         type=argparse.FileType('w'), default=sys.stdout)
+    parser.add_argument('infiles', nargs='+', help="input files or urls")
     converter.populate_argparser(parser)
-    parser.add_argument('infile')
     args = parser.parse_args()
     converter.set_options_from_dict(vars(args))
-
-    try:
-        if (args.format == 'rawxml'):
-            xml = converter.lomfile2rdfxml(args.infile, args.language)
-            if xml:
-                args.output.write(
-                    etree.tounicode(xml, pretty_print=True).encode('utf-8'))
+    for infile in args.infiles:
+        if (urlparse(infile).scheme):
+            infile = urlopen(infile)
         else:
-            rdf = converter.lomfile2graph(args.infile, args.language)
-            if rdf:
-                args.output.write(
-                    rdf.serialize(format=args.format, encoding='utf-8'))
-    finally:
-        args.output.close()
+            infile = open(infile)
+        try:
+            if (args.format == 'rawxml'):
+                xml = converter.lomfile2rdfxml(infile, args.language)
+                if xml:
+                    args.output.write(etree.tounicode(
+                        xml, pretty_print=True).encode('utf-8'))
+            else:
+                rdf = converter.lomfile2graph(infile, args.language)
+                if rdf:
+                    args.output.write(
+                        rdf.serialize(format=args.format, encoding='utf-8'))
+        except:
+            pass
+    args.output.close()
 
 if __name__ == '__main__':
     main()
