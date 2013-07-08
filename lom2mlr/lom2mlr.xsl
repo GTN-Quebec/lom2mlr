@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
 	xmlns:regexp="http://exslt.org/regular-expressions"
@@ -50,7 +50,7 @@
 	<!-- Use a org (or fn) as a basis for an organization's uuid -->
 	<xsl:param name="org_uuid_from_org_or_fn" select="false()"/>
 
-	<!-- If a natural person has a work email, 
+	<!-- If a natural person has a work email,
 	assume it is the organization's email and not the person's email at work. -->
 	<xsl:param name="suborg_use_work_email" select="false()"/>
 
@@ -417,7 +417,7 @@
 
 	<xsl:template match="vcard:vcard" mode="vcard">
 		<xsl:choose>
-			<xsl:when test="vcard:n">
+			<xsl:when test="vcard:n and count(vcard:n/vcard:*) &gt; 0">
 				<mlr9:RC0001>
 					<!-- Whether we will define a organization for that person -->
 					<xsl:variable name="has_suborg_groupless" select="vcard:org[not(@group)] or vcard:url[not(@group) and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or vcard:adr[not(@group) and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] or (($suborg_use_work_email) and vcard:email[not(@group) and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'])"/>
