@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" 
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-        xmlns:skos="http://ltsc.ieee.org/xsd/LOM"
+        xmlns:skos="http://www.w3.org/2004/02/skos/core"
         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
         xmlns:vdex="http://www.imsglobal.org/xsd/imsvdex_v1p0"
         extension-element-prefixes="vdex"
