@@ -3,6 +3,8 @@
 """Utility module to transform a VCard (see :RFC:`2425` and :RFC:`2426`) into a XCard (see :RFC:`6351`)"""
 
 import re
+from base64 import b64encode
+
 
 # TODO: Get rid of vobject and do it directly by parsing?
 from vobject.base import readOne
@@ -44,6 +46,7 @@ def regexp_checker_exs(pattern, exceptions):
 
 
 type_checkers = {
+    'binary': regexp_checker(r'.*[\x00-\x08\x0e-\x1f]'),
     'uri': regexp_checker(r'''^([a-zA-Z0-9+.-]+):(//([a-zA-Z0-9-._~!$&'()*+,;=:]*)@)?([a-zA-Z0-9-._~!$&'()*+,;=]+)(:(\\d*))?(/?[a-zA-Z0-9-._~!$&'()*+,;=:/]+)?(\\?[a-zA-Z0-9-._~!$&'()*+,;=:/?@]+)?(#[a-zA-Z0-9-._~!$&'()*+,;=:/?@]+)?$(:(\\d*))?(/?[a-zA-Z0-9-._~!$&'()*+,;=:/]+)?(\?[a-zA-Z0-9-._~!$&'()*+,;=:/?@]+)?(\#[a-zA-Z0-9-._~!$&'()*+,;=:/?@]+)?$'''),
     'date-time': regexp_checker_ex(r'(\d{8}|--\d{4}|---\d\d)T\d\d(\d\d(\d\d)?)?',
                                    r'(Z|[+\-]\d\d(\d\d)?)?'),
@@ -76,7 +79,7 @@ xcard_prop_types = {
     'source': 'uri',
     'fn': 'text',
     'nickname': 'text-list',
-    'photo': 'uri',
+    'photo': ('uri', 'binary'),
     'bday': ('date-time', 'date', 'time', 'text'),
     'anniversary': ('date-time', 'date', 'time', 'text'),
     'gender': 'sex',
@@ -135,6 +138,8 @@ def vobj_to_str(vobj, root, attributes):
 def append_typed_el(root, typename, val):
     el = root.makeelement(VCARD_NSB + typename, nsmap=NSMAP)
     root.append(el)
+    if typename == 'binary':
+        val = "data:;base64," + b64encode(val)
     el.text = val
 
 
