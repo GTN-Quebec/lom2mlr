@@ -3,6 +3,7 @@
 import unittest
 import os.path
 from collections import defaultdict
+import traceback
 
 from rdflib import RDF, Graph, term, Namespace
 
@@ -273,7 +274,8 @@ TEST_ID = "oai:aquops.qc.ca:videos:8"
 this_dir, this_filename = os.path.split(__file__)
 EXAMPLE = os.path.join(this_dir, 'data', 'Valid.xml')
 
-class testMlr2(unittest.TestCase):
+
+class testMlr(unittest.TestCase):
     @classmethod
     def setupClass(self):
         self.converter = Converter()
@@ -367,3 +369,16 @@ class testMlr2(unittest.TestCase):
         for s, p, o in triples:
             if p in Type_constraints:
                 assert Type_constraints[p](str(o))
+
+    def test_lom_files(self):
+        ex_dir = os.path.join(this_dir, 'data')
+        examples = os.listdir(ex_dir)
+        all_clear = True
+        for example in examples:
+            print example
+            try:
+                graph = self.converter.lomfile2graph(os.path.join(ex_dir, example))
+            except Exception as e:
+                import traceback; traceback.print_exc();
+                all_clear = False
+        assert all_clear

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<lom xmlns="http://ltsc.ieee.org/xsd/LOM"><general><identifier><catalog>CFWB_AGERS</catalog><entry>OUTILEVAL_GEOGRAPHIE_03</entry></identifier><title><string language="fr">A&#xE9;roports parisiens 1</string></title><description><string language="fr">L' &#xE9;preuve s'adresse aux &#xE9;l&#xE8;ves du 3&#xB0; degr&#xE9; et  traite d'am&#xE9;nagement du territoire. La t&#xE2;che consiste en un texte de synth&#xE8;se des composantes de la probl&#xE9;matique.</string></description><keyword><string language="fr">am&#xE9;nagement du territoire</string></keyword><keyword><string language="fr">comp&#xE9;tences terminales</string></keyword><keyword><string language="fr">&#xE9;valuation</string></keyword><keyword><string language="fr">g&#xE9;ographie</string></keyword><keyword><string language="fr">outil d'&#xE9;valuation</string></keyword></general><lifeCycle><contribute><role><source>LOMv1.0</source><value>publisher</value></role><entity>BEGIN:VCARD 
+VERSION:3.0 
+FN: Commission des Outils d'Evaluation pour les Humanit&#xE9;s g&#xE9;n&#xE9;rales et technologiques
+ORG:
+EMAIL;TYPE=INTERNET:
+TEL;TYPE=WORK,VOICE:
+TEL;TYPE=WORK,FAX:
+ADR;TYPE=WORK,POST:;;
+URL:
+END:VCARD</entity><date><dateTime>2004</dateTime></date></contribute><contribute><role><source>LOMv1.0</source><value>validator</value></role><entity>BEGIN:VCARD 
+VERSION:3.0 
+FN: Minist&#xE8;re de la F&#xE9;d&#xE9;ration Wallonie-Bruxelles
+ORG:
+EMAIL;TYPE=INTERNET:
+TEL;TYPE=WORK,VOICE:
+TEL;TYPE=WORK,FAX:
+ADR;TYPE=WORK,POST:;;
+URL:
+END:VCARD</entity><date/></contribute></lifeCycle><metaMetadata><identifier><catalog>URI</catalog><entry>oai:enseignement.be/respel:5214</entry></identifier><contribute><role><source>LOMv1.0</source><value>creator</value></role><entity>BEGIN:VCARD 
+VERSION:3.0
+FN:Pierre ROLAND
+ORG:
+EMAIL;TYPE=INTERNET:
+TEL;TYPE=WORK,VOICE:
+TEL;TYPE=WORK,FAX:
+ADR;TYPE=WORK,POST:;;
+URL:
+END:VCARD</entity><date><dateTime>2009-09-24</dateTime></date></contribute></metaMetadata><technical><format>application/ms-word</format><location>http://www.enseignement.be/download.php?do_id=1360</location><requirement/></technical><educational><learningResourceType><source>http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml</source><value>evaluation</value></learningResourceType><learningResourceType><source>http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml</source><value>lecture/presentation</value></learningResourceType><learningResourceType><source>LOMv1.0</source><value>exam</value></learningResourceType><learningResourceType><source>LOMv1.0</source><value>exercise</value></learningResourceType><learningResourceType><source>LOMv1.0</source><value>lecture</value></learningResourceType><intendedEndUserRole><source>LOMv1.0</source><value>teacher</value></intendedEndUserRole><context><source>LOMv1.0</source><value>school</value></context></educational><rights><cost><source>LOMv1.0</source><value>no</value></cost><copyrightAndOtherRestrictions><source>LOMv1.0</source><value>yes</value></copyrightAndOtherRestrictions><description><string language="fr">Utilisation p&#xE9;dagogique. Reproduction autoris&#xE9;e pour un usage en classe. Pour tout autre usage, reproduction d'extraits autoris&#xE9;e avec mention des sources.</string></description></rights><classification><purpose><source>LOMv1.0</source><value>discipline</value></purpose><taxonPath><source><string xmlns:lom="http://ltsc.ieee.org/xsd/LOM">http://eureka.ntic.org/vdex/respel.xml</string><string language="fr">Classification CFWB</string></source><taxon><id>9</id><entry><string language="fr">HISTOIRE, GEOGRAPHIE, US ET COUTUMES</string></entry></taxon><taxon><id>9.6</id><entry><string language="fr">G&#xE9;ographie</string></entry></taxon><taxon><id>9.6.1</id><entry><string language="fr">Continents</string></entry></taxon><taxon><id>9.6.1.1</id><entry><string language="fr">Europe</string></entry></taxon></taxonPath><taxonPath><source><string xmlns:lom="http://ltsc.ieee.org/xsd/LOM">http://eureka.ntic.org/vdex/respel.xml</string><string language="fr">Classification CFWB</string></source><taxon><id>9</id><entry><string language="fr">HISTOIRE, GEOGRAPHIE, US ET COUTUMES</string></entry></taxon><taxon><id>9.6</id><entry><string language="fr">G&#xE9;ographie</string></entry></taxon><taxon><id>9.6.2</id><entry><string language="fr">D&#xE9;mographie, g&#xE9;ographie politique, &#xE9;conomique et sociale</string></entry></taxon></taxonPath></classification></lom>

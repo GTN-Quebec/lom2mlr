@@ -1,0 +1,287 @@
+<?xml version="1.0"?>
+<lom:lom xmlns:lom="http://ltsc.ieee.org/xsd/LOM" xmlns:lomfr="http://www.lom-fr.fr/xsd/LOMFR">
+ <lom:general>
+  <lom:identifier>
+   <lom:catalog>URI</lom:catalog>
+   <lom:entry>http://ori.unit-c.fr/uid/unit-ori-wf-1-4369</lom:entry>
+  </lom:identifier>
+  <lom:title>
+   <lom:string language="fre">Anglais (Kit de gestion pour l'ing&#xE9;nieur) </lom:string>
+  </lom:title>
+  <lom:language>fre</lom:language>
+  <lom:description>
+   <lom:string language="fre">Collection de cours d'anglais cr&#xE9;&#xE9;s avec le logiciel LAVAC (Laboratoire Audio-Visuel Actif-Comparatif), outil universitaire issu des universit&#xE9;s Montpellier II et Toulouse III. Ces ressources sont con&#xE7;ues pour vous entra&#xEE;ner &#xE0; am&#xE9;liorer votre compr&#xE9;hension et votre production orales &#xE0; partir d&#x2019;un document audio ou vid&#xE9;o en ligne. Vous pourrez &#xE9;couter un document d&#x2019;abord au ralenti, puis par s&#xE9;quences courtes de fa&#xE7;on &#xE0; diminuer la charge cognitive, lourde en compr&#xE9;hension de l&#x2019;anglais oral. Vous comprendrez ainsi ce que vous n&#x2019;auriez pas compris si vous acc&#xE9;diez au document directement par le lecteur propos&#xE9; par le site de votre ressource (g&#xE9;n&#xE9;ralement Voice of America, les ressources de
+ce site &#xE9;tant libres de droit).
+
+Composante de l'ensemble de modules p&#xE9;dagogiques "Kit de gestion pour l'ing&#xE9;nieur".</lom:string>
+  </lom:description>
+  <lom:keyword>
+   <lom:string language="fre">anglais professionnel</lom:string>
+  </lom:keyword>
+  <lom:keyword>
+   <lom:string language="fre">communication</lom:string>
+  </lom:keyword>
+  <lom:keyword>
+   <lom:string language="fre">compr&#xE9;hension orale</lom:string>
+  </lom:keyword>
+  <lom:keyword>
+   <lom:string language="fre">langue &#xE9;trang&#xE8;re</lom:string>
+  </lom:keyword>
+  <lom:structure>
+   <lom:source>LOMv1.0</lom:source>
+   <lom:value>collection</lom:value>
+  </lom:structure>
+  <lom:aggregationLevel>
+   <lom:source>LOMv1.0</lom:source>
+   <lom:value>4</lom:value>
+  </lom:aggregationLevel>
+  <lomfr:documentType>
+   <lomfr:source>LOMv1.0</lomfr:source>
+   <lomfr:value>texte</lomfr:value>
+  </lomfr:documentType>
+  <lomfr:documentType>
+   <lomfr:source>LOMv1.0</lomfr:source>
+   <lomfr:value>son</lomfr:value>
+  </lomfr:documentType>
+  <lomfr:documentType>
+   <lomfr:source>LOMFRv1.0</lomfr:source>
+   <lomfr:value>image en mouvement</lomfr:value>
+  </lomfr:documentType>
+  <lomfr:documentType>
+   <lomfr:source>LOMFRv1.0</lomfr:source>
+   <lomfr:value>ensemble de donn&#xE9;es</lomfr:value>
+  </lomfr:documentType>
+ </lom:general>
+ <lom:lifeCycle>
+  <lom:version>
+   <lom:string language="fre">mars 2011</lom:string>
+  </lom:version>
+  <lom:contribute>
+   <lom:role>
+    <lom:source>LOMv1.0</lom:source>
+    <lom:value>author</lom:value>
+   </lom:role>
+   <lom:entity>BEGIN:VCARD
+VERSION:3.0
+N:Toma;Antoine;Antoine;;;
+FN:Antoine Toma;Antoine
+EMAIL;TYPE=INTERNET:toma@univ-tlse2.fr
+ORG:Institut Universitaire de Technologie de Toulouse A
+END:VCARD</lom:entity>
+   <lom:date>
+    <lom:dateTime>2011-03-16</lom:dateTime>
+   </lom:date>
+  </lom:contribute>
+  <lom:contribute>
+   <lom:role>
+    <lom:source>LOMv1.0</lom:source>
+    <lom:value>publisher</lom:value>
+   </lom:role>
+   <lom:entity>BEGIN:VCARD
+VERSION:3.0
+N:IUT en ligne;;;;
+FN:IUT en ligne
+EMAIL;TYPE=INTERNET:
+ORG:
+END:VCARD</lom:entity>
+   <lom:date>
+    <lom:dateTime>2011-03-16</lom:dateTime>
+   </lom:date>
+  </lom:contribute>
+  <lom:contribute>
+   <lom:role>
+    <lom:source>LOMv1.0</lom:source>
+    <lom:value>publisher</lom:value>
+   </lom:role>
+   <lom:entity>BEGIN:VCARD
+VERSION:3.0
+N:UNIT;;;;
+FN:UNIT
+EMAIL;TYPE=INTERNET:
+ORG:
+END:VCARD</lom:entity>
+   <lom:date>
+    <lom:dateTime>2011-03-16</lom:dateTime>
+   </lom:date>
+  </lom:contribute>
+ </lom:lifeCycle>
+ <lom:metaMetadata>
+  <lom:identifier>
+   <lom:catalog>URI</lom:catalog>
+   <lom:entry>http://ori.unit-c.fr/uid/unit-ori-wf-1-4370</lom:entry>
+  </lom:identifier>
+  <lom:contribute>
+   <lom:role>
+    <lom:source>LOMv1.0</lom:source>
+    <lom:value>validator</lom:value>
+   </lom:role>
+   <lom:entity>BEGIN:VCARD
+VERSION:3.0
+N:Duranton;Sylvain;Sylvain;;;
+FN:Sylvain Duranton;Sylvain
+EMAIL;TYPE=INTERNET:sylvain.duranton@unit.eu
+ORG:UNIT
+END:VCARD</lom:entity>
+   <lom:date>
+    <lom:dateTime>2011-03-17</lom:dateTime>
+   </lom:date>
+  </lom:contribute>
+  <lom:metadataSchema>LOMv1.0</lom:metadataSchema>
+  <lom:metadataSchema>LOMFRv1.0</lom:metadataSchema>
+  <lom:metadataSchema>SupLOMFRv1.0</lom:metadataSchema>
+  <lom:language>fre</lom:language>
+ </lom:metaMetadata>
+ <lom:technical>
+  <lom:format>text/html</lom:format>
+  <lom:format>application/pdf</lom:format>
+  <lom:format>video/mpeg</lom:format>
+  <lom:location>http://www.unit.eu/cours/kit-gestion-ingenieur/Chapitre-1/index.html</lom:location>
+  <lom:requirement>
+   <lom:orComposite>
+    <lom:type>
+     <lom:source>LOMv1.0</lom:source>
+     <lom:value>operating system</lom:value>
+    </lom:type>
+    <lom:name>
+     <lom:source>LOMv1.0</lom:source>
+     <lom:value>ms-windows</lom:value>
+    </lom:name>
+    <lom:minimumVersion>XP</lom:minimumVersion>
+    <lom:maximumVersion>Windows 7</lom:maximumVersion>
+   </lom:orComposite>
+  </lom:requirement>
+  <lom:installationRemarks>
+   <lom:string language="fre">Veuillez consulter les pages de pr&#xE9;sentation et suivre les instructions pour utiliser l'applicatif Lavac 2011.</lom:string>
+  </lom:installationRemarks>
+ </lom:technical>
+ <lom:educational>
+  <lom:learningResourceType>
+   <lom:source>LOMv1.0</lom:source>
+   <lom:value>lecture</lom:value>
+  </lom:learningResourceType>
+  <lom:learningResourceType>
+   <lom:source>LOMv1.0</lom:source>
+   <lom:value>exercise</lom:value>
+  </lom:learningResourceType>
+  <lom:learningResourceType>
+   <lom:source>LOMFRv1.0</lom:source>
+   <lom:value>m&#xE9;thodologie</lom:value>
+  </lom:learningResourceType>
+  <lom:learningResourceType>
+   <lom:source>LOMFRv1.0</lom:source>
+   <lom:value>animation</lom:value>
+  </lom:learningResourceType>
+  <lom:learningResourceType>
+   <lom:source>LOMv1.0</lom:source>
+   <lom:value>self assessment</lom:value>
+  </lom:learningResourceType>
+  <lom:learningResourceType>
+   <lom:source>LOMFRv1.0</lom:source>
+   <lom:value>outil</lom:value>
+  </lom:learningResourceType>
+  <lom:intendedEndUserRole>
+   <lom:source>LOMv1.0</lom:source>
+   <lom:value>learner</lom:value>
+  </lom:intendedEndUserRole>
+  <lom:intendedEndUserRole>
+   <lom:source>LOMv1.0</lom:source>
+   <lom:value>teacher</lom:value>
+  </lom:intendedEndUserRole>
+  <lom:context>
+   <lom:source>LOMv1.0</lom:source>
+   <lom:value>higher education</lom:value>
+  </lom:context>
+  <lom:context>
+   <lom:source>LOMFRv1.0</lom:source>
+   <lom:value>formation continue</lom:value>
+  </lom:context>
+  <lom:description>
+   <lom:string language="fre">Jusqu&#x2019;&#xE0; 12 activit&#xE9;s p&#xE9;dagogiques :
+1- Compr&#xE9;hension orale avec didactisation du son (du plus difficile au plus facile) :
+&#xE9;coute normale, mais facilit&#xE9;e (avec le lecteur Windows Media Player &#xE9;largi et l&#x2019;&#xE9;qualiseur r&#xE9;gl&#xE9;) ; &#xE9;coute au ralenti : choisir 80 ou 70 % (60 % maxi en cas de difficult&#xE9; ; &#xE9;coute multimodale : visualisation de s&#xE9;quences sonores courtes, s&#xE9;lection de blocs, &#xE9;coute normale avec pauses manuelles, rep&#xE9;rage possible des passages difficiles et r&#xE9;&#xE9;coute instantan&#xE9;e par clic droit. &#xE9;coute multimodale avec pauses : idem, mais avec pauses automatiques (&#xE9;gales &#xE0; 150 % de la dur&#xE9;e de la s&#xE9;quence pr&#xE9;c&#xE9;dente) + pauses manuelles, pour vous donner du temps pour comprendre, prendre des notes ou pour r&#xE9;p&#xE9;ter. Pour chacun de ces modes, vous pouvez activer l&#x2019;aide de vocabulaire (avec le dictionnaire Cambridge) : phon&#xE9;tique, graphie (pour noms propres ou mots difficiles &#xE0; rep&#xE9;rer &#xE0; l&#x2019;oral) et traduction si n&#xE9;cessaire, soit au total 8 modes d&#x2019;&#xE9;coute.
+2- Prise de notes :
+Sur papier libre au cours des diff&#xE9;rentes &#xE9;coutes ou dans un fichier Word si votre vitesse de frappe est bonne. Le dictionnaire de Word doit &#xEA;tre activ&#xE9; pour constituer une aide &#xE0; la prise de notes. 
+3- Production orale :
+R&#xE9;p&#xE9;tition d&#x2019;un bloc de s&#xE9;quences choisies par l&#x2019;enseignant (mais vous pouvez choisir de tout r&#xE9;p&#xE9;ter). Vous r&#xE9;p&#xE9;tez uniquement ce que vous pensez avoir compris. 
+4- &#xC9;coute compar&#xE9;e :
+Pour cette activit&#xE9; &#xE9;pilinguistique (avec un recul sur votre travail) , vous entendrez la s&#xE9;quence d&#x2019;origine suivie de votre enregistrement. Enregistrez &#xE0; nouveau si vous pensez pouvoir vous am&#xE9;liorer. Pour certaines s&#xE9;quences difficiles, vos enregistrements successifs seront conserv&#xE9;s pour que vous puissiez &#xE9;valuer votre progression.
+5- Transcription : 
+Collez ou tapez dans une zone texte qui s&#x2019;ouvrira ce que vous avez compris. La transcription doit &#xEA;tre d&#xE9;taill&#xE9;e : vous devez TOUT &#xE9;crire. Lorsque des mots ne sont pas compris, essayez de r&#xE9;diger entre parenth&#xE8;ses ce que vous pensez comprendre avec vos propres mots, de fa&#xE7;on &#xE0; toujours faire l&#x2019;effort de comprendre. Ne laissez pas de blancs.
+6- Compr&#xE9;hension &#xE9;crite :
+Lecture et compr&#xE9;hension de la correction en notant les mots difficiles &#xE0; chercher dans le dictionnaire en ligne.
+7- Autocorrection de votre transcription : 
+Corrigez ensuite EN MAJUSCULES toutes vos erreurs de fa&#xE7;on &#xE0; permettre &#xE0; l&#x2019;enseignant d&#x2019;identifier vos probl&#xE8;mes. Plut&#xF4;t que de masquer vos erreurs, votre int&#xE9;r&#xEA;t est de montrer vos difficult&#xE9;s &#xE0; votre enseignant pour qu&#x2019;il vous aide &#xE0; les ma&#xEE;triser.
+8- Lecture oralis&#xE9;e :
+Le script sous les yeux, &#xE9;coutez le son du document audio ou vid&#xE9;o en suivant sur le texte.
+9- &#xC9;coute et lecture synchronis&#xE9;e manuellement : 
+Lancez le lecteur et &#xE9;coutez le son du document audio ou vid&#xE9;o en faisant d&#xE9;filer le texte dans une fen&#xEA;tre &#xE9;troite de fa&#xE7;on &#xE0; &#xEA;tre actif pendant la lecture.
+10- Lecture &#xE0; haute voix : enregistrement en lisant votre autocorrection.
+11- &#xC9;coute de vos enregistrements : &#xE9;coutez  vos enregistrements pour chaque s&#xE9;quence (soit le dernier effectu&#xE9;, soit tous pour les s&#xE9;quences difficiles).        
+12- M&#xE9;morisation des mots difficiles (&#xE0; l&#x2019;&#xE9;crit et &#xE0; l&#x2019;oral) en recopiant les mots dans un dictionnaire personnel ou collaboratif (en ligne) que vous avez cherch&#xE9;s.     
+Vous avez entendu la ressource et lu en m&#xEA;me temps son script &#xE0; 3 reprises (pour l&#x2019;autocorrection, en lecture oralis&#xE9;e et en lecture synchronis&#xE9;e), vous pouvez donc, avant de terminer, refaire l&#x2019;exercice de r&#xE9;p&#xE9;tition pour vous am&#xE9;liorer. Refaites aussi l&#x2019;&#xE9;coute compar&#xE9;e. </lom:string>
+  </lom:description>
+  <lom:language>fre</lom:language>
+  <lom:language>eng</lom:language>
+ </lom:educational>
+ <lom:rights>
+  <lom:cost>
+   <lom:source>LOMv1.0</lom:source>
+   <lom:value>no</lom:value>
+  </lom:cost>
+  <lom:copyrightAndOtherRestrictions>
+   <lom:source>LOMv1.0</lom:source>
+   <lom:value>yes</lom:value>
+  </lom:copyrightAndOtherRestrictions>
+  <lom:description>
+   <lom:string language="fre">Ces contenus d'enseignement, propri&#xE9;t&#xE9; du campus num&#xE9;rique IUT en ligne, constituent une &#x153;uvre prot&#xE9;g&#xE9;e par les lois sur la propri&#xE9;t&#xE9; intellectuelle.</lom:string>
+  </lom:description>
+ </lom:rights>
+ <lom:relation>
+  <lom:kind>
+   <lom:source>LOMv1.0</lom:source>
+   <lom:value>ispartof</lom:value>
+  </lom:kind>
+  <lom:resource>
+   <lom:identifier>
+    <lom:catalog>URI</lom:catalog>
+    <lom:entry>http://www.unit.eu/nuxeo/site/esupversions/b1f9ba43-7741-480d-9646-05a03fffae14/index.html</lom:entry>
+   </lom:identifier>
+   <lom:description>
+    <lom:string language="fre">Kit de gestion pour l'ing&#xE9;nieur : ensemble des ressources</lom:string>
+   </lom:description>
+  </lom:resource>
+ </lom:relation>
+ <lom:annotation>
+  <lom:description>
+   <lom:string language="fre">Les cours d&#x2019;anglais IUT en ligne sont ouverts &#xE0; tous (les corrig&#xE9;s enseignant le sont par identifiant et mot de passe) </lom:string>
+  </lom:description>
+ </lom:annotation>
+ <lom:classification>
+  <lom:purpose>
+   <lom:source>LOMv1.0</lom:source>
+   <lom:value>discipline</lom:value>
+  </lom:purpose>
+  <lom:taxonPath>
+   <lom:source>
+    <lom:string language="fre">Classification UNIT</lom:string>
+   </lom:source>
+   <lom:taxon>
+    <lom:id>2509</lom:id>
+    <lom:entry>
+     <lom:string language="fre">Langues</lom:string>
+    </lom:entry>
+   </lom:taxon>
+  </lom:taxonPath>
+  <lom:taxonPath>
+   <lom:source>
+    <lom:string language="fre">CDD 22e &#xE9;d.</lom:string>
+   </lom:source>
+   <lom:taxon>
+    <lom:id>42</lom:id>
+    <lom:entry>
+     <lom:string language="fre">Anglais</lom:string>
+    </lom:entry>
+   </lom:taxon>
+  </lom:taxonPath>
+ </lom:classification>
+</lom:lom>

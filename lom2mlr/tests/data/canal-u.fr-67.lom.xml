@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<lom xmlns="http://ltsc.ieee.org/xsd/LOM" xmlns:lomfr="http://www.lom-fr.fr/xsd/LOMFR" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ltsc.ieee.org/xsd/LOM http://www.lom-fr.fr/xsd/lomfrv1.0/std/lomfr.xsd">
+<general>
+    <identifier>
+        <catalog>Canal-U_Ocms</catalog>
+        <entry>670</entry>
+    </identifier>
+    <title><string language="fre">01 &#x96; Illettrisme et scolarit&#xE9;</string></title>
+    <language>FRE</language>
+    <description>
+        <string language="fre">Apr&#xE8;s s'&#xEA;tre orient&#xE9; dans ce champ des pratiques il convient d'en visiter quelques unes sur le terrain et ce de mani&#xE8;re plus approfondie. De voir ce que peut &#xEA;tre concr&#xE8;tement en situant toujours le cadre g&#xE9;n&#xE9;ral o&#xF9;, quand, comment, avec qui et dans quel objectif ?G&#xE9;n&#xE9;riqueHISTOIRE DE VIE EN FORMATION G&#xE9;n&#xE9;rique Conception Gaston Pineau Laboratoire des Sciences de l'Education Universit&#xE9; de Tours Jean-Louis Le Grand IFEF Universit&#xE9; de Paris VIII Chef de projet Patrick Morand Assistance Technique G&#xE9;rard Chiron Image Jean Relet R&#xE9;alisation Philippe Parrain Production Tom Pouce Production Cette &#xE9;mission a &#xE9;t&#xE9; r&#xE9;alis&#xE9;e gr&#xE2;ce &#xE0; la participation financi&#xE8;re de R&#xE9;gion des Pays de la Loire D&#xE9;l&#xE9;gation R&#xE9;gionale de la Formation Professionnelle Ville de Nantes D&#xE9;l&#xE9;gation Interminist&#xE9;rielle &#xE0; l'insertion des jeunes ANPE Poitou-Charente Caisse R&#xE9;gionale du Cr&#xE9;dit Agricole d'Indre et Loire Copyright &#x96; TOM POUCE - Nantes</string></description>
+    <keyword><string language="fre">formation continue</string></keyword><keyword><string language="fre">histoire de vie</string></keyword><keyword><string language="fre">&#xE9;ducation permanente</string></keyword>
+    <lomfr:documentType>
+        <lomfr:source>LOMFRv1.0</lomfr:source>
+        <lomfr:value>image en mouvement</lomfr:value>
+    </lomfr:documentType>
+</general><lifeCycle>
+    
+    <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+VERSION:3.0
+CLASS:PUBLIC
+REV:2013-01-13 23:48:50
+FN:Jean-Louis LE GRAND
+N:LE GRAND;Jean-Louis;;;
+
+URL;TYPE=work:http://www.canal-u.tv/auteurs/le_grand_jean_louis
+ROLE:author
+NOTE:                                Statut           IFEF Paris VII                        
+TZ:+0100
+END:VCARD
+</entity>
+            <date><dateTime>1990-07-03</dateTime></date>
+        </contribute>
+
+    <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>author</value>
+            </role>
+            <entity>BEGIN:VCARD
+VERSION:3.0
+CLASS:PUBLIC
+REV:2013-01-13 23:48:50
+FN:Gaston PINEAU
+N:PINEAU;Gaston;;;
+
+URL;TYPE=work:http://www.canal-u.tv/auteurs/pineau_gaston
+ROLE:author
+NOTE:                                Statut           Professeur des Universit&#xE9;s en Sciences de l'&#xE9;ducation &#xE0; Tours                        
+TZ:+0100
+END:VCARD
+</entity>
+            <date><dateTime>1990-07-03</dateTime></date>
+        </contribute>
+
+    <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>publisher</value>
+            </role>
+            <entity>BEGIN:VCARD
+VERSION:3.0
+CLASS:PUBLIC
+REV:2013-01-13 23:48:50
+FN:Universit&#xE9; de Nantes
+N:Universit&#xE9; de Nantes;;;;
+
+URL;TYPE=work:http://www.canal-u.tv/auteurs/universite_de_nantes
+ROLE:publisher
+TZ:+0100
+END:VCARD
+</entity>
+            <date><dateTime>1990-07-03</dateTime></date>
+        </contribute>
+
+    <contribute>
+            <role>
+                <source>LOMv1.0</source>
+                <value>content provider</value>
+            </role>
+            <entity>BEGIN:VCARD
+VERSION:3.0
+CLASS:PUBLIC
+REV:2013-01-13 23:48:50
+FN:Universit&#xE9; de Nantes
+N:Universit&#xE9; de Nantes;;;;
+
+URL;TYPE=work:http://www.canal-u.tv/auteurs/universite_de_nantes
+ROLE:content provider
+TZ:+0100
+END:VCARD
+</entity>
+            <date><dateTime>1990-07-03</dateTime></date>
+        </contribute>
+
+</lifeCycle>
+<metaMetadata>
+    <metadataSchema>LOMv1.0</metadataSchema>
+    <metadataSchema>LOMFRv1.0</metadataSchema>
+</metaMetadata>
+<technical>
+    <format>video/x-flv</format>
+    <location>http://www.canal-u.tv/video/profession_formateur/01_illettrisme_et_scolarite.670</location>
+    <location>rtmp://streamer.cerimes.fr/vod/canalu/videos/formateur/01.illettrisme.et.scolarit._670/01_illettrisme_et_scolarite.sd.mp4</location>
+    <size>89935831</size>
+    <duration><duration>PT0H14M54S</duration></duration>
+</technical>
+<educational>
+    <learningResourceType>
+        <source>LOMv1.0</source>
+        <value>lecture</value>
+    </learningResourceType>
+    
+</educational>
+<rights>
+    <cost>
+        <source>LOMv1.0</source>
+        <value>no</value>
+    </cost>
+    <copyrightAndOtherRestrictions>
+        <source>LOMv1.0</source>
+        <value>no</value>
+    </copyrightAndOtherRestrictions>
+    <description>
+        <string language="fre">Droits r&#xE9;serv&#xE9;s &#xE0; l'&#xE9;diteur et aux auteurs</string>
+    </description>
+</rights>
+
+            <relation>
+                <kind>
+                    <source>LOMv1.0</source>
+                    <value>ispartof</value>
+                </kind>
+                <resource>
+                    <identifier>
+                        <catalog>URI</catalog>
+                        <entry>http://www.canal-u.tv/producteurs/profession_formateur/histoires_de_vie_en_formation/n_04_pratiques_de_terrain</entry>
+                    </identifier>
+                    <description>
+                        <string language="fre">N&#xB0;04 - Pratiques de terrain</string>
+                    </description>
+                </resource>
+            </relation>
+
+<classification>
+    <purpose>
+        <source>LOMv1.0</source>
+        <value>discipline</value>
+    </purpose>
+    <taxonPath>
+        <source>
+        <string language="fre">Universit&#xE9;s Num&#xE9;riques Th&#xE9;matiques 2009 http://www.universites-numeriques.fr</string>
+        </source>
+        <taxon>
+            <id/>
+            <entry>
+                <string language="fre"/>
+            </entry>
+        </taxon>
+    </taxonPath>
+</classification>
+<classification>
+    <purpose>
+        <source>LOMv1.0</source>
+        <value>discipline</value>
+    </purpose>
+    
+    <taxonPath>
+        <source><string xmlns:lom="http://ltsc.ieee.org/xsd/LOM">http://www.oclc.org/dewey/</string>
+            <string language="fre">CDD 22e &#xE9;d.</string>
+            <string language="eng">DDC 22nd ed.</string>
+        </source>
+        <taxon>
+            <id>374</id>
+            <entry>
+                <string language="fre">Formation des adultes</string>
+            </entry>
+        </taxon>
+   </taxonPath>
+</classification>      </lom>

@@ -1,0 +1,352 @@
+<?xml version="1.0"?>
+<lom xmlns="http://ltsc.ieee.org/xsd/LOM" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ltsc.ieee.org/xsd/LOMv1p0 lom.xsd">
+  <general>
+    <title>
+      <string language="fr-CA">Dur comme du fer?</string>
+    </title>
+    <language>fr-CA</language>
+    <description>
+      <string language="fr-CA">Introduction aux principes de m&#xE9;canique des mat&#xE9;riaux et des fluides. Un tableau d&#x2019;ensemble depuis les principes th&#xE9;oriques jusqu&#x2019;aux applications industrielles et aux avenues de recherches. Extraits sonores d'&#xE9;missions de Radio-Canada.</string>
+    </description>
+    <keyword>
+      <string language="fr-CA">Thermodynamique</string>
+    </keyword>
+    <keyword>
+      <string language="fr-CA">Mat&#xE9;riaux</string>
+    </keyword>
+    <keyword>
+      <string language="fr-CA">Alliages</string>
+    </keyword>
+    <keyword>
+      <string language="fr-CA">M&#xE9;canique des fluides.</string>
+    </keyword>
+  </general>
+  <lifeCycle>
+    <version>
+      <string language="fr-CA">29 mai 2000</string>
+    </version>
+    <contribute>
+      <role>
+        <source>LOMv1.0</source>
+        <value>script writer</value>
+      </role>
+      <entity>BEGIN:VCARD&#xD;
+VERSION:3.0&#xD;
+FN:Myriam Germain&#xD;
+N:;;;;&#xD;
+ORG:Vitrine technologie-&#xE9;ducation&#xD;
+EMAIL;TYPE=INTERNET:info@vteducation.org&#xD;
+TEL;TYPE=WORK,VOICE:+514-332-3000-191&#xD;
+ADR;TYPE=WORK,POST:;;;Montr&#xE9;al;Qu&#xE9;bec;H4N 1L4;Canada&#xD;
+PHOTO;ENCODING=b;TYPE=gif:R0lGODlhlAGgANX/AP797/363/z4z/v1wPrzsPnxoPjukPfsg&#xD;
+ PbqcfXnYfTlUfPjQfLgMvHeIvDbEu/y9e/ZAt/l7M/Z4r/M2a+/z5+yxY+lvH+ZsnCNqWCAoFBz&#xD;
+ lkBmjDBZgyBNeRBAcAAzZv///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#xD;
+ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC&#xD;
+ H/C0FET0JFOklSMS4wAt7tACH5BAEAACAALAAAAACUAaAAAAb/QJBwSCwaj8ikcslsOp/QqHRKr&#xD;
+ Vqv2GYAwYB4IY3EIEsum8/otHrNbrvJgMR3/l0I3vi8fs/v+/UBAwN3VAIOdIgQDgV/jY6PkJGS&#xD;
+ WAAHDXMOCQFRhomejJOhoqOkpWgCl4mLTwCpnogOhKaztLW2op2vEKBMcrqJC7fCw8TFaV2/ELJ&#xD;
+ JAcmeY8bR0tPUQwbOEMFLCNiICtXg4eKkrsmbSsjdc+Ps7e55zd0GS+qI0O/4+fpUA+oHSvHqfb&#xD;
+ m3r6DBg0P6dfuXRKFALwQRSpzIzqEzhkgAPBxIsaPHagGd8UKy0cuyjyhT1kpnbsmCjQ5UypwJD&#xD;
+ 8GCmwjOJSmALQGT/2sPfdIcStQMUDrz0CVzoDOJxocRi5qS8ODjAwnGjiLCeCTAIV0EnBwQqE3q&#xD;
+ qAcTLGTY8OHDBIkSKlzY0KFtsZCJmhoJ8FJVVKcsl+o12+iBBQwbPLRd3PatvggXMnBgzLiYr1d&#xD;
+ ClRTo66XBAQCcvi49SbjRBMqoHedji7oyscCIGjwR8Hc2bFikkQgwcKC3gdylsbRmrBofhuGLiz&#xD;
+ nTU0k0ogSgmRC43SCsqAnYs2vfzp37KOSN910A/0F5Mj4ADCwQvcDA4CNxfimILom8fdeh6iIv/&#xD;
+ m48+GKceVJWLQDchggD9EFy34KjsDYcf+5UQF4xWiWSlC2XJZOZgguS1/9Bg+BB2M5p/xHTyisN&#xD;
+ JDiLRc5Yx2GHyG0wSgYh7kMicsbkQkcswhj4CgP1wRjjKP49aOOEOQaYDXCkCPAQk3sIOaQoRbY&#xD;
+ mIjs3DjfNbgf8RkyF2FzoiJTDyUhljfpk2Vpwa3Aj0IaNkNmamaFUmVoaVU2iJmpsqqEkNgOatl&#xD;
+ 0E5KmmXQRJRCDXBoxqcAEFeUoR11yMMoqBBYgSYSdlqj1AAaWMXoBVE2ipVdcFQyi6VqUXZPqEo&#xD;
+ hdoUKmjFYyqxJ6UNTGprI1eUKsVaHlnhQSuKiHBYZVmcMGVa/zpTKCTFPpEBZMhpwGzRkSAgX7I&#xD;
+ dXBBnpsSB0IENA6nQaRETHD/AWLcLobqBA6ihgG6SDxwQbutdYBBsUXgit8R9uKLmrf8KkEBBtU&#xD;
+ KaWa4i9EJ8L3IeZBBwWqMJRACpUjLBAUCm0uvEQ8c16EFQkiI3MH2cfAxeRiIDJ7DR1igWIeoHu&#xD;
+ FvckhcMPN9HtSsRAUdd4iBEAy3BTMRMi/oMxs8CTRSKBor4fKCKichQdD7CXHzBzuTd7ScqC1Nx&#xD;
+ APlCll1v0gW8UC8HW7wsRAPaAC2u0JQ8DLAbNuXgRt4YfNeJFEjUTaMHCAhQdcLZro1jPxhDaMH&#xD;
+ b8st59lDLH5EwlIWfvncdIOw9dEPYC60Gxk6803GaCJhAdhigxA6mZVzvtjQROQt/2cFRhS9IO2&#xD;
+ xl0jE1GTyPgTwrGt9dxGSk4ltFn3/AuUjgRdBKNiQF0H8fR8aL/sHMNtO5t5ETM95cZaHv72t43&#xD;
+ ot+snal1mEyZO7AeYrYn6XuhHJo9bzBBUgztjS4ksZY+i0uA55AHnb414RBqc/C/DPf4zRQLrSJ&#xD;
+ gQGUsYDFXggeMBXwYiNCn76q5ZjPlcErHUgg7pbXhZK5wk42S9rRwjgBW11uOFkr4PkmVjl2EJA&#xD;
+ +3QgMfYpgu7a4gHvMUZzQ4DgYijQO+REqnxwi9riIqXEDyzNgot5gKLyRMIhgJAylLPbcDjINOf&#xD;
+ s6GmkiN7wkCM2LLbFVVVsC+6MgAGfbf+NA455ne+IBh48CiECjitPE/NVhPUxZo6eo6AYh4NEIR&#xD;
+ hyiX8ET7Fuhsj2zYkI+aMME4nwyAO+AQAIMKMDcmILNToShkNYJGrmqMrWtM5m4FlaK/mkqVgS4&#xD;
+ Yu05CNyhAcC3fEOir20ZS3ZaMlcRnE4vOyiEPYohOu9UQ+0EcTzRGFKEDATBKsbTs10Vz0mbE1s&#xD;
+ FAwmMQe5piFkkjKVTOSU1ImjIRjxA5tM5fG2hq4HrLNkx2MnahrpOje6hU2mLOCCzPROMt5KmEN&#xD;
+ wnBARusw9vpM/dySnMR+KtilJADzx1CdleKk7OmVTdq8kSkATSFDwkKwJ3yzCO9/HUGvu0XH//J&#xD;
+ FhLoEZva15EgRVdJg/TzqEjvY0gSEdyki3Z6ZqGiGltWMmUodAQTWmjabgoRcU/fmBDDzAXuBBn&#xD;
+ zjdp0uQAvR+EpVTUcGahKUKYaUTHCdT9+hU30G1nWmFq0Dz+dN1DrFDEgzOUGXnSfJk9KBqPatS&#xD;
+ W4rWhqLymHJt6jWB6UyeFcynXeXc0YqyV85p7p1Brag2VTrYwIKgsDgFKxTfOhx+be2GrnskeTy&#xD;
+ g1ciihk533d1XDzuEiyInA61dwjv5WVbCdnaMnIXrZ0WbT2Cq9p9xveTYGsvI3G5Vudg0KcX6dA&#xD;
+ Ty8LQI4MkrFIaoQo1SxqCg9e4Ag6sld2KUpesE/yZFkZbdI8ySkelcaHpbKgoACGIQpaSvYGlbL&#xD;
+ 3n28W2ahe5+yxvWhpG3nK7dqPUQytiWUvWVWKzUBnw13WFy1bCt6eYSKryGAJTOM7QgT0g/muG/&#xD;
+ 9osuQ3hAHD/AgYKFbI7KHDCCi0mZ7u3xvYtBLQgcF09g4vKIJSSrTBUoBcgK4ZxHdG7JfrgHApj&#xD;
+ xCwgyhYiRMGQwOrByB6uWTu+jAQfyLwOKqVmMh4sc9I0ZtPY06RBI3JonksdVaUYOIrl5BCxiQM&#xD;
+ lJMDIIfkwZDfzKdfzbVlsyiwYWHUhFkrCtZ4lA1fs4rMr3ETNdyWykAhvtwMYEQaMxMAHmVjW5V&#xD;
+ sIky/8m0GiDpq+PjpoAhxPMmJsKIZD2IbQZTvQLjI1icUGNwIq9tmAyzVHPlA61pYls3sNCmnGg&#xD;
+ vtOwO1QwJHcrAyauq3BBgGOa5WF+ebn1lJPA54Gq7bgwBPZ6aTzepNLW0/ZJZvTQzbKjyumERxi&#xD;
+ iERq97Tf4CCna1i+jwXY0XUvJMeK+X7WJLWNlcxJsvF0cf/RIJu2aW6z08jTIwK3vNHTDhZDANR&#xD;
+ NiK+BUUZxTrP5XsA3+3NdiGuRqe6e1PqbwiX/vbR/v48lzBTJ6bxYP3YBWxut9q5gfMs+7XgzAw&#xD;
+ 4lZCxO44CjPXdCJeN1b+jVnS+da08em8lg/vNJG6J+QPND/XTLkPN/ImXoSKABm+2zAAgBOsQXA&#xD;
+ ffY1g8fVIHB2W67L5gvOfDHxVTu4OYD2JNSdMmKH2wX23ncl2Pztos7qz+S+GA/4eQ9P9gRX9JT&#xD;
+ 2KUwqVhuo46O6Hr5PRSbzF7iy2vAsvcqPjfThM/0S0HKBdW1AWY9atRBQv3p1uR72kGrC4aOmRS&#xD;
+ ykpfWWaj0FaJ8GFnrCRdRN/iNwDGvKyJoahk6EbJRPfUc8konq0gCsn08NBSQD+dUPfx7ijBp6S&#xD;
+ eC43J9GgXSBRvG7nw03c7Ga9wFKVbT//fhHw81eqXiDCMAmDtAA7YFo+VeAZnBs35Ji/qRjBtiA&#xD;
+ xNBYDscHjlNE/2sRR3nngBg4CzdjVY3AcZOWgSBYCjXkSpDgc61BOewQCANAgCGIEg/QMVwXCQy&#xD;
+ nMKpnDAVQDgrwNy04ETO4GC3mBlflBCEjJPDmDsbHIzuIEna2BpMCRBdYL2vnIdCGDxajCjqYhP&#xD;
+ vwd09IBRIQGYZEfEf1e623eTU4Dc0zBxiHhQURAdwhe1GgaBlGfdi2DmqYgd32ARFIE85lfHRQG&#xD;
+ 3VYDcHSHYLYhlXAXIHnEYoiNwwoBM7Sh3/oDrs3HIfIBO8EhvngKQjDGKYmBG6iC9P0iMVggq3h&#xD;
+ hkiAeFaRia1xgU3zCjEBiuzAOYvoBHCIGnkoEbozXQAQeV8wea5IDf9ztUtVcIeTWBBGFItCQAA&#xD;
+ owoK9aAx3eB/R5gTMZYnuUEW1SASrOAcM8InLeAvsFlVVYERwNxGzCHhMIAAJ8BUM8BnbKA5V94&#xD;
+ FQ0F4fcYfSuI6vODfDCFg35xH+FI70eBDjSBnz+AR/J3QoxXmqxgQR4HnBZwEBeQWqNVlZcHkLy&#xD;
+ XlHVQGIwUEPIBca4Ci5149N0IxY8Cl0ISTWUyn+UxwUIGFsE1SGcVwesC8ohXkdAj7s9kMGRjQS&#xD;
+ 1jISxo9/JGgRkwHLw4YWMBei8y5I5gH36JHMBZFNoC1RV2PYxUzvlHf2snQYVFZlJyUn9ZRtwTs&#xD;
+ TCDDd2JVpZ4GM92keqQT/6EcFOjM3SzNmcdRaVyMkmygB7VhmIPCP9mEr5JGH55c5b0N+YPOMZ+&#xD;
+ lS/MUEayM7GXWHwnNs4UgBXAlPRjCQMCIEkhkxqWJdRTCCUjJZvyhzg+lu3ggFPSgn6MJcGTVwE&#xD;
+ YiX9kEvkchVdamJy1Yc/gY28dWMHVKGvViZPTOGvIkYG2BioshId9cW6KI7APSYBKdp21MzvuZ2&#xD;
+ UgmLuZNAFAmKZfl0v5NAvAQeOjZuIzcy17k9bzFwTrRG99SMHFABSWOXiSc70/mIzTeey/YB+oI&#xD;
+ dupNRqmmWSbRHtnlCiCIBLmMrBeQt2EFVfzSGWLObrVdJRQc3caRdZtWdr7Vr/+1Zh8dmdsPZFh&#xD;
+ wYcs/knMNRScfWSIFkaoeDWoF0XUbEW1hTjYQ5HPF0hxoWWheGYa5UFaNJGaToiuKJmcsGXt2yQ&#xD;
+ P1XN+DBO+K5iXc5Zzq6VsgkPfOXLeQRKY4jNidKBPfZSOL5mb0mJ+jDeB1ALxsUZMMBd8yFSFpa&#xD;
+ g3EEM1vzV3d4JXd4Q/f5AfQCWgNHRhFlpUMQnDk2NuSRTvfpofBYbKWVn3L2kW9WBJXJmtdEnsC&#xD;
+ lockJo0enO5V0hypKj4Apl05nmYT6o9S2pDJKGWzapE3AeHkodwyINUw5lX7aGlNHQZVodGFDp+&#xD;
+ TGGBQwiBOALoxnavt4pa2BPvepXf93yFuleF5e2hoGhYBJQB56CVZTSgRxdKETqoa6Y4xHYIFG8&#xD;
+ JDDCXfCKG3CilKeaj6BWqlYF2D6c5nXdId0cmwwE0e4CYrvFKlqEz2T+j9RGaMgwFyqYZxNoDu8&#xD;
+ NXBaRVUApjsO6pnfaS7+lY+nZkOuuqnk6ATA9KrhMWxQukf2unEf2FjhqFq+emQM1qd1ilCmSQR&#xD;
+ xerCLA4YLW3KUUZzgkU505a9N8E5HQ614CoxIEEeG0lLvKi6nhBzFYogHW5mCpLDhBKFtoWOMVx&#xD;
+ z3uTR0Rokf2FJbc4EV6mae5aJEYIqnihoNiYWMx5SwBFZVZFDHVUmVmZhHmgS7Ba6aJF//3+qth&#xD;
+ OSwhdSlDJucPzuYZcqbY+iblbJJi0NGxBq1/6U1joMubcpaR8UBm6Ry6KM79DK0gqOxRZtsSRex&#xD;
+ s+eOHtmmCzIqkpuAQANW9lFEgTSqepMdFSA5mTJEP7hnVRSOu5UpFIBIaamsPcqgdPVOGVWZvDS&#xD;
+ YPMszers9fptAeRiWjHFDtsliK3Y0UWcmNUuQ69ka15KehzWoQ0BVW7iOrZmtU/tuRgBUTColHF&#xD;
+ Sh1hav93FSzShVsuNw9wl3x9WsWPiewIpPsiO84BlvUqKg2xNfPjcqVMWPr5kv6FKZDlO8duGq2&#xD;
+ nsf9YS+ixa9bYYEomhm7euj2JNQ7qiZW6dV/4zXlgBrpb/La0WQo/YRX5LLNRP8bQY0b7ITQwsC&#xD;
+ PhU6u+prNgUjrdhKiwdLwAmLXsghuGS1Z17zsUkwhI4GMiqHAQuIBL87R80YVHG5vUqKqQtKp3Y&#xD;
+ KkEgwAR3TASRTNDxJbRC0AW9xrUtAal7jXGv5Wm9hRCrKMW+XJ41Gehawua3iw1IrBDJ7sBKwHV&#xD;
+ VrOKDyKCl2KFBwMIySAZgyx9nRkKy3Kq/3KKaXkZRCYamiHenahbxyx8sSKWyoHVyILBIWeqQXi&#xD;
+ NixBG2cHTd6sJq8yZzcyZ78yaAcyqI8yqRcyqZ8yqicyqq8yqzcyq78yrAcy7I8y7Rcy7Z8y7ic&#xD;
+ y/+6vMu83Mu+/MvAHMzCPMzEXMzGfMzIrA8VwCjPawx0mXmz3MZqOWjsoB/FsRiZLF/pJwwkgrV&#xD;
+ SAYdvjKQ5BpRXgAE7cy5R4B/bbAuSE09xZgXLvAHNrATBEs5o8MwmXBogNM9MsGhPkDcvKrFWxA&#xD;
+ 7q3Dve/AbdvMrHwQF1kc9RgDOGYbxRYDItRjYYul3UPA5ixEEm49B5kNCqzEM8lAU4g0PsigT6s&#xD;
+ UlxdqMFbQW215GPMD2wJUdW0MjZHD7ZhEdvfMlXZQGFNwX1DCzY8UHLQgaCnMeToBgtwzUk3b9A&#xD;
+ Kp+SQkSJl5S6tM5SijmACwmKcVOS88YtPQV2ctBKwBr/6WnVBu3SRuOYs4MFWrfWkTA9rbehVlD&#xD;
+ S7CQFJuMw/kGk7jvQVFAtFmAy0KoHrFFsV/DVdl0tReTRSOuDHSCY3nRpVUAi/nPTaYVH5ULVbi&#xD;
+ BG2NEWju0EdH0jRdaVHgvZ95rRUkAieVUu5msG/uEYpD3NfE0FIG0FDjJH6VpRYt1bbVHR+sHPB&#xD;
+ kycr8bUkOAfEmBbZh2vlZrbiSfBwl3asR0Ftjd0H4DZbCBGTJRmii3Qx609yi22po3WiwoFJLKl&#xD;
+ VV0FMl1XnY0Hg+1S3f2rPUtm2W0ErMHc770Ehm0F5bLdB0jNJELde63fs/2NDXsFAX7apH3f4m3&#xD;
+ aYqTfZVAX/5ozGYHdBEI3ASlJRDc933H1BAg+0fnD4GVw0Saz2uIE4K9NBawh4twN3jP93OmMod&#xD;
+ mRTScNhJDNGrddvfkSkBjeRBr+3W+oHxyQ448w0v6BBRv+BAU+BSeeBUee4MRW5M7dcX3QzcA34&#xD;
+ FTQMJZSATWOsc8t2TvO4q+y1W/h5HtwHAckNxeL0V7O5O19BEnueyUO3QfO42gOlG78CAzD4HRt&#xD;
+ Bf4hPGKk3GJueDQ94pFgMq+j111O4uEdBW1O4G+u5nW13Sbj4WkgOT++AdUS40qQ58H42nl96FQ&#xD;
+ wM48eCbbV30Qu545+BYuu4qpe3rLdFpi+B/qRKdMT4Uug6Vwo1dfmNHeePgUl/ed6MHdUDtuIvu&#xD;
+ byHeytnug+2+Sm/gRBu0NtNyZOTZhXYOtUkNKIxdLLzgQilFrZzgc8FO1V4Ou1DtxZvl8ork7Ef&#xD;
+ tasTgWS4xipHuW7fXDIVeXgDs9BGwFxc9FdDpVO4B9FtDOSTgYuQ+vajepB2wHm++7Hnu4pvu6W&#xD;
+ t9UYIDmGjgcwbm7+jdxlANDpGi7d7TLnqe+Q8FGvrgTibizckt7ePe+rvvChPiwO8pKQkN/DNPH&#xD;
+ jXt9XEDLnXO43PwH2LI6zmnyN7H7SnMxErwRBAAA7&#xD;
+URL:http\://vteducation.org&#xD;
+END:VCARD&#xD;
+</entity>
+      <date>
+        <dateTime>2000-05-28T23:00:00.0-05:00</dateTime>
+      </date>
+    </contribute>
+  </lifeCycle>
+  <metaMetadata>
+    <identifier>
+      <catalog>URI</catalog>
+      <entry>oai:eureka.ntic.org:4c9912151c8a69.88090749</entry>
+    </identifier>
+    <metadataSchema>NORMETIC version 1.1</metadataSchema>
+  </metaMetadata>
+  <technical>
+    <format>application/ms-word</format>
+    <location>http://ntic.org/formation/tic/francais/scn/chim/chimdem.doc</location>
+    <installationRemarks/>
+    <otherPlatformRequirements/>
+    <duration/>
+  </technical>
+  <educational>
+    <learningResourceType>
+      <source>LOMv1.0</source>
+      <value>simulation</value>
+    </learningResourceType>
+    <learningResourceType>
+      <source>http://www.normetic.org/vdex/typeressourcev1_2.xml</source>
+      <value>situation d'apprentissage et d'&#xE9;valuation</value>
+    </learningResourceType>
+    <learningResourceType>
+      <source>http://www.normetic.org/vdex/typeressourcev1_2.xml</source>
+      <value>sc&#xE9;nario p&#xE9;dagogique</value>
+    </learningResourceType>
+    <intendedEndUserRole>
+      <source>LOMv1.0</source>
+      <value>teacher</value>
+    </intendedEndUserRole>
+    <context>
+      <source>http://eureka.ntic.org/vdex/NORMETICv1.0_element_5_6_contexte_voc.xml</source>
+      <value>cegep</value>
+    </context>
+    <typicalAgeRange>
+      <string>17-18</string>
+    </typicalAgeRange>
+    <typicalLearningTime/>
+  </educational>
+  <rights>
+    <cost>
+      <source>LOMv1.0</source>
+      <value>no</value>
+    </cost>
+    <copyrightAndOtherRestrictions>
+      <source>LOMv1.0</source>
+      <value>yes</value>
+    </copyrightAndOtherRestrictions>
+    <description>
+      <string language="fr-CA">Droits d'auteur pr&#xE9;vus par la loi.</string>
+    </description>
+  </rights>
+  <classification>
+    <purpose>
+      <source>LOMv1.0</source>
+      <value>competency</value>
+    </purpose>
+    <taxonPath>
+      <source>
+        <string language="fr-CA">http://eureka.ntic.org/vdex/eureka_main_themes_voc.xml</string>
+      </source>
+      <taxon>
+        <id>EUREKA_ROOT</id>
+        <entry>
+          <string language="fr">Eur&#xEA;ka</string>
+          <string language="en">Eureka</string>
+        </entry>
+      </taxon>
+      <taxon>
+        <id>41bdd24681c06</id>
+        <entry>
+          <string language="fr">Situations d&amp;apos;apprentissage et d&amp;apos;&#xE9;valuation</string>
+          <string language="en">Teaching Activities</string>
+        </entry>
+      </taxon>
+      <taxon>
+        <id>1911291900430b399d62ae72.26225590</id>
+        <entry>
+          <string language="fr-CA">praTIC-o-praTIC (Vitrine Technologie-&#xC9;ducation)</string>
+        </entry>
+      </taxon>
+    </taxonPath>
+    <taxonPath>
+      <source>
+        <string language="fr-CA">http://eureka.ntic.org/vdex/guide_internet_education_voc.xml</string>
+      </source>
+      <taxon>
+        <id>GUIDE_ROOT</id>
+        <entry>
+          <string language="en">Internet and Education: Resource Guide</string>
+          <string language="fr">Guide Internet et &#xE9;ducation</string>
+        </entry>
+      </taxon>
+      <taxon>
+        <id>41bd5e218ed5d</id>
+        <entry>
+          <string language="fr">Ressources pour les disciplines</string>
+          <string language="en">Resources by Discipline</string>
+        </entry>
+      </taxon>
+      <taxon>
+        <id>41bd5e33bdf56</id>
+        <entry>
+          <string language="fr">Physique</string>
+          <string language="en">Physics</string>
+        </entry>
+      </taxon>
+      <taxon>
+        <id>41bd5e3467bdf</id>
+        <entry>
+          <string>Des sc&#xE9;narios</string>
+        </entry>
+      </taxon>
+    </taxonPath>
+    <description/>
+  </classification>
+  <classification>
+    <purpose>
+      <source>LOMv1.0</source>
+      <value>discipline</value>
+    </purpose>
+    <taxonPath>
+      <source>
+        <string language="fr-CA">http://eureka.ntic.org/vdex/meq_disciplines_collegiales.xml</string>
+      </source>
+      <taxon>
+        <id>urn:uuid:166669879645ef394709d5a6.33522621</id>
+        <entry>
+          <string language="fr">200 Sciences et techniques physiques</string>
+          <string language="en">200 Physical Sciences and Technologies</string>
+          <string language="fr-CA">200 Sciences et techniques physiques</string>
+        </entry>
+      </taxon>
+      <taxon>
+        <id>urn:uuid:114549481745ef394837ebf3.44389010</id>
+        <entry>
+          <string language="fr">Physique 203</string>
+          <string language="en">Physics 203</string>
+          <string language="fr-CA">Physique 203</string>
+        </entry>
+      </taxon>
+    </taxonPath>
+    <taxonPath>
+      <source>
+        <string language="fr-CA">http://eureka.ntic.org/vdex/meq_disciplines_collegiales.xml</string>
+      </source>
+      <taxon>
+        <id>urn:uuid:166669879645ef394709d5a6.33522621</id>
+        <entry>
+          <string language="fr">200 Sciences et techniques physiques</string>
+          <string language="en">200 Physical Sciences and Technologies</string>
+          <string language="fr-CA">200 Sciences et techniques physiques</string>
+        </entry>
+      </taxon>
+      <taxon>
+        <id>urn:uuid:61253744745ef3947123000.49868716</id>
+        <entry>
+          <string language="fr-CA">Chimie 202</string>
+          <string language="fr">Chimie 202</string>
+          <string language="en">Chemistry 202</string>
+        </entry>
+      </taxon>
+    </taxonPath>
+    <description/>
+  </classification>
+  <classification>
+    <purpose>
+      <source>LOMv1.0</source>
+      <value>discipline</value>
+    </purpose>
+    <taxonPath>
+      <source>
+        <string language="fr-CA">http://eureka.ntic.org/vdex/eureka_main_themes_voc.xml</string>
+      </source>
+      <taxon>
+        <id>EUREKA_ROOT</id>
+        <entry>
+          <string language="fr">Eur&#xEA;ka</string>
+          <string language="en">Eureka</string>
+        </entry>
+      </taxon>
+      <taxon>
+        <id>1490781854447deb2457eb84.74910170</id>
+        <entry>
+          <string language="fr">Vitrine Technologie-&#xC9;ducation</string>
+        </entry>
+      </taxon>
+      <taxon>
+        <id>urn:uuid:5fe20b7b85fbe79dbf4e7ae47f80a346</id>
+        <entry>
+          <string language="fr">200 Sciences et techniques physiques</string>
+        </entry>
+      </taxon>
+      <taxon>
+        <id>urn:uuid:5ae5f5484ec76daaa6210ec0b6d86368</id>
+        <entry>
+          <string language="fr">Physique 203</string>
+        </entry>
+      </taxon>
+    </taxonPath>
+    <description/>
+  </classification>
+</lom>

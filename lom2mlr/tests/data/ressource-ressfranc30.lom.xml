@@ -1,0 +1,416 @@
+<?xml version="1.0"?>
+<lom xmlns="http://ltsc.ieee.org/xsd/LOM">
+  <general>
+    <title>
+      <string language="fr-CA">Accord des verbes avec transformation</string>
+    </title>
+    <language>fr-CA</language>
+    <description>
+      <string language="fr-CA">Dans des phrases, remplacer les noms ou les pronoms en gras par les mots entre parenth&#xE8;ses, puis faire tous les accords n&#xE9;cessaires; corriger l'accord des verbes dans des textes - Exercices d'approfondissement et de contr&#xF4;le (corrig&#xE9; inclus)</string>
+    </description>
+
+    <keyword>
+      <string language="fr-CA">accord du verbe</string>
+    </keyword>
+
+    <keyword>
+      <string language="fr-CA">conjugaison</string>
+    </keyword>
+
+    <keyword>
+      <string language="fr-CA">verbe</string>
+    </keyword>
+
+    <keyword>
+      <string language="fr-CA">verbe (accord du)</string>
+    </keyword>
+
+  </general>
+  <lifeCycle>
+    <version>
+      <string language="fr-CA">1,0</string>
+    </version>
+    <contribute>
+      <role>
+        <source>LOMv1.0</source>
+        <value>publisher</value>
+      </role>
+      <entity>BEGIN:VCARD&#xD;
+ &#xD;
+VERSION:3.0&#xD;
+ &#xD;
+FN:&#xD;
+ &#xD;
+N:;;;;&#xD;
+ &#xD;
+ORG:CCDMD (Centre coll&#xE9;gial de d&#xE9;veloppement de mat&#xE9;riel didactique)&#xD;
+ &#xD;
+EMAIL;TYPE=INTERNET:info@ccdmd.qc.ca&#xD;
+ &#xD;
+TEL;TYPE=WORK,VOICE:+1-514-873-2200&#xD;
+ &#xD;
+TEL;TYPE=WORK,FAX:+1-514-864-4908&#xD;
+ &#xD;
+ADR;TYPE=WORK,POST:;Bureau 416; 6220\, rue Sherbrooke Est; Montr&#xE9;al;Qu&#xE9;be&#xD;
+ c;H1N 1C1;Canada&#xD;
+ &#xD;
+PHOTO;ENCODING=b;TYPE=gif:R0lGODlhoABCAMQAAP7+/lNUa0JEXCQlLiUmMMrLzUxOZpCQl&#xD;
+ bOztnJyeSIjLCIjLUhKYj5AWCgpMkBASU5QZyYnMUpMZEZHXyAhK56LMVtcY1lacTIzPOTk5VVW&#xD;
+ bh8gKk5OVp+fpFBRaUxNZCH5BAAAAAAALAAAAACgAEIAAAX/YOQsxBANg6Ogzlm6Dmq6Q2kOCkG&#xD;
+ 4kR0vp1NN9usFdyxZbzFgKkgLpk7WHDKpqFLpWl2svk8n1najcrlZbDYiurF7qZutF9vZXTpbnj&#xD;
+ 3c32k9WjtvhGwOeWMoQmSJaYKKZlFqkzKMjGmVU3uVIoc8RFkEMYFJikE1K0ImL2xMMYqsEa6hJ&#xD;
+ w4tpVokQkBNZDZRqpmLZ1QUk2grjiQ2OY4zcL6di0s3ywRSJwuvO6NIQCuieHPJSzqyJlKHoYqS&#xD;
+ NWhQJO5jT8cy9FhXYWpR11eXQ5kATqnBzdaLLSm0DOFT6tStJttu2BJSJ82bWTWEsCEADs2qfnp&#xD;
+ QLGsSD4kghJik/1SptLJEMpZrqCDKeGtRwYmGcBoSMWhiC1s6W7wBShRoTqGdgnp6JmijH02IzH&#xD;
+ nKgyQUIzgBWVqSqeeOuUGBjKwxWOIQR16YNqYiqJEaHEAP1VXkiWMYDi0KFER42SSQl5BSdKgEm&#xD;
+ IYfYXBbLhkT+cUMQVo8zZGK9hNI1REsANXYZmthxrHPNveK/CrFX3QymMgK3CeLP4VzZKrpR8lb&#xD;
+ F5LJ2ilUAtXOP4KvdJFcJFKsNoJTxJaxEzpOCnUXqzFO04zwTOK9fl1zjOJJMEorcVyR5KWRnKi&#xD;
+ HuYj6uernqTesoIuIkKBDAQD48xdAkGCnzwEcHHBffvjtdwAGA9hXwP+CDDLYwQEHWICBEUYk0O&#xD;
+ CCB/wGEAIXFsABBx02iACECXDAHUsb0bAVFfMpoREsLkIyQwIZ6DdiATXm90YSFgwIQAYjIpAjf&#xD;
+ hYk6COBSOKHgAVzWIhkBhzxlVoCT3oIYpJY/nggJrIRVk8WBrUWx2ADOYeBjwU8AFEUB+RnQVwd&#xD;
+ 5JdBkShQoIAFOSbQS5v5IZCRBQcMCUABCMLxAJJ6EmPDkQXgIAMGSD4QxQMJIIDkAapUBdOmXE0&#xD;
+ EBGkxrXPDmX1uVE0EFhDJB6kFYnCPIocCkOEKqeZ3gAk18ZmfiVMcmYGjXsZqa3gDHOnYA0f6OZ&#xD;
+ BK7cwmE0/SHDXKZy84wOr/oJNBQ4ClBwhlKX4ZIMilDlR2kAUHBGJKoS1U6kfFkQDomci3tr5UQ&#xD;
+ pz5eTTAtfGmxKmGN+Eq1CudWGaWA/ji98AhZmnkALqYOtAufv0hFBukBRCc7nOesEGvrDLAW8Bp&#xD;
+ jxY4bGoD6AqAlygIi5+4+rLsJTfQqOOcX4gs4DIC68klMH0LRzAklChx5I4CJWrhQLrh1NICugR&#xD;
+ 2d9/HdPaSMgAc2hpFbipbTMbHt9oDbHdcCvPQeOgsth0VCfe7482d9TAx1o9ds11wKS49rCFfES&#xD;
+ AonfftzGWNV+IXtj0qZ+LD3I2mhpKoM3fiVR8D7VYsgRwMUhVYRH2cgFEDz7fT/3zpGpVTBGDvU&#xD;
+ CPqBD7wFZWN+mguYYlblIfLKyfySFgCreeSoxvkQMHwOOSVl51IAns8R2qT4MCRFtAg9mpcnLDx&#xD;
+ Yy4ooPKtCuA3QK1KAnRfAgugGZ72UYdHXvLdefTaJDrcstgAwxNgZ3fzIx91O5LkFVUESIqeYMq&#xD;
+ AjiucYwDX00EzrrE9HHivfK0rQaoyEAXzYSFxv+le1L7ghLycqH1gwoIC7MS8MHBweMmrDgn9oQ&#xD;
+ i9uYkrjioNb67XnS1QYHte8B7SrsetJySscY/p2iMctQD2iaQKlkCIF/xxNtlwQR9NiBTlUJORP&#xD;
+ BwpAU1DhFNCtbGZVKGBsZKBoDAQq/9C6aoAmopA17BiFSS9RRRk4JsWsFKQkBRPFsZYwWK8sIEA&#xD;
+ 5sCGRktNC46UoeQcwhgRqUS6xpMbBRyJAwuoVRNumK428awJZ4xR1zghA6iFjy5z5AM3dnOTbNi&#xD;
+ DCcNjgheSkZePdaCReiGeCZKhMjSKUoGouUS6XmK8HMoJBakaGRMgJSf8mKgGZ1TR1fLTmu2okU&#xD;
+ BY1AQ0kKMHbe3kJMaQRSNlMLy5UXAII2zCCphgoQfgznVO02YdkJUAvRCAhguY39y4BzuSDOBj2&#xD;
+ JLBGe0GRyG6QRFHwoA5rGKqj0SlIAzh5G2qkAxBJYovXKgRgsCGqzTuwFJFKgENGTqAIQH/sU0j&#xD;
+ kwHusLiKfZYJg74hFzRnVqaTFLSOe/mFXl4SzyqQEHw/EpcH73c1NBIAd5ljRRRi0K5OLtIGxlj&#xD;
+ Ax465AD6JhyM+yoBQUOBPOLTNKYHwJNaOEIiK5IFhAx2LWVwDjPKgkpsKUEEtETS8CNhpAe3K0F&#xD;
+ 68qSZDAANqfsoBTl/JUAzQKwNMvdzK/AdXWxmiBm2jpmAVxgoC7HUhpMBDH0wVjRZRwYPhnGQ+K&#xD;
+ GC/HerHAuHcAAZ0dUxgIioXA5iYnlagsnghCFBD6oCrkkHMeEkhCjmakCb+ponaKilzlPork+Bo&#xD;
+ s4QshDlVXIM0hBILqjBXKmwoHLhuRCCpusda/x8D0gGERCCBLihL1e2AmmZAAJHZkgBUQkBScJS&#xD;
+ kAiTASeDtU39MJ7p1MVeOVJHG2uinRwrEozzioZ8xdPAAAbV3ROMdwggUUGB8/qgAB8hcBEK0oB&#xD;
+ EdIAEPeMITolSsEG0BAxKiCoXdayEKQyhCoiHoQLRFlVAqNzhInSk/PFiD+51BJcTzoBPgAAxI2&#xD;
+ A0OMwXIAvPiVi7kT0p5+S9yWuBi5EwGjnIQixFekBFo7KgtyZlyUyIzziq4lZc2Fd6Gt4PK/qKN&#xD;
+ RXfZnBIQMzbV0NhoGqYi2VS5nJTOkRYzYU7fnBuKjlGkK16hbEGOQYatdSEHfKGpGFhUzUeQUiB&#xD;
+ Q6P8SJXiBFY8cJBaF6NtHphyIS/uG0/ARx5SR4mSy3NY74TyrOCmggmQYLQr124B/RWKHHmMCL7&#xD;
+ Pk5XiAcBpVaJg4+4WIcnsSPzuKhTlaXvFXgmCqFzE7RXuQXHiIR4EN4I+VnOUp/RhqbVlTQsbgd&#xD;
+ I0JZLkXLByQbKt+qkjQgGWaHDa5abHKR2S059gcNxx9O0pi6qSXJYpzCHbSJkdXvZekOkoIemnJ&#xD;
+ SIgspbBOAxMknE0cy4IEo8ARjrVoQ5TlwwOpuFiL9p1KT8IEk2DEWV+/cCJ1fGy1rayGYwwDyuT&#xD;
+ C4wtNSearHbN4/OgILcngITJV7vTFe+IU+gKlhiUIeJL/YQ28PN5DhWBgzBQwu806JRUbHCv2Yx&#xD;
+ ZenRW3QDVD9J0oeQ7sqcJHDmM9u9L4EK2wJEUH8+vLBqxdY0eRUNZS+EKU7DfgACMxlb87ojbXo&#xD;
+ 1+No0cJTEQCDFxkh5jHqHLQaRopIt+xOTi3abgK+b+Zx9lUL4Dun99AZ+2BVGPMepIiyfHpEaMa&#xD;
+ Zv+kM2q+hnFg0AYm98UUc6wDD6z8Hco+RCNQectmxt5VyQClAhUIAPIZgHwILB/5Bnh+BZw//eZ&#xD;
+ LP/oV+ADytV8B7DO/At/3APKVXwENIN/8FbjA+NdfAfG3H/nudz/60U/9+J+f/eTnPvndv3/22/&#xD;
+ /9yQd98Id//9YXgBUgAQM4AQLQAALQgAzIAAooAQ3YgBKggA3AABTIABg4AQq4gB3IgQrIgQ4oA&#xD;
+ Q/IABVoABDgARAAAReQgisYAB6gASrIAAagATT4AR9gAAwggx7wAQwAAR8gATBoABLwAUCogTr4&#xD;
+ g0A4ATRoAEHoAQyQgxAgAT8oARAQhVcIhEeYhRp4hUWIghJghU74ASooAR6Agi+Igh6whiYoASi&#xD;
+ oAR24gHIIARMYghPYABNgACEIghjogBjIgA4oABvYABJIiBMwhRAAgzmoASloAGgIg1DIAAEQhU&#xD;
+ LoAWYYgzgYAEQohmhYgZLog1eogUZIhRNgiaOYhRCgg6X4hT0Yhf9k2IUmOIpoaImNSIapuIJri&#xD;
+ Ite6IYQYIMTgIeCqIAfgIcgKAAcKIECgIxuuIFM2IC/yIAiyIQQyIQKmIIBkIoBAIO9iINruIYw&#xD;
+ OIkfcAEG4AHZKIPfiI0TYIVrGISuaIUQOI6peIO4+AGH2IlBmIOtKIVgeI89GIYfcI2aqIUagIL&#xD;
+ juIbmmIKMqIG8qAHG2IGA+AETWIfG2IB6WIEhKIHPaIdyqIGRiIM0iJDZqIIpSI5TaIYBoAHX+A&#xD;
+ EoiZLkSI6QKITqWIQ46IRdqIPuiIMriIa3eI8/WIY4mYo5mIPj+IOZCI8qmI1kWJC5aI2QOIUmO&#xD;
+ I6T+IETCQENcIFMCIz/IEiVFIiREymIVQmNE0mFQsiENciIKqiCBhAAVHiU3ZiTA/mPMeiCZ9iL&#xD;
+ SJiI7kiE/6iQOQkBh8gAa0iFWIiXVDiOOiiFOVmEfumDbxiDIgmXK6iSjHmLMtiGCBmRFigAHrC&#xD;
+ AfXiByNgAdBiNxLiAePiVwGiGqgiFlwiEMagBbqiNbCiE2ciRSgmFMMiafkmDlqiHLgiBfOmXRZ&#xD;
+ iOKwiBqBmc6WiESBiFa0iEakiFV4iC11iQKQmE/wiDVniS1ziDRYiQFRiRxkiHYOmMzgiReKiBp&#xD;
+ FmVz2iM9MiLTjiJPRmQjxmDP5iWPXiGPZiWH6kBPPierHmIjeiGYSiJELiW/0EolhJgmyaIiBMA&#xD;
+ imr5hN1onIm4ibeIliYpktZIjmg4mV9Ilw0IgRsYiukoiMbIjIC5gQ5onsYolkbYmIyYiCQpgyj&#xD;
+ Zi71InQUambXZktkYkm1JnVM4l46IiNLplyuYgkaYk1V4huNomipIhklphWTYjSLpkpB4oyroot&#xD;
+ cZhm4YgyIohwyYmRvakIHIAF8ZiGEKkcmYh0qYigXqg7RYkMqpljHpl2yYl4tpmiVpg1jYnP8Jo&#xD;
+ OnohkTolIRJiVTokbDYmlp4lz0olyN5objYki3piNi5kBwIjGDqmcQIgRcoAGRKgs5YleCJqQ1o&#xD;
+ hE54ixzZhTmZlgGpiTuIqomYkv82CJsBAJlnqJLp2JK+GY8ewIRSGIYEGaR5CJSHaKWtqIu1yKI&#xD;
+ 22ouMyoi1WZs1aI1JCKkQaIxfmZmSWqYWqJWAGIwdqoE3+JF82ZdIyIszmJbYeIQx+KoAOqNq6a&#xD;
+ Q7qKuv+JgQ+KoyqZgr2Kt4aZM3yISAmYo6uKj/OJIkeaOaeI3ECp1B6oNPCaPueJQ52a+9OZMmW&#xD;
+ JwpqIQacAHJWY74+Y0nyZblaLEXcKMTy5In+bG1+bH4WbL46ZIoGaXZ6K8yuKgXe4bnOKRNyZQA&#xD;
+ a50tiZIX4KIfy5gk640yqKuJ6IscaKmYqZEh+pXIGIEJuokTYKeKmaCoOgFqSYOIaZ3/Jrii6+i&#xD;
+ XAXABbsiapoqNJ5mDAhuQWpuKfXmkupmLkqiGZuuISSivuYmQLfmCLbuaSxm013mjRJqdMViIm+&#xD;
+ qVDNiZJTqp6aiH1IiB3hmGAbC0PliKx+igKxiGdsqiWKiWNSiKKFmQU3i5UUiYQkqFUbmvOKiYy&#xD;
+ xqUPuiJTIiaVoiN6wijqdiNLbuIr3qWkCiSk3mwcPiLHMqAdNiQnDq4+GqwTPqpGEiEGqiN79qF&#xD;
+ 7FiuPmiDjNqTA7muTQqEN1qEmiiuB4qSoliE4TqdrBuS6WmGFXiruqi1MpiWUJm5KNuIjCmSOBq&#xD;
+ cuAuictidEwmCvyiMt8qcJZmOPemJRniP/9C5ifhImCF7lo3qnBn7hPnZoimonkBJg/DahM9phS&#xD;
+ Xrkz8ahrHqiLU7kuaYrCypghRrpC6Jlt+okOPIkHJogQ3gAZzKgMSoqYuLhRIYqp+KnsabkqNKl&#xD;
+ LGIkoRaiSVJjmIbhriYqqjqvGdZimD4g716hlh4lkGqiGtZrz54jsTKmCFrlqvat6+LrHJprge7&#xD;
+ uL9YopRamsn4rAKQu7xIgx8qtSEaj5S7g9qapN5IwX2anGiIg9HbgwCZnDuog/MJpAbrtE4ohlB&#xD;
+ Yg2iZm24LnIv6gkvJg7W5qtkoro8IlSQciry4uGH6lRl5uNspAJ/pn2Wsg5hpwyVpvJLIhDnZq/&#xD;
+ 8L2qosOqCW2Leay7ZEyJ6zi4XsGLpGGLzc26NMXIFXSIarW7e52L4Ky6itzJZx2ZYKaYQ2eIec2&#xD;
+ smzjIJt6KZ8ybYJCqA/2IQuqJY8+MojqY0di6wu+c0ruY3WaZZReosCe4VPSomJaJcrSbYuOMur&#xD;
+ OpDkeLEAO7HlOrHa2MHbfJKieqAnqcIu3ADDyJnaaoKCSKZDKo2kSKYaHIuAyZ5nGYuSmb1/PIV&#xD;
+ b+5Fl6I1OaKfOqaubCIUJOoqIuYj0qa9W2pq8+M3DfLLeCNBBKoMz6YKPyaLqeJIXAK0OKQABUI&#xD;
+ fCGIV4GJVRyIElyYCqyI5Sy4alaIKRiJuhOJDoe4XR2kiFXmu5TduxkuuI5/uDMHicoIqv5Eiq5&#xD;
+ bqvK/uJxmqJIXuNZlmysPmisxvJ1WmOyRyyXKupcfjTlRqM9LiDIcqGhZm6G9rAy0mXwJmEbhuD&#xD;
+ emi3MwjCawmfS2kAFyCPrPnLURjD/Omf7Pyci7qOzLyjTbqyIOykLiqSNeiI3HjPtZmzPqvP/2q&#xD;
+ L1GmTV1qxLFizJImCcPmNPWuje3yx+JmzJRvO+ZyzkazTKbvW4izaX6uFxTqldI3PpnqyFluzJe&#xD;
+ ux5oiPcanTwH3cE3sBIQAAOw==&#xD;
+ &#xD;
+URL:http\://www.ccdmd.qc.ca/&#xD;
+ &#xD;
+END:VCARD&#xD;
+ &#xD;
+</entity>
+      <date>
+        <dateTime>2004-09-21</dateTime>
+        
+      </date>
+    </contribute>
+  </lifeCycle>
+  <metaMetadata>
+    <identifier>
+      <catalog>URI</catalog>
+      <entry>oai:ccdmd.qc.ca:ressource-ressfranc30</entry>
+    </identifier>
+    <contribute>
+      <role>
+        <source>LOMv1.0</source>
+        <value>creator</value>
+      </role>
+      <entity>BEGIN:VCARD&#xD;
+ &#xD;
+VERSION:3.0&#xD;
+ &#xD;
+FN:&#xD;
+ &#xD;
+N:;;;;&#xD;
+ &#xD;
+ORG:CCDMD (Centre coll&#xE9;gial de d&#xE9;veloppement de mat&#xE9;riel didactique)&#xD;
+ &#xD;
+EMAIL;TYPE=INTERNET:info@ccdmd.qc.ca&#xD;
+ &#xD;
+TEL;TYPE=WORK,VOICE:+1-514-873-2200&#xD;
+ &#xD;
+TEL;TYPE=WORK,FAX:+1-514-864-4908&#xD;
+ &#xD;
+ADR;TYPE=WORK,POST:;Bureau 416; 6220\, rue Sherbrooke Est; Montr&#xE9;al;Qu&#xE9;be&#xD;
+ c;H1N 1C1;Canada&#xD;
+ &#xD;
+PHOTO;ENCODING=b;TYPE=gif:R0lGODlhoABCAMQAAP7+/lNUa0JEXCQlLiUmMMrLzUxOZpCQl&#xD;
+ bOztnJyeSIjLCIjLUhKYj5AWCgpMkBASU5QZyYnMUpMZEZHXyAhK56LMVtcY1lacTIzPOTk5VVW&#xD;
+ bh8gKk5OVp+fpFBRaUxNZCH5BAAAAAAALAAAAACgAEIAAAX/YOQsxBANg6Ogzlm6Dmq6Q2kOCkG&#xD;
+ 4kR0vp1NN9usFdyxZbzFgKkgLpk7WHDKpqFLpWl2svk8n1najcrlZbDYiurF7qZutF9vZXTpbnj&#xD;
+ 3c32k9WjtvhGwOeWMoQmSJaYKKZlFqkzKMjGmVU3uVIoc8RFkEMYFJikE1K0ImL2xMMYqsEa6hJ&#xD;
+ w4tpVokQkBNZDZRqpmLZ1QUk2grjiQ2OY4zcL6di0s3ywRSJwuvO6NIQCuieHPJSzqyJlKHoYqS&#xD;
+ NWhQJO5jT8cy9FhXYWpR11eXQ5kATqnBzdaLLSm0DOFT6tStJttu2BJSJ82bWTWEsCEADs2qfnp&#xD;
+ QLGsSD4kghJik/1SptLJEMpZrqCDKeGtRwYmGcBoSMWhiC1s6W7wBShRoTqGdgnp6JmijH02IzH&#xD;
+ nKgyQUIzgBWVqSqeeOuUGBjKwxWOIQR16YNqYiqJEaHEAP1VXkiWMYDi0KFER42SSQl5BSdKgEm&#xD;
+ IYfYXBbLhkT+cUMQVo8zZGK9hNI1REsANXYZmthxrHPNveK/CrFX3QymMgK3CeLP4VzZKrpR8lb&#xD;
+ F5LJ2ilUAtXOP4KvdJFcJFKsNoJTxJaxEzpOCnUXqzFO04zwTOK9fl1zjOJJMEorcVyR5KWRnKi&#xD;
+ HuYj6uernqTesoIuIkKBDAQD48xdAkGCnzwEcHHBffvjtdwAGA9hXwP+CDDLYwQEHWICBEUYk0O&#xD;
+ CCB/wGEAIXFsABBx02iACECXDAHUsb0bAVFfMpoREsLkIyQwIZ6DdiATXm90YSFgwIQAYjIpAjf&#xD;
+ hYk6COBSOKHgAVzWIhkBhzxlVoCT3oIYpJY/nggJrIRVk8WBrUWx2ADOYeBjwU8AFEUB+RnQVwd&#xD;
+ 5JdBkShQoIAFOSbQS5v5IZCRBQcMCUABCMLxAJJ6EmPDkQXgIAMGSD4QxQMJIIDkAapUBdOmXE0&#xD;
+ EBGkxrXPDmX1uVE0EFhDJB6kFYnCPIocCkOEKqeZ3gAk18ZmfiVMcmYGjXsZqa3gDHOnYA0f6OZ&#xD;
+ BK7cwmE0/SHDXKZy84wOr/oJNBQ4ClBwhlKX4ZIMilDlR2kAUHBGJKoS1U6kfFkQDomci3tr5UQ&#xD;
+ pz5eTTAtfGmxKmGN+Eq1CudWGaWA/ji98AhZmnkALqYOtAufv0hFBukBRCc7nOesEGvrDLAW8Bp&#xD;
+ jxY4bGoD6AqAlygIi5+4+rLsJTfQqOOcX4gs4DIC68klMH0LRzAklChx5I4CJWrhQLrh1NICugR&#xD;
+ 2d9/HdPaSMgAc2hpFbipbTMbHt9oDbHdcCvPQeOgsth0VCfe7482d9TAx1o9ds11wKS49rCFfES&#xD;
+ AonfftzGWNV+IXtj0qZ+LD3I2mhpKoM3fiVR8D7VYsgRwMUhVYRH2cgFEDz7fT/3zpGpVTBGDvU&#xD;
+ CPqBD7wFZWN+mguYYlblIfLKyfySFgCreeSoxvkQMHwOOSVl51IAns8R2qT4MCRFtAg9mpcnLDx&#xD;
+ Yy4ooPKtCuA3QK1KAnRfAgugGZ72UYdHXvLdefTaJDrcstgAwxNgZ3fzIx91O5LkFVUESIqeYMq&#xD;
+ AjiucYwDX00EzrrE9HHivfK0rQaoyEAXzYSFxv+le1L7ghLycqH1gwoIC7MS8MHBweMmrDgn9oQ&#xD;
+ i9uYkrjioNb67XnS1QYHte8B7SrsetJySscY/p2iMctQD2iaQKlkCIF/xxNtlwQR9NiBTlUJORP&#xD;
+ BwpAU1DhFNCtbGZVKGBsZKBoDAQq/9C6aoAmopA17BiFSS9RRRk4JsWsFKQkBRPFsZYwWK8sIEA&#xD;
+ 5sCGRktNC46UoeQcwhgRqUS6xpMbBRyJAwuoVRNumK428awJZ4xR1zghA6iFjy5z5AM3dnOTbNi&#xD;
+ DCcNjgheSkZePdaCReiGeCZKhMjSKUoGouUS6XmK8HMoJBakaGRMgJSf8mKgGZ1TR1fLTmu2okU&#xD;
+ BY1AQ0kKMHbe3kJMaQRSNlMLy5UXAII2zCCphgoQfgznVO02YdkJUAvRCAhguY39y4BzuSDOBj2&#xD;
+ JLBGe0GRyG6QRFHwoA5rGKqj0SlIAzh5G2qkAxBJYovXKgRgsCGqzTuwFJFKgENGTqAIQH/sU0j&#xD;
+ kwHusLiKfZYJg74hFzRnVqaTFLSOe/mFXl4SzyqQEHw/EpcH73c1NBIAd5ljRRRi0K5OLtIGxlj&#xD;
+ Ax465AD6JhyM+yoBQUOBPOLTNKYHwJNaOEIiK5IFhAx2LWVwDjPKgkpsKUEEtETS8CNhpAe3K0F&#xD;
+ 68qSZDAANqfsoBTl/JUAzQKwNMvdzK/AdXWxmiBm2jpmAVxgoC7HUhpMBDH0wVjRZRwYPhnGQ+K&#xD;
+ GC/HerHAuHcAAZ0dUxgIioXA5iYnlagsnghCFBD6oCrkkHMeEkhCjmakCb+ponaKilzlPork+Bo&#xD;
+ s4QshDlVXIM0hBILqjBXKmwoHLhuRCCpusda/x8D0gGERCCBLihL1e2AmmZAAJHZkgBUQkBScJS&#xD;
+ kAiTASeDtU39MJ7p1MVeOVJHG2uinRwrEozzioZ8xdPAAAbV3ROMdwggUUGB8/qgAB8hcBEK0oB&#xD;
+ EdIAEPeMITolSsEG0BAxKiCoXdayEKQyhCoiHoQLRFlVAqNzhInSk/PFiD+51BJcTzoBPgAAxI2&#xD;
+ A0OMwXIAvPiVi7kT0p5+S9yWuBi5EwGjnIQixFekBFo7KgtyZlyUyIzziq4lZc2Fd6Gt4PK/qKN&#xD;
+ RXfZnBIQMzbV0NhoGqYi2VS5nJTOkRYzYU7fnBuKjlGkK16hbEGOQYatdSEHfKGpGFhUzUeQUiB&#xD;
+ Q6P8SJXiBFY8cJBaF6NtHphyIS/uG0/ARx5SR4mSy3NY74TyrOCmggmQYLQr124B/RWKHHmMCL7&#xD;
+ Pk5XiAcBpVaJg4+4WIcnsSPzuKhTlaXvFXgmCqFzE7RXuQXHiIR4EN4I+VnOUp/RhqbVlTQsbgd&#xD;
+ I0JZLkXLByQbKt+qkjQgGWaHDa5abHKR2S059gcNxx9O0pi6qSXJYpzCHbSJkdXvZekOkoIemnJ&#xD;
+ SIgspbBOAxMknE0cy4IEo8ARjrVoQ5TlwwOpuFiL9p1KT8IEk2DEWV+/cCJ1fGy1rayGYwwDyuT&#xD;
+ C4wtNSearHbN4/OgILcngITJV7vTFe+IU+gKlhiUIeJL/YQ28PN5DhWBgzBQwu806JRUbHCv2Yx&#xD;
+ ZenRW3QDVD9J0oeQ7sqcJHDmM9u9L4EK2wJEUH8+vLBqxdY0eRUNZS+EKU7DfgACMxlb87ojbXo&#xD;
+ 1+No0cJTEQCDFxkh5jHqHLQaRopIt+xOTi3abgK+b+Zx9lUL4Dun99AZ+2BVGPMepIiyfHpEaMa&#xD;
+ Zv+kM2q+hnFg0AYm98UUc6wDD6z8Hco+RCNQectmxt5VyQClAhUIAPIZgHwILB/5Bnh+BZw//eZ&#xD;
+ LP/oV+ADytV8B7DO/At/3APKVXwENIN/8FbjA+NdfAfG3H/nudz/60U/9+J+f/eTnPvndv3/22/&#xD;
+ /9yQd98Id//9YXgBUgAQM4AQLQAALQgAzIAAooAQ3YgBKggA3AABTIABg4AQq4gB3IgQrIgQ4oA&#xD;
+ Q/IABVoABDgARAAAReQgisYAB6gASrIAAagATT4AR9gAAwggx7wAQwAAR8gATBoABLwAUCogTr4&#xD;
+ g0A4ATRoAEHoAQyQgxAgAT8oARAQhVcIhEeYhRp4hUWIghJghU74ASooAR6Agi+Igh6whiYoASi&#xD;
+ oAR24gHIIARMYghPYABNgACEIghjogBjIgA4oABvYABJIiBMwhRAAgzmoASloAGgIg1DIAAEQhU&#xD;
+ LoAWYYgzgYAEQohmhYgZLog1eogUZIhRNgiaOYhRCgg6X4hT0Yhf9k2IUmOIpoaImNSIapuIJri&#xD;
+ Ite6IYQYIMTgIeCqIAfgIcgKAAcKIECgIxuuIFM2IC/yIAiyIQQyIQKmIIBkIoBAIO9iINruIYw&#xD;
+ OIkfcAEG4AHZKIPfiI0TYIVrGISuaIUQOI6peIO4+AGH2IlBmIOtKIVgeI89GIYfcI2aqIUagIL&#xD;
+ juIbmmIKMqIG8qAHG2IGA+AETWIfG2IB6WIEhKIHPaIdyqIGRiIM0iJDZqIIpSI5TaIYBoAHX+A&#xD;
+ EoiZLkSI6QKITqWIQ46IRdqIPuiIMriIa3eI8/WIY4mYo5mIPj+IOZCI8qmI1kWJC5aI2QOIUmO&#xD;
+ I6T+IETCQENcIFMCIz/IEiVFIiREymIVQmNE0mFQsiENciIKqiCBhAAVHiU3ZiTA/mPMeiCZ9iL&#xD;
+ SJiI7kiE/6iQOQkBh8gAa0iFWIiXVDiOOiiFOVmEfumDbxiDIgmXK6iSjHmLMtiGCBmRFigAHrC&#xD;
+ AfXiByNgAdBiNxLiAePiVwGiGqgiFlwiEMagBbqiNbCiE2ciRSgmFMMiafkmDlqiHLgiBfOmXRZ&#xD;
+ iOKwiBqBmc6WiESBiFa0iEakiFV4iC11iQKQmE/wiDVniS1ziDRYiQFRiRxkiHYOmMzgiReKiBp&#xD;
+ FmVz2iM9MiLTjiJPRmQjxmDP5iWPXiGPZiWH6kBPPierHmIjeiGYSiJELiW/0EolhJgmyaIiBMA&#xD;
+ imr5hN1onIm4ibeIliYpktZIjmg4mV9Ilw0IgRsYiukoiMbIjIC5gQ5onsYolkbYmIyYiCQpgyj&#xD;
+ Zi71InQUambXZktkYkm1JnVM4l46IiNLplyuYgkaYk1V4huNomipIhklphWTYjSLpkpB4oyroot&#xD;
+ cZhm4YgyIohwyYmRvakIHIAF8ZiGEKkcmYh0qYigXqg7RYkMqpljHpl2yYl4tpmiVpg1jYnP8Jo&#xD;
+ OnohkTolIRJiVTokbDYmlp4lz0olyN5objYki3piNi5kBwIjGDqmcQIgRcoAGRKgs5YleCJqQ1o&#xD;
+ hE54ixzZhTmZlgGpiTuIqomYkv82CJsBAJlnqJLp2JK+GY8ewIRSGIYEGaR5CJSHaKWtqIu1yKI&#xD;
+ 22ouMyoi1WZs1aI1JCKkQaIxfmZmSWqYWqJWAGIwdqoE3+JF82ZdIyIszmJbYeIQx+KoAOqNq6a&#xD;
+ Q7qKuv+JgQ+KoyqZgr2Kt4aZM3yISAmYo6uKj/OJIkeaOaeI3ECp1B6oNPCaPueJQ52a+9OZMmW&#xD;
+ JwpqIQacAHJWY74+Y0nyZblaLEXcKMTy5In+bG1+bH4WbL46ZIoGaXZ6K8yuKgXe4bnOKRNyZQA&#xD;
+ a50tiZIX4KIfy5gk640yqKuJ6IscaKmYqZEh+pXIGIEJuokTYKeKmaCoOgFqSYOIaZ3/Jrii6+i&#xD;
+ XAXABbsiapoqNJ5mDAhuQWpuKfXmkupmLkqiGZuuISSivuYmQLfmCLbuaSxm013mjRJqdMViIm+&#xD;
+ qVDNiZJTqp6aiH1IiB3hmGAbC0PliKx+igKxiGdsqiWKiWNSiKKFmQU3i5UUiYQkqFUbmvOKiYy&#xD;
+ xqUPuiJTIiaVoiN6wijqdiNLbuIr3qWkCiSk3mwcPiLHMqAdNiQnDq4+GqwTPqpGEiEGqiN79qF&#xD;
+ 7FiuPmiDjNqTA7muTQqEN1qEmiiuB4qSoliE4TqdrBuS6WmGFXiruqi1MpiWUJm5KNuIjCmSOBq&#xD;
+ cuAuictidEwmCvyiMt8qcJZmOPemJRniP/9C5ifhImCF7lo3qnBn7hPnZoimonkBJg/DahM9phS&#xD;
+ Xrkz8ahrHqiLU7kuaYrCypghRrpC6Jlt+okOPIkHJogQ3gAZzKgMSoqYuLhRIYqp+KnsabkqNKl&#xD;
+ LGIkoRaiSVJjmIbhriYqqjqvGdZimD4g716hlh4lkGqiGtZrz54jsTKmCFrlqvat6+LrHJprge7&#xD;
+ uL9YopRamsn4rAKQu7xIgx8qtSEaj5S7g9qapN5IwX2anGiIg9HbgwCZnDuog/MJpAbrtE4ohlB&#xD;
+ Yg2iZm24LnIv6gkvJg7W5qtkoro8IlSQciry4uGH6lRl5uNspAJ/pn2Wsg5hpwyVpvJLIhDnZq/&#xD;
+ 8L2qosOqCW2Leay7ZEyJ6zi4XsGLpGGLzc26NMXIFXSIarW7e52L4Ky6itzJZx2ZYKaYQ2eIec2&#xD;
+ smzjIJt6KZ8ybYJCqA/2IQuqJY8+MojqY0di6wu+c0ruY3WaZZReosCe4VPSomJaJcrSbYuOMur&#xD;
+ OpDkeLEAO7HlOrHa2MHbfJKieqAnqcIu3ADDyJnaaoKCSKZDKo2kSKYaHIuAyZ5nGYuSmb1/PIV&#xD;
+ b+5Fl6I1OaKfOqaubCIUJOoqIuYj0qa9W2pq8+M3DfLLeCNBBKoMz6YKPyaLqeJIXAK0OKQABUI&#xD;
+ fCGIV4GJVRyIElyYCqyI5Sy4alaIKRiJuhOJDoe4XR2kiFXmu5TduxkuuI5/uDMHicoIqv5Eiq5&#xD;
+ bqvK/uJxmqJIXuNZlmysPmisxvJ1WmOyRyyXKupcfjTlRqM9LiDIcqGhZm6G9rAy0mXwJmEbhuD&#xD;
+ emi3MwjCawmfS2kAFyCPrPnLURjD/Omf7Pyci7qOzLyjTbqyIOykLiqSNeiI3HjPtZmzPqvP/2q&#xD;
+ L1GmTV1qxLFizJImCcPmNPWuje3yx+JmzJRvO+ZyzkazTKbvW4izaX6uFxTqldI3PpnqyFluzJe&#xD;
+ ux5oiPcanTwH3cE3sBIQAAOw==&#xD;
+ &#xD;
+URL:http\://www.ccdmd.qc.ca/&#xD;
+ &#xD;
+END:VCARD&#xD;
+ &#xD;
+</entity>
+      <date>
+        <dateTime>2011-12-14</dateTime>
+      </date>
+    </contribute>
+    <metadataSchema>NORMETICv1.1</metadataSchema>
+    <language>fr-CA</language>
+  </metaMetadata>
+  <technical>
+    <format>application/pdf</format>
+    <location>http://www.ccdmd.qc.ca/media/acco_v_32Accords.pdf</location>
+    <requirement/>
+    <installationRemarks/>
+    <otherPlatformRequirements/>
+    <duration/>
+  </technical>
+  <educational>
+    
+    
+    <learningResourceType>
+      <source>LOMv1.0</source>
+      <value>exercise</value>
+    </learningResourceType>
+    <learningResourceType>
+      <source>http://www.normetic.org/vdex/typeressourcev1_2.xml</source>
+      <value>exercice</value>
+    </learningResourceType>
+    
+    
+    <intendedEndUserRole>
+      <source>LOMv1.0</source>
+      <value>learner</value>
+    </intendedEndUserRole>
+    
+    
+    <context>
+      <source>LOMv1.0</source>
+      <value>school</value>
+    </context>
+    <context>
+      <source>http://eureka.ntic.org/vdex/NORMETICv1.0_element_5_6_contexte_voc.xml</source>
+      <value>cegep</value>
+    </context>
+    
+    <context>
+      <source>LOMv1.0</source>
+      <value>school</value>
+    </context>
+    <context>
+      <source>http://eureka.ntic.org/vdex/NORMETICv1.0_element_5_6_contexte_voc.xml</source>
+      <value>education secondaire</value>
+    </context>
+    
+    <context>
+      <source>LOMv1.0</source>
+      <value>training</value>
+    </context>
+    <context>
+      <source>http://eureka.ntic.org/vdex/NORMETICv1.0_element_5_6_contexte_voc.xml</source>
+      <value>formation continue</value>
+    </context>
+    
+    <context>
+      <source>LOMv1.0</source>
+      <value>training</value>
+    </context>
+    <context>
+      <source>http://eureka.ntic.org/vdex/NORMETICv1.0_element_5_6_contexte_voc.xml</source>
+      <value>formation en entreprise</value>
+    </context>
+    
+    <context>
+      <source>LOMv1.0</source>
+      <value>higher education</value>
+    </context>
+    <context>
+      <source>http://eureka.ntic.org/vdex/NORMETICv1.0_element_5_6_contexte_voc.xml</source>
+      <value>universite premier cycle</value>
+    </context>
+    
+    
+    <typicalLearningTime/>
+  </educational>
+  <rights>
+    <cost>
+      <source>LOMv1.0</source>
+      <value>no</value>
+    </cost>
+    <copyrightAndOtherRestrictions>
+      <source>LOMv1.0</source>
+      <value>yes</value>
+    </copyrightAndOtherRestrictions>
+    <description>
+      <string language="fr-CA">&#xA9; CCDMD 2011</string>
+    </description>
+  </rights>
+  <relation>
+	  <kind>
+       <source>http://eureka.ntic.org/vdex/eureka_relations_thumbnail.xml</source>
+       <value>thumbnail_image_url</value>
+    </kind>
+	  <resource>
+	    <identifier>
+	      <catalog>URI</catalog>
+	      <entry>http://www.ccdmd.qc.ca/eureka_images/pdf.jpg</entry>
+	    </identifier>
+	    <description>
+	      <string language="fra-CA">Aper&#xE7;u</string>
+	    </description>
+	  </resource>
+	</relation>
+  <annotation/>
+  <classification>
+    <purpose>
+      <source>LOMv1.0</source>
+      <value>discipline</value>
+    </purpose>
+      
+    <taxonPath>
+      <source>
+        <string language="fr-CA">http://eureka.ntic.org/vdex/meq_disciplines_collegiales.xml</string>
+      </source>
+      <taxon>
+	<id>urn:uuid:49644368845ef394f9479d8.13773512</id>
+	<entry>
+	  <string language="fr-CA">Fran&#xE7;ais (langue et litt&#xE9;rature) 601</string>
+	</entry>
+      </taxon>
+       </taxonPath>      
+      
+    <description/>
+  </classification>
+  
+  
+  
+</lom>
