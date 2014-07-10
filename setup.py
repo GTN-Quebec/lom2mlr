@@ -2,6 +2,8 @@
 
 from setuptools import setup
 
+requirements = open('requirements.txt').readlines()
+
 setup(name='lom2mlr',
       version='0.1',
       description="Utilities to convert learning resources metadata "
@@ -19,15 +21,7 @@ setup(name='lom2mlr',
                                 'translations/translation_*.xsl'
                                 ]
                     },
-      install_requires=[
-          'vobject==0.8.1c',
-          'lxml>=2.3',
-          'python-dateutil<2.0',
-          'rdflib>=4.0',
-          'isodate',
-          'pygments',
-          'Markdown'
-      ],
+      install_requires=requirements,
       tests_require=['nose'],
       entry_points={
           'console_scripts': [
