@@ -160,9 +160,10 @@ class Converter(object):
             according to :py:func:`_to_xsl_option`
         """
         options = options or {}
-        self.options = {str(k): _to_xsl_option(v)
-                        for k, v in options.items()
-                        if str(k) in self.sheet_options}
+        self.options = dict(
+            (str(k), _to_xsl_option(v))
+            for k, v in options.items()
+            if str(k) in self.sheet_options)
 
     def _get_lang_sheet(self, lang):
         """Obtain the cached language translation stylesheet.

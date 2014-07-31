@@ -31,13 +31,13 @@ skos_sheet =  etree.XSLT(etree.parse(
 correspondances_sheet =  etree.XSLT(etree.parse(
     os.path.join('lom2mlr', 'correspondances.xsl')))
 
-trans_lang_builders = {
-    "Trans_" + lang: 
+trans_lang_builders = dict(
+    ("Trans_" + lang,
         Builder(action = partial(apply_stylesheet, trans_to_lang_sheet, {'lang': "'%s'" % (lang, )}),
                   suffix = '_%s.xsl' % (lang,),
-                  src_suffix = '.xml')
+                  src_suffix = '.xml'))
     for lang in LANGS
-}
+)
 
 builders.update(trans_lang_builders)
 
@@ -47,13 +47,13 @@ builders['Trans_mlr'] = Builder(
     src_suffix = '.xml')
 
 
-vdex_lang_builders = {
-    "Vdex_" + lang: 
+vdex_lang_builders = dict(
+    ("Vdex_" + lang,
         Builder(action = partial(apply_stylesheet, vdex_to_lang_sheet, {'lang': "'%s'" % (lang, )}),
                   suffix = '_%s.xsl' % (lang,),
-                  src_suffix = '.vdex')
+                  src_suffix = '.vdex'))
     for lang in LANGS
-}
+)
 
 builders.update(vdex_lang_builders)
 builders['Vdex_mlr'] = Builder(

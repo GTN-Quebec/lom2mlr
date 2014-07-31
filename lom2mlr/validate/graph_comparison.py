@@ -250,10 +250,12 @@ class GraphTester(object):
         nsm = obtained_graph.namespace_manager
         comparator_fo = GraphCorrespondence(forbidden_graph, obtained_graph)
         comparator_fo.identify()
-        map_oe = {o: e for (e, o) in
-                  self.last_comparator.blank_map.items()}
-        map_fe = {f: map_oe.get(o, None) for f, o in
-                  comparator_fo.blank_map.items()}
+        map_oe = dict(
+            (o, e) for (e, o) in
+            self.last_comparator.blank_map.items())
+        map_fe = dict(
+            (f, map_oe.get(o, None)) for f, o in
+            comparator_fo.blank_map.items())
         triples = forbidden_graph.triples((None, None, None))
         for triple in triples:
             if list(obtained_graph.triples(comparator_fo.translate_triple(triple))) \
