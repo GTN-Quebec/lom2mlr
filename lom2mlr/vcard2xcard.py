@@ -10,7 +10,7 @@ from base64 import b64encode
 from vobject.base import readOne
 from vobject import vcard
 
-from util import is_sequence, unwrap_seq
+from lom2mlr.util import is_sequence, unwrap_seq
 
 """The namespace for xCard """
 VCARD_NS = 'urn:ietf:params:xml:ns:vcard-4.0'

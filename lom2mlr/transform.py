@@ -14,15 +14,15 @@ from uuid import UUID, uuid1, uuid5, NAMESPACE_URL, RFC_4122
 from lxml import etree
 from rdflib import Graph
 
-from util import unwrap_seq
-from vcard2xcard import convert
+from lom2mlr.util import unwrap_seq, module_path
+from lom2mlr.vcard2xcard import convert
 
 VCARDC_NS = 'http://ntic.org/vcard'
 """A namespace for XSLT extensions in :py:mod:`lom2mlr.vcard2xcard`"""
 
 XSLT_NS = 'http://www.w3.org/1999/XSL/Transform'
 
-this_dir, this_filename = os.path.split(__file__)
+this_dir = module_path()
 
 STYLESHEET = os.path.join(this_dir, 'lom2mlr.xsl')
 """ The stylesheet used by the converter."""

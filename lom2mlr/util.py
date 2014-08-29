@@ -58,3 +58,12 @@ def splitcode(code):
     if ' ' in code_type:
         code_type, args = code_type.split(' ', 1)
     return code_type, code, args
+
+def module_path():
+    import sys
+    import os.path
+    if hasattr(sys, "frozen"):
+        # py2exe
+        return os.path.dirname(unicode(sys.executable, sys.getfilesystemencoding( )))
+
+    return os.path.dirname(unicode(__file__, sys.getfilesystemencoding( )))
