@@ -4,13 +4,15 @@ from distutils.core import setup
 import py2exe
 from glob import glob
 
-data_files=['lom2mlr/lom2mlr.xsl',
+translations_files = glob('lom2mlr/translations/translation_*.xsl')
+vdex_files = glob('lom2mlr/vdex/ISO*.xsl')
+vdex_files.extend(glob('lom2mlr/vdex/*.vdex'))
+
+data_files=[('', ['lom2mlr/lom2mlr.xsl',
                   'lom2mlr/iso639.xsl',
-                  'lom2mlr/correspondances_xsl.xsl',
-                  'lom2mlr/translations/translation.xml']
-data_files.extend(glob('lom2mlr/vdex/ISO*.xsl'))
-data_files.extend(glob('lom2mlr/vdex/*.vdex'))
-data_files.extend(glob('lom2mlr/vdex/translation_*.xsl'))
+                  'lom2mlr/correspondances_xsl.xsl']),
+            ('translations', translations_files),
+            ('vdex', vdex_files)]
 
 requirements = open('requirements.txt').readlines()
 
