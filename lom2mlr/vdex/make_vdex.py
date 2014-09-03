@@ -2,13 +2,14 @@
 
 import sys
 import re
+from os.path import basename, splitext
 
 TRE = re.compile('^T[0-9]+$')
 
 
 def make_vdex(fname):
-    vocname = fname.rsplit('.', 1)[0]
-    target = vocname + '.vdex'
+    vocname = splitext(basename(fname))[0]
+    target = splitext(fname)[0] + '.vdex'
     lines = open(fname).readlines()
     langs = lines.pop(0).split()
     hasdef = True
