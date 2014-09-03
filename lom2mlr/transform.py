@@ -11,7 +11,7 @@ from urlparse import urlparse
 from urllib import urlopen
 
 from uuid import UUID, uuid1, uuid5, NAMESPACE_URL, RFC_4122
-from lxml import etree
+from lxml import etree, _elementpath
 from rdflib import Graph
 
 from lom2mlr.util import unwrap_seq, module_path
@@ -174,11 +174,10 @@ class Converter(object):
         if lang in self.langsheets:
             return self.langsheets[lang]
         langsheet = None
-        try:
-            langsheet = etree.XSLT(etree.parse(os.path.join(
-                this_dir, 'translations', 'translation_%s.xsl' % (lang,))))
-        except:
-            pass
+        filename = os.path.join(
+            this_dir, 'translations', 'translation_%s.xsl' % (lang,))
+        assert os.path.exists(filename)
+        langsheet = etree.XSLT(etree.parse(filename))
         self.langsheets[lang] = langsheet
         return langsheet
 
