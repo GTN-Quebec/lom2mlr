@@ -376,9 +376,4 @@ class testMlr(unittest.TestCase):
         all_clear = True
         for example in examples:
             print example
-            try:
-                graph = self.converter.lomfile2graph(os.path.join(ex_dir, example))
-            except Exception as e:
-                import traceback; traceback.print_exc();
-                all_clear = False
-        assert all_clear
+            graph = self.converter.lomfile2graph(os.path.join(ex_dir, example))

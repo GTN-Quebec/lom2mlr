@@ -7,7 +7,7 @@ from base64 import b64encode
 
 
 # TODO: Get rid of vobject and do it directly by parsing?
-from vobject.base import readOne
+from vobject.base import readOne as readOne_original
 from vobject import vcard
 
 from lom2mlr.util import is_sequence, unwrap_seq
@@ -20,6 +20,16 @@ VCARD_NSB = '{%s}' % (VCARD_NS, )
 
 """The namespace map used in building xCard objects"""
 NSMAP = {None: VCARD_NS}
+
+
+def readOne(card):
+    card_lines = card.split('\n')
+    use_cr = card_lines[0][-1] == '\r'
+    first_line = card_lines[0].rstrip('\r')
+    if first_line != first_line.rstrip():
+        card_lines[0] = first_line.rstrip() + ('\r' if use_cr else '')
+        card = '\n'.join(card_lines)
+    return readOne_original(card)
 
 
 def regexp_checker(pattern):
