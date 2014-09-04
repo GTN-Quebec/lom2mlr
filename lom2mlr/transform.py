@@ -171,12 +171,14 @@ class Converter(object):
         :param lang: a ISO-696-3 language identifier.
         :returns: a :lxml-class:`XSLT` stylesheet.
         """
+        if not lang:
+            return None
         if lang in self.langsheets:
             return self.langsheets[lang]
         langsheet = None
         filename = os.path.join(
             this_dir, 'translations', 'translation_%s.xsl' % (lang,))
-        assert os.path.exists(filename)
+        assert os.path.exists(filename), filename
         langsheet = etree.XSLT(etree.parse(filename))
         self.langsheets[lang] = langsheet
         return langsheet
