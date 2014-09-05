@@ -1,276 +1,268 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <translation>
+  <id ns="mlr1" id="literal">
+    <term lang="eng">literal</term>
+    <term lang="fra">littéral</term>
+    <term lang="rus">литерал</term>
+    <term lang="zh">文字</term>
+  </id>
   <id ns="mlr1" id="RC0001">
     <term lang="eng">Resource</term>
-    <term lang="fra">Ressource</term>
+    <term lang="fra">ressource</term>
   </id>
   <!-- distinguer fr de fr-CA? -->
   <id ns="mlr1" id="RC0002">
     <term lang="eng">Learning Resource</term>
-    <term lang="fra">Ressource d'Enseignement et d'Apprentissage</term>
+    <term lang="fra-FR">ressource pédagogique</term>
+    <term lang="fra-CA">ressource d'apprentissage</term>
+    <term lang="rus">Обучение ресурсов</term>
   </id>
   <id ns="mlr1" id="RC0003">
     <term lang="eng">Person</term>
-    <term lang="fra">Personne</term>
+    <term lang="fra">personne</term>
+    <term lang="rus">Человек</term>
+    <term lang="zh">人</term>
+  </id>
+  <id ns="mlr2" id="RC0001">
+    <term lang="eng">Thing</term>
+    <term lang="fra">objet</term>
+  </id>
+  <id ns="mlr2" id="RC0002">
+    <term lang="eng">Rights Statement</term>
+    <term lang="fra">déclaration de droits</term>
   </id>
   <id ns="mlr2" id="DES0100">
     <term lang="eng">title</term>
     <term lang="fra">titre</term>
     <term lang="rus">заголовок</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES0200">
     <term lang="eng">creator</term>
     <term lang="fra">créateur</term>
     <term lang="rus">автор</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES0300">
     <term lang="eng">subject</term>
     <term lang="fra">sujet</term>
     <term lang="rus">тема</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES0400">
     <term lang="eng">description</term>
     <term lang="fra">description</term>
     <term lang="rus">описание</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES0500">
     <term lang="eng">publisher</term>
     <term lang="fra">éditeur</term>
     <term lang="rus">издатель</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES0600">
     <term lang="eng">contributor</term>
     <term lang="fra">collaborateur</term>
     <term lang="rus">участник</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES0700">
     <term lang="eng">date</term>
     <term lang="fra">date</term>
     <term lang="rus">дата</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES0800">
     <term lang="eng">type</term>
     <term lang="fra">type</term>
     <term lang="rus">тип</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES0900">
     <term lang="eng">format</term>
     <term lang="fra">format</term>
     <term lang="rus">формат</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES1000">
     <term lang="eng">identifier</term>
     <term lang="fra">identificateur</term>
     <term lang="rus">идентификатор</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES1100">
     <term lang="eng">source</term>
     <term lang="fra">source</term>
     <term lang="rus">источник</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES1200">
     <term lang="eng">language</term>
     <term lang="fra">langue</term>
     <term lang="rus">язык</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES1300">
     <term lang="eng">relation</term>
     <term lang="fra">relation</term>
     <term lang="rus">связь</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES1400">
     <term lang="eng">coverage</term>
     <term lang="fra">couverture</term>
     <term lang="rus">охват</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr2" id="DES1500">
     <term lang="eng">rights</term>
     <term lang="fra">droits</term>
     <term lang="rus">правовая информ ация</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
+  <id ns="mlr2" id="DES1600">
+    <term lang="eng">creator</term>
+    <term lang="fra">créateur</term>
+    <term lang="rus">автор</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="RC0003"/>
+  </id>
+  <id ns="mlr2" id="DES1700">
+    <term lang="eng">subject</term>
+    <term lang="fra">sujet</term>
+    <term lang="rus">тема</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr2" id="RC0001"/>
+  </id>
+  <id ns="mlr2" id="DES1800">
+    <term lang="eng">description</term>
+    <term lang="fra">description</term>
+    <term lang="rus">описание</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr2" id="RC0001"/>
+  </id>
+  <id ns="mlr2" id="DES1900">
+    <term lang="eng">publisher</term>
+    <term lang="fra">éditeur</term>
+    <term lang="rus">издатель</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="RC0003"/>
+  </id>
+  <id ns="mlr2" id="DES2000">
+    <term lang="eng">contributor</term>
+    <term lang="fra">collaborateur</term>
+    <term lang="rus">участник</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="RC0003"/>
+  </id>
+  <id ns="mlr2" id="DES2100">
+    <term lang="eng">source</term>
+    <term lang="fra">source</term>
+    <term lang="rus">источник</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr2" id="RC0001"/>
+  </id>
+  <id ns="mlr2" id="DES2200">
+    <term lang="eng">relation</term>
+    <term lang="fra">relation</term>
+    <term lang="rus">связь</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr2" id="RC0001"/>
+  </id>
+  <id ns="mlr2" id="DES2300">
+    <term lang="eng">rights</term>
+    <term lang="fra">droits</term>
+    <term lang="rus">правовая информ ация</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr2" id="RC0002"/>
+  </id>
+
   <id ns="mlr3" id="DES0100">
     <term lang="eng">date</term>
     <term lang="fra">date</term>
     <term lang="rus">дата</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr3" id="DES0200">
-    <term lang="eng">description</term>
-    <term lang="fra">description</term>
-    <term lang="rus">описание</term>
-  </id>
-  <id ns="mlr3" id="DES0300">
-    <term lang="eng">format</term>
-    <term lang="fra">format</term>
-    <term lang="rus">формат</term>
-  </id>
-  <id ns="mlr3" id="DES0400">
     <term lang="eng">identifier</term>
     <term lang="fra">identificateur</term>
     <term lang="rus">идентификатор</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr3" id="DES0500">
+  <id ns="mlr3" id="DES0300">
     <term lang="eng">language</term>
     <term lang="fra">langue</term>
     <term lang="rus">язык</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr3" id="DES0600">
-    <term lang="eng">source</term>
-    <term lang="fra">source</term>
-    <term lang="rus">источник</term>
-  </id>
-  <id ns="mlr3" id="DES0700" vocab="ISO_IEC_19788-3-2011-VA.2">
-    <term lang="eng">type</term>
-    <term lang="fra">type</term>
-    <term lang="rus">тип</term>
-  </id>
-  <id ns="mlr4" id="DES0100">
-    <term lang="eng">Location</term>
-  </id>
-  <id ns="mlr4" id="DES0200">
-    <term lang="eng">Size</term>
-  </id>
-  <id ns="mlr4" id="DES0300">
-    <term lang="eng">Duration</term>
-  </id>
-  <id ns="mlr4" id="DES0400">
-    <term lang="eng">Technical requirement</term>
-  </id>
-  <id ns="mlr4" id="DES0500">
-    <term lang="eng">Technical features</term>
-  </id>
-  <id ns="mlr4" id="DES0600">
-    <term lang="eng">Media format information</term>
-  </id>
-  <id ns="mlr4" id="DES0700">
-    <term lang="eng">Technical delivery context</term>
-  </id>
+
   <id ns="mlr4" id="RC0001">
     <term lang="eng">Media Format Information</term>
   </id>
   <id ns="mlr4" id="RC0002">
     <term lang="eng">Technical Delivery Context</term>
   </id>
-  <id ns="mlr5" id="DES0100">
-    <term lang="eng">annotation date</term>
-    <term lang="fra">date d’annotation</term>
+  <id ns="mlr4" id="DES0100">
+    <term lang="eng">Location</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr5" id="DES0200">
-    <term lang="eng">annotation text</term>
-    <term lang="fra">texte de l’annotation</term>
+  <id ns="mlr4" id="DES0200">
+    <term lang="eng">Size</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr5" id="DES0300" vocab="ISO_IEC_19788-5-2012-VA.5">
-    <term lang="eng">annotation type</term>
-    <term lang="fra">type d’annotation</term>
+  <id ns="mlr4" id="DES0300">
+    <term lang="eng">Duration</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr5" id="DES0400">
-    <term lang="eng">audience language</term>
-    <term lang="fra">langue du public cible</term>
+  <id ns="mlr4" id="DES0400">
+    <term lang="eng">IT platform requirement</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr5" id="DES0500">
-    <term lang="eng">audience level</term>
-    <term lang="fra">niveau du public cible</term>
+  <id ns="mlr4" id="DES0500">
+    <term lang="eng">Optional technical features</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr5" id="DES0600" vocab="ISO_IEC_19788-5-2012-VA.2">
-    <term lang="eng">audience role</term>
-    <term lang="fra">rôle du public cible</term>
+  <id ns="mlr4" id="DES0600">
+    <term lang="eng">Has media format information</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr4" id="RC0001"/>
   </id>
-  <id ns="mlr5" id="DES0700">
-    <term lang="eng">contribution date</term>
-    <term lang="fra">date de contribution</term>
+  <id ns="mlr4" id="DES0700">
+    <term lang="eng">Medium of recording</term>
+    <domain ns="mlr4" id="RC0001"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr5" id="DES0800" vocab="ISO_IEC_19788-5-2012-VA.1">
-    <term lang="eng">contributor role</term>
-    <term lang="fra">rôle du contributeur</term>
+  <id ns="mlr4" id="DES0800">
+    <term lang="eng">medium format</term>
+    <domain ns="mlr4" id="RC0001"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr5" id="DES0900">
-    <term lang="eng">curriculum assessment</term>
-    <term lang="fra">évaluation liée au curriculum</term>
-  </id>
-  <id ns="mlr5" id="DES1000">
-    <term lang="eng">curriculum level</term>
-    <term lang="fra">niveau du programme d’études</term>
-  </id>
-  <id ns="mlr5" id="DES1100">
-    <term lang="eng">curriculum specification</term>
-    <term lang="fra">nom du programme d’études</term>
-  </id>
-  <id ns="mlr5" id="DES1200">
-    <term lang="eng">curriculum topic</term>
-    <term lang="fra">sujet du programme d’études</term>
-  </id>
-  <id ns="mlr5" id="DES1300">
-    <term lang="eng">has annotation</term>
-    <term lang="fra">a pour annotation</term>
-  </id>
-  <id ns="mlr5" id="DES1400">
-    <term lang="eng">has annotator</term>
-    <term lang="fra">a pour annotateur</term>
-  </id>
-  <id ns="mlr5" id="DES1500">
-    <term lang="eng">has audience</term>
-    <term lang="fra">a pour public cible</term>
-  </id>
-  <id ns="mlr5" id="DES1600">
-    <term lang="eng">has audience</term>
-    <term lang="fra">a pour public cible</term>
-  </id>
-  <id ns="mlr5" id="DES1700">
-    <term lang="eng">has contribution</term>
-    <term lang="fra">a pour contribution</term>
-  </id>
-  <id ns="mlr5" id="DES1800">
-    <term lang="eng">has contributor</term>
-    <term lang="fra">a pour contributeur</term>
-  </id>
-  <id ns="mlr5" id="DES1900">
-    <term lang="eng">has curriculum</term>
-    <term lang="fra">a pour curriculum</term>
-  </id>
-  <id ns="mlr5" id="DES2000">
-    <term lang="eng">has learning activity</term>
-    <term lang="fra">a pour activité d’apprentissage</term>
-  </id>
-  <id ns="mlr5" id="DES2100" vocab="ISO_IEC_19788-5-2012-VA.3">
-    <term lang="eng">induced activity</term>
-    <term lang="fra">activité induite</term>
-  </id>
-  <id ns="mlr5" id="DES2200">
-    <term lang="eng">learning activity occurrence</term>
-    <term lang="fra">évènement de l’activité d’apprentissage</term>
-  </id>
-  <id ns="mlr5" id="DES2300" vocab="ISO_IEC_19788-5-2012-VA.3">
-    <term lang="eng">learning method</term>
-    <term lang="fra">méthode d’apprentissage</term>
-  </id>
-  <id ns="mlr5" id="DES2400" vocab="ISO_IEC_19788-5-2012-VA.3">
-    <term lang="eng">learning method</term>
-    <term lang="fra">méthode d’apprentissage</term>
-  </id>
-  <id ns="mlr5" id="DES2500">
-    <term lang="eng">maximum age</term>
-    <term lang="fra">âge maximum</term>
-  </id>
-  <id ns="mlr5" id="DES2600">
-    <term lang="eng">minimum age</term>
-    <term lang="fra">âge minimum</term>
-  </id>
-  <id ns="mlr5" id="DES2700">
-    <term lang="eng">pedagogical relation</term>
-    <term lang="fra">relation pédagogique</term>
-  </id>
-  <id ns="mlr5" id="DES2800">
-    <term lang="eng">pedagogical type</term>
-    <term lang="fra">type pédagogique</term>
-  </id>
-  <id ns="mlr5" id="DES2900">
-    <term lang="eng">prerequisite</term>
-    <term lang="fra">prérequis</term>
-  </id>
-  <id ns="mlr5" id="DES3000">
-    <term lang="eng">typical learning time</term>
-    <term lang="fra">durée typique d’apprentissage</term>
-  </id>
-  <id ns="mlr5" id="RC0001">
+
+  <id ns="mlr5" id="RC0001" deprecated="true">
     <term lang="eng">Annotation</term>
     <term lang="fra">Annotation</term>
   </id>
@@ -286,153 +278,302 @@
     <term lang="eng">Curriculum</term>
     <term lang="fra">Curriculum</term>
   </id>
-  <id ns="mlr5" id="RC0004">
+  <id ns="mlr5" id="RC0005">
     <term lang="eng">Learning activity</term>
     <term lang="fra">Activité d'apprentissage</term>
   </id>
-  <id ns="mlr8" id="DES0100">
-    <term lang="eng">record identifier</term>
-    <term lang="fra">identifiant de l’enregistrement</term>
+  <id ns="mlr5" id="DES0100" deprecated="true">
+    <term lang="eng">annotation date</term>
+    <term lang="fra">date d’annotation</term>
+    <domain ns="mlr5" id="RC0001"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr8" id="DES0200">
-    <term lang="eng">describe</term>
-    <term lang="fra">décrit</term>
+  <id ns="mlr5" id="DES0200" deprecated="true">
+    <term lang="eng">annotation text</term>
+    <term lang="fra">texte de l’annotation</term>
+    <domain ns="mlr5" id="RC0001"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr8" id="DES0300">
-    <term lang="eng">has Record</term>
-    <term lang="fra">enregistrement</term>
+  <id ns="mlr5" id="DES0300" vocab="ISO_IEC_19788-5-2012-VA.5" deprecated="true">
+    <term lang="eng">annotation type</term>
+    <term lang="fra">type d’annotation</term>
+    <domain ns="mlr5" id="RC0001"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr8" id="DES0400">
-    <term lang="eng">language</term>
-    <term lang="fra">langue</term>
+  <id ns="mlr5" id="DES0400">
+    <term lang="eng">audience language</term>
+    <term lang="fra">langue du public cible</term>
+    <domain ns="mlr5" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr8" id="DES0500" vocab="ISO_IEC_19788-8-2012-VA.2.1">
-    <term lang="eng">is Mutable</term>
-    <term lang="fra">est mutable</term>
+  <id ns="mlr5" id="DES0500">
+    <term lang="eng">audience level</term>
+    <term lang="fra">niveau du public cible</term>
+    <domain ns="mlr5" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr8" id="DES0600">
-    <term lang="eng">has Application Profile</term>
-    <term lang="fra">profil d’application</term>
+  <id ns="mlr5" id="DES0600" vocab="ISO_IEC_19788-5-2012-VA.2">
+    <term lang="eng">audience role</term>
+    <term lang="fra">rôle du public cible</term>
+    <domain ns="mlr5" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr8" id="DES0700">
-    <term lang="eng">contribution</term>
-    <term lang="fra">contribution</term>
+  <id ns="mlr5" id="DES0700">
+    <term lang="eng">contribution date</term>
+    <term lang="fra">date de contribution</term>
+    <domain ns="mlr5" id="RC0003"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr8" id="DES0800">
-    <term lang="eng">record Repository</term>
-    <term lang="fra">entrepôt</term>
+  <id ns="mlr5" id="DES0800" vocab="ISO_IEC_19788-5-2012-VA.1">
+    <term lang="eng">contributor role</term>
+    <term lang="fra">rôle du contributeur</term>
+    <domain ns="mlr5" id="RC0003"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr8" id="DES0900">
-    <term lang="eng">record Last Update</term>
-    <term lang="fra">dernière mise à jour</term>
+  <id ns="mlr5" id="DES0900">
+    <term lang="eng">curriculum assessment</term>
+    <term lang="fra">évaluation liée au curriculum</term>
+    <domain ns="mlr5" id="RC0004"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr8" id="DES1000">
-    <term lang="eng">entity</term>
-    <term lang="fra">entité</term>
+  <id ns="mlr5" id="DES1000">
+    <term lang="eng">curriculum level</term>
+    <term lang="fra">niveau du programme d’études</term>
+    <domain ns="mlr5" id="RC0004"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr8" id="DES1100">
-    <term lang="eng">entities</term>
-    <term lang="fra">entités</term>
+  <id ns="mlr5" id="DES1100">
+    <term lang="eng">curriculum specification</term>
+    <term lang="fra">nom du programme d’études</term>
+    <domain ns="mlr5" id="RC0004"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr8" id="DES1200" vocab="ISO_IEC_19788-8-2012-VA.2.2">
-    <term lang="eng">role</term>
-    <term lang="fra">rôle</term>
+  <id ns="mlr5" id="DES1200">
+    <term lang="eng">curriculum topic</term>
+    <term lang="fra">sujet du programme d’études</term>
+    <domain ns="mlr5" id="RC0004"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr8" id="DES1300">
-    <term lang="eng">date</term>
-    <term lang="fra">date</term>
+  <id ns="oa" id="Annotation">
+    <term lang="eng">Annotation</term>
   </id>
-  <id ns="mlr8" id="DES1400">
-    <term lang="eng">original record</term>
-    <term lang="fra">fiche originale</term>
+  <id ns="mlr5" id="DES1300">
+    <term lang="eng">has annotation</term>
+    <term lang="fra">a pour annotation</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="oa" id="Annotation"/>
   </id>
-  <id ns="mlr8" id="DES1500">
-    <term lang="eng">original record format</term>
-    <term lang="fra">format de la fiche originale</term>
+  <id ns="mlr5" id="DES1400" deprecated="true">
+    <term lang="eng">has annotator</term>
+    <term lang="fra">a pour annotateur</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="RC0003"/>
   </id>
-  <id ns="mlr8" id="DES1600">
-    <term lang="eng">conversion software</term>
-    <term lang="fra">logiciel de conversion</term>
+  <id ns="mlr5" id="DES1500">
+    <term lang="eng">has audience</term>
+    <term lang="fra">a pour public cible</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr5" id="RC0002"/>
   </id>
+  <id ns="mlr5" id="DES1600">
+    <term lang="eng">has audience</term>
+    <term lang="fra">a pour public cible</term>
+    <domain ns="mlr5" id="RC0005"/>
+    <range ns="mlr5" id="RC0002"/>
+  </id>
+  <id ns="mlr5" id="DES1700">
+    <term lang="eng">has contribution</term>
+    <term lang="fra">a pour contribution</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr5" id="RC0003"/>
+  </id>
+  <id ns="mlr5" id="DES1800">
+    <term lang="eng">has contributor</term>
+    <term lang="fra">a pour contributeur</term>
+    <domain ns="mlr5" id="RC0003"/>
+    <range ns="mlr1" id="RC0003"/>
+  </id>
+  <id ns="mlr5" id="DES1900">
+    <term lang="eng">has curriculum</term>
+    <term lang="fra">a pour curriculum</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr5" id="RC0004"/>
+  </id>
+  <id ns="mlr5" id="DES2000">
+    <term lang="eng">has learning activity</term>
+    <term lang="fra">a pour activité d’apprentissage</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr5" id="RC0005"/>
+  </id>
+  <id ns="mlr5" id="DES2100" vocab="ISO_IEC_19788-5-2012-VA.3">
+    <term lang="eng">induced activity</term>
+    <term lang="fra">activité induite</term>
+    <domain ns="mlr5" id="RC0005"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr5" id="DES2200">
+    <term lang="eng">learning activity occurrence</term>
+    <term lang="fra">évènement de l’activité d’apprentissage</term>
+    <domain ns="mlr5" id="RC0005"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr5" id="DES2300" vocab="ISO_IEC_19788-5-2012-VA.3">
+    <term lang="eng">learning method</term>
+    <term lang="fra">méthode d’apprentissage</term>
+    <domain ns="mlr5" id="RC0005"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr5" id="DES2400" vocab="ISO_IEC_19788-5-2012-VA.3">
+    <term lang="eng">learning method</term>
+    <term lang="fra">méthode d’apprentissage</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr5" id="DES2500">
+    <term lang="eng">maximum age</term>
+    <term lang="fra">âge maximum</term>
+    <domain ns="mlr5" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr5" id="DES2600">
+    <term lang="eng">minimum age</term>
+    <term lang="fra">âge minimum</term>
+    <domain ns="mlr5" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr5" id="DES2700">
+    <term lang="eng">pedagogical relation</term>
+    <term lang="fra">relation pédagogique</term>
+    <domain ns="mlr5" id="RC0005"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr5" id="DES2800">
+    <term lang="eng">pedagogical type</term>
+    <term lang="fra">type pédagogique</term>
+    <domain ns="mlr5" id="RC0005"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr5" id="DES2900">
+    <term lang="eng">prerequisite</term>
+    <term lang="fra">prérequis</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr5" id="DES3000">
+    <term lang="eng">typical learning time</term>
+    <term lang="fra">durée typique d’apprentissage</term>
+    <domain ns="mlr5" id="RC0005"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+
   <id ns="mlr8" id="RC0001">
     <term lang="eng">MLR Record</term>
     <!-- fiche RÉA? -->
   </id>
   <id ns="mlr8" id="RC0002">
+    <term lang="eng">Mutable MLR Record</term>
+  </id>
+  <id ns="mlr8" id="RC0003">
     <term lang="eng">Contribution</term>
     <term lang="fra">Contribution</term>
   </id>
-  <id ns="mlr8" id="RC0003">
-    <term lang="eng">Mutable MLR Record</term>
+  <id ns="mlr8" id="RC0004">
+    <term lang="eng">Application Profile</term>
   </id>
-  <id ns="mlr9" id="DES0100">
-    <term lang="eng">identifier</term>
-    <term lang="fra">identifiant</term>
+  <id ns="mlr8" id="DES0100">
+    <term lang="eng">has Record</term>
+    <term lang="fra">enregistrement</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr8" id="RC0001"/>
   </id>
-  <id ns="mlr9" id="DES0200">
-    <term lang="eng">name</term>
-    <term lang="fra">nom</term>
+  <id ns="mlr8" id="DES0200">
+    <term lang="eng">Record language</term>
+    <domain ns="mlr8" id="RC0001"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr9" id="DES0300">
-    <term lang="eng">family Name</term>
-    <term lang="fra">nom de famille</term>
+  <id ns="mlr8" id="DES0300">
+    <term lang="eng">source record ID</term>
+    <term lang="fra">identifiant de l’enregistrement original</term>
+    <domain ns="mlr8" id="RC0001"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr9" id="DES0400">
-    <term lang="eng">given Name</term>
-    <term lang="fra">prénom</term>
+  <id ns="mlr8" id="DES0400">
+    <term lang="eng">source record schema</term>
+    <domain ns="mlr8" id="RC0001"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr9" id="DES0500">
-    <term lang="eng">name</term>
-    <term lang="fra">nom</term>
+  <id ns="mlr8" id="DES0500">
+    <term lang="eng">previous version</term>
+    <domain ns="mlr8" id="RC0001"/>
+    <range ns="mlr8" id="RC0001"/>
   </id>
-  <id ns="mlr9" id="DES0600">
-    <term lang="eng">SkypeID</term>
-    <term lang="fra">ID Skype</term>
+  <id ns="mlr8" id="DES0600">
+    <term lang="eng">has Record</term>
+    <term lang="fra">enregistrement</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr8" id="RC0002"/>
   </id>
-  <id ns="mlr9" id="DES0700">
-    <term lang="eng">vCard N</term>
-    <term lang="fra">vCard N</term>
+  <id ns="mlr8" id="DES0700">
+    <term lang="eng">record identifier</term>
+    <term lang="fra">identifiant de l’enregistrement</term>
+    <domain ns="mlr8" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr9" id="DES0800">
-    <term lang="eng">vCard FN</term>
-    <term lang="fra">vCard FN</term>
+  <id ns="mlr8" id="DES0800">
+    <term lang="eng">record Last Update</term>
+    <term lang="fra">dernière mise à jour</term>
+    <domain ns="mlr8" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr9" id="DES0900">
-    <term lang="eng">email</term>
-    <term lang="fra">courriel</term>
+  <id ns="mlr8" id="DES0900">
+    <term lang="eng">record Repository</term>
+    <term lang="fra">entrepôt</term>
+    <domain ns="mlr8" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr9" id="DES1000">
-    <term lang="eng">work Telephone</term>
-    <term lang="fra">téléphone au travail</term>
+  <id ns="mlr8" id="DES1000">
+    <term lang="eng">compliant to</term>
+    <domain ns="mlr8" id="RC0001"/>
+    <range ns="mlr8" id="RC0004"/>
   </id>
-  <id ns="mlr9" id="DES1100">
-    <term lang="eng">work For</term>
-    <term lang="fra">employeur</term>
+  <id ns="mlr8" id="DES1100">
+    <term lang="eng">contribution</term>
+    <term lang="fra">contribution</term>
+    <domain ns="mlr8" id="RC0001"/>
+    <range ns="mlr8" id="RC0003"/>
   </id>
-  <id ns="mlr9" id="DES1200">
-    <term lang="eng">vCard ORG</term>
-    <term lang="fra">vCard ORG</term>
+  <id ns="mlr8" id="DES1100">
+    <term lang="eng">contribution</term>
+    <term lang="fra">contribution</term>
+    <domain ns="mlr8" id="RC0001"/>
+    <range ns="mlr8" id="RC0003"/>
   </id>
-  <id ns="mlr9" id="DES1300">
-    <term lang="eng">location</term>
-    <term lang="fra">localisation</term>
+  <id ns="mlr8" id="DES1200">
+    <term lang="eng">contribution description</term>
+    <domain ns="mlr8" id="RC0003"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr9" id="DES1400">
-    <term lang="eng">longitude</term>
-    <term lang="fra">longitude</term>
+  <id ns="mlr8" id="DES1300">
+    <term lang="eng">contribution date</term>
+    <domain ns="mlr8" id="RC0003"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr9" id="DES1500">
-    <term lang="eng">latitude</term>
-    <term lang="fra">latitude</term>
+  <id ns="mlr8" id="DES1400">
+    <term lang="eng">contributed by</term>
+    <domain ns="mlr8" id="RC0003"/>
+    <range ns="mlr1" id="RC0003"/>
   </id>
-  <id ns="mlr9" id="DES1600">
-    <term lang="eng">representation</term>
-    <term lang="fra">représentation</term>
+  <id ns="mlr8" id="DES1500">
+    <term lang="eng">application profile ID</term>
+    <domain ns="mlr8" id="RC0004"/>
+    <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr9" id="DES1700">
-    <term lang="eng">description</term>
-    <term lang="fra">description</term>
+  <id ns="mlr8" id="DES1600">
+    <term lang="eng">snapshot</term>
+    <domain ns="mlr8" id="RC0002"/>
+    <range ns="mlr8" id="RC0001"/>
   </id>
+
   <id ns="mlr9" id="RC0001">
     <term lang="eng">Natural person</term>
     <term lang="fra">Personne naturelle</term>
@@ -442,11 +583,143 @@
     <term lang="fra">Organisation</term>
   </id>
   <id ns="mlr9" id="RC0003">
-    <term lang="eng">Geographical Location</term>
-    <term lang="fra">Lieu géographique</term>
+    <term lang="eng">Geographic Point</term>
+    <term lang="fra">Point géographique</term>
   </id>
   <id ns="mlr9" id="RC0004">
-    <term lang="eng">Digital Media</term>
-    <term lang="fra">Média numérique</term>
+    <term lang="eng">Communication Account</term>
+    <term lang="fra">Compte communication</term>
+  </id>
+  <id ns="mlr9" id="RC0005">
+    <term lang="eng">VoIP Account</term>
+    <term lang="fra">Compte VoIP</term>
+  </id>
+  <id ns="mlr9" id="RC0006">
+    <term lang="eng">Social Network Account</term>
+    <term lang="fra">Compte réseau social</term>
+  </id>
+  <id ns="mlr9" id="RC0007">
+    <term lang="eng">Telephone Account</term>
+    <term lang="fra">Compte téléphonique</term>
+  </id>
+  <id ns="mlr9" id="DES0100">
+    <term lang="eng">identifier</term>
+    <term lang="fra">identifiant</term>
+    <domain ns="mlr1" id="RC0003"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES0200">
+    <term lang="eng">name</term>
+    <term lang="fra">nom</term>
+    <domain ns="mlr1" id="RC0003"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES0300">
+    <term lang="eng">family Name</term>
+    <term lang="fra">nom de famille</term>
+    <domain ns="mlr9" id="RC0001"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES0400">
+    <term lang="eng">given Name</term>
+    <term lang="fra">prénom</term>
+    <domain ns="mlr9" id="RC0001"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES0500">
+    <term lang="eng">vCard FN</term>
+    <term lang="fra">vCard FN</term>
+    <domain ns="mlr1" id="RC0003"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES0600">
+    <term lang="eng">vCard N</term>
+    <term lang="fra">vCard N</term>
+    <domain ns="mlr9" id="RC0001"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES0700">
+    <term lang="eng">vCard ADR</term>
+    <term lang="fra">vCard ADR</term>
+    <domain ns="mlr1" id="RC0003"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES0800">
+    <term lang="eng">email Address</term>
+    <term lang="fra">addresse courriel</term>
+    <domain ns="mlr1" id="RC0003"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES0900">
+    <term lang="eng">affiliation</term>
+    <term lang="fra">affiliation</term>
+    <domain ns="mlr9" id="RC0001"/>
+    <range ns="mlr9" id="RC0002"/>
+  </id>
+  <id ns="mlr9" id="DES1000">
+    <term lang="eng">vCard ORG</term>
+    <term lang="fra">vCard ORG</term>
+    <domain ns="mlr9" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES1100">
+    <term lang="eng">geolocation</term>
+    <term lang="fra">geolocalisation</term>
+    <domain ns="mlr9" id="RC0002"/>
+    <range ns="mlr9" id="RC0003"/>
+  </id>
+  <id ns="mlr9" id="DES1200">
+    <term lang="eng">longitude</term>
+    <term lang="fra">longitude</term>
+    <domain ns="mlr9" id="RC0003"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES1300">
+    <term lang="eng">latitude</term>
+    <term lang="fra">latitude</term>
+    <domain ns="mlr9" id="RC0003"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES1400">
+    <term lang="eng">communication account</term>
+    <term lang="fra">compte communication</term>
+    <domain ns="mlr9" id="RC0001"/>
+    <range ns="mlr9" id="RC0004"/>
+  </id>
+  <id ns="mlr9" id="DES1500">
+    <term lang="eng">service provided</term>
+    <term lang="fra">service fourni</term>
+    <domain ns="mlr9" id="RC0005"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES1600">
+    <term lang="eng">VoIP ID</term>
+    <term lang="fra">VoIP ID</term>
+    <domain ns="mlr9" id="RC0005"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES1700">
+    <term lang="eng">social Network Name</term>
+    <term lang="fra">nom du réseau social</term>
+    <domain ns="mlr9" id="RC0006"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES1800">
+    <term lang="eng">social Network ID</term>
+    <term lang="fra">ID de réseau social</term>
+    <domain ns="mlr9" id="RC0006"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES1900">
+    <term lang="eng">phone Type</term>
+    <term lang="fra">type de téléphone</term>
+    <domain ns="mlr9" id="RC0007"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr9" id="DES2000">
+    <term lang="eng">phone Number</term>
+    <term lang="fra">numéro téléphonique</term>
+    <domain ns="mlr9" id="RC0007"/>
+    <range ns="mlr1" id="literal"/>
   </id>
 </translation>
