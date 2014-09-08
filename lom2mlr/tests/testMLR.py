@@ -17,6 +17,7 @@ MLR4 = Namespace('http://standards.iso.org/iso-iec/19788/-4/ed-1/en/')
 MLR5 = Namespace('http://standards.iso.org/iso-iec/19788/-5/ed-1/en/')
 MLR8 = Namespace('http://standards.iso.org/iso-iec/19788/-8/ed-1/en/')
 MLR9 = Namespace('http://standards.iso.org/iso-iec/19788/-9/ed-1/en/')
+OA = Namespace('http://www.w3.org/ns/oa#')
 
 prologue = '''
 @prefix mlr1: <%s> .
@@ -26,8 +27,9 @@ prologue = '''
 @prefix mlr5: <%s> .
 @prefix mlr8: <%s> .
 @prefix mlr9: <%s> .
+@prefix oa: <%s> .
 
-''' % (MLR1, MLR2, MLR3, MLR4, MLR5, MLR8, MLR9)
+''' % (MLR1, MLR2, MLR3, MLR4, MLR5, MLR8, MLR9, OA)
 
 
 MLR2_Element_names = {
@@ -64,7 +66,6 @@ MLR4_Element_names = {
 }
 
 MLR5_Element_names = {
-    MLR5.DES1300: 'Has annotation',
     MLR5.DES1500: 'Has audience',
     MLR5.DES1700: 'Has contribution',
     MLR5.DES1900: 'Has curriculum',
@@ -111,7 +112,6 @@ MLR9_Element_names = {
 }
 
 MLR_codomain = {
-    MLR5.DES1300: (MLR5.RC0001, ),  # Annotation
     MLR5.DES1500: (MLR5.RC0002, ),  # Audience
     MLR5.DES1700: (MLR5.RC0003, ),  # Contribution
     MLR5.DES1900: (MLR5.RC0004, ),  # Curriculum
@@ -133,11 +133,11 @@ MLR_Subclass_attributes = {
         MLR9.DES0100: 'Identifier',
         MLR9.DES0200: 'Name',
     },
-    MLR5.RC0001: { # Annotation
-        # MLR5.DES0100: 'Annotation date',
-        MLR5.DES0200: 'Annotation text',
-        # MLR5.DES0300: 'Annotation type',
-        # MLR5.DES1400: 'Has annotator',
+    OA.Annotation: { # Annotation
+        # OA.annotatedAt: 'Annotation date',
+        OA.hasBody: 'Annotation text',
+        # OA.motivatedBy: 'Annotation type',
+        # OA.annotatedBy: 'Has annotator',
     },
     MLR5.RC0002: { # Audience
         MLR5.DES0400: 'Audience language',
@@ -227,12 +227,8 @@ Element_names.update(MLR9_Element_names)
 
 Known_Missing = set([
     MLR2.DES0700,  # replaced by MLR3:DES0100
-    MLR2.DES0400,  # replaced by MLR3:DES0200
-    MLR2.DES0900,  # replaced by MLR3:DES0300
-    MLR2.DES1000,  # replaced by MLR3:DES0400
-    MLR2.DES1200,  # replaced by MLR3:DES0500
-    MLR2.DES1100,  # replaced by MLR3:DES0600
-    MLR2.DES0800,  # replaced by MLR3:DES0700
+    MLR2.DES1000,  # replaced by MLR3:DES0200
+    MLR2.DES1200,  # replaced by MLR3:DES0300
     MLR4.DES0500,
     MLR4.DES0600,
     MLR4.DES0700,

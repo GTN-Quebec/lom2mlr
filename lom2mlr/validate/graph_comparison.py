@@ -30,7 +30,8 @@ PATTERN2 = "@prefix mlr%d_%s: <http://www.gtn-quebec.org/ns/translation/iso-iec/
 
 N3_PREFIXES = "\n".join([PATTERN1 % (s, s) for s in SECTIONS]) + "\n" + \
               "\n".join(chain(*[[PATTERN2 % (s, l, s, l)
-                                for s in SECTIONS] for l in LANGUAGES]))
+                                for s in SECTIONS] for l in LANGUAGES])) + \
+              "\n@prefix oa: <http://www.w3.org/ns/oa#> ."
 """Prefixes for parts of the MLR standard, and their translations"""
 
 # Regular expression for UUID wildcards

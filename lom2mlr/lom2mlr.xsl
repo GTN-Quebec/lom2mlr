@@ -10,6 +10,7 @@
 	xmlns:vcardconv="http://ntic.org/vcard"
 	xmlns:vcard="urn:ietf:params:xml:ns:vcard-4.0"
 	xmlns:cos="http://www.inria.fr/acacia/corese#"
+    xmlns:oa="http://www.w3.org/ns/oa#"
 	xmlns:gtnq="http://www.gtn-quebec.org/ns/"
 	xmlns:mlrext="http://standards.iso.org/iso-iec/19788/ext/"
 	xmlns:mlr1="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/"
@@ -1530,13 +1531,13 @@
 		</xsl:variable>
 		<xsl:if test="string-length($annotation)&gt;0">
 			<mlr5:DES1300>
-				<mlr5:RC0001>
+				<oa:Annotation>
 					<xsl:attribute name="rdf:about">
 						<xsl:text>urn:uuid:</xsl:text>
 						<xsl:value-of select="mlrext:uuid_unique()"/>
 					</xsl:attribute>
 					<xsl:copy-of select="$annotation"/>
-				</mlr5:RC0001>
+				</oa:Annotation>
 			</mlr5:DES1300>
 		</xsl:if>
 		<xsl:apply-templates mode="educational"/>
@@ -1553,15 +1554,15 @@
 
 	<xsl:template match="lom:description" mode="educational">
 		<mlr5:DES1300>
-			<mlr5:RC0001>
+			<oa:Annotation>
 				<xsl:attribute name="rdf:about">
 					<xsl:text>urn:uuid:</xsl:text>
 					<xsl:value-of select="mlrext:uuid_unique()"/>
 				</xsl:attribute>
 				<xsl:apply-templates select="lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr5:DES0200'"/>
+					<xsl:with-param name="nodename" select="'oa:hasBody'"/>
 				</xsl:apply-templates>
-			</mlr5:RC0001>
+			</oa:Annotation>
 		</mlr5:DES1300>
 	</xsl:template>
 
@@ -1702,31 +1703,31 @@
 
 	<xsl:template match="lom:annotation" mode="top">
 		<mlr5:DES1300>
-			<mlr5:RC0001>
+			<oa:Annotation>
 				<xsl:attribute name="rdf:about">
 					<xsl:text>urn:uuid:</xsl:text>
 					<xsl:value-of select="mlrext:uuid_unique()"/>
 				</xsl:attribute>
 				<xsl:apply-templates mode="annotation"/>
-			</mlr5:RC0001>
+			</oa:Annotation>
 		</mlr5:DES1300>
 	</xsl:template>
 
 	<xsl:template match="lom:entity" mode="annotation">
-        <mlr5:DES1400>
+        <oa:annotatedBy>
             <xsl:apply-templates mode="vcard" select="vcardconv:convert(lom:vcard/text())" />
-        </mlr5:DES1400>
+        </oa:annotatedBy>
 	</xsl:template>
 
 	<xsl:template match="lom:description" mode="annotation">
 		<xsl:apply-templates select="lom:string" mode="langstring">
-        	<xsl:with-param name="nodename" select="'mlr5:DES0200'"/>
+        	<xsl:with-param name="nodename" select="'oa:hasBody'"/>
 		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="lom:date" mode="annotation">
 		<xsl:call-template name="date">
-			<xsl:with-param name="nodename" select="'mlr5:DES0100'"/>
+			<xsl:with-param name="nodename" select="'oa:annotatedAt'"/>
 		</xsl:call-template>
 	</xsl:template>
 

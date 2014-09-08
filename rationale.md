@@ -3211,10 +3211,10 @@ Descriptions are treated as a form of annotation.
 Becomes
 
     :::n3
-    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
-        mlr5:DES1300 <urn:uuid:10000000-0000-0000-0000-000000000001>.
-    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr5:RC0001;
-        mlr5:DES0200 "Use this resource for group activities."@eng.
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002.
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a oa:Annotation;
+        mlr5:DES0200 "Use this resource for group activities."@eng;
+        oa:hasTarget <urn:uuid:10000000-0000-0000-0000-000000000000>.
 
 
 ## Rights
@@ -3374,12 +3374,12 @@ LOM annotations are treated as educational annotations of an unknown type. Treat
 Becomes
 
     :::n3
-    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
-        mlr5:DES1300 <urn:uuid:10000000-0000-0000-0000-000000000001>.
-    <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr5:RC0001;
-        mlr5:DES1400 <http://maparent.ca/> ;
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002.
+    <urn:uuid:10000000-0000-0000-0000-000000000001> a oa:Annotation;
+        oa:hasTarget <urn:uuid:10000000-0000-0000-0000-000000000001>;
+        oa:annotatedBy <http://maparent.ca/> ;
         mlr5:DES0200 "Cette ressource exige beaucoup d'aide de l'enseignant."@fra ;
-        mlr5:DES0100 "2004-04-01"^^<http://www.w3.org/2001/XMLSchema#date> .
+        oa:annotatedAt "2004-04-01"^^<http://www.w3.org/2001/XMLSchema#date> .
 
 ## Classification
 
