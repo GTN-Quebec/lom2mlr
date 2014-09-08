@@ -45,12 +45,12 @@ MLR-3 is an application profile, and elements defined here are optional refineme
 
 ### Identifier
 
-What should the RDF identifier (`rdf:about`) of the resource be? There are two aspects here: the RDF resource name, and the mlr2:DES1000 (or mlr3:DES0400) element, which are equivalent to `dc:identifier`. The latter is a literal, whereas the former needs to be a URI.
+What should the RDF identifier (`rdf:about`) of the resource be? There are two aspects here: the RDF resource name, and the mlr2:DES1000 (or mlr3:DES0200) element, which are equivalent to `dc:identifier`. The latter is a literal, whereas the former needs to be a URI.
 
-By design, the LOM 'general/identifier' may be either a global or local identifier. Global identifiers are identified with a known global value for the `identifier/catalog`: Often one of `URI`, `URL`, `ISSN`, `DOI`, `PURL`, `ISBN`, etc. Any of those global identifiers can be made into a URI if it is not one already. This URI can also be used as-is for the literal identifier. Any other catalog value is treated as a local identifier. In the latter case, we cannot use the `mlr3:DES0400` marker, which should refer to a global identifier, unlike `mlr2:DES1000`.
+By design, the LOM 'general/identifier' may be either a global or local identifier. Global identifiers are identified with a known global value for the `identifier/catalog`: Often one of `URI`, `URL`, `ISSN`, `DOI`, `PURL`, `ISBN`, etc. Any of those global identifiers can be made into a URI if it is not one already. This URI can also be used as-is for the literal identifier. Any other catalog value is treated as a local identifier. In the latter case, we cannot use the `mlr3:DES0200` marker, which should refer to a global identifier, unlike `mlr2:DES1000`.
 
 
-The `general/identifier` LOM tag is preferred as a RDF identification. It is also used for the mlr3:DES0400 element, the equivalent to `dc:identifier`.
+The `general/identifier` LOM tag is preferred as a RDF identification. It is also used for the mlr3:DES0200 element, the equivalent to `dc:identifier`.
 
 #### URI catalog
 
@@ -68,7 +68,7 @@ Becomes
 
     :::N3
     <http://www.example.com/resources/4561> a mlr1:RC0002;
-      mlr3:DES0400 "http://www.example.com/resources/4561" .
+      mlr3:DES0200 "http://www.example.com/resources/4561" .
 
 
 #### Other global catalogs
@@ -88,7 +88,7 @@ Becomes
 
     :::N3
     <urn:ISBN:0-201-61633-5> a mlr1:RC0002;
-      mlr3:DES0400 "urn:ISBN:0-201-61633-5" .
+      mlr3:DES0200 "urn:ISBN:0-201-61633-5" .
 
 
 #### Local catalog, with a location.
@@ -111,19 +111,19 @@ Becomes
 
     :::N3
     <http://example.com/resources/123123.html> a mlr1:RC0002;
-      mlr3:DES0400 "http://example.com/resources/123123.html" .
+      mlr3:DES0200 "http://example.com/resources/123123.html" .
 
 But not:
 
     :::N3 forbidden
     <http://example.com/resources/123123.variant.html> a mlr1:RC0002;
-      mlr3:DES0400 "http://example.com/resources/123123.variant.html" .
+      mlr3:DES0200 "http://example.com/resources/123123.variant.html" .
 
 #### Local catalog, without a location.
 
 If we have a local catalog and no location URL we can use as a global identifier, we use the following heuristics: 
 
-1. Combine the catalog with the local identifier to obtain a local identifier. We use '|' as a separator, since it cannot be part of a URI, and this allows us to differentiate from URI identifiers. This can be used for the `mlr2:DES1000` value. (Recall we cannot use the `mlr3:DES0400` marker, which must refer to a global identifier.)
+1. Combine the catalog with the local identifier to obtain a local identifier. We use '|' as a separator, since it cannot be part of a URI, and this allows us to differentiate from URI identifiers. This can be used for the `mlr2:DES1000` value. (Recall we cannot use the `mlr3:DES0200` marker, which must refer to a global identifier.)
 2. For the resource identity, which must be a URI, generate a UUID-5 from the combined identifier above. This requires a base UUID as a namespace: I suggest we use `UUID5(NAMESPACE_URL, 'http://standards.iso.org/iso-iec/19788/-1/ed-1/en/RC0002')`, which is `cd6fbe1e-df95-5959-8a71-1e8ca353a0f3`.
 
 In this example, we would use `UUID5(UUID5(NAMESPACE_URL, 'http://standards.iso.org/iso-iec/19788/-1/ed-1/en/RC0002'), 'MyDatabase|123123')` 
@@ -196,7 +196,7 @@ Ideally, language should follow ISO-639-3. This can be detected by a regular exp
 Becomes
 
     :::N3
-    [] mlr3:DES0500 "fra-CA" .
+    [] mlr3:DES0300 "fra-CA" .
 
 #### general/language following ISO-639-2
 
@@ -210,7 +210,7 @@ ISO-639-2 language tags can also be detected by a regular expression, and are th
 Becomes
 
     :::N3
-    [] mlr3:DES0500 "fra-CA" .
+    [] mlr3:DES0300 "fra-CA" .
 
 
 #### general/language
@@ -230,11 +230,11 @@ Becomes
 But does not become
 
     :::N3 forbidden
-    [] mlr3:DES0500 "français" .
+    [] mlr3:DES0300 "français" .
 
 #### general/description
 
-Description could be interpreted as `mlr2:DES0400`, but in practice there is never any reason not to use `mlr3:DES0200` instead.
+Description could be interpreted as `mlr2:DES0400`.
 
     :::xml
     <general>
@@ -246,8 +246,7 @@ Description could be interpreted as `mlr2:DES0400`, but in practice there is nev
 Becomes
 
     :::N3
-    [] mlr3:DES0200 "L'enseignant identifie les contraintes..."@fra-CA ;
-       mlr2:DES0400 "L'enseignant identifie les contraintes..."@fra-CA .
+    [] mlr2:DES0400 "L'enseignant identifie les contraintes..."@fra-CA .
 
 #### general/keyword ####
 
@@ -285,7 +284,7 @@ Becomes
 
 ### Elements that are not covered
 
-`general/structure` and `general/aggregationLevel` have no MLR equivalent (except composites, treated in `mlr3:DES0700`).
+`general/structure` and `general/aggregationLevel` have no MLR equivalent (except composites, treated in `mlr2:DES0800`).
 
 ## Life cycle
 
@@ -2420,23 +2419,6 @@ Becomes
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr2:DES0900 "interactive" .
 
-#### Mime types
-
-If the format is a MIME type (recognized by a regexp), it will also be identified as `mlr3:DES0300` (provided mlr3 tags are enabled.)
-
-    :::xml
-    <technical>
-        <format>text/html</format>
-    </technical>
-
-Becomes
-
-    :::n3
-    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
-        mlr2:DES0900 "text/html" ;
-        mlr3:DES0300 "text/html".
-
-
 #### non-digital
 
 Similarly for format marked as "non-digital".
@@ -2450,8 +2432,7 @@ Becomes
 
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
-        mlr2:DES0900 "non-digital" ;
-        mlr3:DES0300 "non-digital".
+        mlr2:DES0900 "non-digital".
 
 
 ### Size
@@ -2996,7 +2977,7 @@ Without
 
 ### Learning resource type
 
-The learning resource type is integrated as-is in `mlr2:DES0800`. Moreover, if MLR3 is enabled an the learning resource type is known, and corresponds to a MLR resource type from vocabulary `ISO_IEC_19788-3:2011::VA.2 `, it will be translated in `mlr3:DES0700`.
+The learning resource type is integrated as-is in `mlr2:DES0800`. Moreover, if MLR3 is enabled an the learning resource type is known, and corresponds to a MLR resource type from vocabulary `ISO_IEC_19788-3:2011::VA.2 `, we will use this vocabulary.
 
 However, there is extremely limited overlap between known LOM resource types and MLR resource types. We have identified the following:
 
@@ -3026,7 +3007,7 @@ We obtain
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr2:DES0800 "table";
-        mlr3:DES0700 "T002".
+        mlr2:DES0800 "T002".
 
 ### Difficulty, semantic density, interactivity level.
 
@@ -3320,7 +3301,7 @@ Becomes
 
 ### Source
 
-The LOMv1.0 relationship `isbasedon` translates to source, that is `mlr2:DES1100` and optionally `mlr3:DES0600`. Identifiers are treated as usual (with a uuid-string for local catalogs, etc.)
+The LOMv1.0 relationship `isbasedon` translates to source, that is `mlr2:DES1100`. Identifiers are treated as usual (with a uuid-string for local catalogs, etc.)
 
     :::xml
     <relation>
@@ -3340,8 +3321,7 @@ Becomes
 
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
-        mlr2:DES1100 "http://www.example.com/resources/1234" ;
-        mlr3:DES0600 "http://www.example.com/resources/1234".
+        mlr2:DES1100 "http://www.example.com/resources/1234".
 
 ### Other relations
 

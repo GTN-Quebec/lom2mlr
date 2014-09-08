@@ -2,6 +2,8 @@
 <xslin:stylesheet version="1.0" 
 	xmlns:xslin="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform/Out"
+    xmlns:oa="http://www.w3.org/ns/oa#"
+    xmlns:oa_eng="http://www.w3.org/ns/oa#"
 	xmlns:mlr1="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/"
 	xmlns:mlr2="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/"
 	xmlns:mlr3="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/"

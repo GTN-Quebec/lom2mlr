@@ -18,7 +18,7 @@ from markdown.util import etree
 
 # TODO: Extract this from correspondances_type.xml
 vocabularies_for_DES = {
-    "mlr3:DES0700": "ISO_IEC_19788-3-2011-VA.2",
+    "mlr2:DES0800": "ISO_IEC_19788-3-2011-VA.2",
     "mlr5:DES0800": "ISO_IEC_19788-5-2012-VA.1",
     "mlr5:DES0600": "ISO_IEC_19788-5-2012-VA.2",
     "mlr5:DES2100": "ISO_IEC_19788-5-2012-VA.3",

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <correspondency>
-    <group context="educational" element="learningResourceType" voc="ISO_IEC_19788-3-2011-VA.2" dest="mlr3:DES0700" always="true">
+    <group context="educational" element="learningResourceType" voc="ISO_IEC_19788-3-2011-VA.2" dest="mlr2:DES0800" always="true">
         <term source="LOMv1.0" value="exercise" dest=""/>
         <term source="LOMv1.0" value="simulation" dest=""/>
         <term source="LOMv1.0" value="questionnaire" dest=""/>

@@ -171,9 +171,9 @@
 					</xsl:if>
 				</xsl:when>
 				<xsl:when test="$use_mlr3">
-					<mlr3:DES0400>
+					<mlr3:DES0200>
 						<xsl:value-of select="$identifier"/>
-					</mlr3:DES0400>
+					</mlr3:DES0200>
 					<mlr2:DES1000>
 						<xsl:value-of select="$identifier"/>
 					</mlr2:DES1000>
@@ -286,11 +286,11 @@
 			</xsl:attribute>
 		</mlr2:DES1000>
 		<xsl:if test="$use_mlr3">
-			<mlr3:DES0400>
+			<mlr3:DES0200>
 				<xsl:attribute name="rdf:resource">
 					<xsl:value-of select="lom:entry/text()"/>
 				</xsl:attribute>
-			</mlr3:DES0400>
+			</mlr3:DES0200>
 		</xsl:if>
 	</xsl:template>
 
@@ -302,11 +302,11 @@
 
 	<xsl:template match="lom:language" mode="general">
 		<xsl:if test="$use_mlr3 and regexp:test(text(),'^[a-z][a-z][a-z]?(\-[A-Z][A-Z])?$')">
-			<mlr3:DES0500>
+			<mlr3:DES0300>
 			<xsl:call-template name="language">
 				<xsl:with-param name="l" select="text()"/>
 			</xsl:call-template>
-			</mlr3:DES0500>
+			</mlr3:DES0300>
 		</xsl:if>
 		<mlr2:DES1200>
 			<xsl:call-template name="language">
@@ -319,11 +319,6 @@
 		<xsl:apply-templates select="lom:string" mode="langstring">
 			<xsl:with-param name="nodename">mlr2:DES0400</xsl:with-param>
 		</xsl:apply-templates>
-		<xsl:if test="$use_mlr3">
-			<xsl:apply-templates select="lom:string" mode="langstring">
-				<xsl:with-param name="nodename">mlr3:DES0200</xsl:with-param>
-			</xsl:apply-templates>
-		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="lom:keyword" mode="general">
@@ -1202,18 +1197,6 @@
 		<mlr2:DES0900>
 			<xsl:value-of select="text()"/>
 		</mlr2:DES0900>
-		<xsl:choose>
-			<xsl:when test="$use_mlr3 and text()='non-digital'">
-				<mlr3:DES0300>
-					<xsl:value-of select="text()"/>
-				</mlr3:DES0300>
-			</xsl:when>
-			<xsl:when test="$use_mlr3 and regexp:test(text(),'^\w+\/\w+$')">
-				<mlr3:DES0300>
-					<xsl:value-of select="text()"/>
-				</mlr3:DES0300>
-			</xsl:when>
-		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="lom:size" mode="technical">
@@ -1564,7 +1547,7 @@
           <xsl:value-of select="lom:value/text()"/>
         </mlr2:DES0800>
 		<xsl:if test="$use_mlr3">
-			<xsl:call-template name="mlr3_DES0700"/>
+			<xsl:call-template name="mlr2_DES0800"/>
 		</xsl:if>
 	</xsl:template>
 
@@ -1704,11 +1687,6 @@
 					<mlr2:DES1100>
 						<xsl:value-of select="$resource_id_uri"/>
 					</mlr2:DES1100>
-					<xsl:if test="$use_mlr3">
-						<mlr3:DES0600>
-							<xsl:value-of select="$resource_id_uri"/>
-						</mlr3:DES0600>
-					</xsl:if>
 				</xsl:when>
 				<xsl:otherwise>
 					<mlr2:DES1300>

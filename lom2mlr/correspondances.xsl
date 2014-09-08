@@ -4,6 +4,7 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform/Out"
 	xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:mlr2="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/"
 	xmlns:mlr3="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/"
 	xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
@@ -30,18 +31,18 @@
 				<xslin:value-of select="concat(substring-before(@dest,':'),'_',substring-after(@dest,':'))"/>
 			</xslin:attribute>
 			<xslin:choose>
-				<xslin:when test="@dest='mlr3:DES0700' or term[@dest!='']">
+				<xslin:when test="@dest='mlr2:DES0800' or term[@dest!='']">
 					<xsl:choose>
-						<xslin:if test="@dest='mlr3:DES0700'">
+						<xslin:if test="@dest='mlr2:DES0800'">
 							<xsl:when test="/lom:lom/lom:general/lom:aggregationLevel[lom:source/text()='LOMv1.0' and lom:value/text()='collection']">
-								<mlr3:DES0700>
+								<mlr2:DES0800>
 									<xslin:text>T001</xslin:text> <!-- collection -->
-								</mlr3:DES0700>
+								</mlr2:DES0800>
 							</xsl:when>
 							<xsl:when test="../lom:interactivityLevel[lom:source/text()='LOMv1.0' and (lom:value/text()='high' or lom:value/text()='very high')] or ../lom:interactivityType[lom:source/text()='LOMv1.0' and lom:value/text()='active']">
-								<mlr3:DES0700>
+								<mlr2:DES0800>
 									<xslin:text>T005</xslin:text> <!-- interactive ressource -->
-								</mlr3:DES0700>
+								</mlr2:DES0800>
 							</xsl:when>
 						</xslin:if>
 						<xslin:apply-templates/>
