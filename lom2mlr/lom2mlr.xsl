@@ -192,6 +192,9 @@
 				<xsl:with-param name="resource_id" select="$identity"/>
 			</xsl:apply-templates>
 		</mlr1:RC0002>
+		<xsl:apply-templates mode="annotations">
+			<xsl:with-param name="resource" select="$identity"/>
+		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="text()" />
@@ -205,10 +208,10 @@
 	<xsl:template match="text()" mode="educational"/>
 	<xsl:template match="text()" mode="educational_learning_activity"/>
 	<xsl:template match="text()" mode="educational_audience"/>
-	<xsl:template match="text()" mode="educational_annotation"/>
 	<xsl:template match="text()" mode="rights"/>
 	<xsl:template match="text()" mode="relation"/>
 	<xsl:template match="text()" mode="annotation"/>
+	<xsl:template match="text()" mode="annotations"/>
 	<xsl:template match="text()" mode="classification"/>
 	<xsl:template match="text()" mode="vcard"/>
 	<xsl:template match="text()" mode="vcard_org"/>
@@ -1526,20 +1529,6 @@
 				</mlr5:RC0002>
 			</mlr5:DES1500>
 		</xsl:if>
-		<xsl:variable name="annotation">
-			<xsl:apply-templates mode="educational_annotation"/>
-		</xsl:variable>
-		<xsl:if test="string-length($annotation)&gt;0">
-			<mlr5:DES1300>
-				<oa:Annotation>
-					<xsl:attribute name="rdf:about">
-						<xsl:text>urn:uuid:</xsl:text>
-						<xsl:value-of select="mlrext:uuid_unique()"/>
-					</xsl:attribute>
-					<xsl:copy-of select="$annotation"/>
-				</oa:Annotation>
-			</mlr5:DES1300>
-		</xsl:if>
 		<xsl:apply-templates mode="educational"/>
 	</xsl:template>
 
@@ -1552,18 +1541,23 @@
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="lom:description" mode="educational">
-		<mlr5:DES1300>
-			<oa:Annotation>
-				<xsl:attribute name="rdf:about">
-					<xsl:text>urn:uuid:</xsl:text>
-					<xsl:value-of select="mlrext:uuid_unique()"/>
+	<xsl:template match="lom:description" mode="annotations">
+		<xsl:param name="resource"/>
+		<oa:Annotation>
+			<xsl:attribute name="rdf:about">
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_unique()"/>
+			</xsl:attribute>
+			<oa:hasTarget>
+				<xsl:attribute name="rdf:resource">
+					<xsl:value-of select="$resource"/>
 				</xsl:attribute>
-				<xsl:apply-templates select="lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'oa:hasBody'"/>
-				</xsl:apply-templates>
-			</oa:Annotation>
-		</mlr5:DES1300>
+			</oa:hasTarget>
+			<!-- add something about oa:motivation being educational -->
+			<xsl:apply-templates select="lom:string" mode="langstring">
+				<xsl:with-param name="nodename" select="'oa:hasBody'"/>
+			</xsl:apply-templates>
+		</oa:Annotation>
 	</xsl:template>
 
 	<xsl:template match="lom:learningResourceType" mode="educational_learning_activity">
@@ -1701,16 +1695,21 @@
 
 	<!-- annotation -->
 
-	<xsl:template match="lom:annotation" mode="top">
-		<mlr5:DES1300>
-			<oa:Annotation>
-				<xsl:attribute name="rdf:about">
-					<xsl:text>urn:uuid:</xsl:text>
-					<xsl:value-of select="mlrext:uuid_unique()"/>
+	<xsl:template match="lom:annotation" mode="annotations">
+		<xsl:param name="resource"/>
+		<oa:Annotation>
+			<xsl:attribute name="rdf:about">
+				<xsl:text>urn:uuid:</xsl:text>
+				<xsl:value-of select="mlrext:uuid_unique()"/>
+			</xsl:attribute>
+			<oa:hasTarget>
+				<xsl:attribute name="rdf:resource">
+					<xsl:value-of select="$resource"/>
 				</xsl:attribute>
-				<xsl:apply-templates mode="annotation"/>
-			</oa:Annotation>
-		</mlr5:DES1300>
+			</oa:hasTarget>
+			<!-- add something about oa:motivation from annotation type -->
+			<xsl:apply-templates mode="annotation"/>
+		</oa:Annotation>
 	</xsl:template>
 
 	<xsl:template match="lom:entity" mode="annotation">

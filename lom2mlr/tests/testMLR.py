@@ -136,8 +136,9 @@ MLR_Subclass_attributes = {
     OA.Annotation: { # Annotation
         # OA.annotatedAt: 'Annotation date',
         OA.hasBody: 'Annotation text',
-        # OA.motivatedBy: 'Annotation type',
-        # OA.annotatedBy: 'Has annotator',
+        OA.hasTarget: 'Has target',
+        # OA.motivatedBy: 'motivation',
+        # OA.annotatedBy: 'annotator',
     },
     MLR5.RC0002: { # Audience
         MLR5.DES0400: 'Audience language',

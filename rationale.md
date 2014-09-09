@@ -3213,7 +3213,7 @@ Becomes
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002.
     <urn:uuid:10000000-0000-0000-0000-000000000001> a oa:Annotation;
-        mlr5:DES0200 "Use this resource for group activities."@eng;
+        oa:hasBody "Use this resource for group activities."@eng;
         oa:hasTarget <urn:uuid:10000000-0000-0000-0000-000000000000>.
 
 
@@ -3376,9 +3376,9 @@ Becomes
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002.
     <urn:uuid:10000000-0000-0000-0000-000000000001> a oa:Annotation;
-        oa:hasTarget <urn:uuid:10000000-0000-0000-0000-000000000001>;
+        oa:hasTarget <urn:uuid:10000000-0000-0000-0000-000000000000>;
         oa:annotatedBy <http://maparent.ca/> ;
-        mlr5:DES0200 "Cette ressource exige beaucoup d'aide de l'enseignant."@fra ;
+        oa:hasBody "Cette ressource exige beaucoup d'aide de l'enseignant."@fra ;
         oa:annotatedAt "2004-04-01"^^<http://www.w3.org/2001/XMLSchema#date> .
 
 ## Classification
