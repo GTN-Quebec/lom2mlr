@@ -24,7 +24,7 @@ vocabularies_for_DES = {
     "mlr5:DES2100": "ISO_IEC_19788-5-2012-VA.3",
     "mlr5:DES2400": "ISO_IEC_19788-5-2012-VA.4",
     "mlr5:DES0300": "ISO_IEC_19788-5-2012-VA.5",
-    "mlr8:DES1200": "ISO_IEC_19788-8-2012-VA.2.2"
+    "mlr9:DES1900": "ISO_IEC_19788-9-2014-VA.2.1",
 }
 
 VDEX_PREFIX = '{http://www.imsglobal.org/xsd/imsvdex_v1p0}'

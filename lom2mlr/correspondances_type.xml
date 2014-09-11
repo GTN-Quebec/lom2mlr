@@ -163,9 +163,4 @@
     <group context="education" element="" voc="ISO_IEC_19788-5:2012::VA.5" dest="mlr5:DES0300" always="false">
         annotation type 
     </group -->
-    <group context="metaMetadata" element="role" voc="ISO_IEC_19788-8:2012::VA.2.2" dest="mlr8:DES1200" always="true">
-        <term source="LOMv1.0" value="creator" dest="T001"/>
-        <term source="LOMv1.0" value="validator" dest="T002"/>
-    </group>
-
 </correspondency>

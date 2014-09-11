@@ -542,12 +542,6 @@
     <domain ns="mlr8" id="RC0001"/>
     <range ns="mlr8" id="RC0003"/>
   </id>
-  <id ns="mlr8" id="DES1100">
-    <term lang="eng">contribution</term>
-    <term lang="fra">contribution</term>
-    <domain ns="mlr8" id="RC0001"/>
-    <range ns="mlr8" id="RC0003"/>
-  </id>
   <id ns="mlr8" id="DES1200">
     <term lang="eng">contribution description</term>
     <domain ns="mlr8" id="RC0003"/>
@@ -573,6 +567,77 @@
     <domain ns="mlr8" id="RC0002"/>
     <range ns="mlr8" id="RC0001"/>
   </id>
+
+<!-- 
+
+  <id ns="mlr8e" id="RC0004">
+    <term lang="eng">Information Resource</term>
+    <term lang="fra">Ressource informationnelle</term>
+  </id>
+  <id ns="mlr8e" id="RC0005">
+    <term lang="eng">Web Resource</term>
+    <term lang="fra">Ressource Web</term>
+  </id>
+  <id ns="mlr8e" id="RC0006">
+    <term lang="eng">Representation</term>
+    <term lang="fra">Représentation</term>
+  </id>
+  <id ns="mlr8e" id="DES0100">
+    <term lang="eng">name</term>
+    <term lang="fra">nom</term>
+    <domain ns="mlr1" id="RC0001"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr8e" id="DES0200">
+    <term lang="eng">has representation</term>
+    <term lang="fra">représentation</term>
+    <domain ns="mlr8e" id="RC0004"/>
+    <range ns="mlr8e" id="RC0006"/>
+  </id>
+  <id ns="mlr8e" id="DES0300">
+    <term lang="eng">represents</term>
+    <term lang="fra">représente</term>
+    <domain ns="mlr8e" id="RC0006"/>
+    <range ns="mlr8e" id="RC0004"/>
+  </id>
+  <id ns="mlr8e" id="DES0400">
+    <term lang="eng">has description</term>
+    <term lang="fra">description</term>
+    <domain ns="mlr1" id="RC0001"/>
+    <range ns="mlr8e" id="RC0004"/>
+  </id>
+  <id ns="mlr8e" id="DES0500">
+    <term lang="eng">describes</term>
+    <term lang="fra">décrit</term>
+    <domain ns="mlr8e" id="RC0004"/>
+    <range ns="mlr1" id="RC0001"/>
+  </id>
+  <id ns="mlr8e" id="DES0600">
+    <term lang="eng">refers to</term>
+    <term lang="fra">réfère à</term>
+    <domain ns="mlr8e" id="RC0006"/>
+    <range ns="mlr1" id="RC0001"/>
+  </id>
+  <id ns="mlr8e" id="DES0700">
+    <term lang="eng">location</term>
+    <term lang="fra">localisation</term>
+    <domain ns="mlr8e" id="RC0005"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr8e" id="DES0800">
+    <term lang="eng">character encoding</term>
+    <term lang="fra">encodage caractère</term>
+    <domain ns="mlr8e" id="RC0006"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr8e" id="DES0800">
+    <term lang="eng">media type</term>
+    <term lang="fra">type de média</term>
+    <domain ns="mlr8e" id="RC0006"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+
+-->
 
   <id ns="mlr9" id="RC0001">
     <term lang="eng">Natural person</term>
@@ -683,7 +748,7 @@
   <id ns="mlr9" id="DES1400">
     <term lang="eng">communication account</term>
     <term lang="fra">compte communication</term>
-    <domain ns="mlr9" id="RC0001"/>
+    <domain ns="mlr1" id="RC0003"/>
     <range ns="mlr9" id="RC0004"/>
   </id>
   <id ns="mlr9" id="DES1500">

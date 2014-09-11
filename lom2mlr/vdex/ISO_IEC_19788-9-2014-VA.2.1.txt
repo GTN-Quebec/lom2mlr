@@ -1,0 +1,19 @@
+nodef eng fra
+T010
+home
+maison
+T020
+work
+travail
+T030
+fixed
+fixe
+T040
+mobile
+cellulaire
+T050
+fax
+télécopieur
+T060
+voice
+voix

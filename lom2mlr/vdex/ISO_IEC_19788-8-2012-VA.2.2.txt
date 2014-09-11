@@ -1,9 +1,0 @@
-nodef eng fra rus
-T001
-creator
-créateur
-правда
-T002
-validator
-validateur
-ложных

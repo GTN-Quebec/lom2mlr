@@ -70,6 +70,9 @@
 	<!-- A URI for the conversion machinery.  -->
 	<xsl:param name="converter_id" select="'http://www.gtn-quebec/ns/lom2mlr/version/'"/>
 
+	<!-- Use a mutable MLR record -->
+	<xsl:param name="mutable_record" select="false()"/>
+
 	<!-- A URI for the LOM itself if none is specifified in metaMetadata.  -->
 	<xsl:param name="lom_uri" select="''"/>
 
@@ -243,38 +246,59 @@
 		<xsl:param name="lom_identifier"/>
 		<xsl:param name="record_id"/>
 		<xsl:param name="resource_id"/>
-		<mlr8:DES0300>
-			<mlr8:RC0001>
-				<xsl:attribute name="rdf:about">
-					<xsl:value-of select="$record_id"/>
-				</xsl:attribute>
+		<xsl:choose>
+			<xsl:when test="$mutable_record">
+				<mlr8:DES0600>
+					<mlr8:RC0002>
+						<xsl:attribute name="rdf:about">
+							<xsl:value-of select="$record_id"/>
+						</xsl:attribute>
+						<mlr8:DES0700>
+							<xsl:value-of select="$record_id"/>
+						</mlr8:DES0700>
+						<xsl:if test="$lom_identifier">
+							<!-- should I create a uuid1? -->
+							<mlr8:DES0300>
+								<xsl:value-of select="$lom_identifier"/>
+							</mlr8:DES0300>
+						</xsl:if>
+						<mlr8:DES1000>
+							<mlr8:RC0004>
+								<mlr8:DES1500>IEEE 1484.12.1-2002 LOM</mlr8:DES1500>
+							</mlr8:RC0004>
+						</mlr8:DES1000>
+						<xsl:if test="$mark_unique_uuid and $lom_identifier = ''">
+							<gtnq:irreproducible rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</gtnq:irreproducible>
+						</xsl:if>
+						<xsl:apply-templates mode="metaMetadata"/>
+					</mlr8:RC0002>
+				</mlr8:DES0600>
+			</xsl:when>
+			<xsl:otherwise>
 				<mlr8:DES0100>
-					<xsl:value-of select="$record_id"/>
+					<mlr8:RC0001>
+						<xsl:attribute name="rdf:about">
+							<xsl:value-of select="$record_id"/>
+						</xsl:attribute>
+						<xsl:if test="$lom_identifier">
+							<!-- should I create a uuid1? -->
+							<mlr8:DES0300>
+								<xsl:value-of select="$lom_identifier"/>
+							</mlr8:DES0300>
+						</xsl:if>
+						<mlr8:DES1000>
+							<mlr8:RC0004>
+								<mlr8:DES1500>IEEE 1484.12.1-2002 LOM</mlr8:DES1500>
+							</mlr8:RC0004>
+						</mlr8:DES1000>
+						<xsl:if test="$mark_unique_uuid and $lom_identifier = ''">
+							<gtnq:irreproducible rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</gtnq:irreproducible>
+						</xsl:if>
+						<xsl:apply-templates mode="metaMetadata"/>
+					</mlr8:RC0001>
 				</mlr8:DES0100>
-				<mlr8:DES0200>
-					<xsl:attribute name="rdf:resource">
-						<xsl:value-of select="$resource_id"/>
-					</xsl:attribute>
-				</mlr8:DES0200>
-				<xsl:if test="$lom_identifier">
-					<!-- should I create a uuid1? -->
-					<mlr8:DES1400>
-						<xsl:value-of select="$lom_identifier"/>
-					</mlr8:DES1400>
-				</xsl:if>
-				<mlr8:DES1500 rdf:resource="http://ltsc.ieee.org/xsd/LOM" />
-				<mlr8:DES1600>
-					<xsl:attribute name="rdf:resource">
-						<xsl:value-of select="$converter_id_v"/>
-					</xsl:attribute>
-				</mlr8:DES1600>
-				<xsl:if test="$mark_unique_uuid and $lom_identifier = ''">
-					<gtnq:irreproducible rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</gtnq:irreproducible>
-				</xsl:if>
-				<mlr8:DES0500>T002</mlr8:DES0500>
-				<xsl:apply-templates mode="metaMetadata"/>
-			</mlr8:RC0001>
-		</mlr8:DES0300>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="lom:technical" mode="top">
@@ -450,6 +474,8 @@
 							<xsl:with-param name="vcard" select="."/>
 						</xsl:apply-templates>
 					</xsl:if>
+					<xsl:apply-templates mode="vcard_person" />
+					<xsl:apply-templates mode="address" select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'HOME']"/>
 				</mlr9:RC0001>
 			</xsl:when>
 			<xsl:when test="vcard:org or (vcard:*[vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] and not(vcard:*[vcard:parameters/vcard:type/vcard:text/text() = 'HOME']))">
@@ -466,25 +492,26 @@
 						</mlr9:DES0100>
 					</xsl:if>
 					<xsl:apply-templates mode="vcard_org" />
-					<xsl:if test="vcard:geo or vcard:adr">
-						<mlr9:DES1300>
+					<xsl:apply-templates mode="address" select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']"/>
+					<xsl:if test="vcard:geo">
+						<mlr9:DES1100>
 							<mlr9:RC0003>
 								<xsl:attribute name="rdf:about">
 									<xsl:text>urn:uuid:</xsl:text>
 									<xsl:value-of select="mlrext:uuid_unique()"/>
 								</xsl:attribute>
-								<xsl:apply-templates mode="address" select="vcard:adr"/>
 								<xsl:if test="vcard:geo">
-									<mlr9:DES1500 rdf:datatype="http://www.w3.org/2001/XMLSchema#float">
+									<mlr9:DES1300 rdf:datatype="http://www.w3.org/2001/XMLSchema#float">
 										<xsl:value-of select="substring-before(vcard:geo[1]/vcard:uri/text(),';')"/>
-									</mlr9:DES1500>
-									<mlr9:DES1400 rdf:datatype="http://www.w3.org/2001/XMLSchema#float">
+									</mlr9:DES1300>
+									<mlr9:DES1200 rdf:datatype="http://www.w3.org/2001/XMLSchema#float">
 										<xsl:value-of select="substring-after(vcard:geo[1]/vcard:uri/text(),';')"/>
-									</mlr9:DES1400>
+									</mlr9:DES1200>
 								</xsl:if>
 							</mlr9:RC0003>
-						</mlr9:DES1300>
+						</mlr9:DES1100>
 					</xsl:if>
+					<xsl:apply-templates mode="vcard_person" />
 				</mlr9:RC0002>
 			</xsl:when>
 			<xsl:otherwise>
@@ -499,6 +526,7 @@
 						</mlr9:DES0100>
 					</xsl:if>
 					<xsl:apply-templates mode="vcard_person" />
+					<xsl:apply-templates mode="address" select="vcard:adr[vcard:parameters/vcard:type/vcard:text/text()]"/>
 				</mlr1:RC0003>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -643,46 +671,79 @@
 		<mlr9:DES0200>
 			<xsl:value-of select="vcard:text/text()"/>
 		</mlr9:DES0200>
-	</xsl:template>
-
-	<xsl:template match="vcard:fn" mode="vcard_np">
-		<mlr9:DES0800>
+		<mlr9:DES0500>
 			<xsl:value-of select="vcard:text/text()"/>
-		</mlr9:DES0800>
+		</mlr9:DES0500>
 	</xsl:template>
 
 	<xsl:template match="vcard:x-skype" mode="vcard_np">
-		<mlr9:DES0600>
-			<xsl:value-of select="vcard:unknown/text()"/>
-		</mlr9:DES0600>
+		<mlr9:DES1400>
+			<mlr9:RC0006>
+				<mlr9:DES1700>Skype</mlr9:DES1700>
+				<mlr9:DES1800><xsl:value-of select="vcard:unknown/text()"/></mlr9:DES1800>
+			</mlr9:RC0006>
+		</mlr9:DES1400>
 	</xsl:template>
 
 	<xsl:template match="vcard:x-skype-username" mode="vcard_np">
-		<mlr9:DES0600>
-			<xsl:value-of select="vcard:unknown/text()"/>
-		</mlr9:DES0600>
+		<mlr9:DES1400>
+			<mlr9:RC0006>
+				<mlr9:DES1700>Skype</mlr9:DES1700>
+				<mlr9:DES1800><xsl:value-of select="vcard:unknown/text()"/></mlr9:DES1800>
+			</mlr9:RC0006>
+		</mlr9:DES1400>
+	</xsl:template>
+
+	<xsl:template match="vcard:x-socialprofile" mode="vcard_np">
+		<mlr9:DES1400>
+			<mlr9:RC0006>
+				<mlr9:DES1700><xsl:value-of select="vcard:parameters/vcard:type/vcard:text/text()"/></mlr9:DES1700>
+				<mlr9:DES1800><xsl:value-of select="vcard:unknown/text()"/></mlr9:DES1800>
+			</mlr9:RC0006>
+		</mlr9:DES1400>
 	</xsl:template>
 
 	<xsl:template match="vcard:email" mode="vcard_np">
 		<!-- TODO: Edge case with a work email but no other org info should also be in. -->
 		<xsl:if test="not(vcard:parameters/vcard:type/vcard:text/text() = 'WORK')">
-			<mlr9:DES0900>
+			<mlr9:DES0800>
 				<xsl:value-of select="vcard:text/text()"/>
-			</mlr9:DES0900>
+			</mlr9:DES0800>
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="vcard:tel[vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'VOICE']" mode="vcard_np">
-		<mlr9:DES1000>
-			<xsl:value-of select="vcard:text/text()"/>
-		</mlr9:DES1000>
+	<xsl:template match="vcard:tel" mode="vcard_np">
+		<mlr9:DES1400>
+			<mlr9:RC0007>
+				<xsl:if test="vcard:parameters/vcard:type/vcard:text/text() = 'HOME'">
+					<mlr9:DES1900>T010</mlr9:DES1900>
+				</xsl:if>
+				<xsl:if test="vcard:parameters/vcard:type/vcard:text/text() = 'WORK'">
+					<mlr9:DES1900>T020</mlr9:DES1900>
+				</xsl:if>
+				<xsl:if test="vcard:parameters/vcard:type/vcard:text/text() = 'CELL'">
+					<mlr9:DES1900>T040</mlr9:DES1900>
+				</xsl:if>
+				<xsl:if test="vcard:parameters/vcard:type/vcard:text/text() = 'FAX'">
+					<mlr9:DES1900>T050</mlr9:DES1900>
+				</xsl:if>
+				<xsl:if test="vcard:parameters/vcard:type/vcard:text/text() = 'VOICE'">
+					<mlr9:DES1900>T060</mlr9:DES1900>
+				</xsl:if>
+				<!-- heuristics for fixed? If there is a home/work mobile other than self... -->
+				<mlr9:DES2000>
+					<xsl:value-of select="vcard:text/text()"/></mlr9:DES2000>
+			</mlr9:RC0007>
+		</mlr9:DES1400>
 	</xsl:template>
 
 	<xsl:template match="vcard:n" mode="vcard_np">
-		<mlr9:DES0500>
-			<xsl:apply-templates mode="convert_n_to_fn" select="."/>
-		</mlr9:DES0500>
-		<mlr9:DES0700>
+		<xsl:if test="not(../vcard:fn)">
+			<mlr9:DES0500>
+				<xsl:apply-templates mode="convert_n_to_fn" select="."/>
+			</mlr9:DES0500>
+		</xsl:if>
+		<mlr9:DES0600>
 			<xsl:value-of select="vcard:surname/text()"/>
 			<xsl:text>;</xsl:text>
 			<xsl:value-of select="vcard:given/text()"/>
@@ -692,7 +753,7 @@
 			<xsl:value-of select="vcard:prefix/text()"/>
 			<xsl:text>;</xsl:text>
 			<xsl:value-of select="vcard:suffix/text()"/>
-		</mlr9:DES0700>
+		</mlr9:DES0600>
 		<mlr9:DES0300>
 			<xsl:value-of select="vcard:surname/text()"/>
 		</mlr9:DES0300>
@@ -743,7 +804,7 @@
 
 	<xsl:template match="vcard:vcard"  mode="vcard_suborg">
 		<xsl:param name="group"/>
-		<mlr9:DES1100>
+		<mlr9:DES0900>
 			<mlr9:RC0002>
 				<xsl:attribute name="rdf:about">
 					<xsl:call-template name="suborg_identity_url">
@@ -763,20 +824,20 @@
 				<xsl:apply-templates mode="vcard_suborg_attributes">
 					<xsl:with-param name="group" select="$group"/>
 				</xsl:apply-templates>
+				<xsl:apply-templates mode="address" select="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']"/>
 				<xsl:if test="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
-					<mlr9:DES1300>
+					<mlr9:DES1100>
 						<mlr9:RC0003>
 							<xsl:attribute name="rdf:about">
 								<xsl:text>urn:uuid:</xsl:text>
 								<xsl:value-of select="mlrext:uuid_unique()"/>
 							</xsl:attribute>
-							<xsl:apply-templates mode="address" select="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']"/>
 							<!-- skip geo which might be home address -->
 						</mlr9:RC0003>
-					</mlr9:DES1300>
+					</mlr9:DES1100>
 				</xsl:if>
 			</mlr9:RC0002>
-		</mlr9:DES1100>
+		</mlr9:DES0900>
 	</xsl:template>
 
 	<xsl:template name="suborg_identity_url">
@@ -886,9 +947,9 @@
 	<xsl:template match="vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'WORK']" mode="vcard_suborg_attributes">
 		<xsl:param name="group"/>
 		<xsl:if test="string(@group) = $group">
-			<mlr9:DES0900>
+			<mlr9:DES0800>
 				<xsl:value-of select="vcard:text/text()"/>
-			</mlr9:DES0900>
+			</mlr9:DES0800>
 		</xsl:if>
 	</xsl:template>
 
@@ -896,12 +957,11 @@
 	<xsl:template match="vcard:org" mode="vcard_suborg_attributes">
 		<xsl:param name="group"/>
 		<xsl:if test="string(@group) = $group">
-			<mlr9:DES1200>
+			<mlr9:DES1000>
 				<xsl:value-of select="vcard:text/text()"/>
-			</mlr9:DES1200>
+			</mlr9:DES1000>
 		</xsl:if>
 	</xsl:template>
-
 
 	<!-- VCard : Organizations -->
 
@@ -1067,13 +1127,13 @@
 
 
 	<xsl:template match="vcard:email" mode="vcard_org">
-		<mlr9:DES0900>
+		<mlr9:DES0800>
 			<xsl:value-of select="vcard:text/text()"/>
-		</mlr9:DES0900>
+		</mlr9:DES0800>
 	</xsl:template>
 
 	<xsl:template match="vcard:adr" mode="address">
-		<mlr9:DES1700>
+		<mlr9:DES0700>
 			<xsl:if test="vcard:box or vcard:extended">
 				<xsl:value-of select="vcard:box/text()"/>
 				<xsl:text> </xsl:text>
@@ -1092,26 +1152,14 @@
 			<xsl:text>
 </xsl:text>
 			<xsl:value-of select="vcard:country/text()"/>
-		</mlr9:DES1700>
+		</mlr9:DES0700>
 	</xsl:template>
 
 	<xsl:template match="vcard:org" mode="vcard_org">
-		<mlr9:DES1200>
-			<xsl:value-of select="vcard:text/text()"/>
-		</mlr9:DES1200>
-	</xsl:template>
-
-
-
-
-	<!--
-	Not allowed by the specifications of range.
-	<xsl:template match="vcard:tel[vcard:parameters/vcard:type/vcard:text/text() = 'VOICE']" mode="vcard_org">
 		<mlr9:DES1000>
 			<xsl:value-of select="vcard:text/text()"/>
 		</mlr9:DES1000>
 	</xsl:template>
-	-->
 
 	<!-- metametadata -->
 
@@ -1154,45 +1202,69 @@
 
 	<xsl:template match="lom:metadataSchema" mode="metaMetadata">
 		<!-- note that a URI would be preferrable... Should we identify the frequent ones? -->
-		<mlr8:DES0600>
+		<mlr8:DES0400>
 			<xsl:value-of select="text()"/>
-		</mlr8:DES0600>
+		</mlr8:DES0400>
 	</xsl:template>
 
 	<xsl:template match="lom:contribute" mode="metaMetadata">
-		<mlr8:DES0700>
-			<mlr8:RC0002>
+		<mlr8:DES1100>
+			<mlr8:RC0003>
 				<xsl:attribute name="rdf:about">
 					<xsl:text>urn:uuid:</xsl:text>
 					<xsl:value-of select="mlrext:uuid_unique()"/>
 				</xsl:attribute>
 				<xsl:apply-templates mode="metaMetadata"/>
-			</mlr8:RC0002>
-		</mlr8:DES0700>
+			</mlr8:RC0003>
+		</mlr8:DES1100>
 	</xsl:template>
 
-	<xsl:template match="lom:role" mode="metaMetadata">
-		<xsl:call-template name="mlr8_DES1200"/>
-	</xsl:template>
 
-	<xsl:template match="lom:language" mode="metaMetadata">
-		<mlr8:DES0400>
-			<xsl:call-template name="language">
-				<xsl:with-param name="l" select="text()"/>
-			</xsl:call-template>
-		</mlr8:DES0400>
+	<xsl:template match="lom:entity" mode="metaMetadata">
+		<!-- TODO: Make a vCard -->
+		<mlr8:DES1400>
+			<xsl:value-of select="vcardconv:convert(text())/vcard:fn/vcard:text/text()" />
+		</mlr8:DES1400>
 	</xsl:template>
 
 	<xsl:template match="lom:date" mode="metaMetadata">
-		<xsl:call-template name="date">
-			<xsl:with-param name="nodename" select="'mlr8:DES1300'"/>
-		</xsl:call-template>
+		<xsl:choose>
+			<!-- first cases: valid 8601 date or datetime -->
+			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6]))))$')">
+				<mlr8:DES1300 rdf:datatype="http://www.w3.org/2001/XMLSchema#date">
+					<xsl:value-of select="lom:dateTime/text()" />
+				</mlr8:DES1300>
+			</xsl:when>
+			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$')">
+				<mlr8:DES1300 rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">
+					<xsl:value-of select="lom:dateTime/text()" />
+				</mlr8:DES1300>
+			</xsl:when>
+			<xsl:when test="lom:dateTime">
+				<mlr8:DES1300>
+					<xsl:value-of select="lom:dateTime/text()" />
+				</mlr8:DES1300>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates select="lom:description/lom:string" mode="langstring">
+					<xsl:with-param name="nodename" select="'mlr8:DES1300'"/>
+				</xsl:apply-templates>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template match="lom:entity" mode="metaMetadata">
-		<mlr8:DES1000>
-			<xsl:apply-templates mode="vcard" select="vcardconv:convert(text())" />
-		</mlr8:DES1000>
+	<xsl:template match="lom:role" mode="metaMetadata">
+		<mlr8:DES1200>
+			<xsl:value-of select="lom:value/text()" />
+		</mlr8:DES1200>
+	</xsl:template>
+
+	<xsl:template match="lom:language" mode="metaMetadata">
+		<mlr8:DES0200>
+			<xsl:call-template name="language">
+				<xsl:with-param name="l" select="text()"/>
+			</xsl:call-template>
+		</mlr8:DES0200>
 	</xsl:template>
 
 	<!-- technical -->

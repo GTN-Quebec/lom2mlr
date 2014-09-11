@@ -75,20 +75,20 @@ MLR5_Element_names = {
 }
 
 MLR8_Element_names = {
-    MLR8.DES0300: 'Has Record',
-    # MLR8.DES0400: 'Language',
-    # MLR8.DES0500: 'Type',
-    # MLR8.DES0600: 'Has Application Profile',
-    # MLR8.DES0700: 'Contribution',
-    # MLR8.DES0800: 'Record Repository',
-    # MLR8.DES0900: 'Record Last Update',
-    # MLR8.DES1000: 'Entity',
-    # MLR8.DES1100: 'Entities',
-    # MLR8.DES1200: 'Role',
-    # MLR8.DES1300: 'Date',
-    # MLR8.DES1400: 'Original Record',
-    # MLR8.DES1500: 'Original Record Format',
-    # MLR8.DES1600: 'Conversion software',
+    MLR8.DES0100: 'Has record',
+    # MLR8.DES0200: 'Record language',
+    # MLR8.DES0400: 'source record ID',
+    # MLR8.DES0500: 'source record schema',
+    MLR8.DES0600: 'has Record',
+    # MLR8.DES0700: 'record identifier',
+    # MLR8.DES0800: 'record last update',
+    # MLR8.DES0900: 'record repository',
+    # MLR8.DES1000: 'compliant to',
+    # MLR8.DES1100: 'contribution',
+    # MLR8.DES1100: 'contribution description',
+    # MLR8.DES1100: 'contributed by',
+    # MLR8.DES1200: 'application profile id',
+    # MLR8.DES1300: 'snapshot',
 }
 
 MLR9_Element_names = {
@@ -112,27 +112,43 @@ MLR9_Element_names = {
 }
 
 MLR_codomain = {
-    MLR5.DES1500: (MLR5.RC0002, ),  # Audience
+    MLR2.DES1600: (MLR1.RC0003, MLR9.RC0001, MLR9.RC0002),  # Creator
+    MLR2.DES1700: (MLR2.RC0001, ),  # Subject
+    MLR2.DES1700: (MLR2.RC0001, ),  # Description
+    MLR2.DES1900: (MLR1.RC0003, MLR9.RC0001, MLR9.RC0002),  # Publisher
+    MLR2.DES2000: (MLR1.RC0003, MLR9.RC0001, MLR9.RC0002),  # Collaborator
+    MLR2.DES2100: (MLR2.RC0001, ),  # Source
+    MLR2.DES2200: (MLR2.RC0001, ),  # Relation
+    MLR2.DES2300: (MLR2.RC0002, ),  # Rights
+    MLR4.DES0600: (MLR4.RC0001, ),  # Has media format information
+    MLR4.DES0600: (MLR4.RC0001, ),  # Has media format information
+    MLR5.DES1600: (MLR5.RC0002, ),  # Audience
     MLR5.DES1700: (MLR5.RC0003, ),  # Contribution
+    MLR5.DES1800: (MLR1.RC0003, MLR9.RC0001, MLR9.RC0002),  # Contributor
     MLR5.DES1900: (MLR5.RC0004, ),  # Curriculum
     MLR5.DES2000: (MLR5.RC0005, ),  # Learning activity
-    MLR5.DES1400: (MLR1.RC0003, MLR9.RC0001, MLR9.RC0002),  # Person and subclasses
-    MLR5.DES1800: (MLR1.RC0003, MLR9.RC0001, MLR9.RC0002),  # Person and subclasses
-    MLR8.DES0200: (MLR1.RC0002, ),  # Describes
-    MLR8.DES0300: (MLR8.RC0001, ),  # Has Record
-    MLR8.DES0700: (MLR8.RC0002, ),  # Contribution
-    MLR8.DES1000: (MLR1.RC0003, MLR9.RC0001, MLR9.RC0002),  # Person and subclasses
-    # MLR8.DES1100: (Seq(MLR1.RC0003), ),  # Entities
-    MLR9.DES1100: (MLR9.RC0002, ),  # Organization
-    MLR9.DES1300: (MLR9.RC0003, ),  # Geographical location
-    MLR9.DES1600: (MLR9.RC0004, ),  # Digital media
+    MLR8.DES0100: (MLR8.RC0001, ),  # Has record
+    MLR8.DES0500: (MLR8.RC0001, ),  # Previous version
+    MLR8.DES0600: (MLR8.RC0002, ),  # Has record
+    MLR8.DES1000: (MLR8.RC0004, ),  # Compliant to
+    MLR8.DES1100: (MLR8.RC0003, ),  # Contribution
+    MLR8.DES1400: (MLR1.RC0003, MLR9.RC0001, MLR9.RC0002),  # Contributed by
+    MLR8.DES1600: (MLR8.RC0001, ),  # Snapshot
+    MLR9.DES0900: (MLR9.RC0002, ),  # Affiliation
+    MLR9.DES1100: (MLR9.RC0003, ),  # Geolocalization
+    MLR9.DES1400: (MLR9.RC0004, MLR9.RC0005, MLR9.RC0006, MLR9.RC0007, ),  # Comm. account
+}
+
+Person_attributes = {
+    MLR9.DES0100: 'Identifier',
+    MLR9.DES0200: 'Name',
+    MLR9.DES0500: 'vCard FN',
+    MLR9.DES0700: 'vCard ADR',
+    MLR9.DES0800: 'Email address',
+    MLR9.DES1400: 'Communication account',
 }
 
 MLR_Subclass_attributes = {
-    MLR1.RC0003: { # Person
-        MLR9.DES0100: 'Identifier',
-        MLR9.DES0200: 'Name',
-    },
     OA.Annotation: { # Annotation
         # OA.annotatedAt: 'Annotation date',
         OA.hasBody: 'Annotation text',
@@ -168,52 +184,60 @@ MLR_Subclass_attributes = {
         MLR5.DES3000: 'Typical learning time',
     },
     MLR8.RC0001: {  # MLR Record
-        MLR8.DES0100: 'Record Identifier',
-        MLR8.DES0200: 'Describes',
-        MLR8.DES0400: 'Language',
-        MLR8.DES0500: 'Type',
-        MLR8.DES0600: 'Has Application Profile',
-        MLR8.DES0700: 'Contribution',
-        MLR8.DES0800: 'Record Repository',
-        MLR8.DES1400: 'Original Record',
-        MLR8.DES1500: 'Original Record Format',
-        MLR8.DES1600: 'Conversion software',
+        MLR8.DES0100: 'Has record',
+        MLR8.DES0600: 'has Record',
     },
-    MLR8.RC0002: {  # Contribution
-        MLR8.DES1000: 'Entity',
-        MLR8.DES1200: 'Role',
-        MLR8.DES1300: 'Date',
+    MLR8.RC0001: {  # MLR Record
+        MLR8.DES0200: 'Record language',
+        MLR8.DES0300: 'source record ID',
+        MLR8.DES0400: 'source record schema',
+        MLR8.DES0500: 'previous version',
+        MLR8.DES1000: 'compliant to',
+        MLR8.DES1100: 'contribution',
     },
-    MLR8.RC0003: {  # Mutable MLR Record
-        MLR8.DES0900: 'Record Last Update',
-
+    MLR8.RC0002: {  # Mutable MLR Record
+        MLR8.DES0700: 'record identifier',
+        MLR8.DES0800: 'record last update',
+        MLR8.DES0900: 'record repository',
+        MLR8.DES1300: 'snapshot',
     },
-    MLR9.RC0001: { # Natural Person
-        MLR9.DES0100: 'Identifier',
+    MLR8.RC0003: {  # Contribution
+        MLR8.DES1200: 'contribution description',
+        MLR8.DES1300: 'contribution date',
+        MLR8.DES1400: 'contributed by',
+    },
+    MLR8.RC0004: {  # Application profile
+        MLR8.DES1500: 'application profile id',
+    },
+    MLR1.RC0003: Person_attributes,
+    MLR9.RC0001: dict(Person_attributes, **{ # Natural Person
         MLR9.DES0300: 'Family Name',
         MLR9.DES0400: 'Given Name',
-        MLR9.DES0500: 'Name',
-        MLR9.DES0600: 'SkypeID',
-        MLR9.DES0700: 'vCard N',
-        MLR9.DES0800: 'vCard FN',
-        MLR9.DES0900: 'Email',
-        MLR9.DES1000: 'Work Telephone',
-        MLR9.DES1100: 'Work For',
+        MLR9.DES0600: 'vCard N',
+        MLR9.DES0700: 'vCard ADR',
+        MLR9.DES0900: 'Affiliation',
+    }),
+    MLR9.RC0002: dict(Person_attributes, **{ # Organization
+        MLR9.DES1000: 'vCard ORG',
+        MLR9.DES1100: 'Geolocation',
+    }),
+    MLR9.RC0003: { # Geographic Point
+        MLR9.DES1200: 'Longitude',
+        MLR9.DES1300: 'Latitude',
     },
-    MLR9.RC0002: { # Organization
-        MLR9.DES0100: 'Identifier',
-        # MLR9.DES0200: 'Name', TODO: Is this necessary????
-        MLR9.DES0900: 'Email',
-        MLR9.DES1200: 'vCard ORG',
-        MLR9.DES1300: 'Location',
+    MLR9.RC0004: { # Communication Account
     },
-    MLR9.RC0003: { # Geographical Location
-        MLR9.DES1400: 'Longitude',
-        MLR9.DES1500: 'Latitude',
-        # MLR9.DES1600: 'Representation',
-        MLR9.DES1700: 'Description'
+    MLR9.RC0005: { # VoIP Account
+        MLR9.DES1500: 'Service provided',
+        MLR9.DES1600: 'VoIP ID',
     },
-    MLR9.RC0004: { # Digital media
+    MLR9.RC0006: { # Social Network Account
+        MLR9.DES1700: 'social Network Name',
+        MLR9.DES1800: 'social Network ID',
+    },
+    MLR9.RC0007: { # Telephone Account
+        MLR9.DES1900: 'phone Type',
+        MLR9.DES2000: 'phone number',
     },
 }
 
@@ -236,9 +260,8 @@ Known_Missing = set([
     MLR5.DES2400,
     MLR5.DES2900,
     MLR5.DES0700,  # occasionally missing
-    MLR8.DES0800,
-    MLR8.DES1400,
-    MLR8.DES1600,
+    MLR8.DES0500,
+    MLR8.DES0600,
     MLR9.DES0600,  # occasionally missing
     MLR9.DES1400,  # occasionally missing
     MLR9.DES1500,  # occasionally missing
@@ -345,14 +368,14 @@ class testMlr(unittest.TestCase):
             if type_uri == MLR1.RC0002:
                 continue
             if type_uri not in MLR_Subclass_attributes:
-                missing_types.append(o)
+                missing_types.append(type_uri)
                 continue
             attributes = MLR_Subclass_attributes[type_uri]
             for p, name in attributes.items():
                 if p in Known_Missing:
                     continue
                 if not p in predicates:
-                    missing_predicates.append((p, name, o))
+                    missing_predicates.append((type_uri, p, name))
         assert not missing_types, missing_types
         assert not missing_predicates, missing_predicates
 
