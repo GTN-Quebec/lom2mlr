@@ -77,7 +77,7 @@ class TranslateMlrTreeprocessor(Treeprocessor):
         return self.translations[lang].get(c, c) + t
 
     def run(self, root):
-        for div in root.iter("div"):
+        for div in root.getiterator("div"):
             if div.get("class") != 'example':
                 continue
             div_els = div.getchildren()
