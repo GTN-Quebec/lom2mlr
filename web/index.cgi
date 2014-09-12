@@ -55,6 +55,13 @@ if __name__ == '__main__':
         print
         qs = dict([(k, form.getfirst(k)) for k in form.keys()])
         print "<html><head><title>LOM to MLR Converter</title></head><body>"
+        print "<h1>LOM to MLR converter</h1>"
+        print """<p>This project aims to convert Learning Object Metadata, 
+        <a href="http://ltsc.ieee.org/wg12/files/LOM_1484_12_1_v1_Final_Draft.pdf">IEEE 1484.12.1-2002</a>
+        into Metadata for Learning Resources,
+        <a href="http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=50772">ISO/IEC 19788-1:2011</a>.</p>
+        <p>The source is available on <a href="https://github.com/gtn-Quebec/lom2mlr">Github</a>,
+        and the heuristics used are described <a href="rationale.html">here</a>.</p>"""
         print "<form method='POST' enctype='multipart/form-data' action='index.cgi'>"
         for option, desc in converter.sheet_options.iteritems():
             default = converter.option_defaults[option]
