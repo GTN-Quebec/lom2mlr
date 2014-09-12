@@ -55,7 +55,7 @@ if __name__ == '__main__':
         print
         qs = dict([(k, form.getfirst(k)) for k in form.keys()])
         print "<html><head><title>LOM to MLR Converter</title></head><body>"
-        print "<form method='POST' enctype='multipart/form-data'>"
+        print "<form method='POST' enctype='multipart/form-data' action='index.cgi'>"
         for option, desc in converter.sheet_options.iteritems():
             default = converter.option_defaults[option]
             if default in ('true()', 'false()'):
