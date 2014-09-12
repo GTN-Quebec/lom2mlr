@@ -16,6 +16,9 @@ It will convert a single LOM file into a RDF file following the MLR standard. He
 
 Other flags reflect export options, and are documented in the :file:`rationale` document.
 
+There is also a `web application
+<http://www.gtn-quebec.org/lom2mlr/index.cgi>`_ version available. This web application is available as a web form, or as a RESTful service (at the same address). In that second case, the LOM data can be POSTED, and optional arguments can be passed as a query string.
+
 lom2mlr_markdown
 ----------------
 
