@@ -212,7 +212,7 @@ def convert(context, card):
         if e.params:
             params = el.makeelement(VCARD_NSB + 'parameters', nsmap=NSMAP)
             el.append(params)
-            for k, v in e.params.items():
+            for k, v in e.params.iteritems():
                 param = params.makeelement(VCARD_NSB + k.lower(), nsmap=NSMAP)
                 params.append(param)
                 vobj_to_typed_param(v, param)

@@ -1,6 +1,8 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 __doc__ = """The :py:class:`Converter` transforms LOM records into MLR records."""
 __docformat__ = "restructuredtext en"
 
@@ -162,7 +164,7 @@ class Converter(object):
         options = options or {}
         self.options = dict(
             (str(k), _to_xsl_option(v))
-            for k, v in options.items()
+            for k, v in options.iteritems()
             if str(k) in self.sheet_options)
 
     def _get_lang_sheet(self, lang):
@@ -195,7 +197,7 @@ class Converter(object):
         try:
             rdfxml = self.stylesheet(xml, **self.options)
         except:
-            print self.stylesheet.error_log
+            print(self.stylesheet.error_log)
             raise
         langsheet = self._get_lang_sheet(lang)
         if langsheet:
@@ -245,7 +247,7 @@ class Converter(object):
         """
         if parser is None:
             parser = argparse.ArgumentParser()
-        for name, desc in self.sheet_options.items():
+        for name, desc in self.sheet_options.iteritems():
             default = self.option_defaults[name]
             if default == 'true()':
                 parser.add_argument('--no-' + name, action='store_false',

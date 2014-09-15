@@ -139,7 +139,7 @@ class GraphCorrespondence(object):
         for n in blanks_s:
             unknown, objects = self.identify_one_by_objects(n)
             if len(objects) == 1:
-                self.blank_map[n] = objects.keys()[0]
+                self.blank_map[n] = next(objects.iterkeys())
         missing = set()
         while len(self.blank_map) + len(missing) < len(blanks_s):
             remainder = blanks_s - set(self.blank_map.keys()) - missing
@@ -253,10 +253,10 @@ class GraphTester(object):
         comparator_fo.identify()
         map_oe = dict(
             (o, e) for (e, o) in
-            self.last_comparator.blank_map.items())
+            self.last_comparator.blank_map.iteritems())
         map_fe = dict(
             (f, map_oe.get(o, None)) for f, o in
-            comparator_fo.blank_map.items())
+            comparator_fo.blank_map.iteritems())
         triples = forbidden_graph.triples((None, None, None))
         for triple in triples:
             if list(obtained_graph.triples(comparator_fo.translate_triple(triple))) \

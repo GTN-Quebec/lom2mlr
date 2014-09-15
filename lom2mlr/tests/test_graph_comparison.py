@@ -1,5 +1,7 @@
 """Unit tests for algorithms in :py:mod:`lom2mlr.validate.graph_comparison`"""
 
+from __future__ import print_function
+
 import unittest
 
 from lom2mlr.validate.graph_comparison import (
@@ -43,7 +45,7 @@ class testGraphComparison(unittest.TestCase):
             '''))
         assert len(errors) == 1
         error = errors[0]
-        print error
+        print(error)
         assert error[2] == Literal(u"Commentaire")
 
     def test_find_missing_on_uuid(self):

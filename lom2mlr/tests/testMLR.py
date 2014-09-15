@@ -1,5 +1,7 @@
 """Integration tests for :py:class:`lom2mlr.transform.Converter`"""
 
+from __future__ import print_function
+
 import unittest
 import os.path
 from collections import defaultdict
@@ -298,7 +300,7 @@ class testMlr(unittest.TestCase):
 
     def triple_from_n3(self, n3):
         g = Graph().parse(data=n3, format="n3")
-        return g.triples((None,None,None)).next()
+        return next(g.triples((None,None,None)))
 
     def test_not_empty(self):
         assert(len(self.graph)>0)
@@ -312,7 +314,7 @@ class testMlr(unittest.TestCase):
         #sys.stderr.write(`triples`)
         predicates = set(p for (s, p, o) in triples)
         missing_predicates = []
-        for (p, n) in Element_names.items():
+        for (p, n) in Element_names.iteritems():
             if p in Known_Missing:
                 continue
             if p not in predicates:
@@ -332,7 +334,7 @@ class testMlr(unittest.TestCase):
 
     def test_codomain(self):
         wrong_codomain_type = []
-        for predicate in MLR_codomain.keys():
+        for predicate in MLR_codomain.iterkeys():
             for s, p, o in self.graph.triples((None, term.URIRef(predicate), None)):
                 for s2, p2, o2 in self.graph.triples((o, RDF.type, None)):
                     if o2 not in MLR_codomain[predicate]:
@@ -360,18 +362,18 @@ class testMlr(unittest.TestCase):
         pred_by_type = defaultdict(set)
         for s, p, o in self.graph.triples((None, RDF.type, None)):
             res_by_type[o].add(s)
-        for type_uri, ressources in res_by_type.items():
+        for type_uri, ressources in res_by_type.iteritems():
             for r in ressources:
                 for s, p, o in self.graph.triples((r, None, None)):
                     pred_by_type[type_uri].add(p)
-        for type_uri, predicates in pred_by_type.items():
+        for type_uri, predicates in pred_by_type.iteritems():
             if type_uri == MLR1.RC0002:
                 continue
             if type_uri not in MLR_Subclass_attributes:
                 missing_types.append(type_uri)
                 continue
             attributes = MLR_Subclass_attributes[type_uri]
-            for p, name in attributes.items():
+            for p, name in attributes.iteritems():
                 if p in Known_Missing:
                     continue
                 if not p in predicates:
@@ -390,5 +392,5 @@ class testMlr(unittest.TestCase):
         examples = os.listdir(ex_dir)
         all_clear = True
         for example in examples:
-            print example
+            print(example)
             graph = self.converter.lomfile2graph(os.path.join(ex_dir, example))

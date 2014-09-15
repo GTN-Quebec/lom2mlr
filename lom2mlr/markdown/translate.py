@@ -7,7 +7,7 @@ import os.path
 from collections import defaultdict
 
 #Hack pour importer sw sans le mettre dans pygments
-import sw
+from . import sw
 import pygments.plugin
 pygments.plugin.find_plugin_lexers = lambda: [sw.Notation3Lexer]
 
@@ -53,7 +53,7 @@ class TranslateMlrTreeprocessor(Treeprocessor):
         self.translations = translations
         vocs = {}
 
-        for voc in vocabularies_for_DES.values():
+        for voc in vocabularies_for_DES.itervalues():
             vocs[voc] = defaultdict(dict)
             tree = etree.parse(os.path.join(VDEX_DIR, '%s.vdex' % (voc)))
             for term in tree.findall(VDEX_PREFIX + 'term'):
@@ -96,7 +96,7 @@ class TranslateMlrTreeprocessor(Treeprocessor):
                     t = code.text
                     if isinstance(t, str):
                         t = t.decode('utf-8')
-                    for lang in self.translations.keys():
+                    for lang in self.translations.iterkeys():
                         cl = classes.copy()
                         cl.add('lang_' + lang)
                         new_div = etree.Element('div', {'class': ' '.join(cl)})
