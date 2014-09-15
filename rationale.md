@@ -279,31 +279,11 @@ Becomes
 
 Learning resource version and state have no equivalent in MLR.
 
-### Contributions
-
-All LOM contributions become `mlr5:RC0003` contribution entities through a `mlr5:DES1700` relationships. 
-
-    :::xml
-    <lifeCycle>
-        <contribute>
-            <role>
-                <source>LOMv1.0</source>
-                <value>publisher</value>
-            </role>
-        </contribute>
-    </lifeCycle>
-
-Becomes
-
-    :::N3
-    []  a mlr1:RC0002;
-        mlr5:DES1700 [ a mlr5:RC0003 ] .
-
 ### Roles
 
 #### Authors
 
-A contribution whose role is `LOMv1.0:author` is interpreted as a `dc:creator` (`mlr2:DES0200`). We would then use the `FN` of the `VCARD`.
+A contribution whose role is `LOMv1.0:author` is interpreted as a `dc:creator` (`mlr2:DES0200` and `mlr2:DES1600`). We would then use the `FN` of the `VCARD` for `mlr2:DES0200` and an entity for `mlr2:DES1600`. Various contributors may be interpreted as entities of the Person type (`mlr1:RC0003`), or the subtypes Natural person (`mlr9:RC0001`) or Organisation (`mlr9:RC0002`).
 
     :::xml
     <lifeCycle>
@@ -333,11 +313,14 @@ A contribution whose role is `LOMv1.0:author` is interpreted as a `dc:creator` (
 Becomes
 
     :::N3
-    [] mlr2:DES0200 "Frédéric Bergeron".
+    [] mlr2:DES0200 "Frédéric Bergeron";
+       mlr2:DES1600 [
+            a mlr9:RC0001
+       ].
 
 #### Éditeurs
 
-Similarly, a contribution whose role is `LOMv1.0:publisher` is interpreted as a `dc:publisher` (`mlr2:DES0500`).
+Similarly, a contribution whose role is `LOMv1.0:publisher` is interpreted as a `dc:publisher` (`mlr2:DES0500` and `mlr2:DES1900`).
 
     :::xml
     <lifeCycle>
@@ -348,7 +331,8 @@ Similarly, a contribution whose role is `LOMv1.0:publisher` is interpreted as a 
             </role>
             <entity>BEGIN:VCARD
     VERSION:3.0
-    FN:Frédéric Bergeron
+    ORG:GTN-Québec
+    FN:GTN-Québec
     END:VCARD
     </entity>
         </contribute>
@@ -357,11 +341,14 @@ Similarly, a contribution whose role is `LOMv1.0:publisher` is interpreted as a 
 Becomes
 
     :::N3
-    [] mlr2:DES0500 "Frédéric Bergeron".
+    [] mlr2:DES0500 "GTN-Québec";
+        mlr2:DES1900 [
+            a mlr9:RC0002
+       ].
 
 #### Collaborateurs
 
-Finally, all other roles are interpreted as `dc:contributor` (`mlr2:DES0600`).
+Finally, all other roles are interpreted as `dc:contributor` (`mlr2:DES0600` and `mlr2:DES2000`).
 
     :::xml
     <lifeCycle>
@@ -373,6 +360,7 @@ Finally, all other roles are interpreted as `dc:contributor` (`mlr2:DES0600`).
             <entity>BEGIN:VCARD
     VERSION:3.0
     FN:Frédéric Bergeron
+    N:Bergeron;Frédéric;;;
     END:VCARD
     </entity>
         </contribute>
@@ -381,59 +369,10 @@ Finally, all other roles are interpreted as `dc:contributor` (`mlr2:DES0600`).
 Becomes
 
     :::N3
-    [] mlr2:DES0600 "Frédéric Bergeron".
-
-#### `ISO_IEC_19788-5:2012::VA.1:`
-
-Besides those DC elements, each LOM lifecycle element can be expressed as a contribution in MLR5 terms. Note that there is some ambiguity in the document about the nature of pedagogical contributions. The definition of Contribution is given as:
-
-> Set of resources that are instrumental in making up a learning resource.
-
-This may suggest that the contribution consists of a further learning resource, either a component or an adjuntct of the main learning resource; but the Contribution does not have a link to another learning resource. Its only characteristics are the contribution date, and to a person in one of two roles: author or validator. For this reason, we interpret the Contribution in the same way as LOM lifecycle contributions.
-
-Most [LOM v.10 lifeCycle roles](http://www.lom-fr.fr/vdex/lomfrv1-0/lom/vdex_lc_roles.xml) can be mapped to authors, except validators which are named as such in LOM. 
-
-    :::xml
-    <lifeCycle>
-        <contribute>
-            <role>
-                <source>LOMv1.0</source>
-                <value>technical validator</value>
-            </role>
-        </contribute>
-    </lifeCycle>
-
-Becomes
-
-    :::N3
-    []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES0800 "T020" ] .
-
-##### Exceptions
-
-The difficult cases are `publisher` and `unknown`, which are not translated as vocabulary entities, but as literals. Note that this is invalid MLR, as the literal MUST be taken from the vocabulary. We use an asterisk to denote the absence from the vocabulary.
-
-Another approach would be to use a different RDF property (through a MLR extension or otherwise) to keep the more precise LOM information.
-
-    :::xml
-    <lifeCycle>
-        <contribute>
-            <role>
-                <source>LOMv1.0</source>
-                <value>unknown</value>
-            </role>
-        </contribute>
-    </lifeCycle>
-
-Becomes
-
-    :::N3
-    []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES0800 "*unknown" ] .
-
-
+    [] mlr2:DES0600 "Frédéric Bergeron";
+        mlr2:DES2000 [
+            a mlr9:RC0001
+        ].
 
 ### Person subtypes
 
@@ -467,8 +406,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ] ] .
+        mlr2:DES1600 [ a mlr9:RC0001 ] .
 
 #### Identifying organizations
 
@@ -494,8 +432,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0002 ] ] .
+        mlr2:DES1600 [ a mlr9:RC0002 ] .
 
 #### `WORK` and `HOME` subtypes
 
@@ -521,8 +458,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0002 ] ] .
+        mlr2:DES1600 [ a mlr9:RC0002 ] .
 
 #### Absence of `N` or `ORG` in a `VCARD`
 
@@ -546,9 +482,8 @@ Absent either those attributes, we fall back on the generic person entity.
 Becomes
 
     :::N3
-    []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr1:RC0003 ] ] .
+    []  a mlr1:RC0002;
+        mlr2:DES1600 [ a mlr1:RC0003 ] .
 
 
 
@@ -595,10 +530,9 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES0900 [ a mlr9:RC0002;
-                               mlr9:DES1000 "GTN-Québec" ] ] ] .
+        mlr2:DES1600 [ a mlr9:RC0001 ;
+            mlr9:DES0900 [ a mlr9:RC0002;
+                           mlr9:DES1000 "GTN-Québec" ] ] .
 
 ##### `ADR` of subtype `WORK`
 
@@ -642,12 +576,11 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES0900 [ a mlr9:RC0002;
-                    mlr9:DES0700 """455, rue du Parvis
+        mlr2:DES1600 [ a mlr9:RC0001 ;
+            mlr9:DES0900 [ a mlr9:RC0002;
+                mlr9:DES0700 """455, rue du Parvis
     Québec, Québec, G1K 9H6
-    Canada""" ] ] ].
+    Canada""" ] ].
 
 ##### Work URL
 
@@ -674,9 +607,8 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES0900 <http://www.gtn-quebec.org/> ] ] .
+        mlr2:DES1600 [ a mlr9:RC0001 ;
+            mlr9:DES0900 <http://www.gtn-quebec.org/> ] .
     <http://www.gtn-quebec.org/> a mlr9:RC0002;
         mlr9:DES0100 "http://www.gtn-quebec.org/".
 
@@ -722,8 +654,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://maparent.ca/foaf.rdf> ] .
+        mlr2:DES1600 <http://maparent.ca/foaf.rdf>.
     <http://maparent.ca/foaf.rdf> a mlr9:RC0001;
         mlr9:DES0100 "http://maparent.ca/foaf.rdf" .
 
@@ -731,8 +662,7 @@ In preference to
 
     :::N3 forbidden
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://maparent.ca/> ] .
+        mlr2:DES1600 <http://maparent.ca/> .
     <http://maparent.ca/> a mlr9:RC0001 .
 
 ##### Preferred URL
@@ -761,8 +691,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://maparent.ca/resume.fr.html> ] .
+        mlr2:DES1600 <http://maparent.ca/resume.fr.html>.
     <http://maparent.ca/resume.fr.html> a mlr9:RC0001;
         mlr9:DES0100 "http://maparent.ca/resume.fr.html".
 
@@ -770,8 +699,7 @@ In preference to
 
     :::N3 forbidden
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://maparent.ca/> ] .
+        mlr2:DES1600 <http://maparent.ca/>.
     <http://maparent.ca/> a mlr9:RC0001 .
 
 ##### Any URL (non-work)
@@ -800,8 +728,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://maparent.ca/> ] .
+        mlr2:DES1600 <http://maparent.ca/>.
     <http://maparent.ca/> a mlr9:RC0001 ;
         mlr9:DES0100 "http://maparent.ca/" .
 
@@ -810,8 +737,7 @@ In preference to
 
     :::N3 forbidden
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://maparent.ca/resume.fr.html> ] .
+        mlr2:DES1600 <http://maparent.ca/resume.fr.html>.
     <http://maparent.ca/resume.fr.html> a mlr9:RC0001 .
 
 ##### A UUID calculated from non-work email and FN (`person_uuid_from_email_fn`, enabled)
@@ -847,8 +773,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <urn:uuid:2e53e0a5-38b8-56a2-8841-f9b47cd7f0b1> ] .
+        mlr2:DES1600 <urn:uuid:2e53e0a5-38b8-56a2-8841-f9b47cd7f0b1>.
     <urn:uuid:2e53e0a5-38b8-56a2-8841-f9b47cd7f0b1> a mlr9:RC0001 ;
         mlr9:DES0100 "cn=Marc-Antoine Parent,mail=map@ntic.org" .
 
@@ -877,8 +802,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <urn:uuid:2e53e0a5-38b8-56a2-8841-f9b47cd7f0b1> ] .
+        mlr2:DES1600 <urn:uuid:2e53e0a5-38b8-56a2-8841-f9b47cd7f0b1>.
     <urn:uuid:2e53e0a5-38b8-56a2-8841-f9b47cd7f0b1> a mlr9:RC0001 ;
         mlr9:DES0100 "cn=Marc-Antoine Parent,mail=map@ntic.org" .
 
@@ -917,10 +841,8 @@ Uses a UUID1, thus:
 
     :::N3
     <urn:uuid:10000000-0000-0000-0000-000000000001>  a mlr1:RC0002; 
-        mlr5:DES1700 <urn:uuid:10000000-0000-0000-0000-000000000002> .
-    <urn:uuid:10000000-0000-0000-0000-000000000002> a mlr5:RC0003;
-        mlr5:DES1800 <urn:uuid:10000000-0000-0000-0000-000000000003> .
-    <urn:uuid:10000000-0000-0000-0000-000000000003> a mlr9:RC0001 .
+        mlr2:DES1600 <urn:uuid:10000000-0000-0000-0000-000000000002> .
+    <urn:uuid:10000000-0000-0000-0000-000000000002> a mlr9:RC0001 .
 
 Note the absence of mlr9:DES0100 in that case, so we do not have:
 
@@ -931,9 +853,7 @@ But if we set `person_uuid_from_fn`, we then have:
 
     :::N3 --person_uuid_from_fn
     <urn:uuid:10000000-0000-0000-0000-000000000001>  a mlr1:RC0002; 
-        mlr5:DES1700 <urn:uuid:10000000-0000-0000-0000-000000000002> .
-    <urn:uuid:10000000-0000-0000-0000-000000000002> a mlr5:RC0003;
-        mlr5:DES1800 <urn:uuid:6a1d6673-47dd-5071-9b24-f6c7688f0b64> .
+        mlr2:DES1600 <urn:uuid:6a1d6673-47dd-5071-9b24-f6c7688f0b64> .
     <urn:uuid:6a1d6673-47dd-5071-9b24-f6c7688f0b64> a mlr9:RC0001 ;
         mlr9:DES0100 "Marc-Antoine Parent" .
 
@@ -961,18 +881,14 @@ Uses a UUID1, thus:
 
     :::N3
     <urn:uuid:10000000-0000-0000-0000-000000000001>  a mlr1:RC0002; 
-        mlr5:DES1700 <urn:uuid:10000000-0000-0000-0000-000000000002> .
-    <urn:uuid:10000000-0000-0000-0000-000000000002> a mlr5:RC0003;
-        mlr5:DES1800 <urn:uuid:10000000-0000-0000-0000-000000000003> .
-    <urn:uuid:10000000-0000-0000-0000-000000000003> a mlr9:RC0001 .
+        mlr2:DES1600 <urn:uuid:10000000-0000-0000-0000-000000000002> .
+    <urn:uuid:10000000-0000-0000-0000-000000000002> a mlr9:RC0001 .
 
 But if we set `person_uuid_from_fn`, we then have:
 
     :::N3 --person_uuid_from_fn
     <urn:uuid:10000000-0000-0000-0000-000000000001>  a mlr1:RC0002; 
-        mlr5:DES1700 <urn:uuid:10000000-0000-0000-0000-000000000002> .
-    <urn:uuid:10000000-0000-0000-0000-000000000002> a mlr5:RC0003;
-        mlr5:DES1800 <urn:uuid:6a1d6673-47dd-5071-9b24-f6c7688f0b64> .
+        mlr2:DES1600 <urn:uuid:6a1d6673-47dd-5071-9b24-f6c7688f0b64> .
     <urn:uuid:6a1d6673-47dd-5071-9b24-f6c7688f0b64> a mlr9:RC0001 ;
         mlr9:DES0100 "Marc-Antoine Parent" .
 
@@ -1000,10 +916,8 @@ Uses a UUID1, thus:
 
     :::N3
     <urn:uuid:10000000-0000-0000-0000-000000000001>  a mlr1:RC0002; 
-        mlr5:DES1700 <urn:uuid:10000000-0000-0000-0000-000000000002> .
-    <urn:uuid:10000000-0000-0000-0000-000000000002> a mlr5:RC0003;
-        mlr5:DES1800 <urn:uuid:10000000-0000-0000-0000-000000000003> .
-    <urn:uuid:10000000-0000-0000-0000-000000000003> a mlr9:RC0001 .
+        mlr2:DES1600 <urn:uuid:10000000-0000-0000-0000-000000000002> .
+    <urn:uuid:10000000-0000-0000-0000-000000000002> a mlr9:RC0001 .
 
 But not
 
@@ -1042,8 +956,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://gtn-quebec.org/foaf.rdf> ] .
+        mlr2:DES1600 <http://gtn-quebec.org/foaf.rdf>.
     <http://gtn-quebec.org/foaf.rdf> a mlr9:RC0002;
         mlr9:DES0100 "http://gtn-quebec.org/foaf.rdf" .
 
@@ -1051,8 +964,7 @@ In preference to
 
     :::N3 forbidden
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://gtn-quebec.org/> ] .
+        mlr2:DES1600 <http://gtn-quebec.org/>.
     <http://gtn-quebec.org/> a mlr9:RC0002 .
 
 
@@ -1082,8 +994,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://gtn-quebec.org/contact> ] .
+        mlr2:DES1600 <http://gtn-quebec.org/contact>.
     <http://gtn-quebec.org/contact> a mlr9:RC0002;
         mlr9:DES0100 "http://gtn-quebec.org/contact" .
 
@@ -1091,8 +1002,7 @@ In preference to
 
     :::N3 forbidden
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://gtn-quebec.org/> ] .
+        mlr2:DES1600 <http://gtn-quebec.org/>.
     <http://gtn-quebec.org/> a mlr9:RC0002 .
 
 ##### Any URL
@@ -1121,8 +1031,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://gtn-quebec.org/contact> ] .
+        mlr2:DES1600 <http://gtn-quebec.org/contact>.
     <http://gtn-quebec.org/contact> a mlr9:RC0002;
         mlr9:DES0100 "http://gtn-quebec.org/contact" .
 
@@ -1130,8 +1039,7 @@ In preference to
 
     :::N3 forbidden
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://gtn-quebec.org/> ] .
+        mlr2:DES1600 <http://gtn-quebec.org/>.
     <http://gtn-quebec.org/> a mlr9:RC0002 .
 
 ##### A UUID calculated from an email and ORG (`org_uuid_from_email_org`, enabled)
@@ -1159,8 +1067,7 @@ The URI will be `UUID5(UUID5(NAMESPACE_URL, 'mailto:info@gtn-quebec.org'), 'Grou
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <urn:uuid:ebe75f2a-7562-544c-adf2-43a798987650> ] .
+        mlr2:DES1600 <urn:uuid:ebe75f2a-7562-544c-adf2-43a798987650>.
     <urn:uuid:ebe75f2a-7562-544c-adf2-43a798987650> a mlr9:RC0002;
         mlr9:DES0100 "cn=Groupe de travail québécois sur les normes et standards TI pour l’apprentissage, l’éducation et la formation,mail=info@gtn-quebec.org".
 
@@ -1168,8 +1075,7 @@ In preference to `UUID5(UUID5(NAMESPACE_URL, 'mailto:info@gtn-quebec.org'), 'GTN
 
     :::N3 forbidden
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <urn:uuid:6b7dd3ef-8633-5111-a963-39c908231a7b> ] .
+        mlr2:DES1600 <urn:uuid:6b7dd3ef-8633-5111-a963-39c908231a7b>.
     <urn:uuid:6b7dd3ef-8633-5111-a963-39c908231a7b> a mlr9:RC0002;
         mlr9:DES0100 "cn=GTN-Québec,mail=info@gtn-quebec.org".
 
@@ -1198,8 +1104,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <urn:uuid:6b7dd3ef-8633-5111-a963-39c908231a7b> ] .
+        mlr2:DES1600 <urn:uuid:6b7dd3ef-8633-5111-a963-39c908231a7b>.
     <urn:uuid:6b7dd3ef-8633-5111-a963-39c908231a7b> a mlr9:RC0002;
         mlr9:DES0100 "cn=GTN-Québec,mail=info@gtn-quebec.org".
 
@@ -1227,8 +1132,7 @@ Becomes
 
     :::N3 --no-org_uuid_from_email_fn
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <mailto:info@gtn-quebec.org> ] .
+        mlr2:DES1600 <mailto:info@gtn-quebec.org>.
     <mailto:info@gtn-quebec.org> a mlr9:RC0002;
         mlr9:DES0100 "info@gtn-quebec.org".
 
@@ -1264,8 +1168,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <urn:uuid:f2fd5bf8-502e-5805-bb98-16ffd4929089> ] .
+        mlr2:DES1600 <urn:uuid:f2fd5bf8-502e-5805-bb98-16ffd4929089>.
     <urn:uuid:f2fd5bf8-502e-5805-bb98-16ffd4929089> a mlr9:RC0002;
         mlr9:DES0100 "GTN-Québec;Canada;Québec;Québec".
 
@@ -1293,8 +1196,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <urn:uuid:f2fd5bf8-502e-5805-bb98-16ffd4929089> ] .
+        mlr2:DES1600 <urn:uuid:f2fd5bf8-502e-5805-bb98-16ffd4929089>.
     <urn:uuid:f2fd5bf8-502e-5805-bb98-16ffd4929089> a mlr9:RC0002;
         mlr9:DES0100 "GTN-Québec;Canada;Québec;Québec".
 
@@ -1330,8 +1232,7 @@ Becomes, with `org_uuid_from_org_or_fn`,
 
     :::N3 --org_uuid_from_org_or_fn
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <urn:uuid:88e3aa1b-9aec-51c4-86d2-58a8080832b9> ] .
+        mlr2:DES1600 <urn:uuid:88e3aa1b-9aec-51c4-86d2-58a8080832b9>.
     <urn:uuid:88e3aa1b-9aec-51c4-86d2-58a8080832b9> a mlr9:RC0002;
         mlr9:DES0100 "GTN-Québec".
 
@@ -1359,9 +1260,8 @@ Becomes, with `org_uuid_from_org_or_fn`,
 
     :::N3 --org_uuid_from_org_or_fn
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0002;
-                mlr9:DES0100 "GTN-Québec" ] ] .
+        mlr2:DES1600 [ a mlr9:RC0002;
+            mlr9:DES0100 "GTN-Québec" ] .
 
 ##### A UUID1
 
@@ -1387,8 +1287,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <urn:uuid:10000000-0000-0000-0000-000000000001> ] .
+        mlr2:DES1600 <urn:uuid:10000000-0000-0000-0000-000000000001>.
     <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr9:RC0002 .
 
 Note the absence of `mlr9:DES0100`.
@@ -1429,8 +1328,7 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002;
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://maparent.ca/> ] .
+        mlr2:DES1600 <http://maparent.ca/>.
     <http://maparent.ca/> a mlr9:RC0001;
         mlr9:DES0100 "http://maparent.ca/" ;
         mlr9:DES0900 <http://gtn-quebec.org/> .
@@ -1473,20 +1371,18 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [a mlr9:RC0001 ;
-                mlr9:DES0100 "http://maparent.ca/";
-                mlr9:DES0900 <urn:uuid:10000000-0000-0000-0000-000000000001> ] ] .
+        mlr2:DES1600 [a mlr9:RC0001 ;
+            mlr9:DES0100 "http://maparent.ca/";
+            mlr9:DES0900 <urn:uuid:10000000-0000-0000-0000-000000000001> ] .
     <urn:uuid:10000000-0000-0000-0000-000000000001> a mlr9:RC0002.
 
 But if `suborg_use_work_email` is set to true:
 
     :::N3 --suborg_use_work_email
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [a mlr9:RC0001 ;
-                mlr9:DES0100 "http://maparent.ca/";
-                mlr9:DES0900 <urn:uuid:e66c8b26-2564-53ee-b271-783ec932e4d5> ] ] .
+        mlr2:DES1600 [a mlr9:RC0001 ;
+            mlr9:DES0100 "http://maparent.ca/";
+            mlr9:DES0900 <urn:uuid:e66c8b26-2564-53ee-b271-783ec932e4d5> ] .
     <urn:uuid:e66c8b26-2564-53ee-b271-783ec932e4d5> a mlr9:RC0002;
         mlr9:DES0100 "cn=GTN-Québec,mail=map@ntic.org" .
 
@@ -1519,8 +1415,7 @@ Leading to
 
     :::N3 --suborg_use_work_email
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 <http://maparent.ca/> ] .
+        mlr2:DES1600 <http://maparent.ca/>.
     <http://maparent.ca/> a mlr9:RC0001 ;
                 mlr9:DES0100 "http://maparent.ca/" ;
                 mlr9:DES0900 <http://www.gtn-quebec.org/> ,
@@ -1567,12 +1462,11 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES0300 "Parent";
-                mlr9:DES0400 "Marc";
-                mlr9:DES0600 "Parent;Marc;Antoine;M.;M.Sc.";
-                mlr9:DES0500 "Marc-Antoine Parent" ] ] .
+        mlr2:DES1600 [ a mlr9:RC0001 ;
+            mlr9:DES0300 "Parent";
+            mlr9:DES0400 "Marc";
+            mlr9:DES0600 "Parent;Marc;Antoine;M.;M.Sc.";
+            mlr9:DES0500 "Marc-Antoine Parent" ].
 
 While (without FN)
 
@@ -1595,12 +1489,11 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES0300 "Parent";
-                mlr9:DES0400 "Marc";
-                mlr9:DES0500 "M. Marc Antoine Parent M.Sc.";
-                mlr9:DES0600 "Parent;Marc;Antoine;M.;M.Sc." ] ] .
+        mlr2:DES1600 [ a mlr9:RC0001 ;
+            mlr9:DES0300 "Parent";
+            mlr9:DES0400 "Marc";
+            mlr9:DES0500 "M. Marc Antoine Parent M.Sc.";
+            mlr9:DES0600 "Parent;Marc;Antoine;M.;M.Sc." ] .
 
 #### `FN` for a generic person
 
@@ -1625,9 +1518,8 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr1:RC0003 ;
-                mlr9:DES0200 "Marc-Antoine Parent" ] ] .
+        mlr2:DES1600 [ a mlr1:RC0003 ;
+            mlr9:DES0200 "Marc-Antoine Parent" ] .
 
 
 #### Organization
@@ -1654,9 +1546,8 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0002 ;
-                mlr9:DES1000 "GTN-Québec" ] ].
+        mlr2:DES1600 [ a mlr9:RC0002 ;
+            mlr9:DES1000 "GTN-Québec" ].
 
 
 #### Social profiles
@@ -1684,11 +1575,10 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES1400 [ a mlr9:RC0006; 
-                    mlr9:DES1700 "Twitter" ;
-                    mlr9:DES1800 "http://twitter.com/ma_parent" ] ] ].
+        mlr2:DES1600 [ a mlr9:RC0001 ;
+            mlr9:DES1400 [ a mlr9:RC0006; 
+                mlr9:DES1700 "Twitter" ;
+                mlr9:DES1800 "http://twitter.com/ma_parent" ] ].
 
 
 #### Skype
@@ -1716,11 +1606,10 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES1400 [ a mlr9:RC0006; 
-                    mlr9:DES1700 "Skype" ;
-                    mlr9:DES1800 "maparent" ] ] ].
+        mlr2:DES1600 [ a mlr9:RC0001 ;
+            mlr9:DES1400 [ a mlr9:RC0006; 
+                mlr9:DES1700 "Skype" ;
+                mlr9:DES1800 "maparent" ] ].
 
 ##### #####
 
@@ -1745,11 +1634,10 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES1400 [ a mlr9:RC0006; 
-                    mlr9:DES1700 "Skype" ;
-                    mlr9:DES1800 "maparent" ] ] ].
+        mlr2:DES1600 [ a mlr9:RC0001 ;
+            mlr9:DES1400 [ a mlr9:RC0006; 
+                mlr9:DES1700 "Skype" ;
+                mlr9:DES1800 "maparent" ] ].
 
 #### Email
 
@@ -1776,9 +1664,8 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES0800 "map@ntic.org" ] ].
+        mlr2:DES1600 [ a mlr9:RC0001 ;
+                mlr9:DES0800 "map@ntic.org" ].
 
 ##### #####
 
@@ -1804,9 +1691,8 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0002 ;
-                mlr9:DES0800 "map@ntic.org" ] ].
+        mlr2:DES1600 [ a mlr9:RC0002 ;
+            mlr9:DES0800 "map@ntic.org" ].
 
 
 ##### #####
@@ -1837,20 +1723,18 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES0800 "maparent@gmail.com";
-                mlr9:DES0900 [ a mlr9:RC0002 ;
-                    mlr9:DES0800 "map@ntic.org" ] ] ].
+        mlr2:DES1600 [ a mlr9:RC0001 ;
+            mlr9:DES0800 "maparent@gmail.com";
+            mlr9:DES0900 [ a mlr9:RC0002 ;
+                mlr9:DES0800 "map@ntic.org" ] ].
 
 and not
 
     :::N3 forbidden
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES0800 "map@ntic.org";
-                mlr9:DES0800 "maparent@gmail.com" ] ].
+        mlr2:DES1600 [ a mlr9:RC0001 ;
+            mlr9:DES0800 "map@ntic.org";
+            mlr9:DES0800 "maparent@gmail.com" ].
 
 #### `TEL`
 
@@ -1877,11 +1761,10 @@ Becomes
 
     :::N3
     []  a mlr1:RC0002; 
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001 ;
-                mlr9:DES1400 [ a mlr9:RC0007 ;
-                    mlr9:DES1900 "T020" ;
-                    mlr9:DES2000 "1-514-555-8888" ] ] ] .
+        mlr2:DES1600 [ a mlr9:RC0001 ;
+            mlr9:DES1400 [ a mlr9:RC0007 ;
+                mlr9:DES1900 "T020" ;
+                mlr9:DES2000 "1-514-555-8888" ] ] .
 
 ### Address elements
 
@@ -1916,12 +1799,11 @@ Becomes
 
     :::N3
     [] a mlr1:RC0002;
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001;
-                mlr9:DES0900 [ a mlr9:RC0002;
-                    mlr9:DES0700 """455, rue du Parvis
+        mlr2:DES1600 [ a mlr9:RC0001;
+            mlr9:DES0900 [ a mlr9:RC0002;
+                mlr9:DES0700 """455, rue du Parvis
     Québec, Québec, G1K 9H6
-    Canada""" ] ] ] .
+    Canada""" ] ] .
 
 #### `GEO`
 
@@ -1948,11 +1830,10 @@ Becomes
 
     :::N3
     [] a mlr1:RC0002;
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0002;
-                mlr9:DES1100 [ a mlr9:RC0003;
-                    mlr9:DES1200 "-122.082932"^^<http://www.w3.org/2001/XMLSchema#float>;
-                    mlr9:DES1300 "37.386013"^^<http://www.w3.org/2001/XMLSchema#float> ] ] ] .
+        mlr2:DES1600 [ a mlr9:RC0002;
+            mlr9:DES1100 [ a mlr9:RC0003;
+                mlr9:DES1200 "-122.082932"^^<http://www.w3.org/2001/XMLSchema#float>;
+                mlr9:DES1300 "37.386013"^^<http://www.w3.org/2001/XMLSchema#float> ] ].
 
 ##### `GEO` for persons
 
@@ -1984,20 +1865,18 @@ Becomes
 
     :::N3
     [] a mlr1:RC0002;
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001;
-                mlr9:DES0900 [ a mlr9:RC0002 ] ] ].
+        mlr2:DES1600 [ a mlr9:RC0001;
+            mlr9:DES0900 [ a mlr9:RC0002 ] ].
 
 But not
 
     :::N3 forbidden
     [] a mlr1:RC0002;
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES1800 [ a mlr9:RC0001;
-                mlr9:DES0900 [ a mlr9:RC0002;
-                    mlr9:DES1100 [ a mlr9:RC0003;
-                        mlr9:DES1200 "-122.082932"^^<http://www.w3.org/2001/XMLSchema#float>;
-                        mlr9:DES1300 "37.386013"^^<http://www.w3.org/2001/XMLSchema#float> ] ] ] ] .
+        mlr2:DES1600 [ a mlr9:RC0001;
+            mlr9:DES0900 [ a mlr9:RC0002;
+                mlr9:DES1100 [ a mlr9:RC0003;
+                    mlr9:DES1200 "-122.082932"^^<http://www.w3.org/2001/XMLSchema#float>;
+                    mlr9:DES1300 "37.386013"^^<http://www.w3.org/2001/XMLSchema#float> ] ] ].
 
 
 ### Contribution Date
@@ -2073,57 +1952,7 @@ Becomes
 
 #### Contribution dates
 
-Dates are transferred within the `mlr5:DES0700` contribution entities, as long as they can be parsed.
-
-    :::xml
-    <lifeCycle>
-        <contribute>
-            <role>
-                <source>LOMv1.0</source>
-                <value>publisher</value>
-            </role>
-            <date>
-                <dateTime>2012-01-01T00:00</dateTime>
-            </date>
-        </contribute>
-    </lifeCycle>
-
-Becomes
-
-    :::N3
-    []  a mlr1:RC0002;
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES0700 "2012-01-01T00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ] .
-
-##### #####
-
-Unparsable dates are simply ignored.
-
-    :::xml
-    <lifeCycle>
-        <contribute>
-            <role>
-                <source>LOMv1.0</source>
-                <value>publisher</value>
-            </role>
-            <description>
-                <string language="fra-CA">mi-XVIème siècle</string>
-            </description>
-        </contribute>
-    </lifeCycle>
-
-Becomes
-
-    :::N3
-    []  a mlr1:RC0002;
-        mlr5:DES1700 [ a mlr5:RC0003 ].
-
-without
-
-    :::N3 forbidden
-    []  a mlr1:RC0002;
-        mlr5:DES1700 [ a mlr5:RC0003;
-            mlr5:DES0700 "mi-XVIème siècle"@fra-CA ] .
+Contribution and publication dates have no equivalent in MLR.
 
 ## Metametadata
 

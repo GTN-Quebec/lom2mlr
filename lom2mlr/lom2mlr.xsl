@@ -204,7 +204,6 @@
 	<xsl:template match="text()" mode="top"/>
 	<xsl:template match="text()" mode="general"/>
 	<xsl:template match="text()" mode="lifeCycle"/>
-	<xsl:template match="text()" mode="lifeCycle_ed"/>
 	<xsl:template match="text()" mode="metaMetadata"/>
 	<xsl:template match="text()" mode="technical"/>
 	<xsl:template match="text()" mode="tech-requirement"/>
@@ -239,7 +238,6 @@
 
 	<xsl:template match="lom:lifeCycle" mode="top">
 		<xsl:apply-templates mode="lifeCycle"/>
-		<xsl:apply-templates mode="lifeCycle_ed"/>
 	</xsl:template>
 
 	<xsl:template match="lom:metaMetadata" mode="metaMetadata">
@@ -364,9 +362,6 @@
 	<!-- lifeCycle -->
 
 	<xsl:template match="lom:contribute[lom:role[lom:source/text()='LOMv1.0' and lom:value/text()='author']]" mode="lifeCycle">
-		<mlr2:DES0200> <!-- creator -->
-			<xsl:value-of select="vcardconv:convert(lom:entity/text())/vcard:fn/vcard:text/text()" />
-		</mlr2:DES0200>
 		<xsl:choose>
 			<xsl:when test="lom:date/lom:dateTime">
 				<mlr2:DES0700>
@@ -392,48 +387,39 @@
 				</xsl:apply-templates>
 			</xsl:when>
 		</xsl:choose>
+		<xsl:apply-templates mode="lifeCycle">
+			<xsl:with-param name="dc_entity_role" select="'mlr2:DES0200'" />
+			<xsl:with-param name="mlr9_entity_role" select="'mlr2:DES1600'" />
+		</xsl:apply-templates>
+	</xsl:template>
+
+	<xsl:template match="lom:entity" mode="lifeCycle">
+		<xsl:param name="dc_entity_role"/>
+		<xsl:param name="mlr9_entity_role"/>
+		<xsl:variable name="vcard" select="vcardconv:convert(text())"/>
+		<xsl:element name="{$dc_entity_role}">
+			<xsl:value-of select="$vcard/vcard:fn/vcard:text/text()"/>
+		</xsl:element>
+		<xsl:element name="{$mlr9_entity_role}">
+			<xsl:apply-templates mode="vcard" select="$vcard"/>
+		</xsl:element>
 	</xsl:template>
 
 	<xsl:template match="lom:contribute[lom:role[lom:source/text()='LOMv1.0' and lom:value/text()='publisher']]" mode="lifeCycle">
-		<mlr2:DES0500> <!-- publisher -->
-			<xsl:value-of select="vcardconv:convert(lom:entity/text())/vcard:fn/vcard:text/text()" />
-		</mlr2:DES0500>
+		<!-- publisher -->
+		<xsl:apply-templates mode="lifeCycle">
+			<xsl:with-param name="dc_entity_role" select="'mlr2:DES0500'" />
+			<xsl:with-param name="mlr9_entity_role" select="'mlr2:DES1900'" />
+		</xsl:apply-templates>
 	</xsl:template>
 
 
 	<xsl:template match="lom:contribute" mode="lifeCycle">
-		<mlr2:DES0600> <!-- contributor -->
-			<xsl:value-of select="vcardconv:convert(lom:entity/text())/vcard:fn/vcard:text/text()" />
-		</mlr2:DES0600>
-	</xsl:template>
-
-	<xsl:template match="lom:contribute" mode="lifeCycle_ed">
-		<mlr5:DES1700>
-			<mlr5:RC0003>
-				<xsl:attribute name="rdf:about">
-					<xsl:text>urn:uuid:</xsl:text>
-					<xsl:value-of select="mlrext:uuid_unique()"/>
-				</xsl:attribute>
-				<xsl:apply-templates mode="lifeCycle_ed"/>
-			</mlr5:RC0003>
-		</mlr5:DES1700>
-	</xsl:template>
-
-	<xsl:template match="lom:role" mode="lifeCycle_ed">
-		<xsl:call-template name="mlr5_DES0800"/>
-	</xsl:template>
-
-	<xsl:template match="lom:date" mode="lifeCycle_ed">
-		<xsl:call-template name="date">
-			<xsl:with-param name="nodename" select="'mlr5:DES0700'"/>
-		</xsl:call-template>
-	</xsl:template>
-
-	<xsl:template match="lom:entity" mode="lifeCycle_ed">
-		<mlr5:DES1800>
-			<!-- <xsl:copy-of select="vcardconv:convert(text())" /> -->
-			<xsl:apply-templates mode="vcard" select="vcardconv:convert(text())" />
-		</mlr5:DES1800>
+		<!-- contributor -->
+		<xsl:apply-templates mode="lifeCycle">
+			<xsl:with-param name="dc_entity_role" select="'mlr2:DES0600'" />
+			<xsl:with-param name="mlr9_entity_role" select="'mlr2:DES2000'" />
+		</xsl:apply-templates>
 	</xsl:template>
 
 	<!-- vcard handling -->

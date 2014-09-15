@@ -49,7 +49,15 @@ MLR2_Element_names = {
     MLR2.DES1200: 'Language',
     MLR2.DES1300: 'Relation',
     MLR2.DES1400: 'Coverage',
-    MLR2.DES1500: 'Rights'
+    MLR2.DES1500: 'Rights',
+    MLR2.DES1600: 'Creator',
+    # MLR2.DES1700: 'Subject',
+    # MLR2.DES1800: 'Description',
+    MLR2.DES1900: 'Publisher',
+    MLR2.DES2000: 'Contributor',
+    # MLR2.DES2100: 'Source',
+    # MLR2.DES2200: 'Relation',
+    # MLR2.DES2300: 'Rights',
 }
 
 MLR3_Element_names = {
@@ -158,6 +166,9 @@ MLR_Subclass_attributes = {
         # OA.motivatedBy: 'motivation',
         # OA.annotatedBy: 'annotator',
     },
+    MLR2.RC0002: {
+        
+    },
     MLR5.RC0002: { # Audience
         MLR5.DES0400: 'Audience language',
         MLR5.DES0500: 'Audience level',
@@ -260,6 +271,7 @@ Known_Missing = set([
     MLR4.DES0600,
     MLR4.DES0700,
     MLR5.DES2400,
+    MLR5.DES1700,
     MLR5.DES2900,
     MLR5.DES0700,  # occasionally missing
     MLR8.DES0500,
