@@ -1,18 +1,5 @@
 # Converting LOM to MLR
 
-<!-- 
-TODO: Ouvrir compte GTN-Québec GitHub.
-TODO: Lots: Avec ou sans MLR record. (Toggle)
-MLR9: Suggestions
-    Contribution should be a partial MLR record
-    Repository should be a resource with entry point URIs (and repository type?)
-    DES1100... pourquoi séquence? Préférences? (Maudit RDF!)
-Identifier les heuristiques vs normatif comme telles. (couleur?)
-Toggle: Ajouter des informations hors-scope, comme l'addresse de vcard.owl
-trouver comment éliminer le marqueur linguistique dans le MLR traduit.
-FOAF: Make sure non-work group! sigh.
--->
-
 # General principles
 
 ## Optional heuristics
