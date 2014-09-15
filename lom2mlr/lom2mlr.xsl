@@ -1221,9 +1221,8 @@
 
 
 	<xsl:template match="lom:entity" mode="metaMetadata">
-		<!-- TODO: Make a vCard -->
 		<mlr8:DES1400>
-			<xsl:value-of select="vcardconv:convert(text())/vcard:fn/vcard:text/text()" />
+			<xsl:apply-templates mode="vcard" select="vcardconv:convert(text())" />
 		</mlr8:DES1400>
 	</xsl:template>
 
@@ -1786,7 +1785,7 @@
 
 	<xsl:template match="lom:entity" mode="annotation">
         <oa:annotatedBy>
-            <xsl:apply-templates mode="vcard" select="vcardconv:convert(lom:vcard/text())" />
+            <xsl:apply-templates mode="vcard" select="vcardconv:convert(text())" />
         </oa:annotatedBy>
 	</xsl:template>
 

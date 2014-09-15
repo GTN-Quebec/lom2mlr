@@ -3397,15 +3397,13 @@ LOM annotations are treated as educational annotations of an unknown type. Treat
 
     :::xml
     <annotation>
-        <entity>
-            <vcard>BEGIN:VCARD
+        <entity>BEGIN:VCARD
     VERSION:3.0
     N:Parent;Marc-Antoine.
     FN:Marc-Antoine Parent
     URL:http://maparent.ca/
     END:VCARD
-    </vcard>
-        </entity>
+    </entity>
         <date>
             <dateTime>2004-04-01</dateTime>
         </date>
@@ -3423,6 +3421,7 @@ Becomes
         oa:annotatedBy <http://maparent.ca/> ;
         oa:hasBody "Cette ressource exige beaucoup d'aide de l'enseignant."@fra ;
         oa:annotatedAt "2004-04-01"^^<http://www.w3.org/2001/XMLSchema#date> .
+    <http://maparent.ca/> a mlr9:RC0001.
 
 ## Classification
 

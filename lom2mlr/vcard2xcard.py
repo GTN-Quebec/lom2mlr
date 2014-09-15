@@ -24,6 +24,8 @@ NSMAP = {None: VCARD_NS}
 
 def readOne(card):
     card_lines = card.split('\n')
+    while len(card_lines[0]) == 0:
+        del card_lines[0]
     use_cr = card_lines[0][-1] == '\r'
     first_line = card_lines[0].rstrip('\r')
     if first_line != first_line.rstrip():
