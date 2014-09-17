@@ -1,4 +1,5 @@
 # -*- mode: python -*-
+from sys import platform
 from glob import glob
 from os.path import abspath, join, basename
 
@@ -16,8 +17,12 @@ data_files = [
   for f in glob('lom2mlr/vdex/ISO*.xsl') + glob('lom2mlr/vdex/*.vdex')
 ]
 
+name = lom2mlr
+if platform.lower().startswith('win'):
+  name += '.exe'
+
 a = Analysis(['lom2mlr/transform.py'],
-             pathex=['/Users/maparent/Dropbox/GTN-Q/lom2mlr'],
+             pathex=[abspath(.)],
              hiddenimports=[],
              hookspath=None,
              runtime_hooks=None)
@@ -27,7 +32,7 @@ exe = EXE(pyz,
           a.binaries,
           a.zipfiles,
           a.datas + data_files,
-          name='lom2mlr',
+          name=name,
           debug=False,
           strip=None,
           upx=True,

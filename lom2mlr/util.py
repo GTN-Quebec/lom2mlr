@@ -62,8 +62,13 @@ def splitcode(code):
 def module_path():
     import sys
     import os.path
-    if hasattr(sys, "frozen"):
-        # py2exe
-        return os.path.dirname(unicode(sys.executable, sys.getfilesystemencoding( )))
+    if getattr(sys, "frozen", False):
+        d = getattr(sys, "_MEIPASS", None)
+        if d:
+            # pyinstaller
+            return d
+        else:
+            # py2exe
+            return os.path.dirname(unicode(sys.executable, sys.getfilesystemencoding( )))
 
     return os.path.dirname(unicode(__file__, sys.getfilesystemencoding( )))
