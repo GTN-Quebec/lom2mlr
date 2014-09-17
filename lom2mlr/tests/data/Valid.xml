@@ -271,6 +271,7 @@ les élèves de quatrième ou de cinquième année qui éprouvent des difficult�
         <source>
             <string language="fr">CDD 22e éd.</string>
             <string language="en">DDC 22nd ed.</string>
+            <string language="zxx">http://dewey.info/class/</string>
         </source>
         <taxon>
             <id>909</id>
