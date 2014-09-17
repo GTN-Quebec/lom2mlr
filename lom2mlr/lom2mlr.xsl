@@ -76,7 +76,6 @@
 	<!-- A URI for the LOM itself if none is specifified in metaMetadata.  -->
 	<xsl:param name="lom_uri" select="''"/>
 
-
 	<!-- the version number of the converter -->
 	<xsl:param name="converter_version" select="'0.1'"/>
 
@@ -215,6 +214,7 @@
 	<xsl:template match="text()" mode="annotation"/>
 	<xsl:template match="text()" mode="annotations"/>
 	<xsl:template match="text()" mode="classification"/>
+	<xsl:template match="text()" mode="classification_discipline"/>
 	<xsl:template match="text()" mode="vcard"/>
 	<xsl:template match="text()" mode="vcard_org"/>
 	<xsl:template match="text()" mode="vcard_suborg_attributes"/>
@@ -1803,6 +1803,7 @@
 		<xsl:if test="string-length($target)">
 			<xsl:copy-of select="$target"/>
 		</xsl:if>
+		<xsl:apply-templates mode="classification_discipline"/>
 	</xsl:template>
 
 	<xsl:template match="lom:classification[lom:purpose[lom:source/text()='LOMv1.0' and lom:value/text()='educational level']]" mode="classification">
@@ -1841,6 +1842,25 @@
 				<xsl:apply-templates select="lom:taxonPath/lom:taxon[lom:entry/lom:string][last()]/lom:entry/lom:string" mode="langstring">
 					<xsl:with-param name="nodename" select="$nodename"/>
 				</xsl:apply-templates>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template mode="classification_discipline" match="lom:taxonPath">
+		<xsl:choose>
+			<xsl:when test="lom:source/lom:string[mlrext:is_absolute_iri(text())]">
+				<mlr2:DES1700>
+					<xsl:attribute name="rdf:resource">
+						<xsl:value-of select="concat(lom:source/lom:string[mlrext:is_absolute_iri(text())][position()=1]/text(), lom:taxon[last()]/lom:id/text())" />
+					</xsl:attribute>
+				</mlr2:DES1700>
+			</xsl:when>
+			<xsl:when test="mlrext:is_absolute_iri(lom:taxon[last()]/lom:id/text())">
+				<mlr2:DES1700>
+					<xsl:attribute name="rdf:resource">
+						<xsl:value-of select="lom:taxon[last()]/lom:id/text()" />
+					</xsl:attribute>
+				</mlr2:DES1700>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>

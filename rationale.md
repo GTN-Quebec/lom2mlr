@@ -3266,13 +3266,13 @@ LOMv1.0 distinguishes many purposes of resource classification.
 * security level
 * competency
 
-Of those, we translate only discipline and educational level into `mlr2:DES0200` and `mlr5:DES1000` respectively.
+Of those, we translate only discipline and educational level into `mlr2:DES0300` and `mlr5:DES1000` respectively.
 
 ### Discipline
 
 #### Description
 
-The discipline description can be translated directly as `mlr2:DES0200`.
+The discipline description can be translated directly as `mlr2:DES0300`.
 
     :::xml
     <classification>
@@ -3316,7 +3316,7 @@ Becomes
 
 #### Taxon path
 
-If we have neither description nor keywords, we can use the last (most precise) item of a taxon path. Sometimes, it is necessary to give context rather than the most precise taxon, but that is unfortunately difficult to determine.
+If we have neither description nor keywords, we can use the last (most precise) item of a taxon path for the `mlr2:DES0300` literal. Sometimes, it is necessary to give context rather than the most precise taxon, but that is unfortunately difficult to determine.
 
     :::xml
     <classification>
@@ -3329,20 +3329,20 @@ If we have neither description nor keywords, we can use the last (most precise) 
                 <string language="eng">DDC 22nd ed.</string>
             </source>
             <taxon>
+                <id>500</id>
                 <entry>
-                    <id>500</id>
                     <string language="eng">Natural Sciences and Mathemetics</string>
                 </entry>
             </taxon>
             <taxon>
+                <id>510</id>
                 <entry>
-                    <id>510</id>
                     <string language="eng">Mathematics</string>
                 </entry>
             </taxon>
             <taxon>
+            <id>512</id>
                 <entry>
-                    <id>512</id>
                     <string language="eng">Algebra</string>
                 </entry>
             </taxon>
@@ -3355,6 +3355,77 @@ Becomes
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr2:DES0300 "Algebra"@eng .
+
+#### Taxon path with URI source
+
+If the source is an absolute IRI reference, it can be presumed to refer to a well defined vocabulary (using SKOS or VDEX, for example), and the combination of source and final taxon identifier can be presumed to be a URI for a concept in a taxonomy, which can be identified using `mlr2:DES1700`. The same can be done if the taxon identifier is itself a URI. This is a fragile heuristics, as the [RFC 3987](http://www.ietf.org/rfc/rfc3987.txt) syntax for absolute IRI references is quite permissive. Still, it will avoid some of the most obvious mistakes.
+
+    :::xml
+    <classification>
+        <purpose>
+            <source>LOMv1.0</source>
+            <value>discipline</value>
+        </purpose>
+        <taxonPath>
+            <source>
+                <string language="zxx">http://dewey.info/class/</string>
+            </source>
+            <taxon>
+                <id>500</id>
+                <entry>
+                    <string language="eng">Natural Sciences and Mathemetics</string>
+                </entry>
+            </taxon>
+            <taxon>
+                <id>510</id>
+                <entry>
+                    <string language="eng">Mathematics</string>
+                </entry>
+            </taxon>
+            <taxon>
+                <id>512</id>
+                <entry>
+                    <string language="eng">Algebra</string>
+                </entry>
+            </taxon>
+        </taxonPath>
+    </classification>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES0300 "Algebra"@eng ;
+        mlr2:DES1700 <http://dewey.info/class/512>.
+
+
+Similarly if the taxon identifier is an absolute IRI reference.
+
+    :::xml
+    <classification>
+        <purpose>
+            <source>LOMv1.0</source>
+            <value>discipline</value>
+        </purpose>
+        <taxonPath>
+            <source>
+                <string language="eng">a vocabulary</string>
+            </source>
+            <taxon>
+                <id>http://example.com/vocabulary.vdex#abcd</id>
+                <entry>
+                    <string language="eng">ABCD</string>
+                </entry>
+            </taxon>
+        </taxonPath>
+    </classification>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES0300 "ABCD"@eng ;
+        mlr2:DES1700 <http://example.com/vocabulary.vdex#abcd>.
 
 
 ### Educational level

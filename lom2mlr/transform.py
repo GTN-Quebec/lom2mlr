@@ -9,12 +9,14 @@ __docformat__ = "restructuredtext en"
 import argparse
 import sys
 import os.path
+import re
 from urlparse import urlparse
 from urllib import urlopen
 
 from uuid import UUID, uuid1, uuid5, NAMESPACE_URL, RFC_4122
 from lxml import etree, _elementpath
 from rdflib import Graph
+import rfc3987
 
 from lom2mlr.util import unwrap_seq, module_path
 from lom2mlr.vcard2xcard import convert
@@ -33,13 +35,18 @@ URL_MLR = 'http://standards.iso.org/iso-iec/19788/'
 """ The URL for the MLR standards, as a namespace."""
 
 URL_MLR_EXT = URL_MLR + 'ext/'
-"""A namespace for XSLT extensions that generate UUIDs"""
+"""A namespace for XSLT utility extensions"""
 
 URL_GTN = 'http://gtn-quebec.org/ns/vcarduuid/'
 """ A namespace URL for GTN-Québec.  Used to build UUIDs for vCards."""
 
 NAMESPACE_MLR = uuid5(NAMESPACE_URL, URL_GTN)
 """The UUID5 built from the URL_GTN, used as a namespace for GTN-Québec extensions"""
+
+
+absolute_iri_ref_re = re.compile(u"%s(#%s)?" % (
+    rfc3987.bmp_upatterns_no_names['absolute_IRI'],
+    rfc3987.bmp_upatterns_no_names['ifragment']))
 
 
 @unwrap_seq
@@ -76,6 +83,11 @@ def is_uuid1(context, uuid):
     u = UUID(uuid[9:])
     assert u.variant == RFC_4122
     return u.version == 1
+
+
+@unwrap_seq
+def is_absolute_iri(context, string):
+    return absolute_iri_ref_re.match(string) is not None
 
 
 def _to_xsl_option(val):
@@ -126,6 +138,7 @@ class Converter(object):
                 (URL_MLR_EXT, 'uuid_unique'): uuid_unique,
                 (URL_MLR_EXT, 'uuid_url'): uuid_url,
                 (URL_MLR_EXT, 'is_uuid1'): is_uuid1,
+                (URL_MLR_EXT, 'is_absolute_iri'): is_absolute_iri,
             })
         """ :lxml-class:`XSLT` object
             The Converter's stylesheet """
