@@ -17,7 +17,7 @@ with ``scons``, and then it is possible to do a normal
 ``python setup.py install``. This process will hopefully be streamlined
 in the near future.
 
-On Windows, it is also possible to create a package_ with py2exe_.
+It is also possible to create a package_ with pyinstaller_.
 
 Installing this package installs two scripts: lom2mlr and
 lom2mlr\_markdown. The latter is used to create the rationale.html file,
@@ -35,4 +35,4 @@ Use :program:`nosetests`.
 .. _here: https://github.com/kennethreitz/osx-gcc-installer
 .. _scons: http://scons.org
 .. _package: http://www.gtn-quebec.org/lom2mlr/lom2mlr_win.zip
-.. _py2exe: http://www.py2exe.org/
+.. _pyinstaller: http://www.pyinstaller.org/
