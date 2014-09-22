@@ -1154,6 +1154,7 @@
 
 	<xsl:template match="*" mode="identifier">
 		<xsl:param name="technical"/>
+		<xsl:param name="construct" select="true()"/>
 		<xsl:choose>
 			<xsl:when test="lom:identifier/lom:catalog[text() = 'URI']">
 				<xsl:value-of select="lom:identifier[lom:catalog/text() = 'URI'][1]/lom:entry/text()" />
@@ -1180,7 +1181,7 @@
 			<xsl:when test="$technical and ../lom:technical/lom:location/text()">
 				<xsl:value-of select="../lom:technical/lom:location[1]/text()" />
 			</xsl:when>
-			<xsl:when test="lom:identifier">
+			<xsl:when test="$construct and lom:identifier">
 				<xsl:value-of select="lom:identifier[1]/lom:catalog/text()" />
 				<xsl:text>|</xsl:text>
 				<xsl:value-of select="lom:identifier[1]/lom:entry/text()" />
@@ -1725,31 +1726,46 @@
 				<xsl:with-param name="technical" select="false()"/>
 			</xsl:apply-templates>
 		</xsl:variable>
-		<xsl:variable name="resource_id_uri">
-			<xsl:choose>
-				<xsl:when test="substring-before($resource_id,'|')!=''">
-					<xsl:text>urn:uuid:</xsl:text>
-					<xsl:value-of select="mlrext:uuid_string($resource_id)"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="$resource_id"/>
-				</xsl:otherwise>
-			</xsl:choose>
+		<xsl:variable name="resource_id_if_uri">
+			<xsl:apply-templates mode="identifier" select="lom:resource">
+				<xsl:with-param name="technical" select="false()"/>
+				<xsl:with-param name="construct" select="false()"/>
+			</xsl:apply-templates>
 		</xsl:variable>
-		<xsl:if test="string-length($resource_id_uri) &gt; 0">
-			<xsl:choose>
-				<xsl:when test="lom:kind[lom:source/text()='LOMv1.0' and lom:value/text()='isbasedon']">
-					<mlr2:DES1100>
-						<xsl:value-of select="$resource_id_uri"/>
-					</mlr2:DES1100>
-				</xsl:when>
-				<xsl:otherwise>
-					<mlr2:DES1300>
-						<xsl:value-of select="$resource_id_uri"/>
-					</mlr2:DES1300>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:if>
+		<xsl:choose>
+			<xsl:when test="string-length($resource_id_if_uri) = 0">
+				<xsl:choose>
+					<xsl:when test="lom:kind[lom:source/text()='LOMv1.0' and lom:value/text()='isbasedon']">
+						<mlr2:DES1100>
+							<xsl:value-of select="$resource_id"/>
+						</mlr2:DES1100>
+					</xsl:when>
+					<xsl:otherwise>
+						<mlr2:DES1300>
+							<xsl:value-of select="$resource_id"/>
+						</mlr2:DES1300>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:choose>
+					<xsl:when test="lom:kind[lom:source/text()='LOMv1.0' and lom:value/text()='isbasedon']">
+						<mlr2:DES2100>
+							<xsl:attribute name="rdf:resource">
+								<xsl:value-of select="$resource_id_if_uri"/>
+							</xsl:attribute>
+						</mlr2:DES2100>
+					</xsl:when>
+					<xsl:otherwise>
+						<mlr2:DES2200>
+							<xsl:attribute name="rdf:resource">
+								<xsl:value-of select="$resource_id_if_uri"/>
+							</xsl:attribute>
+						</mlr2:DES2200>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 

@@ -3189,7 +3189,7 @@ Becomes
 
 ### Source
 
-The LOMv1.0 relationship `isbasedon` translates to source, that is `mlr2:DES1100`. Identifiers are treated as usual (with a uuid-string for local catalogs, etc.)
+The LOMv1.0 relationship `isbasedon` translates to source, that is `mlr2:DES2100` in case when the identifier is also an IRI, or can be translated to one easily.
 
     :::xml
     <relation>
@@ -3209,11 +3209,35 @@ Becomes
 
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
-        mlr2:DES1100 "http://www.example.com/resources/1234".
+        mlr2:DES2100 <http://www.example.com/resources/1234>.
+
+Local catalogs are the exception, and we use `mlr2:DES1100`.
+
+    :::xml
+    <relation>
+        <kind>
+            <source>LOMv1.0</source>
+            <value>isbasedon</value>
+        </kind>
+        <resource>
+            <identifier>
+                <catalog>a_local_catalog</catalog>
+                <entry>1234</entry>
+            </identifier>
+        </resource>
+    </relation>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES1100 "a_local_catalog|1234".
+
+Note: Should we then also use a UUID with mlr:DES2100? Optionally?
 
 ### Other relations
 
-Any other relation are expressed with the `mlr2:DES1300` tag. The nature of the relation is lost.
+Any other relation are expressed with the `mlr2:DES2200` tag (for URIs) the (for local catalogs). The nature of the relation is lost.
 
     :::xml
     <relation>
@@ -3233,7 +3257,30 @@ Becomes
 
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
-        mlr2:DES1300 "http://www.example.com/resources/1234" .
+        mlr2:DES2200 <http://www.example.com/resources/1234> .
+
+Similarly for local catalogs, we use the `mlr2:DES1300` tag.
+
+    :::xml
+    <relation>
+        <kind>
+            <source>LOMv1.0</source>
+            <value>requires</value>
+        </kind>
+        <resource>
+            <identifier>
+                <catalog>a_local_catalog</catalog>
+                <entry>1234</entry>
+            </identifier>
+        </resource>
+    </relation>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES1300 "a_local_catalog|1234" .
+
 
 ## Annotation
 
