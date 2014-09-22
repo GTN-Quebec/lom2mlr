@@ -174,9 +174,9 @@
 					</xsl:if>
 				</xsl:when>
 				<xsl:when test="$use_mlr3">
-					<mlr3:DES0200>
+					<mlr3:DES0400>
 						<xsl:value-of select="$identifier"/>
-					</mlr3:DES0200>
+					</mlr3:DES0400>
 					<mlr2:DES1000>
 						<xsl:value-of select="$identifier"/>
 					</mlr2:DES1000>
@@ -312,11 +312,11 @@
 			</xsl:attribute>
 		</mlr2:DES1000>
 		<xsl:if test="$use_mlr3">
-			<mlr3:DES0200>
+			<mlr3:DES0400>
 				<xsl:attribute name="rdf:resource">
 					<xsl:value-of select="lom:entry/text()"/>
 				</xsl:attribute>
-			</mlr3:DES0200>
+			</mlr3:DES0400>
 		</xsl:if>
 	</xsl:template>
 
@@ -328,11 +328,11 @@
 
 	<xsl:template match="lom:language" mode="general">
 		<xsl:if test="$use_mlr3 and regexp:test(text(),'^[a-z][a-z][a-z]?(\-[A-Z][A-Z])?$')">
-			<mlr3:DES0300>
+			<mlr3:DES0500>
 			<xsl:call-template name="language">
 				<xsl:with-param name="l" select="text()"/>
 			</xsl:call-template>
-			</mlr3:DES0300>
+			</mlr3:DES0500>
 		</xsl:if>
 		<mlr2:DES1200>
 			<xsl:call-template name="language">

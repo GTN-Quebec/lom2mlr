@@ -32,12 +32,12 @@ MLR-3 is an application profile, and elements defined here are optional refineme
 
 ### Identifier
 
-What should the RDF identifier (`rdf:about`) of the resource be? There are two aspects here: the RDF resource name, and the mlr2:DES1000 (or mlr3:DES0200) element, which are equivalent to `dc:identifier`. The latter is a literal, whereas the former needs to be a URI.
+What should the RDF identifier (`rdf:about`) of the resource be? There are two aspects here: the RDF resource name, and the mlr2:DES1000 (or mlr3:DES0400) element, which are equivalent to `dc:identifier`. The latter is a literal, whereas the former needs to be a URI.
 
-By design, the LOM 'general/identifier' may be either a global or local identifier. Global identifiers are identified with a known global value for the `identifier/catalog`: Often one of `URI`, `URL`, `ISSN`, `DOI`, `PURL`, `ISBN`, etc. Any of those global identifiers can be made into a URI if it is not one already. This URI can also be used as-is for the literal identifier. Any other catalog value is treated as a local identifier. In the latter case, we cannot use the `mlr3:DES0200` marker, which should refer to a global identifier, unlike `mlr2:DES1000`.
+By design, the LOM 'general/identifier' may be either a global or local identifier. Global identifiers are identified with a known global value for the `identifier/catalog`: Often one of `URI`, `URL`, `ISSN`, `DOI`, `PURL`, `ISBN`, etc. Any of those global identifiers can be made into a URI if it is not one already. This URI can also be used as-is for the literal identifier. Any other catalog value is treated as a local identifier. In the latter case, we cannot use the `mlr3:DES0400` marker, which should refer to a global identifier, unlike `mlr2:DES1000`.
 
 
-The `general/identifier` LOM tag is preferred as a RDF identification. It is also used for the mlr3:DES0200 element, the equivalent to `dc:identifier`.
+The `general/identifier` LOM tag is preferred as a RDF identification. It is also used for the mlr3:DES0400 element, the equivalent to `dc:identifier`.
 
 #### URI catalog
 
@@ -55,7 +55,7 @@ Becomes
 
     :::N3
     <http://www.example.com/resources/4561> a mlr1:RC0002;
-      mlr3:DES0200 "http://www.example.com/resources/4561" .
+      mlr3:DES0400 "http://www.example.com/resources/4561" .
 
 
 #### Other global catalogs
@@ -75,7 +75,7 @@ Becomes
 
     :::N3
     <urn:ISBN:0-201-61633-5> a mlr1:RC0002;
-      mlr3:DES0200 "urn:ISBN:0-201-61633-5" .
+      mlr3:DES0400 "urn:ISBN:0-201-61633-5" .
 
 
 #### Local catalog, with a location.
@@ -98,19 +98,19 @@ Becomes
 
     :::N3
     <http://example.com/resources/123123.html> a mlr1:RC0002;
-      mlr3:DES0200 "http://example.com/resources/123123.html" .
+      mlr3:DES0400 "http://example.com/resources/123123.html" .
 
 But not:
 
     :::N3 forbidden
     <http://example.com/resources/123123.variant.html> a mlr1:RC0002;
-      mlr3:DES0200 "http://example.com/resources/123123.variant.html" .
+      mlr3:DES0400 "http://example.com/resources/123123.variant.html" .
 
 #### Local catalog, without a location.
 
 If we have a local catalog and no location URL we can use as a global identifier, we use the following heuristics: 
 
-1. Combine the catalog with the local identifier to obtain a local identifier. We use '|' as a separator, since it cannot be part of a URI, and this allows us to differentiate from URI identifiers. This can be used for the `mlr2:DES1000` value. (Recall we cannot use the `mlr3:DES0200` marker, which must refer to a global identifier.)
+1. Combine the catalog with the local identifier to obtain a local identifier. We use '|' as a separator, since it cannot be part of a URI, and this allows us to differentiate from URI identifiers. This can be used for the `mlr2:DES1000` value. (Recall we cannot use the `mlr3:DES0400` marker, which must refer to a global identifier.)
 2. For the resource identity, which must be a URI, generate a UUID-5 from the combined identifier above. This requires a base UUID as a namespace: I suggest we use `UUID5(NAMESPACE_URL, 'http://standards.iso.org/iso-iec/19788/-1/ed-1/en/RC0002')`, which is `cd6fbe1e-df95-5959-8a71-1e8ca353a0f3`.
 
 In this example, we would use `UUID5(UUID5(NAMESPACE_URL, 'http://standards.iso.org/iso-iec/19788/-1/ed-1/en/RC0002'), 'MyDatabase|123123')` 
@@ -183,7 +183,7 @@ Ideally, language should follow ISO-639-3. This can be detected by a regular exp
 Becomes
 
     :::N3
-    [] mlr3:DES0300 "fra-CA" .
+    [] mlr3:DES0500 "fra-CA" .
 
 #### general/language following ISO-639-2
 
@@ -197,7 +197,7 @@ ISO-639-2 language tags can also be detected by a regular expression, and are th
 Becomes
 
     :::N3
-    [] mlr3:DES0300 "fra-CA" .
+    [] mlr3:DES0500 "fra-CA" .
 
 
 #### general/language
@@ -217,7 +217,7 @@ Becomes
 But does not become
 
     :::N3 forbidden
-    [] mlr3:DES0300 "français" .
+    [] mlr3:DES0500 "français" .
 
 #### general/description
 

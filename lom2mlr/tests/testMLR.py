@@ -62,8 +62,8 @@ MLR2_Element_names = {
 
 MLR3_Element_names = {
     MLR3.DES0100: 'Date',
-    MLR3.DES0200: 'Identifier',
-    MLR3.DES0300: 'Language'
+    MLR3.DES0400: 'Identifier',
+    MLR3.DES0500: 'Language'
 }
 
 MLR4_Element_names = {
@@ -265,8 +265,8 @@ Element_names.update(MLR9_Element_names)
 
 Known_Missing = set([
     MLR2.DES0700,  # replaced by MLR3:DES0100
-    MLR2.DES1000,  # replaced by MLR3:DES0200
-    MLR2.DES1200,  # replaced by MLR3:DES0300
+    MLR2.DES1000,  # replaced by mlr3:DES0400
+    MLR2.DES1200,  # replaced by mlr3:DES0500
     MLR4.DES0500,
     MLR4.DES0600,
     MLR4.DES0700,
@@ -318,7 +318,7 @@ class testMlr(unittest.TestCase):
         assert(len(self.graph)>0)
 
     def test_has_lang(self):
-        expected = '%s <%s> mlr3:DES0300 "fra-CA".' % (prologue, TEST_ID)
+        expected = '%s <%s> mlr3:DES0500 "fra-CA".' % (prologue, TEST_ID)
         assert(len(list(self.graph.triples(self.triple_from_n3(expected)))))
 
     def test_has_all_mlr_values(self):

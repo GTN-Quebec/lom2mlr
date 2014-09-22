@@ -201,16 +201,44 @@
     <range ns="mlr1" id="literal"/>
   </id>
   <id ns="mlr3" id="DES0200">
+    <term lang="eng">description</term>
+    <term lang="fra">description</term>
+    <term lang="rus">описание</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr3" id="DES0300">
+    <term lang="eng">format</term>
+    <term lang="fra">format</term>
+    <term lang="rus">формат</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr3" id="DES0400">
     <term lang="eng">identifier</term>
     <term lang="fra">identificateur</term>
     <term lang="rus">идентификатор</term>
     <domain ns="mlr1" id="RC0002"/>
     <range ns="mlr1" id="literal"/>
   </id>
-  <id ns="mlr3" id="DES0300">
+  <id ns="mlr3" id="DES0500">
     <term lang="eng">language</term>
     <term lang="fra">langue</term>
     <term lang="rus">язык</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr1" id="literal"/>
+  </id>
+  <id ns="mlr3" id="DES0600">
+    <term lang="eng">source</term>
+    <term lang="fra">source</term>
+    <term lang="rus">источник</term>
+    <domain ns="mlr1" id="RC0002"/>
+    <range ns="mlr2" id="RC0001"/>
+  </id>
+  <id ns="mlr3" id="DES0700">
+    <term lang="eng">type</term>
+    <term lang="fra">type</term>
+    <term lang="rus">тип</term>
     <domain ns="mlr1" id="RC0002"/>
     <range ns="mlr1" id="literal"/>
   </id>
