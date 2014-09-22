@@ -22,7 +22,7 @@ if platform.lower().startswith('win'):
   name += '.exe'
 
 a = Analysis(['lom2mlr/transform.py'],
-             pathex=[abspath(.)],
+             pathex=[abspath('.')],
              hiddenimports=[],
              hookspath=None,
              runtime_hooks=None)
