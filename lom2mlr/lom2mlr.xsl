@@ -348,6 +348,11 @@
 		<xsl:apply-templates select="lom:string[mlrext:is_absolute_iri(text())]" mode="urlstring">
 			<xsl:with-param name="nodename">mlr2:DES1800</xsl:with-param>
 		</xsl:apply-templates>
+		<xsl:if test="$use_mlr3">
+			<xsl:apply-templates select="lom:string" mode="langstring">
+				<xsl:with-param name="nodename">mlr3:DES0200</xsl:with-param>
+			</xsl:apply-templates>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="lom:keyword" mode="general">
@@ -1753,6 +1758,11 @@
 						<mlr2:DES1100>
 							<xsl:value-of select="$resource_id"/>
 						</mlr2:DES1100>
+						<xsl:if test="$use_mlr3">
+							<mlr3:DES0600>
+								<xsl:value-of select="$resource_id"/>
+							</mlr3:DES0600>
+						</xsl:if>
 					</xsl:when>
 					<xsl:otherwise>
 						<mlr2:DES1300>

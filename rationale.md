@@ -221,7 +221,7 @@ But does not become
 
 #### general/description
 
-Description can be interpreted as `mlr2:DES0400`.
+Description can be interpreted as `mlr2:DES0400`, but if we use the MLR3 profile, we'll also want to use `mlr3:DES0200`.
 
     :::xml
     <general>
@@ -233,7 +233,8 @@ Description can be interpreted as `mlr2:DES0400`.
 Becomes
 
     :::N3
-    [] mlr2:DES0400 "L'enseignant identifie les contraintes..."@fra-CA .
+    [] mlr2:DES0400 "L'enseignant identifie les contraintes..."@fra-CA ;
+        mlr3:DES0200 "L'enseignant identifie les contraintes..."@fra-CA .
 
 But if it's an URI, it can also be interpreted as `mlr2:DES1800`.
 
@@ -3228,7 +3229,7 @@ Becomes
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr2:DES2100 <http://www.example.com/resources/1234>.
 
-Local catalogs are the exception, and we use `mlr2:DES1100`.
+Local catalogs are the exception, and we use `mlr2:DES1100`, and optionally `mlr3:DES0600`.
 
     :::xml
     <relation>
@@ -3248,7 +3249,8 @@ Becomes
 
     :::n3
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
-        mlr2:DES1100 "a_local_catalog|1234".
+        mlr2:DES1100 "a_local_catalog|1234" ;
+        mlr3:DES0600 "a_local_catalog|1234".
 
 Note: Should we then also use a UUID with mlr:DES2100? Optionally?
 

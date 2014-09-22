@@ -62,8 +62,10 @@ MLR2_Element_names = {
 
 MLR3_Element_names = {
     MLR3.DES0100: 'Date',
+    MLR3.DES0200: 'Description',
     MLR3.DES0400: 'Identifier',
-    MLR3.DES0500: 'Language'
+    MLR3.DES0500: 'Language',
+    MLR3.DES0600: 'Source',
 }
 
 MLR4_Element_names = {
