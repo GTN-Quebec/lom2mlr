@@ -1681,9 +1681,7 @@
 	<xsl:template match="lom:rights" mode="top">
 		<xsl:choose>
 			<xsl:when test="lom:description">
-				<xsl:apply-templates select="lom:description/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr2:DES1500'"/>
-				</xsl:apply-templates>
+				<xsl:apply-templates select="lom:description/lom:string" mode="rights" />
 			</xsl:when>
 			<xsl:when test="lom:cost[lom:source/text()='LOMv1.0' and lom:value/text()='yes']">
 				<xsl:choose>
@@ -1716,6 +1714,22 @@
 				</xsl:choose>
 			</xsl:when>
 		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template mode="rights" match="lom:string[mlrext:is_absolute_iri(text())]">
+		<mlr2:DES2300>
+			<mlr2:RC0002>
+				<xsl:attribute name="rdf:about">
+					<xsl:value-of select="text()"/>
+				</xsl:attribute>
+			</mlr2:RC0002>
+		</mlr2:DES2300>
+	</xsl:template>
+
+	<xsl:template mode="rights" match="lom:string[not(mlrext:is_absolute_iri(text()))]">
+		<xsl:apply-templates select="." mode="langstring">
+			<xsl:with-param name="nodename" select="'mlr2:DES1500'"/>
+		</xsl:apply-templates>
 	</xsl:template>
 
 	<!-- relations -->

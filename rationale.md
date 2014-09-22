@@ -3126,6 +3126,23 @@ Becomes
     <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
         mlr2:DES1500 "Domaine public."@fra .
 
+If it is a IRI, we can use `mlr2:DES2300`.
+
+    :::xml
+    <rights>
+        <description>
+            <string language="zxx">http://creativecommons.org/licenses/by-nc/3.0/us/legalcode</string>
+        </description>
+    </rights>
+
+Becomes
+
+    :::n3
+    <urn:uuid:10000000-0000-0000-0000-000000000000> a mlr1:RC0002;
+        mlr2:DES2300 <http://creativecommons.org/licenses/by-nc/3.0/us/legalcode> .
+    <http://creativecommons.org/licenses/by-nc/3.0/us/legalcode> a mlr2:RC0002 .
+
+
 ### Costs
 
 When there is no description, but costs exist, they can be mentioned as such. (Copyright is then assumed to apply.)
