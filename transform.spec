@@ -17,7 +17,7 @@ data_files = [
   for f in glob('lom2mlr/vdex/ISO*.xsl') + glob('lom2mlr/vdex/*.vdex')
 ]
 
-name = lom2mlr
+name = 'lom2mlr'
 if platform.lower().startswith('win'):
   name += '.exe'
 
