@@ -221,7 +221,7 @@ But does not become
 
 #### general/description
 
-Description could be interpreted as `mlr2:DES0400`.
+Description can be interpreted as `mlr2:DES0400`.
 
     :::xml
     <general>
@@ -234,6 +234,22 @@ Becomes
 
     :::N3
     [] mlr2:DES0400 "L'enseignant identifie les contraintes..."@fra-CA .
+
+But if it's an URI, it can also be interpreted as `mlr2:DES1800`.
+
+    :::xml
+    <general>
+        <description>
+            <string language="zxx">http://www.example.com/myblog/2014/01/01</string>
+        </description>
+    </general>
+
+Becomes
+
+    :::N3
+    [] mlr2:DES1800 <http://www.example.com/myblog/2014/01/01> .
+
+(Note: Should we specify that this URL is a `mlr2:RC0001` (Thing)?)
 
 #### general/keyword ####
 

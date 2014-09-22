@@ -345,6 +345,9 @@
 		<xsl:apply-templates select="lom:string" mode="langstring">
 			<xsl:with-param name="nodename">mlr2:DES0400</xsl:with-param>
 		</xsl:apply-templates>
+		<xsl:apply-templates select="lom:string[mlrext:is_absolute_iri(text())]" mode="urlstring">
+			<xsl:with-param name="nodename">mlr2:DES1800</xsl:with-param>
+		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="lom:keyword" mode="general">
@@ -1878,6 +1881,15 @@
 				</xsl:attribute>
 			</xsl:if>
 			<xsl:value-of select="text()" />
+		</xsl:element>
+	</xsl:template>
+
+	<xsl:template match="lom:string" mode="urlstring">
+		<xsl:param name="nodename" />
+		<xsl:element name="{$nodename}">
+			<xsl:attribute name="rdf:resource">
+				<xsl:value-of select="text()" />
+			</xsl:attribute>
 		</xsl:element>
 	</xsl:template>
 

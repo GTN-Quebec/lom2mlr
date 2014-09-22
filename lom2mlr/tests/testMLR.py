@@ -52,7 +52,7 @@ MLR2_Element_names = {
     MLR2.DES1500: 'Rights',
     MLR2.DES1600: 'Creator',
     MLR2.DES1700: 'Subject',
-    # MLR2.DES1800: 'Description',
+    MLR2.DES1800: 'Description',
     MLR2.DES1900: 'Publisher',
     MLR2.DES2000: 'Contributor',
     # MLR2.DES2100: 'Source',
