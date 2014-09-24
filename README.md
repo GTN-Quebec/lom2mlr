@@ -12,7 +12,7 @@ More documentation is available [here](http://lom2mlr.readthedocs.org/en/latest/
 
 The documentation contains installation and usage instructions for the command-line tool. There is also a web application version available [here](http://www.gtn-quebec.org/lom2mlr/index.cgi). This web application is available as a web form, or as a RESTful service (at the same address). In that second case, the LOM data can be POSTED, and optional arguments can be passed as a query string.
 
-The command-line tool requires many components, as detailed in the instructions, but packaged binary applications are available [for Windows](http://www.gtn-quebec.org/lom2mlr/lom2mlr.exe) and [for Mac OS X](http://www.gtn-quebec.org/lom2mlr/lom2mlr.gz). Put it in your executable, and type `lom2mlr --help` for instructions.
+The command-line tool requires many components, as detailed in the instructions, but packaged binary applications are available [for Windows](http://www.gtn-quebec.org/lom2mlr/lom2mlr.exe) and [for Mac OS X](http://www.gtn-quebec.org/lom2mlr/lom2mlr.gz). Put it in your executable PATH, and type `lom2mlr --help` for instructions.
 
 ## Rationale
 
