@@ -24,13 +24,14 @@ NSMAP = {None: VCARD_NS}
 
 def readOne(card):
     card_lines = card.split('\n')
+    card_lines = [l.lstrip() for l in card_lines]
     while len(card_lines[0]) == 0:
         del card_lines[0]
     use_cr = card_lines[0][-1] == '\r'
     first_line = card_lines[0].rstrip('\r')
     if first_line != first_line.rstrip():
         card_lines[0] = first_line.rstrip() + ('\r' if use_cr else '')
-        card = '\n'.join(card_lines)
+    card = '\n'.join(card_lines)
     return readOne_original(card)
 
 
@@ -201,28 +202,32 @@ def convert(context, card):
     :param context: the xslt context that will allow creation of etree elements
     :returns: the context's node (a :lxml-class:`_Element`) on which xCards were added.
     """
-    card = readOne(card)
-    root = context.context_node.makeelement(VCARD_NSB + 'vcard', nsmap=NSMAP)
-    for e in card.getChildren():
-        tag = e.name.lower()
-        if tag in exclude_tags:
-            continue
-        el = root.makeelement(VCARD_NSB + tag, nsmap=NSMAP)
-        root.append(el)
-        if e.group:
-            el.attrib['group'] = e.group
-        if e.params:
-            params = el.makeelement(VCARD_NSB + 'parameters', nsmap=NSMAP)
-            el.append(params)
-            for k, v in e.params.iteritems():
-                param = params.makeelement(VCARD_NSB + k.lower(), nsmap=NSMAP)
-                params.append(param)
-                vobj_to_typed_param(v, param)
-        v = e.transformToNative().value
-        if isinstance(v, vcard.Address):
-            vobj_to_str(v, el, vcard.ADDRESS_ORDER)
-        elif isinstance(v, vcard.Name):
-            vobj_to_str(v, el, vcard.NAME_ORDER)
-        else:
-            vobj_to_typed_properties(v, el)
+    try:
+        card = readOne(card)
+        root = context.context_node.makeelement(VCARD_NSB + 'vcard', nsmap=NSMAP)
+        for e in card.getChildren():
+            tag = e.name.lower()
+            if tag in exclude_tags:
+                continue
+            el = root.makeelement(VCARD_NSB + tag, nsmap=NSMAP)
+            root.append(el)
+            if e.group:
+                el.attrib['group'] = e.group
+            if e.params:
+                params = el.makeelement(VCARD_NSB + 'parameters', nsmap=NSMAP)
+                el.append(params)
+                for k, v in e.params.iteritems():
+                    param = params.makeelement(VCARD_NSB + k.lower(), nsmap=NSMAP)
+                    params.append(param)
+                    vobj_to_typed_param(v, param)
+            v = e.transformToNative().value
+            if isinstance(v, vcard.Address):
+                vobj_to_str(v, el, vcard.ADDRESS_ORDER)
+            elif isinstance(v, vcard.Name):
+                vobj_to_str(v, el, vcard.NAME_ORDER)
+            else:
+                vobj_to_typed_properties(v, el)
+    except Exception as e:
+        print("oups", e.message)
+        raise
     return root
