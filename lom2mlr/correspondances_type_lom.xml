@@ -48,20 +48,6 @@
         <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f6aeb39a1bd6f0e67a2783f97b115f97" dest="" />
         <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:0e6bc5231a28a34b96a1de07966c94dc" dest="" />
 
-        <term source="educ_learningResourceType-lomfr" value="démonstration" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="animation" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="tutoriel" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="glossaire" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="guide" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="matériel de référence" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="méthodologie" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="outil" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="scénario pédagogique" dest=""/>
-        <term source="educ_learningResourceType-suplomfr" value="étude de cas" dest=""/>
-        <term source="educ_learningResourceType-suplomfr" value="liste de références" dest=""/>
-        <term source="educ_learningResourceType-suplomfr" value="jeu de données" dest=""/>
-        <term source="educ_learningResourceType-suplomfr" value="autre" dest=""/>
-
     </group>
 
     <group context="educational" element="learningResourceType" voc="" dest="mlr5:DES2100" always="false">
@@ -112,20 +98,6 @@
         <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f6aeb39a1bd6f0e67a2783f97b115f97" dest="" />
         <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:0e6bc5231a28a34b96a1de07966c94dc" dest="" />
 
-        <term source="educ_learningResourceType-lomfr" value="démonstration" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="animation" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="tutoriel" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="glossaire" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="guide" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="matériel de référence" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="méthodologie" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="outil" dest=""/>
-        <term source="educ_learningResourceType-lomfr" value="scénario pédagogique" dest=""/>
-        <term source="educ_learningResourceType-suplomfr" value="étude de cas" dest=""/>
-        <term source="educ_learningResourceType-suplomfr" value="liste de références" dest=""/>
-        <term source="educ_learningResourceType-suplomfr" value="jeu de données" dest=""/>
-        <term source="educ_learningResourceType-suplomfr" value="autre" dest=""/>
-
     </group>
 
     <group context="lifeCycle" element="role" voc="ISO_IEC_19788-5:2012::VA.1" dest="mlr5:DES0800" always="true">
@@ -145,7 +117,6 @@
         <term source="LOMv1.0" value="script writer" dest="T010"/>
         <term source="LOMv1.0" value="instructional designer" dest="T010"/>
         <term source="LOMv1.0" value="subject matter expert" dest="T010"/>
-        <term source="roles-lomfr" value="contributeur" dest="T010"/>
     </group>
     <group context="educational" element="intendedEndUserRole" voc="ISO_IEC_19788-5:2012::VA.2" dest="mlr5:DES0600" always="true">
         <!--  audience role -->

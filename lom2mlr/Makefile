@@ -17,5 +17,8 @@ subdirs: $(SUBDIRS)
 $(SUBDIRS):
 	$(MAKE) -C $@
 
+correspondances_type.xml: correspondances_type_lom.xml correspondances_type_lomfr.xml correspondances_merge.xsl
+	xsltproc -o $@ correspondances_merge.xsl correspondances_type_lom.xml
+
 correspondances_xsl.xsl: correspondances_type.xml correspondances.xsl
 	xsltproc -o $@ correspondances.xsl $< 

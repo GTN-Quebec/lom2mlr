@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<correspondency>
+    <group context="educational" element="learningResourceType" voc="ISO_IEC_19788-3-2011-VA.2" dest="mlr2:DES0800" always="true">
+        
+        <term source="educ_learningResourceType-lomfr" value="démonstration" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="animation" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="tutoriel" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="glossaire" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="guide" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="matériel de référence" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="méthodologie" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="outil" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="scénario pédagogique" dest=""/>
+        <term source="educ_learningResourceType-suplomfr" value="étude de cas" dest=""/>
+        <term source="educ_learningResourceType-suplomfr" value="liste de références" dest=""/>
+        <term source="educ_learningResourceType-suplomfr" value="jeu de données" dest=""/>
+        <term source="educ_learningResourceType-suplomfr" value="autre" dest=""/>
+
+    </group>
+
+    <group context="educational" element="learningResourceType" voc="" dest="mlr5:DES2100" always="false">
+
+        <term source="educ_learningResourceType-lomfr" value="démonstration" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="animation" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="tutoriel" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="glossaire" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="guide" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="matériel de référence" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="méthodologie" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="outil" dest=""/>
+        <term source="educ_learningResourceType-lomfr" value="scénario pédagogique" dest=""/>
+        <term source="educ_learningResourceType-suplomfr" value="étude de cas" dest=""/>
+        <term source="educ_learningResourceType-suplomfr" value="liste de références" dest=""/>
+        <term source="educ_learningResourceType-suplomfr" value="jeu de données" dest=""/>
+        <term source="educ_learningResourceType-suplomfr" value="autre" dest=""/>
+
+    </group>
+
+    <group context="lifeCycle" element="role" voc="ISO_IEC_19788-5:2012::VA.1" dest="mlr5:DES0800" always="true">
+        <!-- agent role ; Contributor role -->
+        <term source="roles-lomfr" value="contributeur" dest="T010"/>
+    </group>
+    <group context="educational" element="intendedEndUserRole" voc="ISO_IEC_19788-5:2012::VA.2" dest="mlr5:DES0600" always="true">
+        <!--  audience role -->
+    </group>
+    <!-- group context="education" element="" voc="ISO_IEC_19788-5:2012::VA.3" dest="mlr5:DES2800" always="false">
+        induced activity 
+    </group>
+    <group context="education" element="" voc="ISO_IEC_19788-5:2012::VA.4" dest="mlr5:DES2400" always="false">
+        learning method 
+    </group>
+    <group context="education" element="" voc="ISO_IEC_19788-5:2012::VA.5" dest="mlr5:DES0300" always="false">
+        annotation type 
+    </group -->
+</correspondency>
