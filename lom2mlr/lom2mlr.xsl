@@ -2,6 +2,8 @@
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
+	xmlns:lomfr="http://www.lom-fr.fr/xsd/LOMFR"
+	xmlns:lomfrens="http://pratic.ens-lyon.fr/xsd/LOMFRENS"
 	xmlns:regexp="http://exslt.org/regular-expressions"
 	xmlns:str="http://exslt.org/strings"
 	xmlns:sets="http://exslt.org/sets"
@@ -94,6 +96,9 @@
 	<!-- vocabularies and utilities -->
 	<xsl:include href="correspondances_xsl.xsl"/>
 	<xsl:include href="iso639.xsl"/>
+
+	<!-- specific lom version (fr, ensfr) -->
+	<xsl:include href="lomfr2mlr.xsl" />
 
 	<!-- top-level templates -->
 	<xsl:template match="/">
