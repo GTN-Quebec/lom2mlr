@@ -22,6 +22,7 @@
 	xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
 	xmlns:mlr9="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/"
+	xmlns:mlr-fr="http://www.ens-lyon.fr/"
 	extension-element-prefixes="regexp sets str vcardconv mlrext"
 	>
 	<xsl:output method="xml" encoding="UTF-8"/>

@@ -10,6 +10,7 @@
 	xmlns:mlr3="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/"
 	xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
+	xmlns:mlr-fr="http://www.ens-lyon.fr/"
 	>
 	<xslin:namespace-alias stylesheet-prefix="xsl" result-prefix="xslin"/>
 	<xslin:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>

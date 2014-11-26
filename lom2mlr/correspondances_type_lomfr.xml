@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <correspondency>
+    <group dest="mlr-fr:activity" always="false" context="educational" element="learningResourceType" voc="ISO_IEC_19788-3-2011-VA.2">
+      <term ns="lomfr" source="LOMFRv1.0" value="animer" dest="FRT001" />
+      <term ns="lomfr" source="LOMFRv1.0" value="apprendre" dest="FRT002" />
+      <term ns="lomfr" source="LOMFRv1.0" value="collaborer" dest="FRT003" />
+      <term ns="lomfr" source="LOMFRv1.0" value="communiquer" dest="FRT004" />
+      <term ns="lomfr" source="LOMFRv1.0" value="coopérer" dest="FRT005" />
+      <term ns="lomfr" source="LOMFRv1.0" value="créer" dest="FRT006" />
+      <term ns="lomfr" source="LOMFRv1.0" value="échanger" dest="FRT007" />
+      <term ns="lomfr" source="LOMFRv1.0" value="lire" dest="FRT008" />
+      <term ns="lomfr" source="LOMFRv1.0" value="observer" dest="FRT009" />
+      <term ns="lomfr" source="LOMFRv1.0" value="organiser" dest="FRT010" />
+      <term ns="lomfr" source="LOMFRv1.0" value="produire" dest="FRT011" />
+      <term ns="lomfr" source="LOMFRv1.0" value="publier" dest="FRT012" />
+      <term ns="lomfr" source="LOMFRv1.0" value="rechercher" dest="FRT013" />
+      <term ns="lomfr" source="LOMFRv1.0" value="s'auto-former" dest="FRT014" />
+      <term ns="lomfr" source="LOMFRv1.0" value="s'exercer" dest="FRT015" />
+      <term ns="lomfr" source="LOMFRv1.0" value="s'informer" dest="FRT016" />
+      <term ns="lomfr" source="LOMFRv1.0" value="se former" dest="FRT017" />
+      <term ns="lomfr" source="LOMFRv1.0" value="simuler" dest="FRT018" />
+      <term ns="lomfr" source="LOMFRv1.0" value="s'évaluer" dest="FRT019" />
+    </group>
+
     <group context="educational" element="learningResourceType" voc="ISO_IEC_19788-3-2011-VA.2" dest="mlr2:DES0800" always="true">
         
         <term ns="lomfr" source="LOMFRv1.0" value="démonstration" dest=""/>
