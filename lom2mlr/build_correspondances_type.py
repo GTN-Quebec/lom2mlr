@@ -3,8 +3,16 @@
 import xml.etree.ElementTree as ET
 import argparse
 
+def parse_a_file(filename):
+    print "parsing ",filename
+    try:
+        return ET.parse(filename)
+    except ET.ParseError:
+        print "fail to parse ",filename
+        raise
+
 def parse_all_file(filenames):
-    return [ET.parse(filename) for filename in filenames]
+    return [parse_a_file(filename) for filename in filenames]
 
 def merge_root(main, other):
     for ogroup in other:
@@ -43,6 +51,12 @@ if __name__ == "__main__" :
 
     for tree in trees:
         merge_root(main_root, tree.getroot())
+
+    for group in main_root:
+        for term in group:
+            value = term.get('value')
+            value = value.replace("'", "&apos")
+            term.set('value', value)
 
     main_tree.write(args.outfile, encoding=args.outencoding)
 
