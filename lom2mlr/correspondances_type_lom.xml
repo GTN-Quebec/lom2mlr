@@ -1,129 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <correspondency>
     <group context="educational" element="learningResourceType" voc="ISO_IEC_19788-3-2011-VA.2" dest="mlr2:DES0800" always="true">
-        <term source="LOMv1.0" value="exercise" dest=""/>
-        <term source="LOMv1.0" value="simulation" dest=""/>
-        <term source="LOMv1.0" value="questionnaire" dest=""/>
-        <term source="LOMv1.0" value="diagram" dest="T011"/>
-        <term source="LOMv1.0" value="figure" dest="T011"/>
-        <term source="LOMv1.0" value="graph" dest="T011"/>
-        <term source="LOMv1.0" value="index" dest=""/>
-        <term source="LOMv1.0" value="slide" dest="T011"/>
-        <term source="LOMv1.0" value="table" dest="T002"/>
-        <term source="LOMv1.0" value="narrative text" dest="T012"/>
-        <term source="LOMv1.0" value="exam" dest=""/>
-        <term source="LOMv1.0" value="experiment" dest=""/>
-        <term source="LOMv1.0" value="problem statement" dest=""/>
-        <term source="LOMv1.0" value="self assessment" dest=""/>
-        <term source="LOMv1.0" value="lecture" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="exercise" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="simulation" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="questionnaire" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="diagram" dest="T011"/>
+        <term ns="lom" source="LOMv1.0" value="figure" dest="T011"/>
+        <term ns="lom" source="LOMv1.0" value="graph" dest="T011"/>
+        <term ns="lom" source="LOMv1.0" value="index" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="slide" dest="T011"/>
+        <term ns="lom" source="LOMv1.0" value="table" dest="T002"/>
+        <term ns="lom" source="LOMv1.0" value="narrative text" dest="T012"/>
+        <term ns="lom" source="LOMv1.0" value="exam" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="experiment" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="problem statement" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="self assessment" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="lecture" dest=""/>
 
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="evaluation" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="animation" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="tutoriel" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="glossaire" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="guide" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="materiel de reference" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="outils" dest="T009"/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="simulation" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="lecture/presentation" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="evaluation" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="animation" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="tutoriel" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="glossaire" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="guide" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="materiel de reference" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="outils" dest="T009"/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="simulation" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="lecture/presentation" dest=""/>
 
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:6c6fb0a02cc5a1900130daeac91d7902" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:269ed39d19198f01707807d9864b919a" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:60c9515e8c01cb51e42b0497732fe273" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:ffcff9f41b145f5a481b9365897de468" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:df93252621bfa530cf27c57db653df10" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:d7b7c3c695ecf8299dac403c29e8fdec" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:95cdc5978356078166b7cfe780e01fec" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:e8173bfb4d7184941bfe8684cc5dbc31" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:cb9c02846e65a4849c943e100dc190f9" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f7da0372bbf14c6c3d2e51feefac7d4f" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f6f87d3df4d8ddd10c20d5dde5dd5670" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:70d53563471a8f20d41e30aefa29f8c0" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:300dff466349e430d631db92c4bec4b6" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:3a58ebfb543b8963b073aa13ba356029" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:03e3a724b309d530b2bb419dae1babd5" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f715814ee892b88d0ab2ddadeda0438d" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:9fc024a9a3cc143303f06cfdfe92a170" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f869da0439a1ad239b6db89afd2afb31" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f6aeb39a1bd6f0e67a2783f97b115f97" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:0e6bc5231a28a34b96a1de07966c94dc" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:6c6fb0a02cc5a1900130daeac91d7902" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:269ed39d19198f01707807d9864b919a" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:60c9515e8c01cb51e42b0497732fe273" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:ffcff9f41b145f5a481b9365897de468" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:df93252621bfa530cf27c57db653df10" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:d7b7c3c695ecf8299dac403c29e8fdec" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:95cdc5978356078166b7cfe780e01fec" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:e8173bfb4d7184941bfe8684cc5dbc31" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:cb9c02846e65a4849c943e100dc190f9" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f7da0372bbf14c6c3d2e51feefac7d4f" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f6f87d3df4d8ddd10c20d5dde5dd5670" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:70d53563471a8f20d41e30aefa29f8c0" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:300dff466349e430d631db92c4bec4b6" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:3a58ebfb543b8963b073aa13ba356029" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:03e3a724b309d530b2bb419dae1babd5" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f715814ee892b88d0ab2ddadeda0438d" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:9fc024a9a3cc143303f06cfdfe92a170" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f869da0439a1ad239b6db89afd2afb31" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f6aeb39a1bd6f0e67a2783f97b115f97" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:0e6bc5231a28a34b96a1de07966c94dc" dest="" />
 
     </group>
 
     <group context="educational" element="learningResourceType" voc="" dest="mlr5:DES2100" always="false">
-        <term source="LOMv1.0" value="exercise" dest="T140"/>
-        <term source="LOMv1.0" value="simulation" dest="T160"/>
-        <term source="LOMv1.0" value="questionnaire" dest="T130"/>
-        <term source="LOMv1.0" value="diagram" dest=""/>
-        <term source="LOMv1.0" value="figure" dest=""/>
-        <term source="LOMv1.0" value="graph" dest=""/>
-        <term source="LOMv1.0" value="index" dest=""/>
-        <term source="LOMv1.0" value="slide" dest=""/>
-        <term source="LOMv1.0" value="table" dest=""/>
-        <term source="LOMv1.0" value="narrative text" dest=""/>
-        <term source="LOMv1.0" value="exam" dest="T130"/>
-        <term source="LOMv1.0" value="experiment" dest="T150"/>
-        <term source="LOMv1.0" value="problem statement" dest="T150"/>
-        <term source="LOMv1.0" value="self assessment" dest="T130"/>
-        <term source="LOMv1.0" value="lecture" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="exercise" dest="T140"/>
+        <term ns="lom" source="LOMv1.0" value="simulation" dest="T160"/>
+        <term ns="lom" source="LOMv1.0" value="questionnaire" dest="T130"/>
+        <term ns="lom" source="LOMv1.0" value="diagram" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="figure" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="graph" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="index" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="slide" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="table" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="narrative text" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="exam" dest="T130"/>
+        <term ns="lom" source="LOMv1.0" value="experiment" dest="T150"/>
+        <term ns="lom" source="LOMv1.0" value="problem statement" dest="T150"/>
+        <term ns="lom" source="LOMv1.0" value="self assessment" dest="T130"/>
+        <term ns="lom" source="LOMv1.0" value="lecture" dest=""/>
 
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="evaluation" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="animation" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="tutoriel" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="glossaire" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="guide" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="materiel de reference" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="outils" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="simulation" dest=""/>
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="lecture/presentation" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="evaluation" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="animation" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="tutoriel" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="glossaire" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="guide" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="materiel de reference" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="outils" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="simulation" dest=""/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="lecture/presentation" dest=""/>
 
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:6c6fb0a02cc5a1900130daeac91d7902" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:269ed39d19198f01707807d9864b919a" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:60c9515e8c01cb51e42b0497732fe273" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:ffcff9f41b145f5a481b9365897de468" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:df93252621bfa530cf27c57db653df10" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:d7b7c3c695ecf8299dac403c29e8fdec" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:95cdc5978356078166b7cfe780e01fec" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:e8173bfb4d7184941bfe8684cc5dbc31" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:cb9c02846e65a4849c943e100dc190f9" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f7da0372bbf14c6c3d2e51feefac7d4f" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f6f87d3df4d8ddd10c20d5dde5dd5670" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:70d53563471a8f20d41e30aefa29f8c0" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:300dff466349e430d631db92c4bec4b6" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:3a58ebfb543b8963b073aa13ba356029" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:03e3a724b309d530b2bb419dae1babd5" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f715814ee892b88d0ab2ddadeda0438d" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:9fc024a9a3cc143303f06cfdfe92a170" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f869da0439a1ad239b6db89afd2afb31" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f6aeb39a1bd6f0e67a2783f97b115f97" dest="" />
-        <term source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:0e6bc5231a28a34b96a1de07966c94dc" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:6c6fb0a02cc5a1900130daeac91d7902" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:269ed39d19198f01707807d9864b919a" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:60c9515e8c01cb51e42b0497732fe273" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:ffcff9f41b145f5a481b9365897de468" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:df93252621bfa530cf27c57db653df10" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:d7b7c3c695ecf8299dac403c29e8fdec" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:95cdc5978356078166b7cfe780e01fec" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:e8173bfb4d7184941bfe8684cc5dbc31" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:cb9c02846e65a4849c943e100dc190f9" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f7da0372bbf14c6c3d2e51feefac7d4f" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f6f87d3df4d8ddd10c20d5dde5dd5670" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:70d53563471a8f20d41e30aefa29f8c0" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:300dff466349e430d631db92c4bec4b6" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:3a58ebfb543b8963b073aa13ba356029" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:03e3a724b309d530b2bb419dae1babd5" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f715814ee892b88d0ab2ddadeda0438d" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:9fc024a9a3cc143303f06cfdfe92a170" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f869da0439a1ad239b6db89afd2afb31" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:f6aeb39a1bd6f0e67a2783f97b115f97" dest="" />
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.2_element_5_2_type_de_ressource_voc.xml" value="urn:uuid:0e6bc5231a28a34b96a1de07966c94dc" dest="" />
 
     </group>
 
     <group context="lifeCycle" element="role" voc="ISO_IEC_19788-5:2012::VA.1" dest="mlr5:DES0800" always="true">
         <!-- agent role ; Contributor role -->
-        <term source="LOMv1.0" value="author" dest="T010"/>
-        <term source="LOMv1.0" value="publisher" dest=""/>
-        <term source="LOMv1.0" value="unknown" dest=""/>
-        <term source="LOMv1.0" value="initiator" dest="T010"/>
-        <term source="LOMv1.0" value="terminator" dest="T010"/>
-        <term source="LOMv1.0" value="validator" dest="T020"/>
-        <term source="LOMv1.0" value="editor" dest="T010"/>
-        <term source="LOMv1.0" value="graphical designer" dest="T010"/>
-        <term source="LOMv1.0" value="technical implementer" dest="T010"/>
-        <term source="LOMv1.0" value="content provider" dest="T010"/>
-        <term source="LOMv1.0" value="technical validator" dest="T020"/>
-        <term source="LOMv1.0" value="educational validator" dest="T020"/>
-        <term source="LOMv1.0" value="script writer" dest="T010"/>
-        <term source="LOMv1.0" value="instructional designer" dest="T010"/>
-        <term source="LOMv1.0" value="subject matter expert" dest="T010"/>
+        <term ns="lom" source="LOMv1.0" value="author" dest="T010"/>
+        <term ns="lom" source="LOMv1.0" value="publisher" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="unknown" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="initiator" dest="T010"/>
+        <term ns="lom" source="LOMv1.0" value="terminator" dest="T010"/>
+        <term ns="lom" source="LOMv1.0" value="validator" dest="T020"/>
+        <term ns="lom" source="LOMv1.0" value="editor" dest="T010"/>
+        <term ns="lom" source="LOMv1.0" value="graphical designer" dest="T010"/>
+        <term ns="lom" source="LOMv1.0" value="technical implementer" dest="T010"/>
+        <term ns="lom" source="LOMv1.0" value="content provider" dest="T010"/>
+        <term ns="lom" source="LOMv1.0" value="technical validator" dest="T020"/>
+        <term ns="lom" source="LOMv1.0" value="educational validator" dest="T020"/>
+        <term ns="lom" source="LOMv1.0" value="script writer" dest="T010"/>
+        <term ns="lom" source="LOMv1.0" value="instructional designer" dest="T010"/>
+        <term ns="lom" source="LOMv1.0" value="subject matter expert" dest="T010"/>
     </group>
     <group context="educational" element="intendedEndUserRole" voc="ISO_IEC_19788-5:2012::VA.2" dest="mlr5:DES0600" always="true">
         <!--  audience role -->
-        <term source="LOMv1.0" value="teacher" dest="T040"/>
-        <term source="LOMv1.0" value="author" dest=""/>
-        <term source="LOMv1.0" value="learner" dest="T010"/>
-        <term source="LOMv1.0" value="manager" dest="T020"/>
+        <term ns="lom" source="LOMv1.0" value="teacher" dest="T040"/>
+        <term ns="lom" source="LOMv1.0" value="author" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="learner" dest="T010"/>
+        <term ns="lom" source="LOMv1.0" value="manager" dest="T020"/>
     </group>
     <!-- group context="education" element="" voc="ISO_IEC_19788-5:2012::VA.3" dest="mlr5:DES2800" always="false">
         induced activity 
