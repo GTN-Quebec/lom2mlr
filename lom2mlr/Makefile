@@ -1,5 +1,5 @@
 
-TARGETS = correspondances_xsl.xsl
+TARGETS = correspondances_xsl.xsl correspondances_type.xml
 
 DIRS = translations vdex
 
@@ -18,7 +18,7 @@ $(SUBDIRS):
 	$(MAKE) -C $@
 
 correspondances_type.xml: correspondances_type_lom.xml correspondances_type_lomfr.xml
-	python build_correspondances_type.py -o $@ $<
+	python build_correspondances_type.py -o $@ $^
 
 correspondances_xsl.xsl: correspondances_type.xml correspondances.xsl
 	xsltproc -o $@ correspondances.xsl $< 
