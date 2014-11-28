@@ -484,13 +484,13 @@
 			</xsl:when>
 			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org and vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
 				<xsl:text>cn=</xsl:text>
-				<xsl:value-of select="vcard:org/vcard:text/text()"/>
+				<xsl:apply-templates select="vcard:org" mode="vcard_fullname"/>
 				<xsl:text>,mail=</xsl:text>
 				<xsl:value-of select="vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK' and vcard:parameters/vcard:type/vcard:text/text() = 'pref'][1]/vcard:text/text()"/>
 			</xsl:when>
 			<xsl:when test="$org_uuid_from_email_org and $suborg_use_work_email and vcard:org[string(@group) = $group] and vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']">
 				<xsl:text>cn=</xsl:text>
-				<xsl:value-of select="vcard:org[string(@group) = $group]/vcard:text/text()"/>
+				<xsl:apply-templates select="vcard:org[string(@group) = $group]" mode="vcard_fullname"/>
 				<xsl:text>,mail=</xsl:text>
 				<xsl:value-of select="vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
 			</xsl:when>
@@ -501,7 +501,7 @@
 				<xsl:value-of select="vcard:email[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'][1]/vcard:text/text()"/>
 			</xsl:when>
 			<xsl:when test="$org_uuid_from_org_address and vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK'] and vcard:org[string(@group) = $group]">
-				<xsl:value-of select="vcard:org[string(@group) = $group]/vcard:text/text()"/>
+				<xsl:apply-templates select="vcard:org[string(@group) = $group]" mode="vcard_fullname"/>
 				<xsl:if test="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()">
 					<xsl:text>;</xsl:text>
 					<xsl:value-of select="vcard:adr[string(@group) = $group and vcard:parameters/vcard:type/vcard:text/text() = 'WORK']/vcard:country/text()"/>
@@ -516,7 +516,7 @@
 				</xsl:if>
 			</xsl:when>
 			<xsl:when test="$org_uuid_from_org_or_fn and vcard:org">
-				<xsl:value-of select="vcard:org[string(@group) = $group]/vcard:text/text()"/>
+				<xsl:apply-templates select="vcard:org[string(@group) = $group]" mode="vcard_fullname"/>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
@@ -536,10 +536,21 @@
 		<xsl:param name="group"/>
 		<xsl:if test="string(@group) = $group">
 			<mlr9:DES1000>
-				<xsl:value-of select="vcard:text/text()"/>
+			    <xsl:apply-templates select="node()" mode="vcard_fullname"/>
 			</mlr9:DES1000>
 		</xsl:if>
 	</xsl:template>
+
+    <xsl:template match="vcard:org" mode="vcard_fullname">
+      <xsl:apply-templates select="node()" mode="vcard_fullname"/>
+    </xsl:template>
+
+    <xsl:template match="vcard:org/vcard:text" mode="vcard_fullname">
+       <xsl:value-of select="text()"/>
+       <xsl:if test="not(position()=last())">
+         <xsl:text>;</xsl:text>
+       </xsl:if>
+    </xsl:template>
 
 	<!-- VCard : Organizations -->
 
@@ -584,7 +595,7 @@
 				<xsl:variable name="id">
 					<xsl:choose>
 						<xsl:when test="vcard:org">
-							<xsl:value-of select="vcard:org/vcard:text/text()"/>
+							<xsl:apply-templates select="vcard:org" mode="vcard_fullname"/>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:value-of select="vcard:fn/vcard:text/text()"/>
@@ -610,7 +621,7 @@
 				<xsl:variable name="id">
 					<xsl:choose>
 						<xsl:when test="vcard:org">
-							<xsl:value-of select="vcard:org/vcard:text/text()"/>
+						    <xsl:apply-templates select="vcard:org" mode="vcard_fullname"/>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:value-of select="vcard:fn/vcard:text/text()"/>
@@ -642,13 +653,13 @@
 			</xsl:when>
 			<xsl:when test="$org_uuid_from_email_org and vcard:org and vcard:email[vcard:parameters/vcard:type/vcard:text/text() = 'pref']">
 				<xsl:text>cn=</xsl:text>
-				<xsl:value-of select="vcard:org/vcard:text/text()"/>
+				<xsl:apply-templates select="vcard:org" mode="vcard_fullname"/>
 				<xsl:text>,mail=</xsl:text>
 				<xsl:value-of select="vcard:email[1][vcard:parameters/vcard:type/vcard:text/text() = 'pref']/vcard:text/text()"/>
 			</xsl:when>
 			<xsl:when test="$org_uuid_from_email_org and vcard:org and vcard:email">
 				<xsl:text>cn=</xsl:text>
-				<xsl:value-of select="vcard:org/vcard:text/text()"/>
+				<xsl:apply-templates select="vcard:org" mode="vcard_fullname"/>
 				<xsl:text>,mail=</xsl:text>
 				<xsl:value-of select="vcard:email[1]/vcard:text/text()"/>
 			</xsl:when>
@@ -673,7 +684,7 @@
 			<xsl:when test="$org_uuid_from_org_address and vcard:adr and (vcard:org or vcard:fn)">
 				<xsl:choose>
 					<xsl:when test="vcard:org">
-						<xsl:value-of select="vcard:org/vcard:text/text()"/>
+						<xsl:apply-templates select="vcard:org" mode="vcard_fullname"/>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of select="vcard:fn/vcard:text/text()"/>
@@ -693,7 +704,7 @@
 				</xsl:if>
 			</xsl:when>
 			<xsl:when test="$org_uuid_from_org_or_fn and vcard:org">
-				<xsl:value-of select="vcard:org/vcard:text/text()"/>
+				<xsl:apply-templates select="vcard:org" mode="vcard_fullname"/>
 			</xsl:when>
 			<xsl:when test="$org_uuid_from_org_or_fn and vcard:fn">
 				<xsl:value-of select="vcard:fn/vcard:text/text()"/>
