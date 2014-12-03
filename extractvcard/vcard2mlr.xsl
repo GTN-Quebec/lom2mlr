@@ -39,6 +39,7 @@
     <xsl:template match="vcard:vcard" mode="individual">
       <v:VCard>
         <xsl:attribute name="rdf:about" value="@uuid">
+          <xsl:text>urn:uuid:</xsl:text>
           <xsl:value-of select="@uuid" />
         </xsl:attribute>
         <xsl:apply-templates />
@@ -49,6 +50,7 @@
     <xsl:template match="vcard:vcard" mode="is-org">
       <v:VCard>
         <xsl:attribute name="rdf:about" value="@uuid">
+          <xsl:text>urn:uuid:</xsl:text>
           <xsl:value-of select="@uuid" />
         </xsl:attribute>
         <xsl:apply-templates />
@@ -82,6 +84,7 @@
 
     <xsl:template match="vcard:vcard/vcard:org" mode="individual">
      <v:org>
+       <xsl:text>urn:uuid:</xsl:text>
        <xsl:value-of select="@uuid" />
      </v:org>
     </xsl:template>
@@ -95,6 +98,7 @@
     <xsl:template match="vcard:vcard/vcard:org" mode="extract-org">
      <v:VCard>
       <xsl:attribute name="rdf:about" value="@uuid">
+          <xsl:text>urn:uuid:</xsl:text>
           <xsl:value-of select="@uuid" />
         </xsl:attribute>
       <v:fn>
