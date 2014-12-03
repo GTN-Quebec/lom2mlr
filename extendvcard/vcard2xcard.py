@@ -257,35 +257,11 @@ def convert(context, card):
     try:
         card = readOne(card)
         root = context.context_node.makeelement(VCARD_NSB + 'vcard', nsmap=NSMAP)
+        fill_tree_from_vcard(root, card)
         id_ = uuid_string("".join(root.itertext()))
         root.set("uuid", id_)
-        fill_tree_from_vcard(root, card)
     except Exception as e:
         print "oups", e.message
         raise
-
-    if False:
-        for e in card.getChildren():
-            tag = e.name.lower()
-            if tag in exclude_tags:
-                continue
-            el = root.makeelement(VCARD_NSB + tag, nsmap=NSMAP)
-            root.append(el)
-            if e.group:
-                el.attrib['group'] = e.group
-            if e.params:
-                params = el.makeelement(VCARD_NSB + 'parameters', nsmap=NSMAP)
-                el.append(params)
-                for k, v in e.params.iteritems():
-                    param = params.makeelement(VCARD_NSB + k.lower(), nsmap=NSMAP)
-                    params.append(param)
-                    vobj_to_typed_param(v, param)
-            v = e.transformToNative().value
-            if isinstance(v, vcard.Address):
-                vobj_to_str(v, el, vcard.ADDRESS_ORDER)
-            elif isinstance(v, vcard.Name):
-                vobj_to_str(v, el, vcard.NAME_ORDER)
-            else:
-                vobj_to_typed_properties(v, el)
     
     return root
