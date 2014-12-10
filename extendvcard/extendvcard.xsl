@@ -8,28 +8,15 @@
 
 <xsl:template match="@*|node()">
   <xsl:copy>
-    <xsl:apply-templates />
+    <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <xsl:template match="lom:entity">
   <xsl:copy>
     <xsl:variable name="x" select="vcardconv:convert(text())" />
-    <xsl:apply-templates mode="copy" select="$x" />
+    <xsl:apply-templates select="$x" />
   </xsl:copy>
 </xsl:template>
-
-	
-
-<!-- copy -->
-	<xsl:template mode="copy" match="*">
-		<xsl:copy>
-			<xsl:apply-templates select="@*" mode="copy"/>
-			<xsl:apply-templates select="*|text()" mode="copy"/>
-		</xsl:copy>
-	</xsl:template>
-	<xsl:template mode="copy" match="@*|text()">
-		<xsl:copy />
-	</xsl:template>
 
 </xsl:stylesheet>
