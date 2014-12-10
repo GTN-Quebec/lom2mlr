@@ -191,6 +191,8 @@ def vobj_to_typed(val, root, typelist):
             if not is_sequence(val):
                 val = [val]
             for v in val:
+                if is_sequence(v):
+                    v = ",".join(v)
                 append_typed_el(root, 'text', v)
         else:
             append_typed_el(root, types, val)
