@@ -273,7 +273,11 @@
 						</xsl:if>
 						<mlr8:DES1000>
 							<mlr8:RC0004>
-								<mlr8:DES1500>IEEE 1484.12.1-2002 LOM</mlr8:DES1500>
+							   <xsl:attribute name="rdf:about">
+							     <xsl:text>urn:uuid:</xsl:text>
+						         <xsl:value-of select="mlrext:uuid_unique()"/>
+						       </xsl:attribute>
+						       <mlr8:DES1500>IEEE 1484.12.1-2002 LOM</mlr8:DES1500>
 							</mlr8:RC0004>
 						</mlr8:DES1000>
 						<xsl:if test="$mark_unique_uuid and $lom_identifier = ''">
@@ -297,6 +301,10 @@
 						</xsl:if>
 						<mlr8:DES1000>
 							<mlr8:RC0004>
+							  <xsl:attribute name="rdf:about">
+							     <xsl:text>urn:uuid:</xsl:text>
+						         <xsl:value-of select="mlrext:uuid_unique()"/>
+						       </xsl:attribute>
 								<mlr8:DES1500>IEEE 1484.12.1-2002 LOM</mlr8:DES1500>
 							</mlr8:RC0004>
 						</mlr8:DES1000>
