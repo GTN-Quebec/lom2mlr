@@ -23,14 +23,10 @@ VCARD_NSB = '{%s}' % (VCARD_NS, )
 NSMAP = {None: VCARD_NS}
 
 def readOne(card):
-    card_lines = card.split('\n')
-    card_lines = [l.lstrip() for l in card_lines]
-    while len(card_lines[0]) == 0:
-        del card_lines[0]
-    use_cr = card_lines[0][-1] == '\r'
-    first_line = card_lines[0].rstrip('\r')
-    if first_line != first_line.rstrip():
-        card_lines[0] = first_line.rstrip() + ('\r' if use_cr else '')
+    card = card.replace("\r\n", "\n")
+    card = card.replace("\r", "\n")
+    card_lines = card.split("\n")
+    card_lines = [l.strip() for l in card_lines]
     card = '\n'.join(card_lines)
     return readOne_original(card)
 
