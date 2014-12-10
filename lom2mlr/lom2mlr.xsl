@@ -287,21 +287,6 @@
 
 	<!-- General templates -->
 
-	<xsl:template match="lom:identifier" mode="general">
-		<mlr2:DES1000>
-			<xsl:attribute name="rdf:resource">
-				<xsl:value-of select="lom:entry/text()"/>
-			</xsl:attribute>
-		</mlr2:DES1000>
-		<xsl:if test="$use_mlr3">
-			<mlr3:DES0400>
-				<xsl:attribute name="rdf:resource">
-					<xsl:value-of select="lom:entry/text()"/>
-				</xsl:attribute>
-			</mlr3:DES0400>
-		</xsl:if>
-	</xsl:template>
-
 	<xsl:template match="lom:title" mode="general">
 		<xsl:apply-templates select="lom:string" mode="langstring">
 			<xsl:with-param name="nodename" select="'mlr2:DES0100'"/>
