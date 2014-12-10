@@ -22,40 +22,12 @@
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
 	xmlns:mlr9="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/"
 	xmlns:mlrens="http://www.ens-lyon.fr/"
-	extension-element-prefixes="regexp sets str vcardconv mlrext"
+	extension-element-prefixes="regexp sets str mlrext"
 	>
 	<xsl:output method="xml" encoding="UTF-8"/>
 
 	<!-- Allow use of MLR3 properties that refine the corresponding mlr2 properties. -->
 	<xsl:param name="use_mlr3" select="true()"/>
-
-	<!-- Use email alone as basis for a (natural) person's identity. Never a good idea. -->
-	<xsl:param name="person_url_from_email" select="false()"/>
-
-	<!-- Use combination of mail and fn (or N) as basis for a (natural) person's uuid. -->
-	<xsl:param name="person_uuid_from_email_fn" select="true()"/>
-
-	<!-- Use fn (or N) alone as basis for a (natural) person's uuid -->
-	<xsl:param name="person_uuid_from_fn" select="false()"/>
-
-	<!-- Use the email alone as a basis for an organization's identifying URL. -->
-	<xsl:param name="org_url_from_email" select="true()"/>
-
-	<!-- Combine org (or fn) with country, region, city as basis for an organization's uuid -->
-	<xsl:param name="org_uuid_from_org_address" select="true()"/>
-
-	<!-- Use the org and email as a basis for an organization's uuid -->
-	<xsl:param name="org_uuid_from_email_org" select="true()"/>
-
-	<!-- Use the fn and email as a basis for an organization's uuid -->
-	<xsl:param name="org_uuid_from_email_fn" select="true()"/>
-
-	<!-- Use a org (or fn) as a basis for an organization's uuid -->
-	<xsl:param name="org_uuid_from_org_or_fn" select="false()"/>
-
-	<!-- If a natural person has a work email,
-	assume it is the organization's email and not the person's email at work. -->
-	<xsl:param name="suborg_use_work_email" select="false()"/>
 
 	<!-- Mark the record with the graph information using cos:graph. -->
 	<xsl:param name="use_subgraph" select="true()"/>
@@ -85,10 +57,6 @@
 	<xsl:variable name="mlr1rc2" select="'http://standards.iso.org/iso-iec/19788/-1/ed-1/en/RC0002'"/>
 	<xsl:variable name="mlr1rc2_uuid" select="mlrext:uuid_url($mlr1rc2)" />
 	<xsl:variable name="gtn_namespace" select="'http://gtn-quebec.org/ns/'"/>
-	<xsl:variable name="vcardorg_namespace" select="concat($gtn_namespace,'vcarduuid/org/')"/>
-	<xsl:variable name="vcardfn_namespace" select="concat($gtn_namespace,'vcarduuid/fn/')"/>
-	<xsl:variable name="vcardorg_namespace_uuid" select="mlrext:uuid_url($vcardorg_namespace)"/>
-	<xsl:variable name="vcardfn_namespace_uuid" select="mlrext:uuid_url($vcardfn_namespace)"/>
 	<xsl:variable name="converter_id_v" select="concat($converter_id, string($converter_version))"/>
 	<xsl:variable name="lc">abcdefghijklmnopqrstuvwxyz</xsl:variable>
 	<xsl:variable name="uc">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
@@ -227,11 +195,6 @@
 	<xsl:template match="text()" mode="classification"/>
 	<xsl:template match="text()" mode="classification_discipline"/>
 	<xsl:template match="text()" mode="vcard"/>
-	<xsl:template match="text()" mode="vcard_org"/>
-	<xsl:template match="text()" mode="vcard_suborg_attributes"/>
-	<xsl:template match="text()" mode="vcard_suborg"/>
-	<xsl:template match="text()" mode="vcard_np"/>
-	<xsl:template match="text()" mode="vcard_person"/>
 	<xsl:template match="text()" mode="convert_n_to_fn"/>
 	<xsl:template match="text()" mode="address"/>
 
