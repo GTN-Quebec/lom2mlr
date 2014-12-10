@@ -9,7 +9,6 @@
 	xmlns:sets="http://exslt.org/sets"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dc="http://purl.org/dc/elements/1.1/"
-	xmlns:vcardconv="http://ntic.org/vcard"
 	xmlns:vcard="urn:ietf:params:xml:ns:vcard-4.0"
 	xmlns:cos="http://www.inria.fr/acacia/corese#"
     xmlns:oa="http://www.w3.org/ns/oa#"

@@ -9,7 +9,6 @@ from urlparse import urlparse
 from urllib import urlopen
 
 from lxml import etree
-from lom2mlr.util import unwrap_seq, module_path
 
 from common.converter import XMLTransform
 from vcard2xcard import convert

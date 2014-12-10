@@ -9,7 +9,6 @@ from urlparse import urlparse
 from urllib import urlopen
 
 from lxml import etree
-from lom2mlr.util import unwrap_seq, module_path
 
 def _to_xsl_option(val):
     if val is True:
