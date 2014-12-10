@@ -19,19 +19,8 @@ VCARD_NS = 'urn:ietf:params:xml:ns:vcard-4.0'
 """The namespace for xCard, in brackets, for :etree:`ElementTree namespace syntax <xml-namespaces>` """
 VCARD_NSB = '{%s}' % (VCARD_NS, )
 
-NAMESPACE_VCARD = uuid5(NAMESPACE_URL, VCARD_NS)
-
 """The namespace map used in building xCard objects"""
 NSMAP = {None: VCARD_NS}
-
-@unwrap_seq
-def uuid_string(s, namespace=None):
-    """A XSLT extension that returns a UUID based on a string"""
-    if namespace is None:
-        namespace = NAMESPACE_VCARD
-    if not isinstance(namespace, UUID):
-        namespace = UUID(namespace)
-    return str(uuid5(namespace, s.encode('utf-8')))
 
 def readOne(card):
     card_lines = card.split('\n')
@@ -238,8 +227,8 @@ def fill_tree_from_vcard(node, vcard_):
         else:
             vobj_to_typed_properties(v, el)
         if tag == "org":
-            id_ = uuid_string(";".join(el.itertext()))
-            el.set("uuid", id_)
+            id_ = ";".join(el.itertext())
+            el.set("uuidstr", id_)
         
 
 
@@ -258,8 +247,8 @@ def convert(context, card):
         card = readOne(card)
         root = context.context_node.makeelement(VCARD_NSB + 'vcard', nsmap=NSMAP)
         fill_tree_from_vcard(root, card)
-        id_ = uuid_string("".join(root.itertext()))
-        root.set("uuid", id_)
+        id_ = "".join(root.itertext())
+        root.set("uuidstr", id_)
     except Exception as e:
         print "oups", e.message
         raise
