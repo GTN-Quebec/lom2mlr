@@ -5,6 +5,8 @@
     xmlns:v="http://www.w3.org/2006/vcard/ns#"
 	xmlns:vcard="urn:ietf:params:xml:ns:vcard-4.0"
 	xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
+	xmlns:mlrext="http://standards.iso.org/iso-iec/19788/ext/"
+	extension-element-prefixes="mlrext"
 	>
 	<xsl:output method="xml" encoding="UTF-8"/>
 	<xsl:template match="text()" mode="individual" />

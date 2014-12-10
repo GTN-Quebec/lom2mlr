@@ -1,7 +1,26 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
 
-"Utility functions, mostly used by XSLT extensions."
-
+from uuid import UUID, uuid1, uuid5, NAMESPACE_URL, RFC_4122
+import rfc3987
+import re
 from functools import wraps
+
+URL_GTN = 'http://gtn-quebec.org/ns/vcarduuid/'
+""" A namespace URL for GTN-Québec.  Used to build UUIDs for vCards."""
+
+NAMESPACE_MLR = uuid5(NAMESPACE_URL, URL_GTN)
+"""The UUID5 built from the URL_GTN, used as a namespace for GTN-Québec extensions"""
+
+"""The namespace for xCard """
+VCARD_NS = 'urn:ietf:params:xml:ns:vcard-4.0'
+
+NAMESPACE_VCARD = uuid5(NAMESPACE_URL, VCARD_NS)
+
+
+absolute_iri_ref_re = re.compile(u"%s(#%s)?" % (
+    rfc3987.bmp_upatterns_no_names['absolute_IRI'],
+    rfc3987.bmp_upatterns_no_names['ifragment']))
 
 
 def is_sequence(arg):
@@ -72,3 +91,46 @@ def module_path():
             return os.path.dirname(unicode(sys.executable, sys.getfilesystemencoding( )))
 
     return os.path.dirname(unicode(__file__, sys.getfilesystemencoding( )))
+
+
+vcard_uuid = lambda c, s : uuid_string(c, s, NAMESPACE_VCARD)
+
+@unwrap_seq
+def uuid_url(context, url, namespace=None):
+    """A XSLT extension that returns a UUID based on a URL"""
+    if namespace is None:
+        namespace = NAMESPACE_URL
+    elif not isinstance(namespace, UUID):
+        namespace = UUID(namespace)
+    return str(uuid5(namespace, url))
+
+
+@unwrap_seq
+def uuid_unique(context):
+    """A XSLT extension that returns a unique UUID composed from the MAC address and timestamp"""
+    return str(uuid1())
+
+
+@unwrap_seq
+def uuid_string(context, s, namespace=None):
+    """A XSLT extension that returns a UUID based on a string"""
+    if namespace is None:
+        namespace = NAMESPACE_MLR
+    elif not isinstance(namespace, UUID):
+        namespace = UUID(namespace)
+    return str(uuid5(namespace, s.encode('utf-8')))
+
+
+@unwrap_seq
+def is_uuid1(context, uuid):
+    """A XSLT extension that returns a UUID based on a string"""
+    if not uuid.startswith('urn:uuid:'):
+        return False
+    u = UUID(uuid[9:])
+    assert u.variant == RFC_4122
+    return u.version == 1
+
+
+@unwrap_seq
+def is_absolute_iri(context, string):
+    return absolute_iri_ref_re.match(string) is not None

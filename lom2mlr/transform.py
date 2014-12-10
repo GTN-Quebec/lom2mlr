@@ -13,20 +13,16 @@ import re
 from urlparse import urlparse
 from urllib import urlopen
 
-from uuid import UUID, uuid1, uuid5, NAMESPACE_URL, RFC_4122
+
 from lxml import etree, _elementpath
 from rdflib import Graph
-import rfc3987
 
-from lom2mlr.util import unwrap_seq, module_path
-from lom2mlr.vcard2xcard import convert
+from common import converter, utils
 
 VCARDC_NS = 'http://ntic.org/vcard'
 """A namespace for XSLT extensions in :py:mod:`lom2mlr.vcard2xcard`"""
 
-XSLT_NS = 'http://www.w3.org/1999/XSL/Transform'
-
-this_dir = module_path()
+this_dir = os.path.dirname(unicode(__file__, sys.getfilesystemencoding( )))
 
 STYLESHEET = os.path.join(this_dir, 'lom2mlr.xsl')
 """ The stylesheet used by the converter."""
@@ -37,69 +33,8 @@ URL_MLR = 'http://standards.iso.org/iso-iec/19788/'
 URL_MLR_EXT = URL_MLR + 'ext/'
 """A namespace for XSLT utility extensions"""
 
-URL_GTN = 'http://gtn-quebec.org/ns/vcarduuid/'
-""" A namespace URL for GTN-Québec.  Used to build UUIDs for vCards."""
 
-NAMESPACE_MLR = uuid5(NAMESPACE_URL, URL_GTN)
-"""The UUID5 built from the URL_GTN, used as a namespace for GTN-Québec extensions"""
-
-
-absolute_iri_ref_re = re.compile(u"%s(#%s)?" % (
-    rfc3987.bmp_upatterns_no_names['absolute_IRI'],
-    rfc3987.bmp_upatterns_no_names['ifragment']))
-
-
-@unwrap_seq
-def uuid_url(context, url, namespace=None):
-    """A XSLT extension that returns a UUID based on a URL"""
-    if namespace is None:
-        namespace = NAMESPACE_URL
-    elif not isinstance(namespace, UUID):
-        namespace = UUID(namespace)
-    return str(uuid5(namespace, url))
-
-
-@unwrap_seq
-def uuid_unique(context):
-    """A XSLT extension that returns a unique UUID composed from the MAC address and timestamp"""
-    return str(uuid1())
-
-
-@unwrap_seq
-def uuid_string(context, s, namespace=None):
-    """A XSLT extension that returns a UUID based on a string"""
-    if namespace is None:
-        namespace = NAMESPACE_MLR
-    elif not isinstance(namespace, UUID):
-        namespace = UUID(namespace)
-    return str(uuid5(namespace, s.encode('utf-8')))
-
-
-@unwrap_seq
-def is_uuid1(context, uuid):
-    """A XSLT extension that returns a UUID based on a string"""
-    if not uuid.startswith('urn:uuid:'):
-        return False
-    u = UUID(uuid[9:])
-    assert u.variant == RFC_4122
-    return u.version == 1
-
-
-@unwrap_seq
-def is_absolute_iri(context, string):
-    return absolute_iri_ref_re.match(string) is not None
-
-
-def _to_xsl_option(val):
-    if val is True:
-        return "true()"
-    elif val is False:
-        return "false()"
-    else:
-        return "'%s'" % (val, )
-
-
-class Converter(object):
+class Converter(converter.XMLTransform):
     """A converter between LOM and MLR formats.
 
     Through various methods, the Converter object can receive a file
@@ -112,73 +47,21 @@ class Converter(object):
         """
         if stylesheet is None:
             stylesheet = STYLESHEET
-        stylesheet_xml = etree.parse(stylesheet)
-        self.sheet_options = {}
-        """
-        The name and comments for each option in the stylesheet.
 
-        :type: {str:str}
-        """
-        self.option_defaults = {}
-        """The default value for each option, as found in the stylesheet.
+        extensions={
+            (URL_MLR_EXT, 'uuid_string'): utils.uuid_string,
+            (URL_MLR_EXT, 'uuid_unique'): utils.uuid_unique,
+            (URL_MLR_EXT, 'uuid_url'): utils.uuid_url,
+            (URL_MLR_EXT, 'is_uuid1'): utils.is_uuid1,
+            (URL_MLR_EXT, 'is_absolute_iri'): utils.is_absolute_iri,
+            (URL_MLR_EXT, 'vcard_uuid'): utils.vcard_uuid,
+            (URL_MLR_EXT, 'person_uuid'): utils.uuid_string,
+        }
 
-        :type: {str:str}
-        """
-        self._read_options(stylesheet_xml)
+        converter.XMLTransform.__init__(self, stylesheet, extensions)
+
         self.langsheets = {}
         ""
-        self.options = {}
-        """The options that will be passed to the XSLT stylesheet.
-        The values are suitable to be passed as XSL params."""
-        self.stylesheet = etree.XSLT(
-            stylesheet_xml,
-            extensions={
-                (VCARDC_NS, 'convert'): convert,
-                (URL_MLR_EXT, 'uuid_string'): uuid_string,
-                (URL_MLR_EXT, 'uuid_unique'): uuid_unique,
-                (URL_MLR_EXT, 'uuid_url'): uuid_url,
-                (URL_MLR_EXT, 'is_uuid1'): is_uuid1,
-                (URL_MLR_EXT, 'is_absolute_iri'): is_absolute_iri,
-            })
-        """ :lxml-class:`XSLT` object
-            The Converter's stylesheet """
-
-    def _read_options(self, stylesheet):
-        """Extract the stylesheet options
-
-        These will be presented to the user in the help.
-
-        :type stylesheet: :lxml-class:`_ElementTree`
-        :param stylesheet: The Converter's stylesheet (as a documentTree,
-            before xslt)
-        """
-        comment = None
-        options = {}
-        option_defaults = {}
-        for c in stylesheet.getroot().getchildren():
-            if isinstance(c, etree._Comment):
-                comment = c.text.strip()
-            elif isinstance(c, etree._Element) and \
-                    c.tag == '{http://www.w3.org/1999/XSL/Transform}param':
-                option_name = c.attrib['name']
-                options[option_name] = comment or ''
-                option_defaults[option_name] = c.attrib['select'] or ''
-        self.sheet_options = options
-        self.option_defaults = option_defaults
-
-    def set_options_from_dict(self, options=None):
-        """Set options for the stylesheet
-
-        :type options: {str:object}
-        :param options: The options that will be passed to the stylesheet.
-            Strings will be quoted, booleans will be replaced by formula
-            according to :py:func:`_to_xsl_option`
-        """
-        options = options or {}
-        self.options = dict(
-            (str(k), _to_xsl_option(v))
-            for k, v in options.iteritems()
-            if str(k) in self.sheet_options)
 
     def _get_lang_sheet(self, lang):
         """Obtain the cached language translation stylesheet.
@@ -207,11 +90,7 @@ class Converter(object):
         :returns: a MLR record in RDF-XML format
             (as a :lxml-class:`_ElementTree`)
         """
-        try:
-            rdfxml = self.stylesheet(xml, **self.options)
-        except:
-            print(self.stylesheet.error_log)
-            raise
+        rdfxml = self.convertxml(xml)
         langsheet = self._get_lang_sheet(lang)
         if langsheet:
             rdfxml = langsheet(rdfxml)
@@ -252,27 +131,6 @@ class Converter(object):
         xml = self.lomxml2rdfxml(xml, lang)
         if xml:
             return Graph().parse(data=etree.tounicode(xml), format="xml")
-
-    def populate_argparser(self, parser=None):
-        """Add options from the stylesheet to the argparser
-
-        :type parser: :py:class:`argparse.ArgumentParser`
-        """
-        if parser is None:
-            parser = argparse.ArgumentParser()
-        for name, desc in self.sheet_options.iteritems():
-            default = self.option_defaults[name]
-            if default == 'true()':
-                parser.add_argument('--no-' + name, action='store_false',
-                                    dest=name, help=desc, default=True)
-            elif default == 'false()':
-                parser.add_argument('--' + name, action='store_true',
-                                    help=desc, default=False)
-            elif default[0] == "'" and default[-1] == "'":
-                parser.add_argument('--' + name, help=desc,
-                                    default=default[1:-1])
-        return parser
-
 
 def main():
     """Apply a Converter to a LOM file according to command-line arguments."""

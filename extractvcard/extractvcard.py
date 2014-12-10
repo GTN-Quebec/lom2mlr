@@ -10,20 +10,27 @@ from urllib import urlopen
 from rdflib import Graph
 
 from lxml import etree
-from lom2mlr.util import unwrap_seq, module_path
 
-from lom2mlr.vcard2xcard import convert
 from common.converter import XMLTransform
+from common import utils
 
 this_dir = os.path.dirname(unicode(__file__, sys.getfilesystemencoding( )))
 
 STYLESHEET_EXTRACT = os.path.join(this_dir, 'vcard2mlr.xsl')
 STYLESHEET_DUP = os.path.join(this_dir, 'removedup.xsl')
 
+URL_MLR = 'http://standards.iso.org/iso-iec/19788/'
+""" The URL for the MLR standards, as a namespace."""
+
+URL_MLR_EXT = URL_MLR + 'ext/'
+"""A namespace for XSLT utility extensions"""
+
 """ The stylesheet used by the converter."""
 
+
 def main():
-    converterExtract = XMLTransform(STYLESHEET_EXTRACT)
+    extensions = {(URL_MLR_EXT, 'vcard_uuid'): utils.vcard_uuid}
+    converterExtract = XMLTransform(STYLESHEET_EXTRACT, extensions)
     converterDup = XMLTransform(STYLESHEET_DUP)
     parser = argparse.ArgumentParser(
         description='Extend the vcard of a lom into a xcard')
