@@ -163,11 +163,14 @@ def vobj_to_str(vobj, root, attributes):
 
 
 def append_typed_el(root, typename, val):
-    el = root.makeelement(VCARD_NSB + typename, nsmap=NSMAP)
-    root.append(el)
-    if typename == 'binary':
-        val = "data:;base64," + b64encode(val)
-    el.text = val
+    if val:
+        el = root.makeelement(VCARD_NSB + typename, nsmap=NSMAP)
+        root.append(el)
+        if typename == 'binary':
+            val = "data:;base64," + b64encode(val)
+        else:
+            val = val.strip()
+        el.text = val
 
 
 def vobj_to_typed(val, root, typelist):
