@@ -27,6 +27,18 @@ def readOne(card):
     card = card.replace("\r", "\n")
     card_lines = card.split("\n")
     card_lines = [l.strip() for l in card_lines]
+    #be sure that vcard start and stop correctly
+    if card_lines[0] != "BEGIN:VCARD":
+        if card_lines[0].startswith("BEGIN:VCARD"):
+            card_lines.insert(1, card_lines[0][11:])
+            card_lines[0] = "BEGIN:VCARD"
+        elif card_lines[0].startswith("VERSION"):
+            card_lines.insert(0, "BEGIN:VCARD")
+    if card_lines[-1] != "END:VCARD":
+        if card_lines[-1].startswith("END:VCARD"):
+            card_lines.append(card_lines[-1][9:])
+            card_lines[0] = "END:VCARD"
+    card_lines = [l.strip() for l in card_lines]
     card = '\n'.join(card_lines)
     return readOne_original(card)
 
