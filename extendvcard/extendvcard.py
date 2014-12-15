@@ -21,10 +21,14 @@ STYLESHEET = os.path.join(this_dir, 'extendvcard.xsl')
 VCARDC_NS = 'http://ntic.org/vcard'
 """A namespace for XSLT extensions in :py:mod:`lom2mlr.vcard2xcard`"""
 
+class Converter(XMLTransform):
+    def __init__(self):
+        extensions = {(VCARDC_NS, 'convert'): convert}
+        XMLTransform.__init__(self, STYLESHEET, extensions)
+
 def main():
     """Apply a Converter to a LOM file according to command-line arguments."""
-    extensions = {(VCARDC_NS, 'convert'): convert}
-    converter = XMLTransform(STYLESHEET, extensions)
+    converter = Converter()
     parser = argparse.ArgumentParser(
         description='Extend the vcard of a lom into a xcard')
     parser.add_argument('-o', '--output', help="Output file",
