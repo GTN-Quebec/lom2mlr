@@ -95,15 +95,21 @@
           <mlr9:DES0200>
             <xsl:value-of select="vcard:vcard/vcard:fn/vcard:text" />
           </mlr9:DES0200>
-          <mlr9:DES0300>
-            <xsl:value-of select="vcard:vcard/vcard:n/vcard:surname" />
-          </mlr9:DES0300>
-          <mlr9:DES0400>
-            <xsl:value-of select="vcard:vcard/vcard:n/vcard:given" />
-          </mlr9:DES0400>
-          <mlr9:DES0800>
-            <xsl:value-of select="vcard:vcard/vcard:email" />
-          </mlr9:DES0800>
+          <xsl:if test="vcard:vcard/vcard:n/vcard:surname">
+            <mlr9:DES0300>
+              <xsl:value-of select="vcard:vcard/vcard:n/vcard:surname" />
+            </mlr9:DES0300>
+          </xsl:if>
+          <xsl:if test="vcard:vcard/vcard:n/vcard:given">
+            <mlr9:DES0400>
+              <xsl:value-of select="vcard:vcard/vcard:n/vcard:given" />
+            </mlr9:DES0400>
+          </xsl:if>
+          <xsl:if test="vcard:vcard/vcard:email">
+            <mlr9:DES0800>
+              <xsl:value-of select="vcard:vcard/vcard:email" />
+            </mlr9:DES0800>
+          </xsl:if>
           <mlr9:DES3000>
             <xsl:text>urn:uuid:</xsl:text>
             <xsl:value-of select="mlrext:vcard_uuid(vcard:vcard/@uuidstr)" />

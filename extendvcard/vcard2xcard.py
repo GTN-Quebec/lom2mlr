@@ -154,9 +154,9 @@ def vobj_to_str(vobj, root, attributes):
     for n in attributes:
         val = getattr(vobj, n, None)
         n = n if n != 'family' else 'surname'
-        el = root.makeelement(VCARD_NSB + n.lower(), nsmap=NSMAP)
-        root.append(el)
         if val:
+            el = root.makeelement(VCARD_NSB + n.lower(), nsmap=NSMAP)
+            root.append(el)
             if is_sequence(val):
                 val = u' '.join(val)
             el.text = val
@@ -214,6 +214,9 @@ def fill_tree_from_vcard(node, vcard_):
         tag = e.name.lower()
         if tag in exclude_tags:
             continue
+        v = e.transformToNative().value
+        if not v or (is_sequence(v) and not any(v)):
+            continue
         if e.group:
             try:
                 master_el = groups[e.group]
@@ -232,7 +235,6 @@ def fill_tree_from_vcard(node, vcard_):
                 param = params.makeelement(VCARD_NSB + k.lower(), nsmap=NSMAP)
                 params.append(param)
                 vobj_to_typed_param(v, param)
-        v = e.transformToNative().value
         if isinstance(v, vcard.Address):
             vobj_to_str(v, el, vcard.ADDRESS_ORDER)
         elif isinstance(v, vcard.Name):
