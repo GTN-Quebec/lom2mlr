@@ -1001,7 +1001,7 @@
 
 	<xsl:template match="lom:entity" mode="annotation">
         <oa:annotatedBy>
-          <!-- <xsl:apply-templates mode="mlr9" /> -->
+          <xsl:apply-templates mode="mlr9" />
         </oa:annotatedBy>
 	</xsl:template>
 
