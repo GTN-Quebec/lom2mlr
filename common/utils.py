@@ -106,10 +106,16 @@ def uuid_url(context, url, namespace=None):
 
 
 _global_dict = {}
+
+def clean_globals():
+    global _global_dict, _global_seq
+    _global_dict = {}
+    _global_seq = {}
+
 @unwrap_seq
 def global_dict(context, name, *args):
     if not args:
-        return str(_global_dict.get(name, ""))
+        return str(_global_dict[name])
     _global_dict[name] = args[0]
     return str(args[0])
 
@@ -117,6 +123,7 @@ _global_seq = {}
 def global_seq(context, name):
     current = _global_seq.get(name, 0)
     _global_seq[name] = current+1
+    print _global_seq[name]
     return str(_global_seq[name])
 
 @unwrap_seq

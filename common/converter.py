@@ -7,6 +7,7 @@ import sys
 import os.path
 from urlparse import urlparse
 from urllib import urlopen
+import utils
 
 from lxml import etree
 
@@ -135,6 +136,7 @@ class XMLTransform(object):
         :returns: a MLR record in RDF-XML format
             (as a :lxml-class:`_ElementTree`)
         """
+        utils.clean_globals()
         try:
             new_xml = self.stylesheet(xml, **self.options)
         except:
