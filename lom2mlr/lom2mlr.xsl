@@ -104,8 +104,7 @@
 					<xsl:value-of select="mlrext:uuid_string($lom_identifier, mlrext:uuid_url($converter_id_v))"/>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:text>urn:uuid:</xsl:text>
-					<xsl:value-of select="mlrext:uuid_unique()"/>
+				    <xsl:message terminate="yes">Impossible to get a identifier for the lom</xsl:message>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -117,8 +116,7 @@
 		<xsl:variable name="identity">
 			<xsl:choose>
 				<xsl:when test="$identifier = ''">
-					<xsl:text>urn:uuid:</xsl:text>
-					<xsl:value-of select="mlrext:uuid_unique()"/>
+				    <xsl:message terminate="yes">Impossible to get a identifier for the lom</xsl:message>
 				</xsl:when>
 				<xsl:when test="substring-after($identifier, '|') != ''">
 					<xsl:text>urn:uuid:</xsl:text>
@@ -128,6 +126,9 @@
 					<xsl:value-of select="$identifier"/>
 				</xsl:otherwise>
 			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="_">
+		  <xsl:value-of select="mlrext:global_dict('lomid', $identifier)" />
 		</xsl:variable>
 		<mlr1:RC0002>
 			<xsl:attribute name="rdf:about">
@@ -238,7 +239,7 @@
 							<mlr8:RC0004>
 							   <xsl:attribute name="rdf:about">
 							     <xsl:text>urn:uuid:</xsl:text>
-						         <xsl:value-of select="mlrext:uuid_unique()"/>
+						         <xsl:value-of select="mlrext:uuid_string('mlr8:RC0004')"/>
 						       </xsl:attribute>
 						       <mlr8:DES1500>IEEE 1484.12.1-2002 LOM</mlr8:DES1500>
 							</mlr8:RC0004>
@@ -266,7 +267,7 @@
 							<mlr8:RC0004>
 							  <xsl:attribute name="rdf:about">
 							     <xsl:text>urn:uuid:</xsl:text>
-						         <xsl:value-of select="mlrext:uuid_unique()"/>
+						         <xsl:value-of select="mlrext:uuid_string('IEEE 1484.12.1-2002 LOM')"/>
 						       </xsl:attribute>
 								<mlr8:DES1500>IEEE 1484.12.1-2002 LOM</mlr8:DES1500>
 							</mlr8:RC0004>
@@ -394,7 +395,7 @@
 			<mlr8:RC0003>
 				<xsl:attribute name="rdf:about">
 					<xsl:text>urn:uuid:</xsl:text>
-					<xsl:value-of select="mlrext:uuid_unique()"/>
+					<xsl:value-of select="mlrext:uuid_unique('mlr8:RC0003')"/>
 				</xsl:attribute>
 				<xsl:apply-templates mode="metaMetadata"/>
 			</mlr8:RC0003>
@@ -762,7 +763,7 @@
 				<mlr5:RC0005>
 					<xsl:attribute name="rdf:about">
 						<xsl:text>urn:uuid:</xsl:text>
-						<xsl:value-of select="mlrext:uuid_unique()"/>
+						<xsl:value-of select="mlrext:uuid_unique('mlr5:RC0005')"/>
 					</xsl:attribute>
 					<xsl:copy-of select="$learning_activity"/>
 				</mlr5:RC0005>
@@ -776,7 +777,7 @@
 				<mlr5:RC0002>
 					<xsl:attribute name="rdf:about">
 						<xsl:text>urn:uuid:</xsl:text>
-						<xsl:value-of select="mlrext:uuid_unique()"/>
+						<xsl:value-of select="mlrext:uuid_unique('mlr5:RC0002')"/>
 					</xsl:attribute>
 					<xsl:copy-of select="$audience"/>
 				</mlr5:RC0002>
@@ -799,7 +800,7 @@
 		<oa:Annotation>
 			<xsl:attribute name="rdf:about">
 				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_unique()"/>
+				<xsl:value-of select="mlrext:uuid_unique('oa:Annotation')"/>
 			</xsl:attribute>
 			<oa:hasTarget>
 				<xsl:attribute name="rdf:resource">
@@ -987,7 +988,7 @@
 		<oa:Annotation>
 			<xsl:attribute name="rdf:about">
 				<xsl:text>urn:uuid:</xsl:text>
-				<xsl:value-of select="mlrext:uuid_unique()"/>
+				<xsl:value-of select="mlrext:uuid_unique('oa:Annotation')"/>
 			</xsl:attribute>
 			<oa:hasTarget>
 				<xsl:attribute name="rdf:resource">
@@ -1047,7 +1048,7 @@
 				<mlr5:RC0004>
 					<xsl:attribute name="rdf:about">
 						<xsl:text>urn:uuid:</xsl:text>
-						<xsl:value-of select="mlrext:uuid_unique()"/>
+						<xsl:value-of select="mlrext:uuid_unique('mlr5:RC0004')"/>
 					</xsl:attribute>
 					<xsl:copy-of select="$target"/>
 				</mlr5:RC0004>

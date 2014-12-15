@@ -42,7 +42,7 @@
         <mlrens:RC0001>
           <xsl:attribute name="rdf:about">
             <xsl:text>urn:uuid:</xsl:text>
-            <xsl:value-of select="mlrext:uuid_unique()" />
+            <xsl:value-of select="mlrext:uuid_unique('mlrens:RC0001')" />
           </xsl:attribute>
           <mlrens:DES1100>
             <xsl:apply-templates mode="mlr9" />

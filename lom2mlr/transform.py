@@ -51,6 +51,7 @@ class Converter(converter.XMLTransform):
         extensions={
             (URL_MLR_EXT, 'uuid_string'): utils.uuid_string,
             (URL_MLR_EXT, 'uuid_unique'): utils.uuid_unique,
+            (URL_MLR_EXT, 'global_dict'): utils.global_dict,
             (URL_MLR_EXT, 'uuid_url'): utils.uuid_url,
             (URL_MLR_EXT, 'is_uuid1'): utils.is_uuid1,
             (URL_MLR_EXT, 'is_absolute_iri'): utils.is_absolute_iri,

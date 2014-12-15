@@ -105,10 +105,29 @@ def uuid_url(context, url, namespace=None):
     return str(uuid5(namespace, url))
 
 
+_global_dict = {}
 @unwrap_seq
-def uuid_unique(context):
+def global_dict(context, name, *args):
+    if not args:
+        return str(_global_dict.get(name, ""))
+    _global_dict[name] = args[0]
+    return str(args[0])
+
+_global_seq = {}
+def global_seq(context, name):
+    current = _global_seq.get(name, 0)
+    _global_seq[name] = current+1
+    return str(_global_seq[name])
+
+@unwrap_seq
+def get_global_seq(context, name):
+    return str(_global_seq[name])
+
+@unwrap_seq
+def uuid_unique(context, name):
     """A XSLT extension that returns a unique UUID composed from the MAC address and timestamp"""
-    return str(uuid1())
+    string = global_dict(context, "lomid")+global_seq(context, name)
+    return uuid_string(context, string)
 
 
 @unwrap_seq
