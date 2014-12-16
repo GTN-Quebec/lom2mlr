@@ -53,7 +53,6 @@ class Converter(converter.XMLTransform):
             (URL_MLR_EXT, 'uuid_unique'): utils.uuid_unique,
             (URL_MLR_EXT, 'global_dict'): utils.global_dict,
             (URL_MLR_EXT, 'uuid_url'): utils.uuid_url,
-            (URL_MLR_EXT, 'is_uuid1'): utils.is_uuid1,
             (URL_MLR_EXT, 'is_absolute_iri'): utils.is_absolute_iri,
             (URL_MLR_EXT, 'vcard_uuid'): utils.vcard_uuid,
             (URL_MLR_EXT, 'person_uuid'): utils.uuid_string,

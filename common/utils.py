@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-from uuid import UUID, uuid1, uuid5, NAMESPACE_URL, RFC_4122
+from uuid import UUID, uuid5, NAMESPACE_URL, RFC_4122
 import rfc3987
 import re
 from functools import wraps
@@ -123,7 +123,6 @@ _global_seq = {}
 def global_seq(context, name):
     current = _global_seq.get(name, 0)
     _global_seq[name] = current+1
-    print _global_seq[name]
     return str(_global_seq[name])
 
 @unwrap_seq
@@ -145,16 +144,6 @@ def uuid_string(context, s, namespace=None):
     elif not isinstance(namespace, UUID):
         namespace = UUID(namespace)
     return str(uuid5(namespace, s.encode('utf-8')))
-
-
-@unwrap_seq
-def is_uuid1(context, uuid):
-    """A XSLT extension that returns a UUID based on a string"""
-    if not uuid.startswith('urn:uuid:'):
-        return False
-    u = UUID(uuid[9:])
-    assert u.variant == RFC_4122
-    return u.version == 1
 
 
 @unwrap_seq
