@@ -133,7 +133,7 @@ def get_global_seq(context, name):
 @unwrap_seq
 def uuid_unique(context, name):
     """A XSLT extension that returns a unique UUID composed from the MAC address and timestamp"""
-    string = global_dict(context, "lomid")+global_seq(context, name)
+    string = global_dict(context, "lomid")+global_seq(context, name)+name
     return uuid_string(context, string)
 
 
