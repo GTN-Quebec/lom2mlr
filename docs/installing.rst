@@ -5,10 +5,10 @@ Installing
 This project is based on python (2.7 or 2.6) and python libraries, as specified in
 :file:``requirements.txt``. On a posix platform with pip_,
 it is possible to satisfy the prerequisites with
-``pip install -r requirements.txt``. However, some requirements may be
+``pip install --egg "scons>=2.4";pip install -r requirements.txt``. However, some requirements may be
 demanding. On a linux platform, you might need to install development
 tools and ``xmllib2-devel``, ``xmllint2-devel`` beforehand. On a MacOS
-platform, you would need development tools, either through XCode_ or standalone. 
+platform, you would need development tools, either through XCode_ or standalone.
 (Availale here_ for versions of OS X older than 10.8.)
 
 Once the requirements are satisfied, including
