@@ -23,7 +23,7 @@ data_files=[('', core_data_files),
 requirements = open('requirements.txt').readlines()
 
 setup(name='lom2mlr',
-      version='0.1',
+      version='0.2',
       description="Utilities to convert learning resources metadata "
       "from IEEE LOM to ISO-19788 format",
       author='Marc-Antoine Parent',
