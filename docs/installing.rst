@@ -6,7 +6,7 @@ This project is based on python (2.7 or 2.6) and python libraries, as specified 
 :file:``requirements.txt``. On a posix platform with pip_,
 it is possible to satisfy the prerequisites with
 ``pip install --egg "scons>=2.4";pip install -r requirements.txt``. However, some requirements may be
-demanding. On a linux platform, you might need to install development
+demanding (check for pipegg_). On a linux platform, you might need to install development
 tools and ``xmllib2-devel``, ``xmllint2-devel`` beforehand. On a MacOS
 platform, you would need development tools, either through XCode_ or standalone.
 (Availale here_ for versions of OS X older than 10.8.)
@@ -31,6 +31,7 @@ Use :program:`nosetests`.
 
 
 .. _pip: http://www.pip-installer.org/en/latest/installing.html#using-the-installer
+.. _pipegg: http://pip.readthedocs.org/en/stable/reference/pip_install/#cmdoption--egg
 .. _XCode: http://developer.apple.com/technologies/tools/
 .. _here: https://github.com/kennethreitz/osx-gcc-installer
 .. _scons: http://scons.org
