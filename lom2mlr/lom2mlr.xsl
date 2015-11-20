@@ -104,7 +104,7 @@
 					<xsl:value-of select="mlrext:uuid_string($lom_identifier, mlrext:uuid_url($converter_id_v))"/>
 				</xsl:when>
 				<xsl:otherwise>
-				    <xsl:message terminate="yes">Impossible to get a identifier for the lom</xsl:message>
+					<xsl:message terminate="yes">record_id: Impossible to get a identifier for the lom</xsl:message>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -116,7 +116,7 @@
 		<xsl:variable name="identity">
 			<xsl:choose>
 				<xsl:when test="$identifier = ''">
-				    <xsl:message terminate="yes">Impossible to get a identifier for the lom</xsl:message>
+					<xsl:message terminate="yes">identity: Impossible to get a identifier for the lom</xsl:message>
 				</xsl:when>
 				<xsl:when test="substring-after($identifier, '|') != ''">
 					<xsl:text>urn:uuid:</xsl:text>
