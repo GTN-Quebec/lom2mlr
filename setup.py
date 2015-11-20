@@ -29,9 +29,8 @@ setup(name='lom2mlr',
       author='Marc-Antoine Parent',
       author_email='map@ntic.org',
       url='https://github.com/GTN-Quebec/lom2mlr',
-      packages=['lom2mlr', 'lom2mlr.markdown', 'lom2mlr.validate'],
-      package_data={
-        'lom2mlr': core_data_files + translations_files + vdex_files},
+      packages=['lom2mlr', 'lom2mlr.markdown', 'lom2mlr.validate', 'common'],
+      package_data={'lom2mlr': core_data_files + translations_files + vdex_files},
       data_files=data_files,
       install_requires=requirements,
       tests_require=['nose'],
@@ -47,7 +46,7 @@ setup(name='lom2mlr',
       console=['lom2mlr/transform.py'],
       options={'py2exe':{
         #'includes':['pyparsing', 'lxml', 'rdflib', 'python-dateutil', 'vobject', 'six', 'gzip', 'lxml._elementpath'],
-        'packages':['lom2mlr', 'lom2mlr.validate', 'lom2mlr.markdown'],
+        'packages':['lom2mlr', 'lom2mlr.validate', 'lom2mlr.markdown', 'common'],
         'bundle_files': 1
       }}
       )
