@@ -31,15 +31,15 @@ class SchemaFixer(object):
 
         self.folder_path = folder
 
-    def walkDirectories(self):
+    def walkDirectories(self, folder_path):
         """ Main working loop
 
         It follows subdirectory and executes fixes sequentially on each file.
         """
-        for filename in listdir(self.folder_path):
-            file_path = self.folder_path+path_sep+filename
+        for filename in listdir(folder_path):
+            file_path = folder_path+path_sep+filename
             if isdir(file_path):
-                self.walk_dir(file_path)
+                self.walkDirectories(file_path)
             else:
                 file_xml = open(file_path, mode='rw')
                 tree = etree.parse(file_xml)
@@ -129,7 +129,7 @@ def main():
         raise IndexError('Only one argument, no option\n\n'+usage)
 
     fixer = SchemaFixer(argv[1])
-    fixer.walkDirectories()
+    fixer.walkDirectories(fixer.folder_path)
 
 
 if __name__ == '__main__':
