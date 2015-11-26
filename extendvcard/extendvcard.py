@@ -33,11 +33,12 @@ def main():
         description='Extend the vcard of a lom into a xcard')
     parser.add_argument('-o', '--output', help="Output file",
                         type=argparse.FileType('w'), default=sys.stdout)
+    parser.add_argument("-e", "--encoding", default="UTF-8", help="Encoding to use")
     parser.add_argument('infile', help="input file or url")
     converter.populate_argparser(parser)
     args = parser.parse_args()
     converter.set_options_from_dict(vars(args))
-    
+
     if (urlparse(args.infile).scheme):
         opener = urlopen
     else:
@@ -46,8 +47,8 @@ def main():
     with opener(args.infile) as infile:
         xml = converter.convertfile(infile)
     if xml:
-        args.output.write(etree.tounicode(
-            xml, pretty_print=True).encode('utf-8'))
+        print(args.encoding)
+        args.output.write(etree.tostring(xml, encoding=args.encoding, pretty_print=True))
     args.output.close()
 
 if __name__ == '__main__':
