@@ -21,9 +21,12 @@
 	xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
 	xmlns:mlr9="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/"
-	xmlns:mlrens="http://www.ens-lyon.fr/"
+	xmlns:mlrfrens="http://www.ens-lyon.fr/"
 	extension-element-prefixes="regexp sets str mlrext"
 	>
+	
+	<xsl:import href="lom2mlr_utils.xsl" />
+	
 	<xsl:output method="xml" encoding="UTF-8"/>
 
 	<!-- Allow use of MLR3 properties that refine the corresponding mlr2 properties. -->
@@ -63,15 +66,13 @@
 
 	<!-- vocabularies and utilities -->
 	<xsl:include href="correspondances_xsl.xsl"/>
-	<xsl:include href="iso639.xsl"/>
-
-    <xsl:include href="lom2mlr_utils.xsl" />
 
 	<!-- specific lom version (fr, ensfr) -->
 	<xsl:include href="lomfr2mlr.xsl" />
 
     <xsl:include href="lom2mlr2.xsl" />
-    <xsl:include href="lom2mlr3.xsl" />
+	<xsl:include href="lom2mlr3.xsl" />
+	<xsl:include href="lom2mlr8.xsl" />
     <xsl:include href="lom2mlr9.xsl" />
 
 	<!-- top-level templates -->
@@ -339,8 +340,9 @@
 
     <xsl:template match="lom:contribute" mode="lifeCycle">
       <xsl:apply-templates mode="mlr2" select="."/>
-      <xsl:apply-templates mode="mlr3" select="."/>
-      <xsl:apply-templates mode="mlrens" select="."/>
+    	<xsl:apply-templates mode="mlr3" select="."/>
+    	<xsl:apply-templates mode="mlr9" select="."/>
+      <!--xsl:apply-templates mode="mlrfrens" select="."/-->
     </xsl:template>
 
 	<!-- metametadata -->
@@ -382,72 +384,6 @@
 		</xsl:choose>
 	</xsl:template>
 
-
-	<xsl:template match="lom:metadataSchema" mode="metaMetadata">
-		<!-- note that a URI would be preferrable... Should we identify the frequent ones? -->
-		<mlr8:DES0400>
-			<xsl:value-of select="text()"/>
-		</mlr8:DES0400>
-	</xsl:template>
-
-	<xsl:template match="lom:contribute" mode="metaMetadata">
-		<mlr8:DES1100>
-			<mlr8:RC0003>
-				<xsl:attribute name="rdf:about">
-					<xsl:text>urn:uuid:</xsl:text>
-					<xsl:value-of select="mlrext:uuid_unique('mlr8:RC0003')"/>
-				</xsl:attribute>
-				<xsl:apply-templates mode="metaMetadata"/>
-			</mlr8:RC0003>
-		</mlr8:DES1100>
-	</xsl:template>
-
-
-	<xsl:template match="lom:entity" mode="metaMetadata">
-		<mlr8:DES1400>
-		  <xsl:apply-templates mode="mlr9" select="." />
-		</mlr8:DES1400>
-	</xsl:template>
-
-	<xsl:template match="lom:date" mode="metaMetadata">
-		<xsl:choose>
-			<!-- first cases: valid 8601 date or datetime -->
-			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6]))))$')">
-				<mlr8:DES1300 rdf:datatype="http://www.w3.org/2001/XMLSchema#date">
-					<xsl:value-of select="lom:dateTime/text()" />
-				</mlr8:DES1300>
-			</xsl:when>
-			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$')">
-				<mlr8:DES1300 rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">
-					<xsl:value-of select="lom:dateTime/text()" />
-				</mlr8:DES1300>
-			</xsl:when>
-			<xsl:when test="lom:dateTime">
-				<mlr8:DES1300>
-					<xsl:value-of select="lom:dateTime/text()" />
-				</mlr8:DES1300>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:apply-templates select="lom:description/lom:string" mode="langstring">
-					<xsl:with-param name="nodename" select="'mlr8:DES1300'"/>
-				</xsl:apply-templates>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template match="lom:role" mode="metaMetadata">
-		<mlr8:DES1200>
-			<xsl:value-of select="lom:value/text()" />
-		</mlr8:DES1200>
-	</xsl:template>
-
-	<xsl:template match="lom:language" mode="metaMetadata">
-		<mlr8:DES0200>
-			<xsl:call-template name="language">
-				<xsl:with-param name="l" select="text()"/>
-			</xsl:call-template>
-		</mlr8:DES0200>
-	</xsl:template>
 
 	<!-- technical -->
 
@@ -1123,50 +1059,6 @@
 
 	<xsl:template match="*" mode="langstring">
 		<xsl:message terminate="yes">Langstring called on non-string</xsl:message>
-	</xsl:template>
-
-	<xsl:template name="language">
-		<xsl:param name="l"/>
-		<xsl:choose>
-			<xsl:when test="regexp:test($l,'^[a-z][a-z]\-[A-Z][A-Z]$')">
-				<xsl:call-template name="iso639_2to3">
-					<xsl:with-param name="l" select="substring-before($l,'-')"/>
-				</xsl:call-template>
-				<xsl:text>-</xsl:text>
-				<xsl:value-of select="substring-after($l,'-')"/>
-			</xsl:when>
-			<xsl:when test="regexp:test($l,'^[a-z][a-z]$')">
-				<xsl:call-template name="iso639_2to3">
-					<xsl:with-param name="l" select="$l"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="$l"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template name="date">
-		<xsl:param name="nodename"/>
-		<xsl:choose>
-			<!-- first cases: valid 8601 date or datetime -->
-			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6]))))$')">
-				<xsl:element name="{$nodename}">
-					<xsl:attribute name="rdf:datatype">
-						<xsl:text>http://www.w3.org/2001/XMLSchema#date</xsl:text>
-					</xsl:attribute>
-					<xsl:value-of select="lom:dateTime/text()" />
-				</xsl:element>
-			</xsl:when>
-			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$')">
-				<xsl:element name="{$nodename}">
-					<xsl:attribute name="rdf:datatype">
-						<xsl:text>http://www.w3.org/2001/XMLSchema#dateTime</xsl:text>
-					</xsl:attribute>
-					<xsl:value-of select="lom:dateTime/text()" />
-				</xsl:element>
-			</xsl:when>
-		</xsl:choose>
 	</xsl:template>
 
 <!-- copy -->

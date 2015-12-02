@@ -22,12 +22,12 @@
 	xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
 	xmlns:mlr9="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/"
-	xmlns:mlrens="http://www.ens-lyon.fr/"
+	xmlns:mlrfrens="http://www.ens-lyon.fr/"
 	extension-element-prefixes="regexp sets str vcardconv mlrext"
 	>
 	<xsl:output method="xml" encoding="UTF-8"/>
 
-    <xsl:template match="lom:contribute" mode="mlrens">
+    <xsl:template match="lom:contribute" mode="mlr9">
       <xsl:variable name="role">
         <xsl:apply-templates mode="get_role" />
       </xsl:variable>
@@ -38,23 +38,23 @@
         <xsl:text>urn:uuid:</xsl:text>
         <xsl:value-of select="mlrext:person_uuid(lom:entity/vcard:vcard/@uuidstr)" />
       </xsl:variable>
-      <mlrens:DES0100>
-        <mlrens:RC0001>
+      <mlr8:DES0100>
+        <mlr8:RC0001>
           <xsl:attribute name="rdf:about">
             <xsl:text>urn:uuid:</xsl:text>
-            <xsl:value-of select="mlrext:uuid_unique('mlrens:RC0001')" />
+            <xsl:value-of select="mlrext:uuid_unique('mlr8:RC0001')" />
           </xsl:attribute>
-          <mlrens:DES1100>
+          <mlr8:DES1100>
             <xsl:apply-templates mode="mlr9" />
-          </mlrens:DES1100>
-          <mlrens:DES1200>
+          </mlr8:DES1100>
+          <mlr8:DES1200>
             <xsl:value-of select="$role" />
-          </mlrens:DES1200>
-          <mlrens:DES1300 rdf:datatype="{$date_datatype}">
+          </mlr8:DES1200>
+          <mlr8:DES1300 rdf:datatype="{$date_datatype}">
             <xsl:value-of select="lom:date/lom:dateTime/text()"/>
-          </mlrens:DES1300>
-        </mlrens:RC0001>
-      </mlrens:DES0100>
+          </mlr8:DES1300>
+        </mlr8:RC0001>
+      </mlr8:DES0100>
       <xsl:choose>
         <xsl:when test="$role='author'">
           <mlr2:DES1600>
@@ -79,6 +79,59 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:template>
+
+  <xsl:template match="lom:contribute" mode="mlrfrens">
+    <xsl:variable name="role">
+      <xsl:apply-templates mode="get_role" />
+    </xsl:variable>
+    <xsl:variable name="date_datatype">
+      <xsl:apply-templates mode="get_date_datatype" />
+    </xsl:variable>
+    <xsl:variable name="urlid">
+      <xsl:text>urn:uuid:</xsl:text>
+      <xsl:value-of select="mlrext:person_uuid(lom:entity/vcard:vcard/@uuidstr)" />
+    </xsl:variable>
+    <mlrfrens:DES0100>
+      <mlrfrens:RC0001>
+        <xsl:attribute name="rdf:about">
+          <xsl:text>urn:uuid:</xsl:text>
+          <xsl:value-of select="mlrext:uuid_unique('mlrfrens:RC0001')" />
+        </xsl:attribute>
+        <mlrfrens:DES1100>
+          <xsl:apply-templates mode="mlr9" />
+        </mlrfrens:DES1100>
+        <mlrfrens:DES1200>
+          <xsl:value-of select="$role" />
+        </mlrfrens:DES1200>
+        <mlrfrens:DES1300 rdf:datatype="{$date_datatype}">
+          <xsl:value-of select="lom:date/lom:dateTime/text()"/>
+        </mlrfrens:DES1300>
+      </mlrfrens:RC0001>
+    </mlrfrens:DES0100>
+    <xsl:choose>
+      <xsl:when test="$role='author'">
+        <mlr2:DES1600>
+          <xsl:attribute name="rdf:resource">
+            <xsl:value-of select="$urlid" />
+          </xsl:attribute>
+        </mlr2:DES1600>
+      </xsl:when>
+      <xsl:when test="$role='publisher'">
+        <mlr2:DES1900>
+          <xsl:attribute name="rdf:resource">
+            <xsl:value-of select="$urlid" />
+          </xsl:attribute>
+        </mlr2:DES1900>
+      </xsl:when>
+      <xsl:otherwise>
+        <mlr2:DES2000>
+          <xsl:attribute name="rdf:resource">
+            <xsl:value-of select="$urlid" />
+          </xsl:attribute>
+        </mlr2:DES2000>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
     <xsl:template match="lom:entity" mode="mlr9">
       <xsl:variable name="urlid">

@@ -26,6 +26,8 @@
 	extension-element-prefixes="regexp sets str vcardconv mlrext"
 	>
 	<xsl:output method="xml" encoding="UTF-8"/>
+	
+	<xsl:include href="iso639.xsl"/>
 
     <!-- get date datatype -->
 
@@ -50,5 +52,50 @@
     </xsl:template>
 
     <xsl:template match="text()" mode="get_role"/>
+	
+	
+	<xsl:template name="language">
+		<xsl:param name="l"/>
+		<xsl:choose>
+			<xsl:when test="regexp:test($l,'^[a-z][a-z]\-[A-Z][A-Z]$')">
+				<xsl:call-template name="iso639_2to3">
+					<xsl:with-param name="l" select="substring-before($l,'-')"/>
+				</xsl:call-template>
+				<xsl:text>-</xsl:text>
+				<xsl:value-of select="substring-after($l,'-')"/>
+			</xsl:when>
+			<xsl:when test="regexp:test($l,'^[a-z][a-z]$')">
+				<xsl:call-template name="iso639_2to3">
+					<xsl:with-param name="l" select="$l"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$l"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template name="date">
+		<xsl:param name="nodename"/>
+		<xsl:choose>
+			<!-- first cases: valid 8601 date or datetime -->
+			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6]))))$')">
+				<xsl:element name="{$nodename}">
+					<xsl:attribute name="rdf:datatype">
+						<xsl:text>http://www.w3.org/2001/XMLSchema#date</xsl:text>
+					</xsl:attribute>
+					<xsl:value-of select="lom:dateTime/text()" />
+				</xsl:element>
+			</xsl:when>
+			<xsl:when test="lom:dateTime and regexp:test(lom:dateTime/text(), '^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$')">
+				<xsl:element name="{$nodename}">
+					<xsl:attribute name="rdf:datatype">
+						<xsl:text>http://www.w3.org/2001/XMLSchema#dateTime</xsl:text>
+					</xsl:attribute>
+					<xsl:value-of select="lom:dateTime/text()" />
+				</xsl:element>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
 
 </xsl:stylesheet>
