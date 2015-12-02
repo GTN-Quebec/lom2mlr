@@ -52,8 +52,7 @@
     </xsl:template>
 
     <xsl:template match="text()" mode="get_role"/>
-	
-	
+
 	<xsl:template name="language">
 		<xsl:param name="l"/>
 		<xsl:choose>
@@ -74,7 +73,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	
+
 	<xsl:template name="date">
 		<xsl:param name="nodename"/>
 		<xsl:choose>
