@@ -25,7 +25,23 @@
 	xmlns:mlrfrens="http://www.ens-lyon.fr/"
 	extension-element-prefixes="regexp sets str vcardconv mlrext"
 	>
-	<xsl:output method="xml" encoding="UTF-8"/>
+  <xsl:output method="xml" encoding="UTF-8"/>
+
+  <xsl:template match="lom:role" mode="mlr9">
+    <xsl:choose>
+      <xsl:when test="lom:source">
+          <xsl:text>source: </xsl:text>
+          <xsl:value-of select="lom:source/text()" />
+          <xsl:text>, value: </xsl:text>
+          <xsl:value-of select="lom:value/text()" />
+          <xsl:if test="lom:source/text()='LOMv1.0'"><xsl:text>@en</xsl:text></xsl:if>
+          <xsl:if test="lom:source/text()='LOMFRv1.0' or lom:source/text()='LOMFRv1.2' or lom:source/text()='LOMFRENSv1.0' or lom:source/text()='LOMFRENSv1.2'">@fr</xsl:if>
+      </xsl:when>
+      <xsl:otherwise>
+          <xsl:value-of select="lom:value/text()" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
     <xsl:template match="lom:contribute" mode="mlr9">
       <xsl:variable name="role">
@@ -38,23 +54,23 @@
         <xsl:text>urn:uuid:</xsl:text>
         <xsl:value-of select="mlrext:person_uuid(lom:entity/vcard:vcard/@uuidstr)" />
       </xsl:variable>
-      <mlr8:DES0100>
-        <mlr8:RC0001>
+      <mlr5:DES1700>
+        <mlr5:RC0003>
           <xsl:attribute name="rdf:about">
             <xsl:text>urn:uuid:</xsl:text>
             <xsl:value-of select="mlrext:uuid_unique('mlr8:RC0001')" />
           </xsl:attribute>
-          <mlr8:DES1100>
+          <mlr5:DES1800>
             <xsl:apply-templates mode="mlr9" />
-          </mlr8:DES1100>
-          <mlr8:DES1200>
-            <xsl:value-of select="$role" />
-          </mlr8:DES1200>
-          <mlr8:DES1300 rdf:datatype="{$date_datatype}">
+          </mlr5:DES1800>
+          <mlr5:DES0800>
+            <xsl:apply-templates select="lom:role" mode="mlr9" />
+          </mlr5:DES0800>
+          <mlr5:DES0700 rdf:datatype="{$date_datatype}">
             <xsl:value-of select="lom:date/lom:dateTime/text()"/>
-          </mlr8:DES1300>
-        </mlr8:RC0001>
-      </mlr8:DES0100>
+          </mlr5:DES0700>
+        </mlr5:RC0003>
+      </mlr5:DES1700>
       <xsl:choose>
         <xsl:when test="$role='author'">
           <mlr2:DES1600>
