@@ -13,7 +13,7 @@ from markdown.treeprocessors import Treeprocessor
 from markdown.util import etree
 
 from lom2mlr.validate.graph_comparison import GraphTester
-from lom2mlr.util import splitcode
+from common.utils import splitcode
 
 
 HEADER_R = re.compile(r'^h[1-9]$', re.I)
