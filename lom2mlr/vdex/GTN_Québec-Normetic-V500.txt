@@ -1,0 +1,22 @@
+eng fra
+T010
+discipline
+discipline acdémique
+discipline
+academic discipline
+T020
+idée
+idée
+idea
+idea
+T040
+objectif pédagogique
+objectif pédagogique
+educational objective
+educational objective
+T030
+préalable
+préalable
+prerequisite
+prerequisite
+
