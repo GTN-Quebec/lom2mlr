@@ -40,8 +40,8 @@ def make_vdex(fname):
                         break
                     defs[lang] = l
             f.write("""  <vdex:term>
-    <vdex:termIdentifier>%s</vdex:termIdentifier>
-    <vdex:caption>\n""" % (id,))
+    <vdex:termIdentifier>%s#%s</vdex:termIdentifier>
+    <vdex:caption>\n""" % (vocname, id))
             for lang in langs:
                 if caps[lang]:
                     f.write("        <vdex:langstring language=\"%s\">%s</vdex:langstring>\n" % (lang, caps[lang]))
