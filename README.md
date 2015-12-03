@@ -12,7 +12,6 @@ This this repository for more fondamental information.
 
 The documentation contains installation and usage instructions for the command-line tool.
 
-
 The command-line tool requires many components, as detailed in the instructions, but packaged binary applications are available [for Windows](http://www.gtn-quebec.org/lom2mlr/lom2mlr.exe) and [for Mac OS X](http://www.gtn-quebec.org/lom2mlr/lom2mlr.gz). Put it in your executable PATH, and type `lom2mlr --help` for instructions.
 
 This project contains 3 different tools. Thoses tools need to be used together to translate a lom file to a mlr file.
