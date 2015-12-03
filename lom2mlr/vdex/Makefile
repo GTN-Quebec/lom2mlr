@@ -2,7 +2,7 @@ VOCS := ISO_IEC_19788-3-2011-VA.2 ISO_IEC_19788-5-2012-VA.2 ISO_IEC_19788-5-2012
 	ISO_IEC_19788-5-2012-VA.1 ISO_IEC_19788-5-2012-VA.3\
 	ISO_IEC_19788-5-2012-VA.5 ISO_IEC_19788-9-2014-VA.2.1
 
-LANGS := fra eng rus
+LANGS := fr en ru
 
 VDEX := $(foreach voc, $(VOCS), $(voc).vdex)
 SKOS := $(foreach voc, $(VOCS), $(voc).skos)
@@ -20,14 +20,14 @@ clean:
 %.skos: %.vdex
 	xsltproc vdex2skos.xsl $< | xmllint --format - > $@
 
-%_fra.xsl: %.vdex
-	xsltproc --stringparam lang fra -o $@ make_translation_tolang.xsl $<
+%_fr.xsl: %.vdex
+	xsltproc --stringparam lang fr -o $@ make_translation_tolang.xsl $<
 
-%_eng.xsl: %.vdex
-	xsltproc --stringparam lang eng -o $@ make_translation_tolang.xsl $<
+%_en.xsl: %.vdex
+	xsltproc --stringparam lang en -o $@ make_translation_tolang.xsl $<
 
-%_rus.xsl: %.vdex
-	xsltproc --stringparam lang rus -o $@ make_translation_tolang.xsl $<
+%_ru.xsl: %.vdex
+	xsltproc --stringparam lang ru -o $@ make_translation_tolang.xsl $<
 
 %_mlr.xsl: %.vdex
 	xsltproc -o $@ make_translation_fromlang.xsl $<
