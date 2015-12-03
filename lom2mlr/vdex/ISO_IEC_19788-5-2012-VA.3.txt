@@ -1,4 +1,5 @@
-eng fra
+en fr
+http://purl.iso.org/iso-iec/19788/-5/VA.3
 T010
 lead
 be in charge or command of, organize and direct 

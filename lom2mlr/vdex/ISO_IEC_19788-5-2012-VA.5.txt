@@ -1,4 +1,5 @@
-nodef eng fra
+nodef en fr
+http://purl.iso.org/iso-iec/19788/-5/VA.5
 T010
 global
 globale
