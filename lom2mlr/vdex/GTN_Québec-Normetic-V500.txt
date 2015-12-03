@@ -1,4 +1,5 @@
-eng fra
+en fr
+http://purl.normetic.org/normetic/v010
 T010
 discipline
 discipline acdémique
