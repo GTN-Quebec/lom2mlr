@@ -57,6 +57,7 @@ class SchemaFixer(object):
                 self.fix01FixNamespace(tree, namespaces)
                 self.fix10MissingIdentifier(tree, namespaces=namespaces,
                                             **{'filename': filename})
+                self.fix20FixFrenchISO639_3(tree, namespaces)
 
                 tree.write(file_path, pretty_print=True, encoding='UTF-8')
 
@@ -122,6 +123,19 @@ class SchemaFixer(object):
                 entry_elem.text = meta_entry
                 id_elem.append(entry_elem)
 
+    def fix20FixFrenchISO639_3(self, tree, namespaces={}, **kwargs):
+        """Remove unused namespaces
+
+        :type xml: :lxml-class:`_ElementTree`
+        :param xml: the parsed LOM record.
+        :param namespaces: the needed namespaces.
+        :param kwargs: additionnal parameters mandatory for this fix
+        """
+        root = tree.getroot()
+        nodes = root.xpath("//lom:string", namespaces=namespaces)
+        for node in nodes:
+            if node.get('language') == 'fre':
+                node.set('language', 'fra')
 
 def main():
     usage = "Usage: %s target_folder" % argv[0]
