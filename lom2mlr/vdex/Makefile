@@ -4,6 +4,7 @@ VOCS := ISO_IEC_19788-3-2011-VA.2 ISO_IEC_19788-5-2012-VA.2 ISO_IEC_19788-5-2012
 	GTN_Québec-Normetic-V500
 
 LANGS := fr en ru
+SAXON_JAR := /opt/Saxon/Saxon9/saxon9he.jar
 
 VDEX := $(foreach voc, $(VOCS), $(voc).vdex)
 SKOS := $(foreach voc, $(VOCS), $(voc).skos)
@@ -32,3 +33,4 @@ clean:
 
 %_mlr.xsl: %.vdex
 	xsltproc -o $@ make_translation_fromlang.xsl $<
+	#java -jar ${SAXON_JAR} -o:$@ -s:$< -xsl:make_translation_fromlang.xsl
