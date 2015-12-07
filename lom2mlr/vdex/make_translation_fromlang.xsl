@@ -16,6 +16,7 @@
     </xslin:param>
 
     <xslin:variable name="voc" select="/vdex:vdex/vdex:vocabIdentifier/text()" />
+    <xslin:variable name="voc_id" select="str:replace($voc,'http://purl.iso.org/iso-iec/19788/-', 'mlr')" />
 
     <xslin:template match="/">
         <xsl:stylesheet version="1.0">
@@ -36,7 +37,7 @@
         <xslin:param name="lang"/>
         <xsl:template>
             <xslin:attribute name="name">
-                <xslin:value-of select="translate($voc,':','-')"/>
+                <xslin:value-of select="str:replace($voc_id, '/', '_')"/>
                 <xslin:text>_</xslin:text>
                 <xslin:value-of select="$lang"/>
             </xslin:attribute>

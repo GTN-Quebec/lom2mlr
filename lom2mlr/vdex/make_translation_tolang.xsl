@@ -3,6 +3,7 @@
         xmlns:xslin="http://www.w3.org/1999/XSL/Transform"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform/Out"
         xmlns:vdex="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+        xmlns:str="http://exslt.org/strings"
         xmlns:mlr3="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/"
         xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
         xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
@@ -24,6 +25,7 @@
     </xslin:param>
 
     <xslin:variable name="voc" select="/vdex:vdex/vdex:vocabIdentifier/text()" />
+    <xslin:variable name="voc_id" select="str:replace($voc,'http://purl.iso.org/iso-iec/19788/-', 'mlr')" />
 
     <xslin:template match="/">
         <xsl:stylesheet version="1.0">
@@ -34,7 +36,7 @@
     <xslin:template match="vdex:vdex">
         <xsl:template>
             <xslin:attribute name="name">
-                <xslin:value-of select="translate($voc,':','-')"/>
+                <xslin:value-of select="str:replace($voc_id, '/', '_')"/>
             </xslin:attribute>
             <xsl:param name="ename"/>
             <xsl:element>
