@@ -1,5 +1,5 @@
 en fr
-http://purl.iso.org/iso-iec/19788/-5/VA.2
+http://purl.iso.org/iso-iec/19788/-5/v0200
 T010
 learner
 one who learns or receives instruction

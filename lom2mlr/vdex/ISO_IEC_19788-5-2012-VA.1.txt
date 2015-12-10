@@ -1,5 +1,5 @@
 en fr
-http://purl.iso.org/iso-iec/19788/-5/VA.1
+http://purl.iso.org/iso-iec/19788/-5/v0100
 T010
 author
 an individual or an institution responsible for making the content of the resource. An author can be a person, institution, group, or other entity
