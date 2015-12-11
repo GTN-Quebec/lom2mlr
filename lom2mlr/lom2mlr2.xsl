@@ -49,7 +49,7 @@
           </xsl:when>
         </xsl:choose>
       </xsl:if>
-      <xsl:apply-templates mode="mlr2" />
+      <xsl:apply-templates select="lom:entity" mode="mlr2" />
     </xsl:template>
 
     <xsl:template match="lom:entity" mode="mlr2">

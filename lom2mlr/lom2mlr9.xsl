@@ -34,7 +34,6 @@
     <xsl:choose>
       <xsl:when test="lom:source/text()='LOMv1.0' or lom:source/text()='LOMFRv1.0' or lom:source/text()='LOMFRv1.2' or lom:source/text()='LOMFRENSv1.0' or lom:source/text()='LOMFRENSv1.2'">
         <xsl:call-template name="mlr5_DES0800" />
-
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>source: </xsl:text>
@@ -63,7 +62,7 @@
             <xsl:value-of select="mlrext:uuid_unique('mlr8:RC0001')" />
           </xsl:attribute>
           <mlr5:DES1800>
-            <xsl:apply-templates mode="mlr9" />
+            <xsl:apply-templates select="lom:entity" mode="mlr9" />
           </mlr5:DES1800>
           <mlr5:DES0800>
             <xsl:apply-templates select="lom:role" mode="mlr9" />
