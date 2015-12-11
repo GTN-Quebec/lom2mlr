@@ -34,7 +34,7 @@ def merge_group(main, other):
 def parse_args():
     parser = argparse.ArgumentParser(description='Merge several correspondances_type_*.xml into on correspondances_type.xml')
     parser.add_argument('-o', '--outfile', help="The file to write in.")
-    parser.add_argument('--outencoding', help="The encoding to use to write outfile.", default="ISO-8859-1")
+    parser.add_argument('--outencoding', help="The encoding to use to write outfile.", default="UTF-8")
     parser.add_argument('infiles', nargs="+",
                         help="The list of file to process")
     return parser.parse_args()
@@ -55,7 +55,7 @@ if __name__ == "__main__" :
     for group in main_root:
         for term in group:
             value = term.get('value')
-            value = value.replace("'", "&apos")
+            value = value.replace("'", "&apos;")
             term.set('value', value)
 
     main_tree.write(args.outfile, encoding=args.outencoding)
