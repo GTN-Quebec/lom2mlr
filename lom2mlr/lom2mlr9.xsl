@@ -64,9 +64,7 @@
           <mlr5:DES1800>
             <xsl:apply-templates select="lom:entity" mode="mlr9" />
           </mlr5:DES1800>
-          <mlr5:DES0800>
             <xsl:apply-templates select="lom:role" mode="mlr9" />
-          </mlr5:DES0800>
           <mlr5:DES0700 rdf:datatype="{$date_datatype}">
             <xsl:value-of select="lom:date/lom:dateTime/text()"/>
           </mlr5:DES0700>
