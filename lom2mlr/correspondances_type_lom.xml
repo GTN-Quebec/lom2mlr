@@ -4,13 +4,13 @@
         <term ns="lom" source="LOMv1.0" value="exercise" dest=""/>
         <term ns="lom" source="LOMv1.0" value="simulation" dest=""/>
         <term ns="lom" source="LOMv1.0" value="questionnaire" dest=""/>
-        <term ns="lom" source="LOMv1.0" value="diagram" dest="T011"/>
-        <term ns="lom" source="LOMv1.0" value="figure" dest="T011"/>
-        <term ns="lom" source="LOMv1.0" value="graph" dest="T011"/>
+        <term ns="lom" source="LOMv1.0" value="diagram" dest="http://purl.iso.org/iso-iec/19788/-3/VA.2#T011"/>
+        <term ns="lom" source="LOMv1.0" value="figure" dest="http://purl.iso.org/iso-iec/19788/-3/VA.2#T011"/>
+        <term ns="lom" source="LOMv1.0" value="graph" dest="http://purl.iso.org/iso-iec/19788/-3/VA.2#T011"/>
         <term ns="lom" source="LOMv1.0" value="index" dest=""/>
-        <term ns="lom" source="LOMv1.0" value="slide" dest="T011"/>
-        <term ns="lom" source="LOMv1.0" value="table" dest="T002"/>
-        <term ns="lom" source="LOMv1.0" value="narrative text" dest="T012"/>
+        <term ns="lom" source="LOMv1.0" value="slide" dest="http://purl.iso.org/iso-iec/19788/-3/VA.2#T011"/>
+        <term ns="lom" source="LOMv1.0" value="table" dest="http://purl.iso.org/iso-iec/19788/-3/VA.2#T002"/>
+        <term ns="lom" source="LOMv1.0" value="narrative text" dest="http://purl.iso.org/iso-iec/19788/-3/VA.2#T012"/>
         <term ns="lom" source="LOMv1.0" value="exam" dest=""/>
         <term ns="lom" source="LOMv1.0" value="experiment" dest=""/>
         <term ns="lom" source="LOMv1.0" value="problem statement" dest=""/>
@@ -23,7 +23,7 @@
         <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="glossaire" dest=""/>
         <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="guide" dest=""/>
         <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="materiel de reference" dest=""/>
-        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="outils" dest="T009"/>
+        <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="outils" dest="http://purl.iso.org/iso-iec/19788/-3/VA.2#T009"/>
         <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="simulation" dest=""/>
         <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="lecture/presentation" dest=""/>
 
@@ -50,10 +50,10 @@
 
     </group>
 
-    <group context="educational" element="learningResourceType" voc="" dest="mlr5:DES2100" always="false">
-        <term ns="lom" source="LOMv1.0" value="exercise" dest="T140"/>
-        <term ns="lom" source="LOMv1.0" value="simulation" dest="T160"/>
-        <term ns="lom" source="LOMv1.0" value="questionnaire" dest="T130"/>
+    <group context="educational" element="learningResourceType" voc="ISO_IEC_19788-5:2012::VA.3" dest="mlr5:DES2100" always="false">
+        <term ns="lom" source="LOMv1.0" value="exercise" dest="http://purl.iso.org/iso-iec/19788/-5/VA.3#T140"/>
+        <term ns="lom" source="LOMv1.0" value="simulation" dest="http://purl.iso.org/iso-iec/19788/-5/VA.3#T160"/>
+        <term ns="lom" source="LOMv1.0" value="questionnaire" dest="http://purl.iso.org/iso-iec/19788/-5/VA.3#T130"/>
         <term ns="lom" source="LOMv1.0" value="diagram" dest=""/>
         <term ns="lom" source="LOMv1.0" value="figure" dest=""/>
         <term ns="lom" source="LOMv1.0" value="graph" dest=""/>
@@ -61,10 +61,10 @@
         <term ns="lom" source="LOMv1.0" value="slide" dest=""/>
         <term ns="lom" source="LOMv1.0" value="table" dest=""/>
         <term ns="lom" source="LOMv1.0" value="narrative text" dest=""/>
-        <term ns="lom" source="LOMv1.0" value="exam" dest="T130"/>
-        <term ns="lom" source="LOMv1.0" value="experiment" dest="T150"/>
-        <term ns="lom" source="LOMv1.0" value="problem statement" dest="T150"/>
-        <term ns="lom" source="LOMv1.0" value="self assessment" dest="T130"/>
+        <term ns="lom" source="LOMv1.0" value="exam" dest="http://purl.iso.org/iso-iec/19788/-5/VA.3#T130"/>
+        <term ns="lom" source="LOMv1.0" value="experiment" dest="http://purl.iso.org/iso-iec/19788/-5/VA.3#T150"/>
+        <term ns="lom" source="LOMv1.0" value="problem statement" dest="http://purl.iso.org/iso-iec/19788/-5/VA.3#T150"/>
+        <term ns="lom" source="LOMv1.0" value="self assessment" dest="http://purl.iso.org/iso-iec/19788/-5/VA.3#T130"/>
         <term ns="lom" source="LOMv1.0" value="lecture" dest=""/>
 
         <term ns="lom" source="http://eureka.ntic.org/vdex/NORMETICv1.1_element_5_2_type_de_ressource_voc.xml" value="evaluation" dest=""/>
@@ -102,28 +102,28 @@
 
     <group context="lifeCycle" element="role" voc="ISO_IEC_19788-5:2012::VA.1" dest="mlr5:DES0800" always="true">
         <!-- agent role ; Contributor role -->
-        <term ns="lom" source="LOMv1.0" value="author" dest="T010"/>
-        <term ns="lom" source="LOMv1.0" value="publisher" dest=""/>
+        <term ns="lom" source="LOMv1.0" value="author" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T010"/>
+        <term ns="lom" source="LOMv1.0" value="publisher" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T010"/>
         <term ns="lom" source="LOMv1.0" value="unknown" dest=""/>
-        <term ns="lom" source="LOMv1.0" value="initiator" dest="T010"/>
-        <term ns="lom" source="LOMv1.0" value="terminator" dest="T010"/>
-        <term ns="lom" source="LOMv1.0" value="validator" dest="T020"/>
-        <term ns="lom" source="LOMv1.0" value="editor" dest="T010"/>
-        <term ns="lom" source="LOMv1.0" value="graphical designer" dest="T010"/>
-        <term ns="lom" source="LOMv1.0" value="technical implementer" dest="T010"/>
-        <term ns="lom" source="LOMv1.0" value="content provider" dest="T010"/>
-        <term ns="lom" source="LOMv1.0" value="technical validator" dest="T020"/>
-        <term ns="lom" source="LOMv1.0" value="educational validator" dest="T020"/>
-        <term ns="lom" source="LOMv1.0" value="script writer" dest="T010"/>
-        <term ns="lom" source="LOMv1.0" value="instructional designer" dest="T010"/>
-        <term ns="lom" source="LOMv1.0" value="subject matter expert" dest="T010"/>
+        <term ns="lom" source="LOMv1.0" value="initiator" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T010"/>
+        <term ns="lom" source="LOMv1.0" value="terminator" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T010"/>
+        <term ns="lom" source="LOMv1.0" value="validator" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T020"/>
+        <term ns="lom" source="LOMv1.0" value="editor" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T010"/>
+        <term ns="lom" source="LOMv1.0" value="graphical designer" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T010"/>
+        <term ns="lom" source="LOMv1.0" value="technical implementer" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T010"/>
+        <term ns="lom" source="LOMv1.0" value="content provider" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T010"/>
+        <term ns="lom" source="LOMv1.0" value="technical validator" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T020"/>
+        <term ns="lom" source="LOMv1.0" value="educational validator" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T020"/>
+        <term ns="lom" source="LOMv1.0" value="script writer" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T010"/>
+        <term ns="lom" source="LOMv1.0" value="instructional designer" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T010"/>
+        <term ns="lom" source="LOMv1.0" value="subject matter expert" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T010"/>
     </group>
     <group context="educational" element="intendedEndUserRole" voc="ISO_IEC_19788-5:2012::VA.2" dest="mlr5:DES0600" always="true">
         <!--  audience role -->
-        <term ns="lom" source="LOMv1.0" value="teacher" dest="T040"/>
+        <term ns="lom" source="LOMv1.0" value="teacher" dest="http://purl.iso.org/iso-iec/19788/-5/VA.2#T040"/>
         <term ns="lom" source="LOMv1.0" value="author" dest=""/>
-        <term ns="lom" source="LOMv1.0" value="learner" dest="T010"/>
-        <term ns="lom" source="LOMv1.0" value="manager" dest="T020"/>
+        <term ns="lom" source="LOMv1.0" value="learner" dest="http://purl.iso.org/iso-iec/19788/-5/VA.2#T010"/>
+        <term ns="lom" source="LOMv1.0" value="manager" dest="http://purl.iso.org/iso-iec/19788/-5/VA.2#T020"/>
     </group>
     <!-- group context="education" element="" voc="ISO_IEC_19788-5:2012::VA.3" dest="mlr5:DES2800" always="false">
         induced activity 

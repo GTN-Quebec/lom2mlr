@@ -35,7 +35,7 @@
         <term ns="lomfr" source="LOMFRv1.0" value="outil" dest=""/>
         <term ns="lomfr" source="LOMFRv1.0" value="scénario pédagogique" dest=""/>
         <term ns="lomfrens" source="LOMFRENSv1.0" value="article" dest=""/>
-        <term ns="lomfrens" source="LOMFRENSv1.0" value="image" dest="T004"/>
+        <term ns="lomfrens" source="LOMFRENSv1.0" value="image" dest="http://purl.iso.org/iso-iec/19788/-3/VA.2#T004"/>
         <term ns="lomfrens" source="LOMFRENSv1.0" value="brève" dest=""/>
         <term ns="lomfrens" source="LOMFRENSv1.0" value="imageDeLaSemaine" dest=""/>
         <term ns="lomfr" source="educ_learningResourceType-suplomfr" value="étude de cas" dest=""/>
@@ -66,7 +66,7 @@
 
     <group context="lifeCycle" element="role" voc="ISO_IEC_19788-5:2012::VA.1" dest="mlr5:DES0800" always="true">
         <!-- agent role ; Contributor role -->
-        <term ns="lomfr" source="LOMFRv1.0" value="contributeur" dest="T010"/>
+        <term ns="lomfr" source="LOMFRv1.0" value="contributeur" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T010"/>
     </group>
     <group context="educational" element="intendedEndUserRole" voc="ISO_IEC_19788-5:2012::VA.2" dest="mlr5:DES0600" always="true">
         <!--  audience role -->
