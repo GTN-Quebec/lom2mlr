@@ -21,7 +21,6 @@
 	xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
 	xmlns:mlr9="http://standards.iso.org/iso-iec/19788/-9/ed-1/en/"
-	xmlns:mlrfrens="http://www.ens-lyon.fr/"
 	extension-element-prefixes="regexp sets str mlrext"
 	>
 	
@@ -342,7 +341,6 @@
       <xsl:apply-templates mode="mlr2" select="."/>
     	<xsl:apply-templates mode="mlr3" select="."/>
     	<xsl:apply-templates mode="mlr9" select="."/>
-      <!--xsl:apply-templates mode="mlrfrens" select="."/-->
     </xsl:template>
 
 	<!-- metametadata -->
