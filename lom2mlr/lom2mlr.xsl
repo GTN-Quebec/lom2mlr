@@ -1042,7 +1042,7 @@
 					</xsl:call-template>
 				</xsl:attribute>
 			</xsl:if>
-			<xsl:value-of select="text()" />
+			<xsl:value-of select="translate(text(),'&#34;','&#92;&#34;')" />
 		</xsl:element>
 	</xsl:template>
 
