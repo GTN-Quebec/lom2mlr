@@ -25,7 +25,7 @@ A full installation example:
   . $PROJECT_PATH/bin/activate
   pip install --egg "scons>=2.4"
   cd $PROJECT_PATH
-  git clone git@github.com:GTN-Quebec/lom2mlr.git
+  git clone https://github.com/encolpe/lom2mlr.git
   cd lom2mlr
   pip install -r requirements.txt
   make
