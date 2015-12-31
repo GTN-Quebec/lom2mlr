@@ -83,7 +83,7 @@
             </xsl:apply-templates>
           </xsl:otherwise>
         </xsl:choose>
-        
+
       </mlr5:RC0003>
     </mlr5:DES1700>
     <xsl:choose>
@@ -122,6 +122,7 @@
         <xsl:value-of select="$urlid"/>
       </xsl:attribute>
       <mlr9:DES0100>
+      <xsl:text>urn:uuid:</xsl:text>
         <xsl:value-of select="mlrext:vcard_uuid(vcard:vcard/@uuidstr)"/>
       </mlr9:DES0100>
       <mlr9:DES0200>
@@ -142,10 +143,13 @@
           <xsl:value-of select="vcard:vcard/vcard:email"/>
         </mlr9:DES0800>
       </xsl:if>
-      <mlr9:DES3000>
-        <xsl:text>urn:uuid:</xsl:text>
-        <xsl:value-of select="mlrext:vcard_uuid(vcard:vcard/@uuidstr)"/>
-      </mlr9:DES3000>
+      <xsl:if test="vcard:vcard/vcard:org">
+        <xsl:for-each select="vcard:vcard/vcard:org/vcard:text">
+        <mlr9:DES0900>
+          <xsl:value-of select="current()"/>
+        </mlr9:DES0900>
+          </xsl:for-each>
+      </xsl:if>
     </mlr9:RC0001>
   </xsl:template>
 
