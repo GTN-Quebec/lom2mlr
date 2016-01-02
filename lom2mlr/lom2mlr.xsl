@@ -49,7 +49,8 @@
 
 	<!-- the version number of the converter -->
 	<xsl:param name="converter_version" select="'0.1'"/>
-
+   <xsl:param name="ENSdeLyon" select="'http://normes-educ.ens-lyon.fr/ontologies/2015/OERResource#'"/>
+   
 	<xsl:variable name="mlr_namespace" select="'http://standards.iso.org/iso-iec/19788/'"/>
 	<xsl:variable name="mlr1rc2" select="'http://standards.iso.org/iso-iec/19788/-1/ed-1/en/RC0002'"/>
 	<xsl:variable name="mlr1rc2_uuid" select="mlrext:uuid_url($mlr1rc2)"/>
@@ -1003,6 +1004,7 @@
 		<xsl:variable name="target">
 			<xsl:call-template name="classification_content">
 				<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
+				<xsl:with-param name="ENSdeLyon" select="$ENSdeLyon"/>
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:if test="string-length($target)">
@@ -1033,6 +1035,7 @@
 
 	<xsl:template name="classification_content">
 		<xsl:param name="nodename"/>
+	   <xsl:param name="ENSdeLyon"/>
 		<xsl:choose>
 			<xsl:when test="lom:description">
 				<xsl:apply-templates select="lom:description/lom:string" mode="langstring">
@@ -1047,32 +1050,28 @@
 			<xsl:when test="lom:taxonPath[starts-with(lom:source/lom:string, 'ThoKaVi')]">
 				<xsl:for-each select="lom:taxonPath/lom:taxon[last()]">
 					<xsl:element name="{$nodename}">
-					<xsl:text >ENSdeLyon:TKV_0</xsl:text>
-					<xsl:value-of select="translate(lom:id, ':','0')"/>			
-				</xsl:element>
+					      <xsl:value-of select="concat('&lt;',$ENSdeLyon,'TKV_0', translate(lom:id, ':','0'),'&gt;')"/>
+					</xsl:element>
 				</xsl:for-each>
 			</xsl:when>
 			<xsl:when test="lom:taxonPath[starts-with(lom:source/lom:string, 'STU')]">
 				<xsl:for-each select="lom:taxonPath/lom:taxon[last()]">
 				<xsl:element name="{$nodename}">
-					<xsl:text >ENSdeLyon:STU_0</xsl:text>
-					<xsl:value-of select="translate(lom:id, ':','0')"/>
+				   <xsl:value-of select="concat('&lt;',$ENSdeLyon,'STU_0', translate(lom:id, ':','0'),'&gt;')"/>
 				</xsl:element>
 				</xsl:for-each>
 			</xsl:when>
 			<xsl:when test="starts-with(lom:taxonPath/lom:source/lom:string, 'CheBoCar')">
 				<xsl:for-each select="lom:taxonPath/lom:taxon[last()]">
 				<xsl:element  name="{$nodename}">
-					<xsl:text>ENSdeLyon:CBC_0</xsl:text>
-					<xsl:value-of select="translate(lom:id, ':','0')"/>
+				   <xsl:value-of select="concat('&lt;',$ENSdeLyon,'CBC_0', translate(lom:id, ':','0'),'&gt;')"/>
 				</xsl:element>
 				</xsl:for-each>
 			</xsl:when>
 			<xsl:when test="starts-with(lom:taxonPath/lom:source/lom:string, 'Physique-formation')">
 				<xsl:for-each select="lom:taxonPath/lom:taxon[last()]">
 				<xsl:element name="{$nodename}">
-					<xsl:text>ENSdeLyon:PHF_</xsl:text>
-					<xsl:value-of select="translate(lom:id, ':','0')"/>
+				   <xsl:value-of select="concat('&lt;',$ENSdeLyon,'PHF_', translate(lom:id, ':','0'),'&gt;')"/>
 				</xsl:element>
 				</xsl:for-each>
 			</xsl:when>
