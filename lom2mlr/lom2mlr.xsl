@@ -8,7 +8,7 @@
 	xmlns:sets="http://exslt.org/sets" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:vcard="urn:ietf:params:xml:ns:vcard-4.0"
 	xmlns:cos="http://www.inria.fr/acacia/corese#" xmlns:oa="http://www.w3.org/ns/oa#"
-	xmlns:gtnq="http://www.gtn-quebec.org/ns/" xmlns:ENSdeLyon="http://normes-educ.ens-lyon.fr/ontologies/2015/OERResource#" 
+	xmlns:gtnq="http://www.gtn-quebec.org/ns/"  
 	xmlns:mlrext="http://standards.iso.org/iso-iec/19788/ext/"
 	xmlns:mlr1="http://standards.iso.org/iso-iec/19788/-1/ed-1/en/"
 	xmlns:mlr2="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/"
@@ -49,7 +49,29 @@
 
 	<!-- the version number of the converter -->
 	<xsl:param name="converter_version" select="'0.1'"/>
-   <xsl:param name="ENSdeLyon" select="'http://normes-educ.ens-lyon.fr/ontologies/2015/OERResource#'"/>
+   
+   <!-- Transformation of LOM resources derived from taxons and taxonPaths cannot be generic. 
+        It relies on a given taxonomy/ontology expressing the classification of 
+        ressources for a given instituion or group of institutions. The method choosen here
+        is to agregate an external IRI bearing the classification and the Id tag of the 
+        LAST taxon of all taxonPathes. In such a way taxons lead to ontology clases or individuals
+        while keywords lead to litterals.
+        Besides the IRI it is also necessary to qualify the taxonPath source, to identify
+        the qualifier string associated with this source
+        As an example an ontology build on 4 classification is used here-->
+   <xsl:param name="classifIRI" select="'http://normes-educ.ens-lyon.fr/ontologies/2015/OERResource#'"/>
+   <!-- Exemple of a taxonomy (tested in an operational environment) -->
+   <xsl:param name="Thokavi" select="'Thokavi'"/>
+   <xsl:param name="ThokaviIdent" select="'TKV_0'"/>
+   <!-- Exemple of a taxonomy (tested in an operational environment) -->
+   <xsl:param name="STU" select="'STU'"/>
+   <xsl:param name="STUIdent" select="'STU_0'"/>  
+   <!-- Exemple of a taxonomy (tested in an operational environment) -->
+    <xsl:param name="CheBoCar" select="'CheBoCar'"/>
+   <xsl:param name="CheBoCarIdent" select="'CBC_0'"/>
+   <!-- Exemple of a taxonomy (tested in an operational environment) -->
+   <xsl:param name="Physique-formation" select="'Physique-formation'"/>
+   <xsl:param name="Physique-formationIdent" select="'PHF_'"/>
    
 	<xsl:variable name="mlr_namespace" select="'http://standards.iso.org/iso-iec/19788/'"/>
 	<xsl:variable name="mlr1rc2" select="'http://standards.iso.org/iso-iec/19788/-1/ed-1/en/RC0002'"/>
@@ -1004,7 +1026,15 @@
 		<xsl:variable name="target">
 			<xsl:call-template name="classification_content">
 				<xsl:with-param name="nodename" select="'mlr2:DES0300'"/>
-				<xsl:with-param name="ENSdeLyon" select="$ENSdeLyon"/>
+				<xsl:with-param name="classifIRI" select="$classifIRI"/>
+				<xsl:with-param name="Thokavi" select="$classifIRI"/>
+				<xsl:with-param name="ThokaviIdent" select="$classifIRI"/>
+				<xsl:with-param name="STU" select="$classifIRI"/>
+				<xsl:with-param name="STUIdent" select="$classifIRI"/>
+				<xsl:with-param name="CheBoCar" select="$classifIRI"/>
+				<xsl:with-param name="CheBoCarIdent" select="$classifIRI"/>
+				<xsl:with-param name="Physique-formation" select="$classifIRI"/>
+				<xsl:with-param name="Physique-formationIdent" select="$classifIRI"/>
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:if test="string-length($target)">
@@ -1035,7 +1065,7 @@
 
 	<xsl:template name="classification_content">
 		<xsl:param name="nodename"/>
-	   <xsl:param name="ENSdeLyon"/>
+	   <xsl:param name="classifIRI"/>
 		<xsl:choose>
 			<xsl:when test="lom:description">
 				<xsl:apply-templates select="lom:description/lom:string" mode="langstring">
@@ -1050,28 +1080,28 @@
 			<xsl:when test="lom:taxonPath[starts-with(lom:source/lom:string, 'ThoKaVi')]">
 				<xsl:for-each select="lom:taxonPath/lom:taxon[last()]">
 					<xsl:element name="{$nodename}">
-					      <xsl:value-of select="concat('&lt;',$ENSdeLyon,'TKV_0', translate(lom:id, ':','0'),'&gt;')"/>
+					      <xsl:value-of select="concat('&lt;',$classifIRI,'TKV_0', translate(lom:id, ':','0'),'&gt;')"/>
 					</xsl:element>
 				</xsl:for-each>
 			</xsl:when>
 			<xsl:when test="lom:taxonPath[starts-with(lom:source/lom:string, 'STU')]">
 				<xsl:for-each select="lom:taxonPath/lom:taxon[last()]">
 				<xsl:element name="{$nodename}">
-				   <xsl:value-of select="concat('&lt;',$ENSdeLyon,'STU_0', translate(lom:id, ':','0'),'&gt;')"/>
+				   <xsl:value-of select="concat('&lt;',$classifIRI,'STU_0', translate(lom:id, ':','0'),'&gt;')"/>
 				</xsl:element>
 				</xsl:for-each>
 			</xsl:when>
 			<xsl:when test="starts-with(lom:taxonPath/lom:source/lom:string, 'CheBoCar')">
 				<xsl:for-each select="lom:taxonPath/lom:taxon[last()]">
 				<xsl:element  name="{$nodename}">
-				   <xsl:value-of select="concat('&lt;',$ENSdeLyon,'CBC_0', translate(lom:id, ':','0'),'&gt;')"/>
+				   <xsl:value-of select="concat('&lt;',$classifIRI,'CBC_0', translate(lom:id, ':','0'),'&gt;')"/>
 				</xsl:element>
 				</xsl:for-each>
 			</xsl:when>
 			<xsl:when test="starts-with(lom:taxonPath/lom:source/lom:string, 'Physique-formation')">
 				<xsl:for-each select="lom:taxonPath/lom:taxon[last()]">
 				<xsl:element name="{$nodename}">
-				   <xsl:value-of select="concat('&lt;',$ENSdeLyon,'PHF_', translate(lom:id, ':','0'),'&gt;')"/>
+				   <xsl:value-of select="concat('&lt;',$classifIRI,'PHF_', translate(lom:id, ':','0'),'&gt;')"/>
 				</xsl:element>
 				</xsl:for-each>
 			</xsl:when>
