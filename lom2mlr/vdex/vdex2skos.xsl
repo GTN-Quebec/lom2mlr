@@ -27,7 +27,7 @@
     <xsl:template match="vdex:term">
         <skos:Concept>
             <xsl:attribute name="rdf:about">
-                <xsl:value-of select="concat($voc,'#',vdex:termIdentifier/text())"/>
+                <xsl:value-of select="vdex:termIdentifier/text()"/>
             </xsl:attribute>
             <xsl:apply-templates />
         </skos:Concept>

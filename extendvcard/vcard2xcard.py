@@ -10,7 +10,8 @@ from base64 import b64encode
 from vobject.base import readOne as readOne_original
 from vobject import vcard
 
-from lom2mlr.util import is_sequence, unwrap_seq
+from common.utils import is_sequence, unwrap_seq
+from uuid import UUID, uuid5, NAMESPACE_URL
 
 """The namespace for xCard """
 VCARD_NS = 'urn:ietf:params:xml:ns:vcard-4.0'
@@ -21,16 +22,24 @@ VCARD_NSB = '{%s}' % (VCARD_NS, )
 """The namespace map used in building xCard objects"""
 NSMAP = {None: VCARD_NS}
 
-
 def readOne(card):
-    card_lines = card.split('\n')
-    while len(card_lines[0]) == 0:
-        del card_lines[0]
-    use_cr = card_lines[0][-1] == '\r'
-    first_line = card_lines[0].rstrip('\r')
-    if first_line != first_line.rstrip():
-        card_lines[0] = first_line.rstrip() + ('\r' if use_cr else '')
-        card = '\n'.join(card_lines)
+    card = card.replace("\r\n", "\n")
+    card = card.replace("\r", "\n")
+    card_lines = card.split("\n")
+    card_lines = [l.strip() for l in card_lines]
+    #be sure that vcard start and stop correctly
+    if card_lines[0] != "BEGIN:VCARD":
+        if card_lines[0].startswith("BEGIN:VCARD"):
+            card_lines.insert(1, card_lines[0][11:])
+            card_lines[0] = "BEGIN:VCARD"
+        elif card_lines[0].startswith("VERSION"):
+            card_lines.insert(0, "BEGIN:VCARD")
+    if card_lines[-1] != "END:VCARD":
+        if card_lines[-1].startswith("END:VCARD"):
+            card_lines.append(card_lines[-1][9:])
+            card_lines[0] = "END:VCARD"
+    card_lines = [l.strip() for l in card_lines]
+    card = '\n'.join(card_lines)
     return readOne_original(card)
 
 
@@ -78,23 +87,31 @@ type_checkers = {
 }
 
 xcard_param_types = {
-    'language': 'language-tag',
-    'altid': 'text',
-    'mediatype': 'text-list',
-    'sort-as': 'text-list',
-    'geo': 'uri',
-    'tz': ('uri', 'text'),
-    'type': 'text-list'
+    'language'  : 'language-tag',
+    'pref'      : 'int',
+    'altid'     : 'text-list',
+    'pid'       : 'text',
+    'type'      : 'text-list',
+    'mediatype' : 'text-list',
+    'calscale'  : 'text-list',
+    'sort-as'   : 'text-list',
+    'geo'       : 'uri',
+    'tz'        : ('uri', 'text'),
+    
 }
 
 xcard_prop_types = {
-    'source': 'uri',
-    'fn': 'text',
+    'source' : 'uri',
+    'kind'   : 'text',
+    'fn'     : 'text',
+    'n'      : ('surname', 'given', 'additional', 'prefix', 'suffix'),
     'nickname': 'text-list',
     'photo': ('uri', 'binary'),
     'bday': ('date-time', 'date', 'time', 'text'),
     'anniversary': ('date-time', 'date', 'time', 'text'),
     'gender': 'sex',
+    'adr'  : ('pobox', 'ext', 'street', 'locality', 'region', 'code', 'country'),
+    
     'tel': ('uri', 'text'),
     'email': 'text',
     'impp': 'uri',
@@ -136,10 +153,8 @@ def vobj_to_str(vobj, root, attributes):
     """
     for n in attributes:
         val = getattr(vobj, n, None)
+        n = n if n != 'family' else 'surname'
         if val:
-            # vobject disagrees with rfc6531
-            if n == 'family':
-                n = 'surname'
             el = root.makeelement(VCARD_NSB + n.lower(), nsmap=NSMAP)
             root.append(el)
             if is_sequence(val):
@@ -148,11 +163,14 @@ def vobj_to_str(vobj, root, attributes):
 
 
 def append_typed_el(root, typename, val):
-    el = root.makeelement(VCARD_NSB + typename, nsmap=NSMAP)
-    root.append(el)
-    if typename == 'binary':
-        val = "data:;base64," + b64encode(val)
-    el.text = val
+    if val:
+        el = root.makeelement(VCARD_NSB + typename, nsmap=NSMAP)
+        root.append(el)
+        if typename == 'binary':
+            val = "data:;base64," + b64encode(val)
+        else:
+            val = val.strip()
+        el.text = val
 
 
 def vobj_to_typed(val, root, typelist):
@@ -173,6 +191,8 @@ def vobj_to_typed(val, root, typelist):
             if not is_sequence(val):
                 val = [val]
             for v in val:
+                if is_sequence(v):
+                    v = ",".join(v)
                 append_typed_el(root, 'text', v)
         else:
             append_typed_el(root, types, val)
@@ -189,6 +209,44 @@ def vobj_to_typed_param(val, root):
 def vobj_to_typed_properties(val, root):
     vobj_to_typed(val, root, xcard_prop_types)
 
+def fill_tree_from_vcard(node, vcard_):
+    for e in vcard_.getChildren():
+        tag = e.name.lower()
+        if tag in exclude_tags:
+            continue
+        v = e.transformToNative().value
+        if not v or (is_sequence(v) and not any(v)):
+            continue
+        if e.group:
+            try:
+                master_el = groups[e.group]
+            except KeyError:
+                master_el = root.makeelement(VCARD_NSB + "group", nsmap=NSMAP)
+                master_el.set("name", e.group)
+                groups[e.group] = master_el
+        else:
+            master_el = node
+        el = master_el.makeelement(VCARD_NSB + tag, nsmap=NSMAP)
+        master_el.append(el)
+        if e.params:
+            params = el.makeelement(VCARD_NSB + 'parameters', nsmap=NSMAP)
+            el.append(params)
+            for k, v in e.params.iteritems():
+                param = params.makeelement(VCARD_NSB + k.lower(), nsmap=NSMAP)
+                params.append(param)
+                v = v.strip()
+                vobj_to_typed_param(v, param)
+        if isinstance(v, vcard.Address):
+            vobj_to_str(v, el, vcard.ADDRESS_ORDER)
+        elif isinstance(v, vcard.Name):
+            vobj_to_str(v, el, vcard.NAME_ORDER)
+        else:
+            vobj_to_typed_properties(v, el)
+        if tag == "org":
+            id_ = ";".join(el.itertext())
+            el.set("uuidstr", id_)
+        
+
 
 # TODO: Utiliser http://tools.ietf.org/html/rfc6351
 @unwrap_seq
@@ -201,28 +259,14 @@ def convert(context, card):
     :param context: the xslt context that will allow creation of etree elements
     :returns: the context's node (a :lxml-class:`_Element`) on which xCards were added.
     """
-    card = readOne(card)
-    root = context.context_node.makeelement(VCARD_NSB + 'vcard', nsmap=NSMAP)
-    for e in card.getChildren():
-        tag = e.name.lower()
-        if tag in exclude_tags:
-            continue
-        el = root.makeelement(VCARD_NSB + tag, nsmap=NSMAP)
-        root.append(el)
-        if e.group:
-            el.attrib['group'] = e.group
-        if e.params:
-            params = el.makeelement(VCARD_NSB + 'parameters', nsmap=NSMAP)
-            el.append(params)
-            for k, v in e.params.iteritems():
-                param = params.makeelement(VCARD_NSB + k.lower(), nsmap=NSMAP)
-                params.append(param)
-                vobj_to_typed_param(v, param)
-        v = e.transformToNative().value
-        if isinstance(v, vcard.Address):
-            vobj_to_str(v, el, vcard.ADDRESS_ORDER)
-        elif isinstance(v, vcard.Name):
-            vobj_to_str(v, el, vcard.NAME_ORDER)
-        else:
-            vobj_to_typed_properties(v, el)
+    try:
+        card = readOne(card)
+        root = context.context_node.makeelement(VCARD_NSB + 'vcard', nsmap=NSMAP)
+        fill_tree_from_vcard(root, card)
+        id_ = "".join(root.itertext())
+        root.set("uuidstr", id_)
+    except Exception as e:
+        print "oups", e.message
+        raise
+    
     return root

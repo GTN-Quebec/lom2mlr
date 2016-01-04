@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<correspondency>
+    <group dest="mlr-fr:activity" always="false" context="educational" element="learningResourceType" voc="ISO_IEC_19788-3-2011-VA.2">
+      <term ns="lomfr" source="LOMFRv1.0" value="animer" dest="FRT001" />
+      <term ns="lomfr" source="LOMFRv1.0" value="apprendre" dest="FRT002" />
+      <term ns="lomfr" source="LOMFRv1.0" value="collaborer" dest="FRT003" />
+      <term ns="lomfr" source="LOMFRv1.0" value="communiquer" dest="FRT004" />
+      <term ns="lomfr" source="LOMFRv1.0" value="coopérer" dest="FRT005" />
+      <term ns="lomfr" source="LOMFRv1.0" value="créer" dest="FRT006" />
+      <term ns="lomfr" source="LOMFRv1.0" value="échanger" dest="FRT007" />
+      <term ns="lomfr" source="LOMFRv1.0" value="lire" dest="FRT008" />
+      <term ns="lomfr" source="LOMFRv1.0" value="observer" dest="FRT009" />
+      <term ns="lomfr" source="LOMFRv1.0" value="organiser" dest="FRT010" />
+      <term ns="lomfr" source="LOMFRv1.0" value="produire" dest="FRT011" />
+      <term ns="lomfr" source="LOMFRv1.0" value="publier" dest="FRT012" />
+      <term ns="lomfr" source="LOMFRv1.0" value="rechercher" dest="FRT013" />
+      <term ns="lomfr" source="LOMFRv1.0" value="s'auto-former" dest="FRT014" />
+      <term ns="lomfr" source="LOMFRv1.0" value="s'exercer" dest="FRT015" />
+      <term ns="lomfr" source="LOMFRv1.0" value="s'informer" dest="FRT016" />
+      <term ns="lomfr" source="LOMFRv1.0" value="se former" dest="FRT017" />
+      <term ns="lomfr" source="LOMFRv1.0" value="simuler" dest="FRT018" />
+      <term ns="lomfr" source="LOMFRv1.0" value="s'évaluer" dest="FRT019" />
+    </group>
+
+    <group context="educational" element="learningResourceType" voc="ISO_IEC_19788-3-2011-VA.2" dest="mlr2:DES0800" always="true">
+        
+        <term ns="lomfr" source="LOMFRv1.0" value="démonstration" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="évaluation" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="animation" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="tutoriel" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="glossaire" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="guide" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="matériel de référence" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="méthodologie" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="outil" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="scénario pédagogique" dest=""/>
+        <term ns="lomfrens" source="LOMFRENSv1.0" value="article" dest=""/>
+        <term ns="lomfrens" source="LOMFRENSv1.0" value="image" dest="http://purl.iso.org/iso-iec/19788/-3/VA.2#T004"/>
+        <term ns="lomfrens" source="LOMFRENSv1.0" value="brève" dest=""/>
+        <term ns="lomfrens" source="LOMFRENSv1.0" value="imageDeLaSemaine" dest=""/>
+        <term ns="lomfr" source="educ_learningResourceType-suplomfr" value="étude de cas" dest=""/>
+        <term ns="lomfr" source="educ_learningResourceType-suplomfr" value="liste de références" dest=""/>
+        <term ns="lomfr" source="educ_learningResourceType-suplomfr" value="jeu de données" dest=""/>
+        <term ns="lomfr" source="educ_learningResourceType-suplomfr" value="autre" dest=""/>
+
+    </group>
+
+    <group context="educational" element="learningResourceType" voc="" dest="mlr5:DES2100" always="false">
+
+        <term ns="lomfr" source="LOMFRv1.0" value="démonstration" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="évaluation" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="animation" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="tutoriel" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="glossaire" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="guide" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="matériel de référence" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="méthodologie" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="outil" dest=""/>
+        <term ns="lomfr" source="LOMFRv1.0" value="scénario pédagogique" dest=""/>
+        <term ns="lomfr" source="educ_learningResourceType-suplomfr" value="étude de cas" dest=""/>
+        <term ns="lomfr" source="educ_learningResourceType-suplomfr" value="liste de références" dest=""/>
+        <term ns="lomfr" source="educ_learningResourceType-suplomfr" value="jeu de données" dest=""/>
+        <term ns="lomfr" source="educ_learningResourceType-suplomfr" value="autre" dest=""/>
+
+    </group>
+
+    <group context="lifeCycle" element="role" voc="ISO_IEC_19788-5:2012::VA.1" dest="mlr5:DES0800" always="true">
+        <!-- agent role ; Contributor role -->
+        <term ns="lomfr" source="LOMFRv1.0" value="contributeur" dest="http://purl.iso.org/iso-iec/19788/-5/VA.1#T010"/>
+    </group>
+    <group context="educational" element="intendedEndUserRole" voc="ISO_IEC_19788-5:2012::VA.2" dest="mlr5:DES0600" always="true">
+        <!--  audience role -->
+    </group>
+    <!-- group context="education" element="" voc="ISO_IEC_19788-5:2012::VA.3" dest="mlr5:DES2800" always="false">
+        induced activity 
+    </group>
+    <group context="education" element="" voc="ISO_IEC_19788-5:2012::VA.4" dest="mlr5:DES2400" always="false">
+        learning method 
+    </group>
+    <group context="education" element="" voc="ISO_IEC_19788-5:2012::VA.5" dest="mlr5:DES0300" always="false">
+        annotation type 
+    </group -->
+</correspondency>

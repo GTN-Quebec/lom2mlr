@@ -11,6 +11,8 @@ from uuid import UUID
 from lxml import etree
 from rdflib import Graph, BNode, URIRef
 
+import argparse
+
 from lom2mlr import Converter
 
 LOM_TEMPLATE = u'''<?xml version="1.0"?>
@@ -71,7 +73,7 @@ class GraphCorrespondence(object):
     1. They are identical resources or literals
     2. The dest node is a resource and the source node is a blank
        (or "blank-like") nodes involved in identical relations to corresponding nodes.
-    
+
     This notion of correspondance is built iteratively.
     blank-like nodes are UUID nodes where the first digit is the UUID type,
     the next 19 digits are zero, and the last 12 digits are unique.
@@ -188,7 +190,8 @@ class GraphTester(object):
 
     def __init__(self):
         self.converter = Converter()
-        self.parser = self.converter.populate_argparser()
+        parser = argparse.ArgumentParser(description="Graph Comparison")
+        self.parser = self.converter.populate_argparser(parser)
         self.reset()
 
     def normalizeTerm(self, graph, term):

@@ -1,0 +1,24 @@
+
+.PHONY: all
+
+SOURCES = $(wildcard LOM*.xml) $(wildcard */LOM*.xml)
+
+EXTENDED := $(patsubst %.xml,%.exml,$(SOURCES))
+VCARDTTL := $(patsubst %.xml,%.vcard.ttl,$(SOURCES))
+LOMTTL := $(patsubst %.xml,%.lom.ttl,$(SOURCES))
+
+extended: $(EXTENDED)
+vcard: $(VCARDTTL)
+lomttl: $(LOMTTL)
+all: $(EXTENDED) $(VCARDTTL) $(LOMTTL)
+
+
+%.exml: %.xml
+	extendvcard -o $@ $<
+
+
+%.vcard.ttl: %.exml
+	extractvcard --format turtle -o $@ $<
+
+%.lom.ttl: %.exml
+	lom2mlr --format turtle -o $@ $<

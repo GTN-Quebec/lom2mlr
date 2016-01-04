@@ -8,18 +8,29 @@ TRE = re.compile('^T[0-9]+$')
 
 
 def make_vdex(fname):
-    vocname = splitext(basename(fname))[0]
+    """
+
+    See docs/vocabularies.rst
+    """
     target = splitext(fname)[0] + '.vdex'
     lines = open(fname).readlines()
+
+    ## headers
+    # langs
     langs = lines.pop(0).split()
     hasdef = True
     if langs[0] == 'nodef':
         hasdef = False
         langs.pop(0)
+
+    # Vocab URI
+    vocab_uri = lines.pop(0).strip()
+
+    ## body
     with open(target, 'w') as f:
         f.write("""<?xml version="1.0" encoding="utf-8"?>
 <vdex:vdex xmlns:vdex="http://www.imsglobal.org/xsd/imsvdex_v1p0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsvdex_v1p0 http://www.imsglobal.org/xsd/imsvdex_v1p0.xsd" xs:version="0.2">
-<vdex:vocabIdentifier isRegistered="false">%s</vdex:vocabIdentifier>\n""" % (vocname))
+<vdex:vocabIdentifier isRegistered="false">%s</vdex:vocabIdentifier>\n""" % (vocab_uri))
         while lines:
             caps = {}
             defs = {}
@@ -40,8 +51,8 @@ def make_vdex(fname):
                         break
                     defs[lang] = l
             f.write("""  <vdex:term>
-    <vdex:termIdentifier>%s</vdex:termIdentifier>
-    <vdex:caption>\n""" % (id,))
+    <vdex:termIdentifier>%s#%s</vdex:termIdentifier>
+    <vdex:caption>\n""" % (vocab_uri, id))
             for lang in langs:
                 if caps[lang]:
                     f.write("        <vdex:langstring language=\"%s\">%s</vdex:langstring>\n" % (lang, caps[lang]))

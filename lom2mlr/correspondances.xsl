@@ -3,11 +3,14 @@
 	xmlns:xslin="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform/Out"
 	xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
+	xmlns:lomfr="http://www.lom-fr.fr/xsd/LOMFR"
+	xmlns:lomfrens="http://pratic.ens-lyon.fr/xsd/LOMFRENS"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:mlr2="http://standards.iso.org/iso-iec/19788/-2/ed-1/en/"
 	xmlns:mlr3="http://standards.iso.org/iso-iec/19788/-3/ed-1/en/"
 	xmlns:mlr5="http://standards.iso.org/iso-iec/19788/-5/ed-1/en/"
 	xmlns:mlr8="http://standards.iso.org/iso-iec/19788/-8/ed-1/en/"
+	xmlns:mlr-fr="http://www.ens-lyon.fr/"
 	>
 	<xslin:namespace-alias stylesheet-prefix="xsl" result-prefix="xslin"/>
 	<xslin:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
@@ -69,9 +72,12 @@
 	<xslin:template match="term[@dest!='']">
 		<xsl:when>
 			<xslin:attribute name="test">
-				<xslin:text>lom:source/text()='</xslin:text>
+			    <xslin:value-of select="@ns" />
+				<xslin:text>:source/text()='</xslin:text>
 				<xslin:value-of select="@source"/>
-				<xslin:text>' and lom:value/text()='</xslin:text>
+				<xslin:text>' and </xslin:text>
+				<xslin:value-of select="@ns" />
+				<xslin:text>:value/text()='</xslin:text>
 				<xslin:value-of select="@value"/>
 				<xslin:text>'</xslin:text>
 			</xslin:attribute>

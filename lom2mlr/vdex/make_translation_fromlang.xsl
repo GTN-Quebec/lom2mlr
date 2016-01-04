@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xslin:stylesheet version="1.0" 
+<xslin:stylesheet version="1.0"
         xmlns:xslin="http://www.w3.org/1999/XSL/Transform"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform/Out"
         xmlns:vdex="http://www.imsglobal.org/xsd/imsvdex_v1p0"
@@ -12,10 +12,11 @@
     <xslin:namespace-alias stylesheet-prefix="xsl" result-prefix="xslin"/>
     <xslin:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
     <xslin:param name="langs">
-        <xslin:text>eng fra rus</xslin:text>
+        <xslin:text>en fr ru</xslin:text>
     </xslin:param>
 
     <xslin:variable name="voc" select="/vdex:vdex/vdex:vocabIdentifier/text()" />
+    <xslin:variable name="voc_id" select="str:replace($voc,'http://purl.iso.org/iso-iec/19788/-', 'mlr')" />
 
     <xslin:template match="/">
         <xsl:stylesheet version="1.0">
@@ -36,7 +37,7 @@
         <xslin:param name="lang"/>
         <xsl:template>
             <xslin:attribute name="name">
-                <xslin:value-of select="translate($voc,':','-')"/>
+                <xslin:value-of select="str:replace($voc_id, '/', '_')"/>
                 <xslin:text>_</xslin:text>
                 <xslin:value-of select="$lang"/>
             </xslin:attribute>

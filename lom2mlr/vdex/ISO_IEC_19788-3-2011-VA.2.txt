@@ -1,4 +1,5 @@
-eng fra rus
+en fr ru
+http://purl.iso.org/iso-iec/19788/-3/v0200
 T001
 collection
 A collection is an aggregation of items.

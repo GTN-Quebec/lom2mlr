@@ -23,28 +23,30 @@ data_files=[('', core_data_files),
 requirements = open('requirements.txt').readlines()
 
 setup(name='lom2mlr',
-      version='0.1',
+      version='0.3-dev',
       description="Utilities to convert learning resources metadata "
       "from IEEE LOM to ISO-19788 format",
       author='Marc-Antoine Parent',
       author_email='map@ntic.org',
       url='https://github.com/GTN-Quebec/lom2mlr',
-      packages=['lom2mlr', 'lom2mlr.markdown', 'lom2mlr.validate'],
-      package_data={
-        'lom2mlr': core_data_files + translations_files + vdex_files},
+      packages=['lom2mlr', 'lom2mlr.markdown', 'lom2mlr.validate', 'common'],
+      package_data={'lom2mlr': core_data_files + translations_files + vdex_files},
       data_files=data_files,
       install_requires=requirements,
       tests_require=['nose'],
       entry_points={
           'console_scripts': [
               'lom2mlr = lom2mlr.transform:main',
+              'extendvcard = extendvcard.extendvcard:main',
+              'extractvcard = extractvcard.extractvcard:main',
+              'pyxmltransform = common.converter:main',
               'lom2mlr_markdown = lom2mlr.markdown:compile'
           ]
       },
       console=['lom2mlr/transform.py'],
       options={'py2exe':{
         #'includes':['pyparsing', 'lxml', 'rdflib', 'python-dateutil', 'vobject', 'six', 'gzip', 'lxml._elementpath'],
-        'packages':['lom2mlr', 'lom2mlr.validate', 'lom2mlr.markdown'],
+        'packages':['lom2mlr', 'lom2mlr.validate', 'lom2mlr.markdown', 'common'],
         'bundle_files': 1
       }}
       )
